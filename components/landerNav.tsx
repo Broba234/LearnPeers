@@ -8,7 +8,7 @@ export default function LanderNav() {
       </div>
       {/* Center logo */}
       <div className="flex-1 flex justify-center">
-        <a href="/" className="font-extrabold text-xl md:text-2xl tracking-tight text-blue-600">eclero</a>
+        <a href="/" className="font-extrabold text-xl md:text-2xl tracking-tight text-blue-600">LearnPeers</a>
       </div>
       {/* Right links */}
       <div className="flex items-center gap-4 absolute right-8 top-1/2 -translate-y-1/2">

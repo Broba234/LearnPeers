@@ -66,8 +66,8 @@ export default function ContactSection() {
     {
       icon: LuMail,
       label: "Email",
-      value: "support@eclero.com",
-      href: "mailto:support@eclero.com",
+      value: "support@learnpeers.com",
+      href: "mailto:support@learnpeers.com",
     },
     {
       icon: LuPhone,

@@ -11,11 +11,11 @@ export default function Footer() {
                     <div className="space-y-4 sm:space-y-6 sm:col-span-2 lg:col-span-1">
                         <Link href="/" className="inline-block">
                             <span className="font-black text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 tracking-tight">
-                                eclero
+                                LearnPeers
                             </span>
                         </Link>
                         <p className="text-gray-300 text-base sm:text-lg leading-relaxed max-w-md">
-                            Connecting minds, enabling success through innovative solutions and collaborative partnerships.
+                            The peer tutoring marketplace where students book live help from other students—and get paid to teach what they know.
                         </p>
                         <div className="flex space-x-4 pt-2">
                             <a href="#" className="w-10 h-10 rounded-full bg-gray-800 hover:bg-blue-600 flex items-center justify-center transition-all duration-300 hover:scale-110">
@@ -38,27 +38,27 @@ export default function Footer() {
                         <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-white border-l-4 border-blue-500 pl-3">Quick Links</h3>
                         <ul className="space-y-3 sm:space-y-4">
                             <li>
-                                <Link href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm sm:text-base">
+                                <Link href="/" className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm sm:text-base">
                                     <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
                                     Home
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm sm:text-base">
+                                <Link href="/#our-mission" className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm sm:text-base">
                                     <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                                    About Us
+                                    Our mission
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm sm:text-base">
+                                <Link href="/home/student/explore" className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm sm:text-base">
                                     <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                                    Services
+                                    Find tutors
                                 </Link>
                             </li>
                             <li>
-                                <Link href="#" className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm sm:text-base">
+                                <Link href="/home/tutor/profile" className="text-gray-300 hover:text-blue-400 transition-colors duration-200 flex items-center group text-sm sm:text-base">
                                     <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                                    Case Studies
+                                    Teach &amp; earn
                                 </Link>
                             </li>
                         </ul>
@@ -105,7 +105,7 @@ export default function Footer() {
                             </li>
                             <li className="flex items-center gap-3">
                                 <FaEnvelope className="text-blue-400 flex-shrink-0" />
-                                <span className="text-gray-300 text-sm sm:text-base break-all">hello@eclero.com</span>
+                                <span className="text-gray-300 text-sm sm:text-base break-all">hello@learnpeers.com</span>
                             </li>
                         </ul>
                         
@@ -132,7 +132,7 @@ export default function Footer() {
                 {/* Bottom Bar */}
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
                     <div className="text-gray-400 text-sm order-2 md:order-1">
-                        &copy; {new Date().getFullYear()} <span className="text-white font-semibold">Eclero</span>. All rights reserved.
+                        &copy; {new Date().getFullYear()} <span className="text-white font-semibold">LearnPeers</span>. All rights reserved.
                     </div>
                     
                     <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 sm:gap-6 order-1 md:order-2">
@@ -142,7 +142,7 @@ export default function Footer() {
                         <Link href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
                             Privacy Policy
                         </Link>
-                        <Link href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
+                        <Link href="/#contact" className="text-gray-400 hover:text-white text-sm transition-colors">
                             Contact
                         </Link>
                         <div className="flex items-center space-x-2 w-full justify-center md:w-auto md:justify-end">

@@ -34,7 +34,7 @@ export default function Navbar() {
                 <Link href="/#how-it-works" className="text-gray-700 hover:text-blue-600 font-medium">How it Works</Link>
             </div>
             <div className="flex-1 flex justify-center">
-                <Link href="/" className="font-extrabold text-xl md:text-2xl tracking-tight text-blue-600">eclero</Link>
+                <Link href="/" className="font-extrabold text-xl md:text-2xl tracking-tight text-blue-600">LearnPeers</Link>
             </div>
             <div className="hidden sm:flex items-center gap-4 absolute right-8 top-1/2 -translate-y-1/2">
                 <Link href="#about" className="text-gray-700 hover:text-blue-600 font-medium">About</Link>

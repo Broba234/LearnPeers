@@ -80,11 +80,12 @@ export async function GET(req: Request) {
         }
       }
 
-      // Filter out past slots for today
+      // Filter out past slots for today — slots are stored in UTC (toHHMM uses getUTCHours)
       let slots = Array.from(slotSet).sort();
       if (i === 0) {
-        const nowLocal = new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
-        slots = slots.filter(s => s > nowLocal);
+        const now = new Date();
+        const nowUTC = `${String(now.getUTCHours()).padStart(2,'0')}:${String(now.getUTCMinutes()).padStart(2,'0')}`;
+        slots = slots.filter(s => s > nowUTC);
       }
 
       result.push({ date: dateStr, slots });

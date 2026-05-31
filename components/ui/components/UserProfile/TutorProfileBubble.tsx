@@ -134,15 +134,21 @@ function PaymentForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="p-4 bg-indigo-50 rounded-xl">
-        <div className="flex justify-between items-center text-sm">
-          <span className="text-gray-700 font-medium">Amount to pay</span>
-          <span className="font-bold text-indigo-700">
-            ${amount.toFixed(2)}
-          </span>
+      <div className="p-4 bg-indigo-50 rounded-xl space-y-1.5 text-sm">
+        <div className="flex justify-between items-center">
+          <span className="text-gray-600">Session price</span>
+          <span className="text-gray-800">${amount.toFixed(2)}</span>
         </div>
-        <p className="text-xs text-gray-500 mt-1">
-          90% goes to {tutorName}, 10% platform fee
+        <div className="flex justify-between items-center">
+          <span className="text-gray-600">Platform fee (5%)</span>
+          <span className="text-gray-800">+${(amount * 0.05).toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between items-center border-t border-indigo-200 pt-1.5">
+          <span className="font-semibold text-gray-800">Total charged</span>
+          <span className="font-bold text-indigo-700">${(amount * 1.05).toFixed(2)}</span>
+        </div>
+        <p className="text-xs text-gray-500 pt-0.5">
+          {tutorName} receives ${(amount * 0.95).toFixed(2)} (5% platform fee deducted from payout)
         </p>
       </div>
 
@@ -273,19 +279,9 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
     });
     if (slotMinutes.length === 0) return [];
 
-    // Filter out past slots when the selected date is today
-    const now = new Date();
-    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-    const isToday = selectedDateStr === todayStr;
-    const nowMinutes = now.getHours() * 60 + now.getMinutes();
-
-    const futureSlots = isToday
-      ? slotMinutes.filter((m) => m > nowMinutes)
-      : slotMinutes;
-    if (futureSlots.length === 0) return [];
-
-    // Group consecutive 30-min slots into ranges, then generate bookable slots
-    const sorted = [...futureSlots].sort((a, b) => a - b);
+    // API already filters past slots server-side — no client-side time filtering needed
+    // (client-side filtering causes bugs when browser timezone differs from slot timezone)
+    const sorted = [...slotMinutes].sort((a, b) => a - b);
     const ranges: { start: number; end: number }[] = [];
     let rangeStart = sorted[0];
     let prev = sorted[0];
@@ -627,9 +623,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                             month: "short",
                           })}
                         </span>
-                        {hasSlots && !isSelected && (
-                          <span className="w-1 h-1 rounded-full bg-emerald-400 mt-0.5" />
-                        )}
+                        <span className={`w-1 h-1 rounded-full mt-0.5 ${hasSlots && !isSelected ? "bg-emerald-400" : "bg-transparent"}`} />
                       </button>
                     );
                   })}

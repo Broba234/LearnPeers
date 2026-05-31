@@ -149,21 +149,18 @@ export default function InboxPage() {
     cancelled:   { label: 'Cancelled',   bg: 'bg-gray-50   border-gray-200',  text: 'text-gray-500',   dot: 'bg-gray-400' },
   };
 
-  const today = now.toISOString().split('T')[0];
-
   const isUpcoming = (r: SessionRequest) =>
     r.status === 'accepted' && now < new Date(`${r.date}T${r.start_time}`);
 
-  const isPendingToday = (r: SessionRequest) =>
-    r.status === 'pending' && r.date === today;
+  const isPending = (r: SessionRequest) => r.status === 'pending';
 
   const filteredRequests = requests.filter(req => {
-    if (filter === 'pending') return isPendingToday(req);
+    if (filter === 'pending') return isPending(req);
     if (filter === 'upcoming') return isUpcoming(req);
     return req.status === 'completed';
   });
 
-  const pendingCount = requests.filter(r => isPendingToday(r)).length;
+  const pendingCount = requests.filter(r => isPending(r)).length;
   const upcomingCount = requests.filter(r => isUpcoming(r)).length;
   const completedCount = requests.filter(r => r.status === 'completed').length;
 
@@ -173,54 +170,43 @@ export default function InboxPage() {
     .reduce((sum, r) => sum + (r.amount ?? 0), 0);
 
   return (
-    <div className="min-h-screen bg-gray-50/80">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
 
-        {/* ── Header ────────────────────────────────── */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight">Sessions</h1>
-            <p className="text-gray-500 mt-1">Manage your tutoring sessions</p>
+            <h1 className="text-2xl font-semibold text-slate-900">Sessions</h1>
+            <p className="text-sm text-slate-400 mt-0.5">Manage your tutoring sessions</p>
           </div>
           <button
             onClick={fetchSessions}
-            className="self-start sm:self-auto px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 rounded-xl transition-all border border-gray-200 shadow-sm flex items-center gap-2 text-sm font-medium active:scale-95"
+            className="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-lg hover:bg-slate-100"
+            title="Refresh"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
-            Refresh
           </button>
         </div>
 
-        {/* ── Stat Cards ────────────────────────────── */}
+        {/* Stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           {[
-            { label: 'Upcoming',    count: upcomingCount,   color: 'text-blue-600',    iconBg: 'bg-blue-50',    icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
-            { label: 'Pending',     count: pendingCount,    color: 'text-amber-600',   iconBg: 'bg-amber-50',   icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
-            { label: 'Completed',   count: completedCount,  color: 'text-green-600',   iconBg: 'bg-green-50',   icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-            { label: 'Earnings',    count: null,            color: 'text-emerald-600',  iconBg: 'bg-emerald-50', icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
+            { label: 'Upcoming',  value: upcomingCount,                    color: 'text-indigo-600' },
+            { label: 'Pending',   value: pendingCount,                     color: 'text-amber-500' },
+            { label: 'Completed', value: completedCount,                   color: 'text-green-600' },
+            { label: 'Earnings',  value: `$—`,                             color: 'text-slate-300' },
           ].map(stat => (
-            <div key={stat.label} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-              <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${stat.iconBg}`}>
-                  <svg className={`w-5 h-5 ${stat.color}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={stat.icon} />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 font-medium">{stat.label}</p>
-                  <p className={`text-xl font-bold text-gray-900`}>
-                    {stat.count !== null ? stat.count : `$${totalEarnings.toFixed(0)}`}
-                  </p>
-                </div>
-              </div>
+            <div key={stat.label} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{stat.label}</p>
+              <p className={`text-2xl font-bold mt-1 ${stat.color}`}>{stat.value}</p>
             </div>
           ))}
         </div>
 
-        {/* ── Filters ───────────────────────────────── */}
-        <div className="flex flex-wrap gap-2 mb-6">
+        {/* Tab filters */}
+        <div className="flex border-b border-slate-100 mb-6">
           {(['pending', 'upcoming', 'completed'] as const).map(opt => {
             const count = opt === 'upcoming' ? upcomingCount : opt === 'pending' ? pendingCount : completedCount;
             const labels: Record<string, string> = { pending: 'Pending', upcoming: 'Upcoming', completed: 'Completed' };
@@ -228,42 +214,33 @@ export default function InboxPage() {
               <button
                 key={opt}
                 onClick={() => setFilter(opt)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
                   filter === opt
-                    ? 'bg-gray-900 text-white shadow-sm'
-                    : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                    ? 'border-indigo-600 text-indigo-600'
+                    : 'border-transparent text-slate-500 hover:text-slate-700'
                 }`}
               >
                 {labels[opt]}
-                {count !== null && (
-                  <span className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-md ${
-                    filter === opt ? 'bg-white/20' : 'bg-gray-100'
-                  }`}>
-                    {count}
-                  </span>
-                )}
+                <span className="ml-1.5 text-xs text-slate-400">{count}</span>
               </button>
             );
           })}
         </div>
 
-        {/* ── Session List ──────────────────────────── */}
+        {/* Session list */}
         {loading && requests.length === 0 ? (
           <div className="text-center py-20">
-            <div className="inline-block w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-            <p className="text-gray-500 mt-4 text-sm">Loading sessions...</p>
+            <p className="text-sm text-slate-400">Loading sessions...</p>
           </div>
         ) : filteredRequests.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-16 text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center py-20">
+            <div className="w-12 h-12 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
+              <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">No {filter} sessions</h3>
-            <p className="text-gray-500 text-sm mb-4">
-              No sessions match this filter.
-            </p>
+            <p className="text-sm font-medium text-slate-900 mb-1">No {filter} sessions</p>
+            <p className="text-xs text-slate-400">Sessions will appear here once they match this filter.</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -273,106 +250,66 @@ export default function InboxPage() {
               return (
                 <div
                   key={request.id}
-                  className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+                  className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden"
                 >
-                  <div className="p-5 sm:p-6">
-                    {/* Top row: avatar + name + status */}
-                    <div className="flex items-start justify-between gap-4 mb-4">
+                  <div className="p-5">
+                    {/* Top row */}
+                    <div className="flex items-start justify-between gap-3 mb-3">
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="relative shrink-0">
+                        <div className="relative flex-shrink-0">
                           <img
                             src={request.studentAvatar || '/default-avatar.png'}
                             alt={request.studentName}
-                            className="w-11 h-11 rounded-full object-cover ring-2 ring-gray-100"
+                            className="w-10 h-10 rounded-full object-cover bg-slate-100"
                           />
-                          <span className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${sc.dot}`} />
+                          <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-white ${sc.dot}`} />
                         </div>
                         <div className="min-w-0">
-                          <h3 className="font-semibold text-gray-900 truncate">{request.studentName}</h3>
-                          <p className="text-sm text-gray-500 truncate">{request.subject}</p>
+                          <h3 className="text-sm font-semibold text-slate-900 truncate">{request.studentName}</h3>
+                          <p className="text-xs text-slate-500 truncate">{request.subject}</p>
                         </div>
                       </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-2 flex-shrink-0">
                         {request.amount != null && (
-                          <span className="px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-sm font-semibold border border-emerald-100">
-                            ${request.amount.toFixed(2)}
-                          </span>
+                          <span className="text-sm font-semibold text-slate-900">${request.amount.toFixed(0)}</span>
                         )}
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium border ${sc.bg} ${sc.text}`}>
+                        <div className="flex items-center gap-1.5">
                           <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
-                          {sc.label}
-                        </span>
+                          <span className={`text-xs font-medium ${sc.text}`}>{sc.label}</span>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Info grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-lg px-3 py-2">
-                        <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        <span className="truncate">{formatDate(request.date)}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-lg px-3 py-2">
-                        <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>{request.start_time}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-lg px-3 py-2">
-                        <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                        <span>{formatDuration(request.duration)}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
-                        <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                        </svg>
-                        <span>Requested {formatTimeAgo(request.requestedAt)}</span>
-                      </div>
+                    {/* Info row */}
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 mb-3">
+                      <span>{formatDate(request.date)}</span>
+                      <span>·</span>
+                      <span>{request.start_time}</span>
+                      <span>·</span>
+                      <span>{formatDuration(request.duration)}</span>
+                      <span>·</span>
+                      <span>Requested {formatTimeAgo(request.requestedAt)}</span>
                     </div>
 
-                    {/* Student message */}
+                    {/* Student note */}
                     {request.message && (
-                      <div className="bg-blue-50/60 border border-blue-100 rounded-xl px-4 py-3 mb-4">
-                        <p className="text-xs font-medium text-blue-600 mb-1">Student note</p>
-                        <p className="text-sm text-gray-700 leading-relaxed">&ldquo;{request.message}&rdquo;</p>
+                      <div className="bg-slate-50 border border-slate-100 rounded-xl px-3 py-2 mb-3">
+                        <p className="text-xs text-slate-600 leading-relaxed">&ldquo;{request.message}&rdquo;</p>
                       </div>
                     )}
 
-                    {/* Actions */}
-                    <div className="flex items-center justify-between pt-1">
-                      <div className="flex items-center gap-2">
-                        {ready && request.status !== 'completed' && request.status !== 'cancelled' && request.status !== 'declined' ? (
-                          <button
-                            onClick={() => handleStartSession(request)}
-                            disabled={!userInfo}
-                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors shadow-sm flex items-center gap-2 disabled:opacity-50"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Start Session
-                          </button>
-                        ) : request.status !== 'completed' && request.status !== 'cancelled' && request.status !== 'declined' ? (
-                          <span className="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg text-sm font-medium flex items-center gap-2">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Starts at {request.start_time}
-                          </span>
-                        ) : null}
-                      </div>
-
-                      {request.amount != null && (
-                        <p className="text-xs text-gray-400 hidden sm:block">
-                          Session ID: {request.id.slice(0, 8)}
-                        </p>
-                      )}
-                    </div>
+                    {/* Action */}
+                    {ready && request.status !== 'completed' && request.status !== 'cancelled' && request.status !== 'declined' ? (
+                      <button
+                        onClick={() => handleStartSession(request)}
+                        disabled={!userInfo}
+                        className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50"
+                      >
+                        Start Session
+                      </button>
+                    ) : request.status !== 'completed' && request.status !== 'cancelled' && request.status !== 'declined' ? (
+                      <p className="text-center text-xs text-slate-400 py-1">Starts at {request.start_time}</p>
+                    ) : null}
                   </div>
                 </div>
               );
@@ -380,10 +317,9 @@ export default function InboxPage() {
           </div>
         )}
 
-        {/* ── Footer count ──────────────────────────── */}
         {filteredRequests.length > 0 && (
-          <p className="text-center text-xs text-gray-400 mt-6">
-            {filteredRequests.length} session{filteredRequests.length !== 1 ? 's' : ''} shown
+          <p className="text-center text-xs text-slate-400 mt-6">
+            {filteredRequests.length} session{filteredRequests.length !== 1 ? 's' : ''}
           </p>
         )}
       </div>

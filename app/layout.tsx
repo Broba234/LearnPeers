@@ -9,7 +9,7 @@ const inter = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'eclero',
+  title: 'LearnPeers',
   description: 'Peer-to-peer tutoring platform',
 }
 
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="stylesheet" href="/excalidraw.css" />
       </head>
-      <body className={`bg-gray-900 overflow-x-hidden ${inter.className}`}>
+      <body className={`bg-slate-50 overflow-x-hidden ${inter.className}`}>
         {children}
         <Toaster position="top-right" richColors closeButton />
       </body>

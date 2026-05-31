@@ -41,15 +41,12 @@ export default function HomeLayout({
     setProfileLoading(true);
     setFullTutorProfile(null);
     try {
-      const {
-        data: { user },
-        error: sessionError,
-      } = await supabase.auth.getUser();
-      if (sessionError || !user) {
-        router.push("/auth/login");
+      if (!tutor?.email) {
+        setFullTutorProfile(tutor);
+        setProfileLoading(false);
         return;
       }
-      const url = `/api/profiles/get-full?email=${encodeURIComponent(user.email!)}`;
+      const url = `/api/profiles/get-full?email=${encodeURIComponent(tutor.email)}`;
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
@@ -58,10 +55,10 @@ export default function HomeLayout({
           availableSlots: data.availableSlots ?? tutor.availableSlots,
         });
       } else {
-        setFullTutorProfile(null);
+        setFullTutorProfile(tutor);
       }
     } catch (e) {
-      setFullTutorProfile(null);
+      setFullTutorProfile(tutor);
     }
     setProfileLoading(false);
   };
@@ -154,16 +151,16 @@ export default function HomeLayout({
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gradient-to-b from-[#F8F9FD] to-gray-400">
-        <div className="text-lg text-white">Loading...</div>
+      <div className="flex h-screen items-center justify-center bg-slate-50">
+        <div className="text-sm text-slate-400">Loading...</div>
       </div>
     );
   }
   if (!userRole || !userName) {
     return (
-        <div className="flex h-screen items-center justify-center bg-gradient-to-b from-[#F8F9FD] to-gray-400">
-        <div className="text-lg text-white">Redirecting to login...</div>
-      </div>
+        <div className="flex h-screen items-center justify-center bg-slate-50">
+          <div className="text-sm text-slate-400">Redirecting...</div>
+        </div>
     );
   }
 
@@ -178,7 +175,7 @@ export default function HomeLayout({
             <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
               {userName.charAt(0).toUpperCase()}
             </div>
-            <div className="text-white font-semibold tracking-tight">eclero</div>
+            <div className="text-white font-semibold tracking-tight">LearnPeers</div>
           </div>
           <button
             aria-label="Open sidebar menu"
@@ -192,7 +189,7 @@ export default function HomeLayout({
           </button>
         </div>
 
-        <div className="flex h-screen pt-14 lg:pt-0 bg-[#F3F4F4]">
+        <div className="flex h-screen pt-14 lg:pt-0 bg-slate-50">
           {/* Sidebar: desktop */}
           <div className="hidden lg:block">
             <HomeSidebar userRole={userRole} userName={userName} />

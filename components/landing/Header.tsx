@@ -159,10 +159,10 @@ export default function HeaderSmooth() {
                   href="/" 
                   className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent hover:scale-105 transition-transform block"
                 >
-                  Eclero
+                  LearnPeers
                 </Link>
               </motion.div>
-              
+
               {/* Desktop Navigation */}
               <motion.div 
                 className="hidden md:flex items-center space-x-2 lg:space-x-4"
@@ -251,7 +251,7 @@ export default function HeaderSmooth() {
                 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Eclero
+                LearnPeers
               </Link>
             </div>
             

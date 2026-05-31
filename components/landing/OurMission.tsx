@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { BookOpen, Users, Target, GraduationCap } from 'lucide-react';
 
 const OurMission = () => {
@@ -14,7 +15,7 @@ const OurMission = () => {
             <h2 className="text-4xl font-bold text-gray-900">Our Mission</h2>
           </div>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Guiding educational excellence through meaningful connections and accessible learning
+            A peer tutoring marketplace where students learn from—and earn by teaching—each other
           </p>
         </div>
 
@@ -28,7 +29,7 @@ const OurMission = () => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                    The Eclero Principle
+                    The LearnPeers Principle
                   </h3>
                   <p className="text-gray-700 italic">
                     "Education should be accessible to everyone."
@@ -37,9 +38,9 @@ const OurMission = () => {
               </div>
               
               <p className="text-gray-700 mb-6 leading-relaxed">
-                Founded on the fundamental belief that learning is a lifelong journey, 
-                we recognize that the most effective education comes from connecting 
-                with those who possess both knowledge and practical experience.
+                We believe the people closest to the coursework—fellow students who have
+                recently mastered it—are often the best guides. LearnPeers makes it simple to
+                book paid sessions, teach on your own schedule, and keep learning in motion.
               </p>
               
               <div className="p-4 bg-blue-50 rounded-se-[50px] rounded-es-[50px] border-l-4 border-blue-500">
@@ -73,10 +74,11 @@ const OurMission = () => {
           {/* Right Column - Global Vision */}
           <div className="bg-[#1559C6]/80 rounded-se-[100px] p-8 text-white shadow-xl">
             <div className="mb-8">
-              <h3 className="text-2xl font-bold mb-4">Building a Global Learning Ecosystem</h3>
+              <h3 className="text-2xl font-bold mb-4">A marketplace built on peers</h3>
               <p className="text-blue-100 mb-6">
-                Our vision is to create an interconnected community where knowledge flows freely 
-                between learners and educators across borders and disciplines.
+                Our vision is a community where students connect for live help, share what they
+                know, and get paid fairly when they teach—supported by tools for booking, video
+                sessions, and secure payouts.
               </p>
             </div>
 
@@ -88,8 +90,8 @@ const OurMission = () => {
                 <div>
                   <h4 className="font-bold text-lg mb-2">For Students</h4>
                   <p className="text-blue-100">
-                    Overcome academic challenges with personalized guidance from experts 
-                    who genuinely care about your success
+                    Get unstuck with one-on-one help from peers who understand your courses and
+                    exams—not generic content, but real explanations when you need them
                   </p>
                 </div>
               </div>
@@ -99,10 +101,10 @@ const OurMission = () => {
                   <span className="font-bold text-lg">02</span>
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg mb-2">For Educators</h4>
+                  <h4 className="font-bold text-lg mb-2">For Student Tutors</h4>
                   <p className="text-blue-100">
-                    Share your passion and expertise, shaping the next generation of 
-                    thinkers and doers through meaningful mentorship
+                    Monetize what you already know: set your rates and availability, run live
+                    sessions, and receive payouts while helping classmates succeed
                   </p>
                 </div>
               </div>
@@ -125,10 +127,13 @@ const OurMission = () => {
 
         {/* Call to Action */}
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full shadow-lg">
+          <Link
+            href="/home/student/explore"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:brightness-105"
+          >
             <BookOpen className="h-5 w-5" />
-            <span className="font-semibold">Begin Your Learning Journey Today</span>
-          </div>
+            Find a peer tutor
+          </Link>
         </div>
       </div>
     </section>

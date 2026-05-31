@@ -11,6 +11,7 @@ import { getCountryFromTimezone } from "@/lib/timezone-to-country";
 import { toast } from "sonner";
 import UpdateProfileTimeSlot from "@/components/ui/components/UpdateProfileTimeSlot";
 import Image from "next/image";
+
 export type Subjects = {
   id: string;
   name: string;
@@ -24,6 +25,7 @@ type CategoryGroup = {
   name: string;
   subjects: Subjects[];
 };
+
 export default function TutorProfile() {
   const [profile, setProfile] = useState<any>(null);
   const [step, setStep] = useState(1);
@@ -42,25 +44,16 @@ export default function TutorProfile() {
   const [educationText, setEducationText] = useState<string>("");
   const [categories, setCategories] = useState<CategoryGroup[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<any[]>([]);
-  const [selectedSubjectsWithPrice, setSelectedSubjectsWithPrice] = useState<
-    any[]
-  >([]);
+  const [selectedSubjectsWithPrice, setSelectedSubjectsWithPrice] = useState<any[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [stripeLoading, setStripeLoading] = useState(false);
+
   const fetchProfile = async () => {
     try {
-      const {
-        data: { user },
-        error: sessionError,
-      } = await supabase.auth.getUser();
-      if (sessionError || !user) {
-        router.push("/auth/login");
-        return;
-      }
-      const profileRes = await fetch(
-        `/api/profiles/get-full?email=${encodeURIComponent(user.email!)}`
-      );
+      const { data: { user }, error: sessionError } = await supabase.auth.getUser();
+      if (sessionError || !user) { router.push("/auth/login"); return; }
+      const profileRes = await fetch(`/api/profiles/get-full?email=${encodeURIComponent(user.email!)}`);
       if (profileRes.ok) {
         const profileData = await profileRes.json();
         setProfile(profileData);
@@ -71,19 +64,18 @@ export default function TutorProfile() {
         if (profileData.education) {
           setEducationText(String(profileData.education) || "");
         } else {
-          setEducationText(""); 
+          setEducationText("");
         }
         let normalizedSubjects: string[] = [];
         if (profileData.subjects && Array.isArray(profileData.subjects)) {
           normalizedSubjects = profileData.subjects
             .map((s: any) => {
               if (s && typeof s.id === "string") return s.id;
-              if (s && s.Subjects && typeof s.Subjects.id === "string")
-                return s.Subjects;
+              if (s && s.Subjects && typeof s.Subjects.id === "string") return s.Subjects;
               return undefined;
             })
             .filter(
-                (subject: any): subject is Subjects =>
+              (subject: any): subject is Subjects =>
                 typeof subject.id === "string" && subject.id.length > 0
             );
         }
@@ -94,34 +86,27 @@ export default function TutorProfile() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-
     fetchProfile();
-
     fetch("/api/subjects")
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          // setSelectedSubjects(data);
           const catMap = new Map<string, Subjects[]>();
           data.forEach((subject: Subjects) => {
             const cat = subject.category || "Uncategorized";
             if (!catMap.has(cat)) catMap.set(cat, []);
             catMap.get(cat)!.push(subject);
           });
-          const grouped: CategoryGroup[] = Array.from(catMap.entries()).map(
-            ([name, subjects]) => ({ name, subjects })
-          );
+          const grouped: CategoryGroup[] = Array.from(catMap.entries()).map(([name, subjects]) => ({ name, subjects }));
           setCategories(grouped);
         } else {
           setSelectedSubjects([]);
           setCategories([]);
         }
       })
-      .catch((err) => {
-        setSelectedSubjects([]);
-        setCategories([]);
-      });
+      .catch(() => { setSelectedSubjects([]); setCategories([]); });
   }, [router]);
 
   const handleSave = async () => {
@@ -130,86 +115,54 @@ export default function TutorProfile() {
     await fetch("/api/profiles/update", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: profile.email,
-        name: editName,
-        phone: editPhone,
-        bio: editBio,
-        hourlyRate: hourlyRate,
-      }),
+      body: JSON.stringify({ email: profile.email, name: editName, phone: editPhone, bio: editBio, hourlyRate }),
     });
-    setProfile({
-      ...profile,
-      name: editName,
-      phone: editPhone,
-      bio: editBio,
-      hourlyRate: hourlyRate,
-    });
+    setProfile({ ...profile, name: editName, phone: editPhone, bio: editBio, hourlyRate });
     setSaving(false);
   };
+
   const handleSaveEducation = async () => {
     setSaving(true);
     await fetch("/api/profiles/update-education", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: profile.email,
-        education: educationText,
-      }),
+      body: JSON.stringify({ email: profile.email, education: educationText }),
     });
     setProfile({ ...profile, education: educationText });
     setSaving(false);
   };
+
   const handleAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file || !profile?.email) return;
-
     try {
       setAvatarUploading(true);
-
       const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9-_.]/g, "-");
       const filePath = `avatars/${profile.email}-${Date.now()}-${sanitizedFileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("eclero-storage")
-        .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("eclero-storage").getPublicUrl(filePath);
-
+      const { error: uploadError } = await supabase.storage.from("eclero-storage").upload(filePath, file);
+      if (uploadError) throw uploadError;
+      const { data: { publicUrl } } = supabase.storage.from("eclero-storage").getPublicUrl(filePath);
       await fetch("/api/profiles/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: profile.email,
-          name: profile.name,
-          phone: profile.phone,
-          bio: profile.bio,
-          hourlyRate: profile.hourlyRate,
-          avatar: publicUrl,
-        }),
+        body: JSON.stringify({ email: profile.email, name: profile.name, phone: profile.phone, bio: profile.bio, hourlyRate: profile.hourlyRate, avatar: publicUrl }),
       });
-
       setProfile({ ...profile, avatar: publicUrl });
     } catch (error: any) {
       console.error("Error uploading avatar:", error?.message || error);
       toast.error("Failed to upload profile picture. Please try again.");
     } finally {
       setAvatarUploading(false);
-      // Allow re-selecting the same file
       event.target.value = "";
     }
   };
+
   const onSubjectsChange = (subjects: any) => {
     setError(false);
     setErrorMsg("");
     setSelectedSubjects(subjects);
   };
+
   const handleSubjectsChange = async () => {
     if (!profile?.email) return;
     if (selectedSubjectsWithPrice.length === 0) {
@@ -219,18 +172,13 @@ export default function TutorProfile() {
     }
     const hasInvalidPriceOrDuration = selectedSubjectsWithPrice.some(
       (subject) =>
-        !subject?.duration_1 ||
-        Number(subject?.price_1) <= 0 ||
-        !subject?.duration_2 ||
-        Number(subject?.price_2) <= 0 ||
-        !subject?.duration_3 ||
-        Number(subject?.price_3) <= 0
+        !subject?.duration_1 || Number(subject?.price_1) <= 0 ||
+        !subject?.duration_2 || Number(subject?.price_2) <= 0 ||
+        !subject?.duration_3 || Number(subject?.price_3) <= 0
     );
     if (hasInvalidPriceOrDuration) {
       setError(true);
-      setErrorMsg(
-        "Please add prices and select durations for all session lengths"
-      );
+      setErrorMsg("Please add prices and select durations for all session lengths");
       return;
     }
     Swal.fire({
@@ -247,420 +195,358 @@ export default function TutorProfile() {
           await fetch("/api/subjects/update-subjects-and-prices", {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: profile.email,
-              subjects: selectedSubjectsWithPrice,
-            }),
+            body: JSON.stringify({ email: profile.email, subjects: selectedSubjectsWithPrice }),
           });
-        } catch (e) {
-        }
+        } catch (e) {}
         setEditMode3(false);
         setStep(1);
         fetchProfile();
-        Swal.fire({
-          title: "Updated!",
-          text: "Your subjects have been updated.",
-          icon: "success",
-        });
+        Swal.fire({ title: "Updated!", text: "Your subjects have been updated.", icon: "success" });
       }
     });
   };
 
+  const handleStripe = async () => {
+    setStripeLoading(true);
+    try {
+      const endpoint = profile.stripe_account_id
+        ? "/api/stripe/connect/login-link"
+        : "/api/stripe/connect/create-account-link";
+      const body = endpoint === "/api/stripe/connect/create-account-link"
+        ? JSON.stringify({ email: profile.email, country: getCountryFromTimezone() })
+        : undefined;
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        ...(body && { body }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        sessionStorage.setItem("setupReturnStep", "4");
+        window.location.href = data.url;
+      } else {
+        setStripeLoading(false);
+        toast.error(data.error || "Failed to connect Stripe");
+      }
+    } catch {
+      setStripeLoading(false);
+      toast.error("Failed to connect Stripe");
+    }
+  };
+
   if (loading) {
     return (
-      <div className="flex h-screen bg-slate-900 items-center justify-center">
-        <div className="text-white text-xl font-bold">Loading profile...</div>
+      <div className="flex h-screen bg-slate-50 items-center justify-center">
+        <div className="text-sm text-slate-400">Loading profile...</div>
       </div>
     );
   }
   if (!profile) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="text-white text-xl font-bold">Profile not found.</div>
+      <div className="flex h-screen bg-slate-50 items-center justify-center">
+        <div className="text-sm text-slate-400">Profile not found.</div>
       </div>
     );
   }
+
   return (
-   <div className="h-screen flex items-center justify-center bg-[#F3F4F4]">
-  <div className="w-full max-w-7xl lg:min-h-[750px] bg-white rounded-2xl border border-gray-200 p-8 grid grid-cols-1 md:grid-cols-[1.1fr_1.6fr] gap-8" style={{ boxShadow: '0 8px 32px 0 rgba(31,38,135,0.37)' }}>
-    {/* LEFT COLUMN – Subjects */}
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-3">
-        <div className="relative">
-          <div className="w-[150px] h-[150px] rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 p-1 shadow-lg">
-            <Image
-              src={profile.avatar || "/default-avatar.png"}
-              alt={profile.name}
-              className="w-full h-full rounded-full object-cover bg-gray-100"
-              fill
-            />
-          </div>
-          {/* {editMode1 && ( */}
-            <label className="absolute -bottom-3 min-w-[100px] left-1/2 -translate-x-1/2 px-2 py-1 rounded-full bg-gray-950/50 border border-gray-200 text-[10px] font-medium text-white shadow-sm cursor-pointer hover:bg-gray-50 hover:text-gray-900 transition">
-              {avatarUploading ? "Uploading..." : "Change photo"}
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleAvatarChange}
-                disabled={avatarUploading}
-              />
-            </label>
-          {/* )} */}
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-slate-900">Profile</h1>
+          <p className="text-sm text-slate-400 mt-0.5">Manage your public profile and payout settings</p>
         </div>
-        <div>
-          <h2 className="text-2xl font-semibold text-gray-900">
-            {profile.name}
-          </h2>
-          <div className="mt-1 inline-flex items-center gap-2">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
-              {profile.role === "tutor"
-                ? "Tutor"
-                : profile.role || "Student"}
-            </span>
-          </div>
-        </div>
-      </div>
 
-      <div className="rounded-2xl border border-gray-300 bg-gray-50 p-5">
-        {editMode3 ? (
-          <>
-            {error && <div className="text-red-500 text-sm mb-2">{errorMsg}</div>}
-            {step === 1 && (
-              <motion.div
-                key="subjects-step"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              >
-                <SubjectSelectProfile
-                  categories={categories}
-                  selectedSubjects={selectedSubjects}
-                  onSubjectsChange={onSubjectsChange}
-                />
-              </motion.div>
-            )}
-            {step === 2 && (
-              <motion.div
-                key="timeslot-step"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              >
-                <UpdateProfileTimeSlot
-                  selectedSubjectsfromProfile={selectedSubjects}
-                  setSelectedSubjectsWithPrice={setSelectedSubjectsWithPrice}
-                />
-              </motion.div>
-            )}
-            <div className="pt-5 flex justify-end">
-              <button
-                onClick={() => {
-                  setEditMode3(false);
-                  setStep(1);
-                }}
-                className="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium border border-gray-300 text-gray-700 mr-3 disabled:opacity-60 disabled:cursor-not-allowed transition-colors hover:bg-gray-100"
-              >
-                cancel
-              </button>
-              {step === 1 && (
-              <button
-                onClick={() => setStep(2)}
-                disabled={saving}
-                className="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-              >
-                Next
-              </button>
-              )}
-              {step === 2 && (
-                <button
-                  onClick={handleSubjectsChange}
-                  disabled={saving}
-                  className="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-                >
-                  Save Changes
-                </button>
-              )}
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="flex items-start justify-between mb-5">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900">
-                  Subjects you teach
-                </h3>
-              </div>
-              <button
-                onClick={() => {
-                  setEditMode3(true);
-                  setEditMode2(false);
-                  setEditMode1(false);
-                }}
-                className="inline-flex items-center min-w-[100px] px-3 py-1.5 rounded-full text-xs font-medium bg-gray-800 text-white hover:bg-gray-900 transition-colors"
-              >
-                Edit Subjects
-              </button>
-            </div>
-            <p className="text-xs text-gray-600 mb-3">
-              Manage the courses that appear on your profile.
-            </p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            <div className=" flex flex-wrap gap-2">
-              {Array.isArray(profile.subjects) &&
-              profile.subjects.length > 0 ? (
-                profile.subjects.map((subject: any, index: number) => (
-                  <button
-                    key={index}
-                    className={`rounded-xl border border-gray-300 px-5 py-4 w-full text-sm transition gap-2 hover:border-gray-400 hover:bg-gray-50`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="block text-gray-900">
-                        {subject.Subjects?.name || subject.name}
-                      </span>
-                      <span className="text-gray-700 rounded-lg px-[15px] bg-gray-200">
-                        {subject.Subjects?.code || subject.code}
-                      </span>
-                    </div>
-                  </button>
-                ))
-              ) : (
-                <p className="text-xs text-gray-500">
-                  No subjects selected yet. Click "Edit Subjects" to add some.
-                </p>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-
-    {/* RIGHT COLUMN – Personal Info + Education */}
-    <div className="flex flex-col gap-6">
-      {/* Personal Info */}
-      <section className="rounded-2xl border border-gray-300 bg-gray-50 p-5">
-        <form action="">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900">
-                Personal Info
-              </h3>
-              <p className="text-xs text-gray-600">
-                Basic details that students will see on your profile.
-              </p>
-            </div>
-            {!editMode1 && (
-              <span
-                onClick={() => {
-                  setEditMode1(true);
-                  setEditMode2(false);
-                  setEditMode3(false);
-                }}
-                className="inline-flex cursor-pointer items-center min-w-[100px] px-3 py-1.5 rounded-full text-xs font-medium bg-gray-800 text-white hover:bg-gray-900 transition-colors"
-              >
-                Edit profile
-              </span>
-            )}
-          </div>
-
+          {/* LEFT — Identity */}
           <div className="space-y-4">
-            {/* Name */}
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                Full Name
-              </label>
-              <input
-                className="w-full rounded-xl bg-white border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                placeholder="Your full name"
-                disabled={saving}
-              />
-            </div>
 
-            {/* Bio */}
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                Bio
-              </label>
-              <textarea
-                className="w-full rounded-xl bg-white border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none min-h-[96px]"
-                value={editBio}
-                onChange={(e) => setEditBio(e.target.value)}
-                placeholder="Tell students about your experience, teaching style, and what to expect."
-                disabled={saving}
-              />
-            </div>
-
-            {/* Email & Phone */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                  Email
+            {/* Avatar card */}
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center">
+              <div className="relative mb-4">
+                <div className="relative w-24 h-24">
+                  <Image
+                    src={profile.avatar || "/default-avatar.png"}
+                    alt={profile.name}
+                    className="rounded-full object-cover bg-slate-100"
+                    fill
+                  />
+                </div>
+                <label className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+                  {avatarUploading ? (
+                    <svg className="animate-spin w-3.5 h-3.5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  )}
+                  <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} disabled={avatarUploading} />
                 </label>
-                <input
-                  className="w-full rounded-xl bg-gray-100 border border-gray-300 px-3 py-2.5 text-sm text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  value={profile.email}
-                  disabled
-                />
               </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1.5">
-                  Phone
-                </label>
-                <input
-                  className="w-full rounded-xl bg-white border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  value={editPhone}
-                  onChange={(e) => setEditPhone(e.target.value)}
-                  placeholder="+1 234 567 890"
-                  disabled={saving}
-                />
+              <h2 className="text-base font-semibold text-slate-900">{profile.name}</h2>
+              <span className="mt-1.5 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700">Tutor</span>
+              <p className="text-xs text-slate-400 mt-1.5 truncate w-full">{profile.email}</p>
+            </div>
+
+            {/* Payout card */}
+            <div className={`bg-white rounded-2xl border shadow-sm p-5 ${!profile.stripe_account_id ? "border-amber-200" : "border-slate-100"}`}>
+              <div className="flex items-center gap-3 mb-4">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${profile.stripe_account_id ? "bg-green-50" : "bg-amber-50"}`}>
+                  <svg className={`w-4 h-4 ${profile.stripe_account_id ? "text-green-600" : "text-amber-500"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-900">Payouts</p>
+                  <p className="text-xs text-slate-500">{profile.stripe_account_id ? "Stripe connected" : "Not connected"}</p>
+                </div>
+              </div>
+              <button
+                onClick={handleStripe}
+                disabled={stripeLoading}
+                className={`w-full px-3 py-2 text-xs font-semibold rounded-xl transition-colors disabled:opacity-50 ${
+                  profile.stripe_account_id
+                    ? "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    : "bg-indigo-600 text-white hover:bg-indigo-700"
+                }`}
+              >
+                {stripeLoading ? "Opening…" : profile.stripe_account_id ? "Manage Stripe" : "Set up payouts"}
+              </button>
+            </div>
+          </div>
+
+          {/* RIGHT — Details */}
+          <div className="lg:col-span-2 space-y-4">
+
+            {/* Personal Info */}
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                <h3 className="text-sm font-semibold text-slate-900">Personal Info</h3>
+                {!editMode1 && (
+                  <button
+                    onClick={() => { setEditMode1(true); setEditMode2(false); setEditMode3(false); }}
+                    className="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
+              <div className="px-6 py-5 space-y-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-500 mb-1.5">Full Name</label>
+                  <input
+                    className={`w-full rounded-xl border px-3 py-2.5 text-sm text-slate-900 transition-colors ${
+                      editMode1
+                        ? "bg-white border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        : "bg-slate-50 border-slate-100 cursor-default"
+                    }`}
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    disabled={!editMode1 || saving}
+                    placeholder="Your full name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-500 mb-1.5">Bio</label>
+                  <textarea
+                    className={`w-full rounded-xl border px-3 py-2.5 text-sm text-slate-900 resize-none min-h-[96px] transition-colors ${
+                      editMode1
+                        ? "bg-white border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        : "bg-slate-50 border-slate-100 cursor-default"
+                    }`}
+                    value={editBio}
+                    onChange={(e) => setEditBio(e.target.value)}
+                    disabled={!editMode1 || saving}
+                    placeholder="Tell students about your experience and teaching style..."
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Email</label>
+                    <input
+                      className="w-full rounded-xl bg-slate-50 border border-slate-100 px-3 py-2.5 text-sm text-slate-400 cursor-default"
+                      value={profile.email}
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-500 mb-1.5">Phone</label>
+                    <input
+                      className={`w-full rounded-xl border px-3 py-2.5 text-sm text-slate-900 transition-colors ${
+                        editMode1
+                          ? "bg-white border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                          : "bg-slate-50 border-slate-100 cursor-default"
+                      }`}
+                      value={editPhone}
+                      onChange={(e) => setEditPhone(e.target.value)}
+                      disabled={!editMode1 || saving}
+                      placeholder="+1 234 567 890"
+                    />
+                  </div>
+                </div>
+                {editMode1 && (
+                  <div className="pt-2 flex justify-end gap-2">
+                    <button
+                      onClick={() => setEditMode1(false)}
+                      className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      disabled={saving}
+                      className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                    >
+                      {saving ? "Saving..." : "Save"}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
-            {editMode1 && (
-              <div className="pt-2 flex justify-end">
-                <button
-                  onClick={() => setEditMode1(false)}
-                  className="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium border border-gray-300 text-gray-700 mr-3 disabled:opacity-60 disabled:cursor-not-allowed transition-colors hover:bg-gray-100"
-                >
-                  cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  disabled={saving}
-                  className="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-                >
-                  {saving ? "Saving..." : "Save Changes"}
-                </button>
+            {/* Subjects */}
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                <h3 className="text-sm font-semibold text-slate-900">Subjects you teach</h3>
+                {!editMode3 && (
+                  <button
+                    onClick={() => { setEditMode3(true); setEditMode1(false); setEditMode2(false); }}
+                    className="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                  >
+                    Edit
+                  </button>
+                )}
               </div>
-            )}
-          </div>
-        </form>
-      </section>
-
-      {/* Education (Rich Text-ish) */}
-      <section className="rounded-2xl border border-gray-300 bg-gray-50 p-5">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <h3 className="text-sm font-semibold text-gray-900">
-              Education
-            </h3>
-            <p className="text-xs text-gray-600">
-              Share your degrees, institutions and any relevant qualifications.
-            </p>
-          </div>
-          {!editMode2 && (
-            <span
-              onClick={() => {
-                setEditMode2(true);
-                setEditMode1(false);
-                setEditMode3(false);
-              }}
-              className="inline-flex cursor-pointer items-center min-w-[100px] px-3 py-1.5 rounded-full text-xs font-medium bg-gray-800 text-white hover:bg-gray-900 transition-colors"
-            >
-              Edit education
-            </span>
-          )}
-        </div>
-        <div className="relative">
-          <div className="relative">
-            {editMode2 ? (
-              <TiptapEditor
-                onChange={setEducationText}
-                value={educationText}
-              />
-            ) : (
-              <div className="education-content">
-                <div
-                  className="rendered-html-content text-gray-900"
-                  dangerouslySetInnerHTML={{ __html: educationText }}
-                />
+              <div className="px-6 py-5">
+                {editMode3 ? (
+                  <>
+                    {error && <div className="text-red-500 text-sm mb-3">{errorMsg}</div>}
+                    {step === 1 && (
+                      <motion.div
+                        key="subjects-step"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                      >
+                        <SubjectSelectProfile categories={categories} selectedSubjects={selectedSubjects} onSubjectsChange={onSubjectsChange} />
+                      </motion.div>
+                    )}
+                    {step === 2 && (
+                      <motion.div
+                        key="timeslot-step"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                      >
+                        <UpdateProfileTimeSlot selectedSubjectsfromProfile={selectedSubjects} setSelectedSubjectsWithPrice={setSelectedSubjectsWithPrice} />
+                      </motion.div>
+                    )}
+                    <div className="pt-5 flex justify-end gap-2">
+                      <button
+                        onClick={() => { setEditMode3(false); setStep(1); }}
+                        className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      {step === 1 && (
+                        <button
+                          onClick={() => setStep(2)}
+                          disabled={saving}
+                          className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                        >
+                          Next
+                        </button>
+                      )}
+                      {step === 2 && (
+                        <button
+                          onClick={handleSubjectsChange}
+                          disabled={saving}
+                          className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                        >
+                          Save Changes
+                        </button>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {Array.isArray(profile.subjects) && profile.subjects.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {profile.subjects.map((subject: any, index: number) => (
+                          <div key={index} className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50">
+                            <span className="text-sm text-slate-900">{subject.Subjects?.name || subject.name}</span>
+                            <span className="text-xs font-medium text-slate-500 bg-slate-200 px-2 py-0.5 rounded-md">{subject.Subjects?.code || subject.code}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-slate-400">No subjects yet. Click Edit to add subjects you teach.</p>
+                    )}
+                  </>
+                )}
               </div>
-            )}
-          </div>
-        </div>
-        {editMode2 && (
-          <div className="w-full flex mt-3 justify-end">
-            <button
-              onClick={() => setEditMode2(false)}
-              className="inline-flex items-center px-4 py-1 rounded-full text-sm font-medium border border-gray-300 text-gray-700 mr-3 disabled:opacity-60 disabled:cursor-not-allowed transition-colors hover:bg-gray-100"
-            >
-              cancel
-            </button>
-            <button
-              disabled={saving}
-              onClick={handleSaveEducation}
-              className="inline-flex items-center justify-end px-4 py-2.5 rounded-full text-sm font-medium bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-            >
-              {saving ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        )}
-      </section>
-
-      {/* Stripe / Payments */}
-      {profile.role === "tutor" && (
-        <section className="rounded-2xl border border-gray-300 bg-gray-50 p-5">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900">
-                Payment account
-              </h3>
-              <p className="text-xs text-gray-600">
-                {profile.stripe_account_id
-                  ? "Manage your Stripe account to update bank details, view payouts, or complete onboarding."
-                  : "Connect your Stripe account to receive payments from students."}
-              </p>
             </div>
-            <button
-              onClick={async () => {
-                setStripeLoading(true);
-                try {
-                  const endpoint = profile.stripe_account_id
-                    ? "/api/stripe/connect/login-link"
-                    : "/api/stripe/connect/create-account-link";
-                  const body =
-                    endpoint === "/api/stripe/connect/create-account-link"
-                      ? JSON.stringify({
-                          email: profile.email,
-                          country: getCountryFromTimezone(),
-                        })
-                      : undefined;
-                  const res = await fetch(endpoint, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    ...(body && { body }),
-                  });
-                  const data = await res.json();
-                  if (data.url) {
-                    sessionStorage.setItem("setupReturnStep", "4");
-                    window.location.href = data.url;
-                  } else {
-                    setStripeLoading(false);
-                    toast.error(data.error || "Failed to connect Stripe");
-                  }
-                } catch {
-                  setStripeLoading(false);
-                  toast.error("Failed to connect Stripe");
-                }
-              }}
-              disabled={stripeLoading}
-              className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-            >
-              {stripeLoading
-                ? "Opening…"
-                : profile.stripe_account_id
-                ? "Manage Stripe account"
-                : "Connect Stripe account"}
-            </button>
+
+            {/* Education */}
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-900">Education</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">Degrees, institutions, and qualifications</p>
+                </div>
+                {!editMode2 && (
+                  <button
+                    onClick={() => { setEditMode2(true); setEditMode1(false); setEditMode3(false); }}
+                    className="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
+              <div className="px-6 py-5">
+                {editMode2 ? (
+                  <>
+                    <TiptapEditor onChange={setEducationText} value={educationText} />
+                    <div className="pt-4 flex justify-end gap-2">
+                      <button
+                        onClick={() => setEditMode2(false)}
+                        className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSaveEducation}
+                        disabled={saving}
+                        className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                      >
+                        {saving ? "Saving..." : "Save"}
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="education-content">
+                    {educationText ? (
+                      <div className="rendered-html-content text-sm text-slate-700" dangerouslySetInnerHTML={{ __html: educationText }} />
+                    ) : (
+                      <p className="text-sm text-slate-400">No education info yet. Click Edit to add your qualifications.</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
           </div>
-        </section>
-      )}
+        </div>
+      </div>
     </div>
-  </div>
-</div>
   );
 }

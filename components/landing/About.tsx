@@ -24,10 +24,10 @@ export default function About() {
                     className="max-w-4xl mx-auto text-center text-gray-700 leading-relaxed"
                 >
                     <p className="mb-6 text-lg">
-                        Eclero was founded on a simple principle: education should be accessible to everyone. Believing that learning is a lifelong journey, the best way to learn is by connecting with others who have the knowledge and experience to share.
+                        LearnPeers was founded on a simple principle: education should be accessible to everyone. Believing that learning is a lifelong journey, the best way to learn is by connecting with others who have the knowledge and experience to share.
                     </p>
                     <p className="text-lg">
-                        Our mission is to foster a global community of learners and educators, enabling everyone to access the help they need to achieve their goals. Whether you're a student struggling with a difficult subject or a tutor eager to share your passion, Eclero is the place for you.
+                        Our mission is to foster a global community of learners and educators, enabling everyone to access the help they need to achieve their goals. Whether you're a student struggling with a difficult subject or a tutor eager to share your passion, LearnPeers is the place for you.
                     </p>
                 </motion.div>
             </div>

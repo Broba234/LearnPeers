@@ -35,6 +35,15 @@ type Session = {
     duration: number;
 };
 
+const statusConfig: Record<SessionStatus, { label: string; dot: string; text: string }> = {
+  pending:    { label: "Pending",     dot: "bg-amber-400",  text: "text-amber-600" },
+  accepted:   { label: "Confirmed",   dot: "bg-green-500",  text: "text-green-600" },
+  in_progress:{ label: "Live",        dot: "bg-green-500",  text: "text-green-600" },
+  completed:  { label: "Completed",   dot: "bg-slate-300",  text: "text-slate-500" },
+  declined:   { label: "Declined",    dot: "bg-red-400",    text: "text-red-500"   },
+  cancelled:  { label: "Cancelled",   dot: "bg-red-400",    text: "text-red-500"   },
+};
+
 export default function StudentHome() {
     const [stats, setStats] = useState<Stats>({
         totalSessions: 0,
@@ -69,7 +78,6 @@ export default function StudentHome() {
                 const res = await fetch(`/api/sessions/student?studentId=${encodeURIComponent(profileData.id)}`);
                 if (res.ok) {
                   const data = await res.json();
-                  console.log("datadfghj", data);
                   if (data.success && Array.isArray(data.sessions)) {
                     const nonCompleted = data.sessions.filter(
                       (session: any) => session.status !== "completed"
@@ -90,7 +98,7 @@ export default function StudentHome() {
                         duration: session.duration || 60,
                       };
                     });
-    
+
                     setSessions(formattedSessions);
                     setStats((prev) => ({
                       ...prev,
@@ -120,21 +128,24 @@ export default function StudentHome() {
         fetchProfile();
       }, [router]);
 
-      console.log("profile", profile);
-      if(loading) {
-        return <div className="flex h-screen items-center justify-center bg-gradient-to-b from-[#F8F9FD] to-gray-400">
-        <div className="text-lg text-white">Loading...</div>
-      </div>;
+      if (loading) {
+        return (
+          <div className="flex h-screen items-center justify-center bg-[#FAFAF9]">
+            <div className="text-sm text-slate-400">Loading...</div>
+          </div>
+        );
       }
-      if(!profile) {
-        return <div className="flex h-screen items-center justify-center bg-gradient-to-b from-[#F8F9FD] to-gray-400">
-        <div className="text-lg text-white">No profile found</div>
-      </div>;
+      if (!profile) {
+        return (
+          <div className="flex h-screen items-center justify-center bg-[#FAFAF9]">
+            <div className="text-sm text-slate-400">No profile found.</div>
+          </div>
+        );
       }
-      if(profile.role !== "student") {
+      if (profile.role !== "student") {
         router.push("/auth/login");
       }
-      if(!profile.profile_setup) {
+      if (!profile.profile_setup) {
         return (
             <>
          <AnimatePresence>
@@ -152,173 +163,103 @@ export default function StudentHome() {
           );
       }
 
+    const firstName = profile.name?.split(" ")[0] || "there";
+
     return (
-        <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="md:flex md:items-center md:justify-between">
-                <div className="flex-1 min-w-0">
-                    <p className="mt-2 text-gray-600">Track your learning progress and find tutors</p>
-                </div>
-                <div className="mt-4 flex md:mt-0 md:ml-4">
-                    <Link
-                        href="/home/student/explore"
-                        className="inline-flex items-center px-6 py-3 border border-transparent rounded-full shadow-lg text-sm font-medium text-white bg-[#1559C6] hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 hover:scale-105"
-                    >
-                        Find Tutor
-                    </Link>
-                </div>
+      <div className="min-h-screen bg-[#FAFAF9]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-2xl font-semibold text-slate-900">Hello, {firstName}</h1>
+              <p className="text-sm text-slate-400 mt-0.5">Here's what's coming up for you</p>
             </div>
-    
-    
-            {/* Upcoming Sessions */}
-            <div className="mt-8">
-                <div className="bg-white shadow-xl overflow-hidden sm:rounded-2xl border border-gray-200">
-                    <div className="px-6 py-5 sm:px-6">
-                        <h3 className="text-xl leading-6 font-bold text-gray-900">
-                            Upcoming Sessions
-                        </h3>
-                    </div>
-                    <div className="border-t border-gray-200">
-    <div className="px-6 py-5 sm:p-6">
-        {sessionsLoading ? (
-          <div className="flex flex-col items-center justify-center text-center space-y-3">
-            <svg
-              className="w-10 h-10 text-blue-500 animate-spin"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
+            <Link
+              href="/home/student/explore"
+              className="px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors"
             >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h3z"
-              ></path>
-            </svg>
-            <p className="text-gray-500">Loading your upcoming sessions...</p>
+              Find a Tutor
+            </Link>
           </div>
-        ) : sessions.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-center space-y-3">
-            <svg
-              className="w-16 h-16 text-gray-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <p className="text-gray-500">No upcoming sessions</p>
-            <p className="text-sm text-gray-400">
-              Book a new session to see it appear here.
-            </p>
+
+          {/* Stats row */}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+              <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">Total</p>
+              <p className="text-3xl font-bold text-slate-900 mt-2">{stats.totalSessions}</p>
+              <p className="text-xs text-slate-400 mt-1">sessions booked</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+              <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">Completed</p>
+              <p className="text-3xl font-bold text-slate-900 mt-2">{stats.completedSessions}</p>
+              <p className="text-xs text-slate-400 mt-1">sessions done</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+              <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">Upcoming</p>
+              <p className="text-3xl font-bold text-indigo-600 mt-2">{stats.upcomingSessions}</p>
+              <p className="text-xs text-slate-400 mt-1">sessions ahead</p>
+            </div>
           </div>
-        ) : (
-          <div className="space-y-4">
-            {sessions.map((session) => (
-              <div
-                key={session.id}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200 hover:bg-gray-100 transition-all"
-              >
-                <div className="flex items-center gap-4">
-                  <img
-                    src={session.tutorAvatar || "/default-avatar.png"}
-                    alt={session.tutorName}
-                    className="w-12 h-12 rounded-full object-cover border border-white shadow-sm"
-                  />
-                  <div>
-                    <h4 className="text-sm font-semibold text-gray-900">
-                      {session.subject}
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      with{" "}
-                      <span className="font-medium text-gray-800">
-                        {session.tutorName}
-                      </span>
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {session.date} at {session.startTime} •{" "}
-                      {session.duration === 0.5
-                        ? "30"
-                        : session.duration === 1
-                        ? "60"
-                        : session.duration === 1.5
-                        ? "90"
-                        : `${session.duration} min`}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end gap-2">
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                      session.status === "in_progress"
-                        ? "bg-green-100 text-green-800"
-                        : session.status === "pending"
-                        ? "bg-blue-100 text-blue-800"
-                        : session.status === "accepted"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {session.status.replace("_", " ")}
-                  </span>
-                  <Link
-                    href="/home/student/sessions"
-                    className="text-xs text-[#1559C6] hover:underline font-medium"
-                  >
-                    View details
+
+          {/* Upcoming Sessions */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+              <h3 className="text-sm font-semibold text-slate-900">Upcoming Sessions</h3>
+              <Link href="/home/student/sessions" className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
+                View all
+              </Link>
+            </div>
+            <div className="px-5 py-4">
+              {sessionsLoading ? (
+                <p className="text-sm text-slate-400 text-center py-6">Loading...</p>
+              ) : sessions.length === 0 ? (
+                <div className="text-center py-10">
+                  <svg className="w-10 h-10 text-slate-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p className="text-sm text-slate-500">No upcoming sessions</p>
+                  <p className="text-xs text-slate-400 mt-1">Book a session to see it here.</p>
+                  <Link href="/home/student/explore" className="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white text-xs font-medium rounded-xl hover:bg-indigo-700 transition-colors">
+                    Find a Tutor
                   </Link>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-    </div>
-</div>
-                </div>
-            </div>
-    
-            {/* Quick Actions */}
-            <div className="mt-8">
-                <div className="bg-white shadow-xl overflow-hidden sm:rounded-2xl border border-gray-200">
-                    <div className="px-6 py-5 sm:px-6">
-                        <h3 className="text-xl leading-6 font-bold text-gray-900">
-                            Quick Actions
-                        </h3>
-                    </div>
-                    <div className="border-t border-gray-200">
-                        <div className="px-6 py-5 sm:p-6">
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                <Link
-                                    href="/home/student/profile"
-                                    className="inline-flex items-center px-6 py-3 border border-gray-300 text-sm font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
-                                >
-                                    Edit Profile
-                                </Link>
-                                <Link
-                                    href="/home/student/sessions"
-                                    className="inline-flex items-center px-6 py-3 border border-gray-300 text-sm font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
-                                >
-                                    View All Sessions
-                                </Link>
-                            </div>
+              ) : (
+                <div className="divide-y divide-slate-100">
+                  {sessions.slice(0, 5).map((session) => {
+                    const sc = statusConfig[session.status] || statusConfig.pending;
+                    return (
+                      <div key={session.id} className="flex items-center justify-between py-3.5">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={session.tutorAvatar || "/default-avatar.png"}
+                            alt={session.tutorName}
+                            className="w-9 h-9 rounded-full object-cover bg-slate-100 flex-shrink-0"
+                          />
+                          <div>
+                            <p className="text-sm font-medium text-slate-900">{session.subject}</p>
+                            <p className="text-xs text-slate-400">with {session.tutorName}</p>
+                          </div>
                         </div>
-                    </div>
+                        <div className="flex items-center gap-4">
+                          <div className="text-right hidden sm:block">
+                            <p className="text-xs text-slate-500">{session.date}</p>
+                            <p className="text-xs text-slate-400">{session.startTime}</p>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${sc.dot}`} />
+                            <span className={`text-xs font-medium ${sc.text}`}>{sc.label}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
+              )}
             </div>
+          </div>
+
         </div>
-    </div>
+      </div>
     );
 }

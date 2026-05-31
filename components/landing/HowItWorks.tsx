@@ -54,7 +54,7 @@ export default function HowItWorks() {
                         A Marketplace for <span className="text-blue-600">Knowledge</span>
                     </h2>
                     <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-                        Eclero is a seamless peer-to-peer platform where students seeking help connect directly with students offering it.
+                        LearnPeers is a seamless peer-to-peer platform where students seeking help connect directly with students offering it.
                     </p>
                 </motion.div>
 

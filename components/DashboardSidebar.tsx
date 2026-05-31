@@ -146,7 +146,7 @@ export default function HomeSidebar({ userRole, userName }: HomeSidebarProps) {
 
       <div className="p-4 border-t">
         <div className="mb-3">
-          <h2 className="text-lg font-semibold text-gray-800">eclero</h2>
+          <h2 className="text-lg font-semibold text-gray-800">LearnPeers</h2>
         </div>
         <button
           onClick={handleSignOut}
