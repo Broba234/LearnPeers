@@ -214,7 +214,8 @@ export default function SubjectSelectProfile({
   };
 
   const selectedByCategory = getSelectedSubjectsByCategory();
-  const GRADES = [9, 10, 11, 12];
+  const gradeLabel = (n: number) => (n >= 1 && n <= 4 ? `Year ${n}` : `Grade ${n}`);
+  const GRADES = [9, 10, 11, 12, 1, 2, 3, 4];
   const searchResults = getSearchResults();
   return (
    <div className="space-y-8">
@@ -267,15 +268,13 @@ export default function SubjectSelectProfile({
               onChange={(e: any) => setGradeFilter(e.target.value || null)}
               className="w-full py-2 px-0 border-0 focus:ring-0 focus:outline-none text-sm text-gray-900 placeholder:text-gray-400 bg-transparent"
             >
-              <option value="">All Grades</option>
-              {GRADES.map((grade) => (
-                <option
-                  key={grade}
-                  value={grade}
-                >
-                  {grade}
-                </option>
-              ))}
+              <option value="">All Levels</option>
+              <optgroup label="High School">
+                {[9, 10, 11, 12].map(g => <option key={g} value={g}>Grade {g}</option>)}
+              </optgroup>
+              <optgroup label="Post-Secondary">
+                {[1, 2, 3, 4].map(g => <option key={g} value={g}>Year {g}</option>)}
+              </optgroup>
             </select>
           </div>
         </div>

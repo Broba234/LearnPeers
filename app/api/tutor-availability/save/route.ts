@@ -51,6 +51,9 @@ const endDate = newEvent.end ? new Date(newEvent.end) : new Date(`${newEvent.end
             end_time: toTimeDate(newEvent.end_time),
             start_date: startDate.toISOString(),
             end_date: endDate.toISOString(),
+            ...(newEvent.day_of_week !== undefined && newEvent.day_of_week !== null
+              ? { day_of_week: newEvent.day_of_week }
+              : {}),
           }
         });
     }

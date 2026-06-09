@@ -29,7 +29,8 @@ interface FilterModalProps {
   subjectsLoading: boolean;
 }
 
-const GRADES = [9, 10, 11, 12];
+const gradeLabel = (n: number) => (n >= 1 && n <= 4 ? `Year ${n}` : `Grade ${n}`);
+const GRADES = [9, 10, 11, 12, 1, 2, 3, 4];
 
 export const FilterModal: React.FC<FilterModalProps> = ({
   isOpen,
@@ -145,29 +146,46 @@ export const FilterModal: React.FC<FilterModalProps> = ({
 
           {/* Grade Filter */}
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-3">Grade</label>
-            <div className="flex gap-2">
-              <button
-                onClick={() => onGradeChange("")}
-                className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  gradeFilter === ""
-                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                All
-              </button>
-              {GRADES.map((g) => (
+            <label className="block text-sm font-semibold text-gray-900 mb-3">Level</label>
+            <button
+              onClick={() => onGradeChange("")}
+              className={`w-full mb-2 py-2 rounded-xl text-sm font-medium transition-all ${
+                gradeFilter === ""
+                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              All levels
+            </button>
+            <p className="text-xs text-gray-400 font-medium mb-1.5 mt-2">High School</p>
+            <div className="flex gap-2 mb-2">
+              {[9, 10, 11, 12].map((g) => (
                 <button
                   key={g}
                   onClick={() => onGradeChange(gradeFilter === String(g) ? "" : String(g))}
-                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all ${
                     gradeFilter === String(g)
                       ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
-                  {g}
+                  G{g}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 font-medium mb-1.5">Post-Secondary</p>
+            <div className="flex gap-2">
+              {[1, 2, 3, 4].map((g) => (
+                <button
+                  key={g}
+                  onClick={() => onGradeChange(gradeFilter === String(g) ? "" : String(g))}
+                  className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all ${
+                    gradeFilter === String(g)
+                      ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  Y{g}
                 </button>
               ))}
             </div>

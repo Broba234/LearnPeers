@@ -1,288 +1,151 @@
-// components/HeaderSmooth.tsx
 'use client';
 
 import Link from 'next/link';
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
-import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 
-export default function HeaderSmooth() {
-  const [width, setWidth] = useState(1280);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { scrollY } = useScroll();
-  const containerRef = useRef<HTMLDivElement>(null);
+const NAV = [
+  { label: 'How it works', href: '/#how-it-works' },
+  { label: 'For tutors', href: '/#features' },
+  { label: 'FAQ', href: '/#faq' },
+];
 
-  const SCROLL_THRESHOLD = 200;
-  const MIN_WIDTH = 640;
-  const MAX_WIDTH = 1280;
+function Wordmark({ className = 'h-7' }: { className?: string }) {
+  return (
+    <span className="flex items-center gap-2">
+      <Image
+        src="/learnpeers-logo-trimmed.png"
+        alt="LearnPeers"
+        width={297}
+        height={100}
+        priority
+        className={`${className} w-auto`}
+      />
+      <span className="rounded-md bg-brand-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand-700 ring-1 ring-brand-200">
+        Beta
+      </span>
+    </span>
+  );
+}
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const progress = Math.min(Math.max((latest - SCROLL_THRESHOLD) / 300, 0), 1);
-    const newWidth = MAX_WIDTH - (MAX_WIDTH - MIN_WIDTH) * progress;
-    setWidth(newWidth);
-  });
-
+export default function Header() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const [activeSection, setActiveSection] = useState<string>('');
 
-  // Close mobile menu when route changes
+  useEffect(() => setMobileOpen(false), [pathname]);
+
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
-
-  // Track which section is in view on the landing page
-  useEffect(() => {
-    if (pathname !== '/') return;
-
-    const sectionIds = ['our-mission', 'contact'];
-    const observers: IntersectionObserver[] = [];
-
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveSection(id);
-          }
-        },
-        { rootMargin: '-40% 0px -40% 0px', threshold: 0 }
-      );
-
-      observer.observe(el);
-      observers.push(observer);
-    });
-
-    // Reset to empty (Home) when scrolled to the very top
-    const handleScroll = () => {
-      if (window.scrollY < 200) {
-        setActiveSection('');
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      observers.forEach((o) => o.disconnect());
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [pathname]);
-
-  // Close mobile menu on escape key
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsMobileMenuOpen(false);
-    };
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    document.body.style.overflow = mobileOpen ? 'hidden' : 'unset';
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isMobileMenuOpen]);
-
-  const navItems = [
-    { label: 'Home', href: '/', sectionId: '' },
-    { label: 'About', href: '/#our-mission', sectionId: 'our-mission' },
-    { label: 'Contact', href: '/#contact', sectionId: 'contact' }
-  ];
-
-  const isNavActive = (item: typeof navItems[number]) => {
-    if (pathname !== '/') return false;
-    if (item.sectionId === '') return activeSection === '';
-    return activeSection === item.sectionId;
-  };
+  }, [mobileOpen]);
 
   return (
     <>
       <motion.header
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="fixed top-6 right-0 w-full z-[999] left-0"
+        className="fixed inset-x-0 top-0 z-[999] px-4 pt-4"
       >
-        <div className="flex justify-center">
-          <motion.div
-            ref={containerRef}
-            className="px-4 sm:px-5 py-3 sm:py-5 rounded-full bg-blue-900/20 backdrop-blur-xl mx-4 sm:mx-0"
-            animate={{
-              width: width,
-              scale: width < MAX_WIDTH ? 0.95 : 1,
-              boxShadow: width < MAX_WIDTH 
-                ? "0px 0px 80px -30px rgba(59, 130, 246, 0.5)" 
-                : "0px 0px 20px -10px rgba(59, 130, 246, 0.2)",
-            }}
-            transition={{
-              width: {
-                type: "spring",
-                stiffness: 180,
-                damping: 18,
-                mass: 0.8,
-              },
-              scale: {
-                type: "spring",
-                stiffness: 300,
-                damping: 25,
-              },
-              boxShadow: {
-                type: "spring",
-                stiffness: 300,
-                damping: 25,
-              },
-            }}
-            style={{
-              maxWidth: MAX_WIDTH,
-              minWidth: `min(${MIN_WIDTH}px, 90vw)`,
-            }}
-          >
-            <nav className="flex items-center justify-between px-2 sm:px-4">
-              <motion.div
-                animate={{
-                  scale: width < MAX_WIDTH ? 0.95 : 1,
-                }}
-                transition={{ 
-                  type: "spring", 
-                  stiffness: 400,
-                  damping: 20 
-                }}
-              >
-                <Link 
-                  href="/" 
-                  className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent hover:scale-105 transition-transform block"
-                >
-                  LearnPeers
-                </Link>
-              </motion.div>
+        <div
+          className={`mx-auto flex max-w-6xl items-center justify-between rounded-2xl px-4 py-2.5 transition-all duration-300 sm:px-5 ${
+            scrolled
+              ? 'border border-ink-100 bg-white/85 shadow-lg shadow-ink-900/5 backdrop-blur-xl'
+              : 'border border-transparent bg-white/40 backdrop-blur-md'
+          }`}
+        >
+          <Link href="/" className="shrink-0 transition hover:opacity-90">
+            <Wordmark />
+          </Link>
 
-              {/* Desktop Navigation */}
-              <motion.div 
-                className="hidden md:flex items-center space-x-2 lg:space-x-4"
-                animate={{
-                  scale: width < MAX_WIDTH ? 0.98 : 1,
-                }}
-                transition={{ 
-                  type: "spring", 
-                  stiffness: 350,
-                  damping: 20 
-                }}
+          <nav className="hidden items-center gap-1 md:flex">
+            {NAV.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="rounded-full px-3.5 py-2 text-sm font-medium text-ink-600 transition hover:bg-brand-50 hover:text-brand-700"
               >
-                {navItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className={`hover:text-white transition-colors duration-200 font-medium px-3 lg:px-4 py-1 rounded-full hover:bg-white/10 whitespace-nowrap text-sm lg:text-base ${isNavActive(item) ? 'bg-white/10 text-white' : 'text-gray-700/70'}`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </motion.div>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
-              {/* Mobile Menu Button */}
-              <div className="flex items-center space-x-2 sm:space-x-4">
-              <Link href="/auth/login" className="hidden sm:block w-full">
-           <motion.span
-              whileTap={{ scale: 0.95 }}
-              className="w-full block text-center py-2 px-6 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full font-medium shadow-lg hover:shadow-[0_0_40px_-10px_#3b82f6] transition-all"
-              
+          <div className="flex items-center gap-2">
+            <Link
+              href="/auth/login"
+              className="hidden rounded-full px-4 py-2 text-sm font-semibold text-ink-700 transition hover:text-brand-700 sm:block"
             >
-              Login
-            </motion.span>
-           </Link>
-
-                <button
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="md:hidden p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
-                  aria-label="Toggle menu"
-                >
-                  {isMobileMenuOpen ? (
-                    <X className="w-6 h-6 text-white" />
-                  ) : (
-                    <Menu className="w-6 h-6 text-white" />
-                  )}
-                </button>
-              </div>
-            </nav>
-          </motion.div>
+              Log in
+            </Link>
+            <Link
+              href="/auth/register"
+              className="hidden rounded-full bg-gradient-to-r from-brand-600 to-brand-700 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-brand-600/25 transition hover:brightness-105 active:scale-[0.98] sm:block"
+            >
+              Get started
+            </Link>
+            <button
+              onClick={() => setMobileOpen((v) => !v)}
+              className="rounded-full p-2 text-ink-700 transition hover:bg-brand-50 md:hidden"
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
       </motion.header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile menu */}
       <motion.div
         initial={false}
-        animate={isMobileMenuOpen ? "open" : "closed"}
-        variants={{
-          open: { opacity: 1, pointerEvents: "auto" },
-          closed: { opacity: 0, pointerEvents: "none" }
-        }}
-        className="fixed inset-0 z-[999] md:hidden bg-black/30 backdrop-blur-sm"
-        onClick={() => setIsMobileMenuOpen(false)}
+        animate={mobileOpen ? { opacity: 1, pointerEvents: 'auto' } : { opacity: 0, pointerEvents: 'none' }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-[998] bg-ink-900/30 backdrop-blur-sm md:hidden"
+        onClick={() => setMobileOpen(false)}
       />
-
-      {/* Mobile Menu Panel */}
       <motion.div
         initial={false}
-        animate={isMobileMenuOpen ? "open" : "closed"}
-        variants={{
-          open: { 
-            x: 0,
-            transition: { type: "spring", stiffness: 300, damping: 30 }
-          },
-          closed: { 
-            x: "100%",
-            transition: { type: "spring", stiffness: 300, damping: 30, delay: 0.1 }
-          }
-        }}
-        className="fixed top-0 right-0 bottom-0 w-64 z-[999] md:hidden bg-black/20 backdrop-blur-xl p-6 rounded-l-[50px]"
+        animate={mobileOpen ? { x: 0 } : { x: '100%' }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        className="fixed right-0 top-0 z-[999] flex h-full w-72 flex-col gap-1 bg-white p-6 pt-20 shadow-2xl md:hidden"
       >
-        <div className="flex flex-col h-full pt-16">
-          <div className="flex-1">
-            <div className="mb-8">
-              <Link 
-                href="/" 
-                className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                LearnPeers
-              </Link>
-            </div>
-            
-            <div className="space-y-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`block py-3 px-4 rounded-full text-lg font-medium transition-all ${isNavActive(item)
-                    ? 'bg-white/20 text-white'
-                    : 'text-gray-200 hover:bg-white/10 hover:text-white'
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="pt-6 border-t w-full border-white/20">
-           <Link href="/auth/login" className="w-full block" onClick={() => setIsMobileMenuOpen(false)}>
-           <motion.span
-              whileTap={{ scale: 0.95 }}
-              className="w-full block text-center py-3 px-6 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full font-medium shadow-lg hover:shadow-[0_0_40px_-10px_#3b82f6] transition-all"
-              
-            >
-              Login
-            </motion.span>
-           </Link>
-          </div>
+        {NAV.map((item) => (
+          <Link
+            key={item.label}
+            href={item.href}
+            onClick={() => setMobileOpen(false)}
+            className="rounded-xl px-4 py-3 text-base font-medium text-ink-700 transition hover:bg-brand-50 hover:text-brand-700"
+          >
+            {item.label}
+          </Link>
+        ))}
+        <div className="mt-4 flex flex-col gap-2 border-t border-ink-100 pt-4">
+          <Link
+            href="/auth/login"
+            onClick={() => setMobileOpen(false)}
+            className="rounded-xl px-4 py-3 text-center text-base font-semibold text-ink-700 ring-1 ring-ink-200 transition hover:bg-slate-50"
+          >
+            Log in
+          </Link>
+          <Link
+            href="/auth/register"
+            onClick={() => setMobileOpen(false)}
+            className="rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 px-4 py-3 text-center text-base font-semibold text-white"
+          >
+            Get started
+          </Link>
         </div>
       </motion.div>
     </>

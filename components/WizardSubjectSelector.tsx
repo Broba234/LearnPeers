@@ -42,7 +42,7 @@ export const WizardSubjectSelector = ({
       {/* Category Selection */}
       <div>
   <label className="block text-sm font-medium text-white mb-2">
-    Select Grade *
+    Filter by level
   </label>
   <select
     name="grade"
@@ -50,12 +50,19 @@ export const WizardSubjectSelector = ({
     onChange={(e) => onChange(e)}
     className="w-full px-4 py-3 text-white bg-gradient-to-r from-gray-800 to-gray-900 border border-white/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none hover:from-gray-700 hover:to-gray-800"
   >
-    <option value="" className="text-gray-300 bg-gray-800">Choose a grade</option>
-    <option value="1" className="text-white bg-gray-800">All</option>
-    <option value="2" className="text-white bg-gray-800">9th</option>
-    <option value="3" className="text-white bg-gray-800">10th</option>
-    <option value="4" className="text-white bg-gray-800">11th</option>
-    <option value="5" className="text-white bg-gray-800">12th</option>
+    <option value="" className="text-gray-300 bg-gray-800">All levels</option>
+    <optgroup label="High School" className="bg-gray-800">
+      <option value="9" className="text-white bg-gray-800">Grade 9</option>
+      <option value="10" className="text-white bg-gray-800">Grade 10</option>
+      <option value="11" className="text-white bg-gray-800">Grade 11</option>
+      <option value="12" className="text-white bg-gray-800">Grade 12</option>
+    </optgroup>
+    <optgroup label="Post-Secondary" className="bg-gray-800">
+      <option value="1" className="text-white bg-gray-800">Year 1</option>
+      <option value="2" className="text-white bg-gray-800">Year 2</option>
+      <option value="3" className="text-white bg-gray-800">Year 3</option>
+      <option value="4" className="text-white bg-gray-800">Year 4</option>
+    </optgroup>
   </select>
 </div>
       <div className="relative">
@@ -155,7 +162,7 @@ export const WizardSubjectSelector = ({
                           >
                             {subject.name} ({subject.code})
                             <span className="ml-1 text-xs text-gray-500">
-                              G{subject.grade}
+                              {subject.grade >= 1 && subject.grade <= 4 ? `Y${subject.grade}` : `G${subject.grade}`}
                             </span>
                             {isSelected && (
                               <svg

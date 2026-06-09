@@ -4,20 +4,20 @@ import { NextRequest } from 'next/server';
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email,name, phone, bio,avatar } = body;
-
+    const { email, name, phone, bio, avatar, institution_id } = body;
 
     if (!email) {
       return new Response(JSON.stringify({ error: 'Email is required' }), { status: 400 });
     }
-    const fullName = name.trim();
+    const fullName = name?.trim();
       const updatedProfile = await prisma.profiles.update({
         where: { email },
         data: {
-          name: fullName,
+          ...(fullName ? { name: fullName } : {}),
           phone: phone || null,
           bio: bio || null,
           ...(avatar !== undefined ? { avatar } : {}),
+          ...(institution_id !== undefined ? { institution_id: institution_id || null } : {}),
         },
       });
 

@@ -90,7 +90,7 @@ export default function SubjectsPage() {
             .sort((a, b) => a - b)
             .map(grade => ({
               id: grade,
-              name: `Grade ${grade}`
+              name: grade >= 1 && grade <= 4 ? `Year ${grade}` : `Grade ${grade}`
             }));
           
           const categoryOptions: CategoryOption[] = Array.from(uniqueCategories)
@@ -358,10 +358,10 @@ export default function SubjectsPage() {
               }}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
             >
-              <option value="all">All Grades</option>
+              <option value="all">All Levels</option>
               {uniqueGrades.sort((a, b) => parseInt(a) - parseInt(b)).map(grade => (
                 <option key={grade} value={grade}>
-                  Grade {grade}
+                  {parseInt(grade) >= 1 && parseInt(grade) <= 4 ? `Year ${grade}` : `Grade ${grade}`}
                 </option>
               ))}
             </select>
@@ -450,7 +450,7 @@ export default function SubjectsPage() {
                           Code: <span className="font-mono">{subject.code}</span>
                         </div>
                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                          Grade: {subject.grade}
+                          {subject.grade >= 1 && subject.grade <= 4 ? `Year ${subject.grade}` : `Grade ${subject.grade}`}
                         </div>
                       </td>
                       <td className="px-6 py-4">

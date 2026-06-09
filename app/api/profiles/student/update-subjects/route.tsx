@@ -15,21 +15,17 @@ export async function PUT(request: NextRequest) {
       });
 
       if (profile && subjects && Array.isArray(subjects)) {
-        // Clear existing subject relationships
-        await prisma.profilesOnSubjects.deleteMany({
-          where: { profile_id: profile.id }
-        });
+        await prisma.profilesOnSubjects.deleteMany({ where: { profile_id: profile.id } });
 
-        // Create new subject relationships
         for (const s of subjects) {
-          if (s) {
-            await prisma.profilesOnSubjects.create({
-              data: {
-                profile_id: profile.id,
-                subject_id: s
-              }
-            });
-          }
+          if (!s) continue;
+          // s can be a plain subject_id string or { subject_id, institution_course_id }
+          const subject_id = typeof s === 'string' ? s : s.subject_id;
+          const institution_course_id = typeof s === 'string' ? null : (s.institution_course_id || null);
+          if (!subject_id) continue;
+          await prisma.profilesOnSubjects.create({
+            data: { profile_id: profile.id, subject_id, institution_course_id },
+          });
         }
       }
 

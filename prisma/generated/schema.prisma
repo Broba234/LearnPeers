@@ -477,6 +477,7 @@ model Profiles {
   profile_setup                                    Boolean?             @default(false)
   is_tutor                                         Boolean?             @default(false)
   stripe_account_id                                String?              @db.VarChar(255)
+  institution_id                                   String?              @db.Uuid
   Conversations_Conversations_student_idToProfiles Conversations[]      @relation("Conversations_student_idToProfiles")
   Conversations_Conversations_tutor_idToProfiles   Conversations[]      @relation("Conversations_tutor_idToProfiles")
   Messages                                         Messages[]
@@ -485,25 +486,29 @@ model Profiles {
   Sessions_Sessions_student_idToProfiles           Sessions[]           @relation("Sessions_student_idToProfiles")
   Sessions_Sessions_tutor_idToProfiles             Sessions[]           @relation("Sessions_tutor_idToProfiles")
   TutorAvailability                                TutorAvailability[]
+  Institutions                                     Institutions?        @relation(fields: [institution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  Feedback                                         Feedback[]
 
   @@schema("public")
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model ProfilesOnSubjects {
-  profile_id        String              @db.Uuid
-  subject_id        String              @db.Uuid
-  created_at        DateTime?           @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime?           @default(now()) @db.Timestamptz(6)
-  price_1           Float?
-  price_2           Float?
-  price_3           Float?              @default(1)
-  duration_3        Float?              @default(1.5)
-  duration_2        Float?              @default(1)
-  duration_1        Float?              @default(0.5)
-  Profiles          Profiles            @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Subjects          Subjects            @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  TutorAvailability TutorAvailability[]
+  profile_id            String              @db.Uuid
+  subject_id            String              @db.Uuid
+  created_at            DateTime?           @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?           @default(now()) @db.Timestamptz(6)
+  price_1               Float?
+  price_2               Float?
+  price_3               Float?              @default(1)
+  duration_3            Float?              @default(1.5)
+  duration_2            Float?              @default(1)
+  duration_1            Float?              @default(0.5)
+  institution_course_id String?             @db.Uuid
+  Profiles              Profiles            @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Subjects              Subjects            @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  InstitutionCourses    InstitutionCourses? @relation(fields: [institution_course_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  TutorAvailability     TutorAvailability[]
 
   @@id([profile_id, subject_id])
   @@schema("public")
@@ -541,7 +546,39 @@ model Subjects {
   created_at         DateTime?            @default(now()) @db.Timestamptz(6)
   updated_at         DateTime?            @default(now()) @db.Timestamptz(6)
   ProfilesOnSubjects ProfilesOnSubjects[]
+  InstitutionCourses InstitutionCourses[]
 
+  @@schema("public")
+}
+
+model Institutions {
+  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name               String
+  abbreviation       String?
+  country            String               @default("Canada")
+  province           String?
+  created_at         DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime             @default(now()) @db.Timestamptz(6)
+  Profiles           Profiles[]
+  InstitutionCourses InstitutionCourses[]
+
+  @@schema("public")
+}
+
+model InstitutionCourses {
+  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  institution_id     String               @db.Uuid
+  subject_id         String               @db.Uuid
+  code               String
+  name               String?
+  description        String?
+  created_at         DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime             @default(now()) @db.Timestamptz(6)
+  Institutions       Institutions         @relation(fields: [institution_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Subjects           Subjects             @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  ProfilesOnSubjects ProfilesOnSubjects[]
+
+  @@unique([institution_id, code])
   @@schema("public")
 }
 
@@ -597,6 +634,25 @@ model Contacts {
 
   @@index([created_at(sort: Desc)])
   @@index([is_read])
+  @@schema("public")
+}
+
+/// Beta feedback messages submitted from the persistent feedback widget. Stored only.
+model Feedback {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  message    String
+  user_id    String?   @db.Uuid
+  email      String?
+  name       String?
+  page       String?
+  user_agent String?
+  is_read    Boolean   @default(false)
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  Profiles   Profiles? @relation(fields: [user_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([created_at(sort: Desc)])
+  @@index([is_read])
+  @@index([user_id])
   @@schema("public")
 }
 

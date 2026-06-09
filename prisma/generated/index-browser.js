@@ -415,7 +415,8 @@ exports.Prisma.ProfilesScalarFieldEnum = {
   updated_at: 'updated_at',
   profile_setup: 'profile_setup',
   is_tutor: 'is_tutor',
-  stripe_account_id: 'stripe_account_id'
+  stripe_account_id: 'stripe_account_id',
+  institution_id: 'institution_id'
 };
 
 exports.Prisma.ProfilesOnSubjectsScalarFieldEnum = {
@@ -428,7 +429,8 @@ exports.Prisma.ProfilesOnSubjectsScalarFieldEnum = {
   price_3: 'price_3',
   duration_3: 'duration_3',
   duration_2: 'duration_2',
-  duration_1: 'duration_1'
+  duration_1: 'duration_1',
+  institution_course_id: 'institution_course_id'
 };
 
 exports.Prisma.SessionsScalarFieldEnum = {
@@ -454,6 +456,27 @@ exports.Prisma.SubjectsScalarFieldEnum = {
   code: 'code',
   grade: 'grade',
   category: 'category',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.InstitutionsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  abbreviation: 'abbreviation',
+  country: 'country',
+  province: 'province',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.InstitutionCoursesScalarFieldEnum = {
+  id: 'id',
+  institution_id: 'institution_id',
+  subject_id: 'subject_id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -495,6 +518,18 @@ exports.Prisma.ContactsScalarFieldEnum = {
   email: 'email',
   subject: 'subject',
   message: 'message',
+  is_read: 'is_read',
+  created_at: 'created_at'
+};
+
+exports.Prisma.FeedbackScalarFieldEnum = {
+  id: 'id',
+  message: 'message',
+  user_id: 'user_id',
+  email: 'email',
+  name: 'name',
+  page: 'page',
+  user_agent: 'user_agent',
   is_read: 'is_read',
   created_at: 'created_at'
 };
@@ -660,9 +695,12 @@ exports.Prisma.ModelName = {
   ProfilesOnSubjects: 'ProfilesOnSubjects',
   Sessions: 'Sessions',
   Subjects: 'Subjects',
+  Institutions: 'Institutions',
+  InstitutionCourses: 'InstitutionCourses',
   TutorAvailability: 'TutorAvailability',
   Notifications: 'Notifications',
   Contacts: 'Contacts',
+  Feedback: 'Feedback',
   custom_oauth_providers: 'custom_oauth_providers',
   webauthn_challenges: 'webauthn_challenges',
   webauthn_credentials: 'webauthn_credentials'

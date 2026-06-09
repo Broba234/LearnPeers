@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
     const profile = await prisma.profiles.findUnique({
       where: { email },
-      select: { 
+      select: {
         id: true,
         role: true,
         name: true,
@@ -29,28 +29,35 @@ export async function GET(request: Request) {
         profile_setup: true,
         is_tutor: true,
         stripe_account_id: true,
+        institution_id: true,
+        Institutions: { select: { id: true, name: true, abbreviation: true } },
         subjects: {
           select: {
-            Subjects: {
+            institution_course_id: true,
+            price_1: true, price_2: true, price_3: true,
+            duration_1: true, duration_2: true, duration_3: true,
+            Subjects: { select: { id: true, name: true, code: true, grade: true, category: true } },
+            InstitutionCourses: {
               select: {
-                id: true,
-                name: true,
-                code: true,
-                grade: true,
-                category: true,
-                created_at: true,
-                updated_at: true,
+                id: true, code: true, name: true,
+                Institutions: { select: { id: true, name: true, abbreviation: true } },
               }
             }
           }
         }
       }
     });
-    const subjects = profile.subjects.map(pivot => pivot.Subjects);
-
     if (!profile) {
       return new Response(JSON.stringify({ error: 'Profile not found' }), { status: 404 });
     }
+
+    const subjects = profile.subjects.map(pivot => ({
+      ...pivot.Subjects,
+      institution_course_id: pivot.institution_course_id,
+      institution_course: pivot.InstitutionCourses,
+      price_1: pivot.price_1, price_2: pivot.price_2, price_3: pivot.price_3,
+      duration_1: pivot.duration_1, duration_2: pivot.duration_2, duration_3: pivot.duration_3,
+    }));
 
     return new Response(JSON.stringify({ ...profile, subjects }), { status: 200 });
   } catch (error: any) {

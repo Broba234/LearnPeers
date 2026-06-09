@@ -1,199 +1,138 @@
-"use client";
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+'use client';
+
+import { useRef } from 'react';
+import Link from 'next/link';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useReducedMotion,
+} from 'framer-motion';
+import { ArrowRight, GraduationCap, Sparkles } from 'lucide-react';
+import HeroMedia from './HeroMedia';
+import ParallaxNodes, { type ParallaxItem } from './ParallaxNodes';
+
+const HERO_NODES: ParallaxItem[] = [
+  // left edge — large/soft (far, slow) then smaller (near, fast)
+  { className: 'absolute -left-10 top-24 h-56 w-56 rotate-[-14deg] opacity-[0.2] blur-[4px]', travel: 50 },
+  { className: 'absolute left-[3%] bottom-16 hidden h-28 w-28 rotate-[18deg] opacity-[0.16] blur-[2px] sm:block', travel: 110 },
+  // right edge
+  { className: 'absolute -right-12 top-[28%] h-64 w-64 rotate-[10deg] opacity-[0.18] blur-[5px]', travel: 40 },
+  { className: 'absolute right-[5%] bottom-24 hidden h-24 w-24 -rotate-[10deg] opacity-[0.16] blur-[2px] md:block', travel: 130 },
+];
+
+const fade = (delay: number) => ({
+  initial: { opacity: 0, y: 18 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: [0.21, 0.5, 0.36, 1] as const },
+});
 
 export default function Hero() {
-    const containerRef = useRef(null);
-    const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+  const smooth = useSpring(scrollYProgress, { stiffness: 55, damping: 22, mass: 0.5 });
+  const copyY = useTransform(smooth, [0, 1], [0, -40]);
+  const mediaY = useTransform(smooth, [0, 1], [0, -100]);
 
-    // Title animations - extend the pause where titles remain perfectly still, then slide out later
-    const leftX = useTransform(scrollYProgress, [0, 0.7, 0.8, 0.98], ["0vw", "0vw", "-0.1vw", "-100vw"]);
-    const rightX = useTransform(scrollYProgress, [0, 0.7, 0.8, 0.98], ["0vw", "0vw", "0.1vw", "100vw"]);
-    const titleSectionOpacity = useTransform(scrollYProgress, [0, 0.75, 0.9, 0.99], [1, 1, 1, 0]);
-    // NO Y movement - titles stay at exact same vertical position
+  return (
+    <section
+      ref={ref}
+      className="relative w-full overflow-hidden bg-gradient-to-b from-white via-brand-50/40 to-white"
+    >
+      {/* ambient brand blobs */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-70"
+        style={{
+          backgroundImage: `radial-gradient(at 12% 8%, rgba(0,119,190,0.14) 0px, transparent 45%),
+            radial-gradient(at 88% 0%, rgba(36,48,54,0.10) 0px, transparent 40%),
+            radial-gradient(at 50% 100%, rgba(0,119,190,0.08) 0px, transparent 55%)`,
+        }}
+      />
 
-    // Description animations - appear earlier and remain longer during the extended pause
-    const descriptionOpacity = useTransform(scrollYProgress, [0.05, 0.2, 0.88, 0.98], [0, 1, 1, 0]);
-    const descriptionY = useTransform(scrollYProgress, [0.05, 0.2], ["30px", "0px"]);
+      <ParallaxNodes items={HERO_NODES} offset={['start start', 'end start']} />
 
-    // CTA buttons stay visible on load but disappear as the hero scrolls away
-    const ctaOpacity = useTransform(scrollYProgress, [0, 0.2, 0.4, 0.6], [1, 1, 0.5, 0]);
-    const ctaPointerEvents = useTransform(scrollYProgress, (value) => (value > 0.55 ? "none" : "auto"));
-
-    return (
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-5 pb-16 pt-32 sm:px-8 lg:flex-row lg:gap-16 lg:pb-24 lg:pt-40">
+        {/* Copy — slower layer */}
         <motion.div
-            className="min-h-[85svh] sm:min-h-screen relative overflow-hidden"
-            style={{
-                background: useTransform(
-                    scrollYProgress,
-                    [0, 1],
-                    [
-                        "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%)",
-                        "linear-gradient(135deg, #764ba2 0%, #667eea 50%, #764ba2 100%)"
-                    ]
-                )
-            }}
+          style={reduce ? undefined : { y: copyY, willChange: 'transform' }}
+          className="flex-1 text-center lg:text-left"
         >
-            {/* Animated background elements */}
-            <div className="absolute inset-0 opacity-20">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-white/5 rounded-full blur-3xl animate-pulse delay-700"></div>
-                <div className="absolute top-3/4 left-1/2 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-            </div>
-            
-            {/* Desktop/Large screens: fixed titles with motion */}
-            <motion.div 
-                style={{ 
-                    opacity: titleSectionOpacity,
-                    position: "fixed",
-                    top: "25vh",
-                    left: "0",
-                    right: "0",
-                    zIndex: 20,
-                    transform: "none"
-                }} 
-                className="hidden lg:flex items-center justify-center pointer-events-none"
+          <motion.div {...fade(0)} className="mb-5 flex justify-center lg:justify-start">
+            <span className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-1.5 text-xs font-semibold text-brand-700">
+              <Sparkles className="h-3.5 w-3.5" />
+              Now in beta testing - give us feedback!
+            </span>
+          </motion.div>
+
+          <motion.h1
+            {...fade(0.08)}
+            className="text-balance text-4xl font-extrabold tracking-tight text-ink-900 sm:text-5xl lg:text-6xl lg:leading-[1.05]"
+          >
+            Learn from the student who{' '}
+            <span className="bg-gradient-to-r from-brand-500 to-brand-700 bg-clip-text text-transparent">
+              aced it
+            </span>
+            .
+          </motion.h1>
+
+          <motion.p
+            {...fade(0.16)}
+            className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-ink-500 sm:text-lg lg:mx-0"
+          >
+            Get matched with students a year or two ahead — the ones who scored 90+ in your
+            exact course.
+          </motion.p>
+
+          <motion.div
+            {...fade(0.24)}
+            className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start"
+          >
+            <Link
+              href="/home/student/explore"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-600/25 ring-1 ring-white/20 transition hover:shadow-xl hover:shadow-brand-600/30 hover:brightness-[1.04] active:scale-[0.98] sm:w-auto sm:text-base"
             >
-                <div className="grid grid-cols-2 gap-16 items-start w-full max-w-7xl mx-auto px-4">
-                    {/* Left side - Learn */}
-                    <motion.div 
-                        style={{ x: leftX }}
-                        className="text-left space-y-6"
-                    >
-                        <h2 className="text-5xl md:text-7xl text-white font-black leading-none">
-                            Learn <span className="bg-gradient-to-r from-cyan-400 to-blue-400 text-transparent bg-clip-text">Faster</span>
-                        </h2>
-                        <motion.div
-                            style={{ 
-                                opacity: descriptionOpacity,
-                                y: descriptionY
-                            }}
-                            className="text-blue-100 text-base md:text-lg leading-relaxed max-w-md bg-white/10 rounded-xl p-4 backdrop-blur-sm min-h-[96px]"
-                        >
-                            <span className="block">Connect instantly with vetted peer tutors across STEM, humanities, and languages.</span>
-                            <span className="block">Collaborate via whiteboard, screen share, and file uploads for faster exam prep.</span>
-                        </motion.div>
-                    </motion.div>
-                    
-                    {/* Right side - Earn */}
-                    <motion.div 
-                        style={{ x: rightX }}
-                        className="text-right space-y-6"
-                    >
-                        <h2 className="text-5xl md:text-7xl text-white font-black leading-none">
-                            Earn <span className="bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">Smarter</span>
-                        </h2>
-                        <motion.div
-                            style={{ 
-                                opacity: descriptionOpacity,
-                                y: descriptionY
-                            }}
-                            className="text-purple-100 text-base md:text-lg leading-relaxed max-w-md ml-auto bg-white/10 rounded-xl p-4 backdrop-blur-sm min-h-[96px]"
-                        >
-                            <span className="block">Turn your expertise into income with flexible scheduling and transparent payouts.</span>
-                            <span className="block">Set your rates, earn trust with verified reviews, and help learners thrive.</span>
-                        </motion.div>
-                    </motion.div>
-                </div>
-            </motion.div>
+              Find a tutor
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+            <Link
+              href="/auth/register?role=tutor"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-ink-200 bg-white px-6 py-3.5 text-sm font-semibold text-ink-800 shadow-sm transition hover:border-brand-300 hover:bg-brand-50/50 active:scale-[0.98] sm:w-auto sm:text-base"
+            >
+              <GraduationCap className="h-5 w-5 text-brand-600" />
+              Become a tutor
+            </Link>
+          </motion.div>
 
-            {/* Mobile/Tablet: static, stacked content to avoid overlap */}
-            <div className="lg:hidden relative z-20 px-4 pt-28 pb-10">
-                <div className="max-w-2xl mx-auto space-y-10">
-                    <div className="text-center space-y-4">
-                        <h2 className="text-4xl sm:text-5xl text-white font-black leading-tight">
-                            Learn <span className="bg-gradient-to-r from-cyan-400 to-blue-400 text-transparent bg-clip-text">Faster</span>
-                        </h2>
-                        <div className="text-blue-100 text-base leading-relaxed bg-white/10 rounded-xl p-4 backdrop-blur-sm">
-                            <span className="block">Connect instantly with vetted peer tutors across STEM, humanities, and languages.</span>
-                            <span className="block">Collaborate via whiteboard, screen share, and file uploads for faster exam prep.</span>
-                        </div>
-                    </div>
-                    <div className="text-center space-y-4">
-                        <h2 className="text-4xl sm:text-5xl text-white font-black leading-tight">
-                            Earn <span className="bg-gradient-to-r from-purple-400 to-pink-400 text-transparent bg-clip-text">Smarter</span>
-                        </h2>
-                        <div className="text-purple-100 text-base leading-relaxed bg-white/10 rounded-xl p-4 backdrop-blur-sm">
-                            <span className="block">Turn your expertise into income with flexible scheduling and transparent payouts.</span>
-                            <span className="block">Set your rates, earn trust with verified reviews, and help learners thrive.</span>
-                        </div>
-                    </div>
-                </div>
-                {/* Mobile buttons in normal flow */}
-                <motion.div
-                    className="mt-8 flex flex-col items-center"
-                    style={{ opacity: ctaOpacity, pointerEvents: ctaPointerEvents }}
-                >
-                    <div className="flex flex-col sm:flex-row justify-center items-center gap-4 w-full max-w-md mx-auto">
-                        <a 
-                            href="/auth/register?role=student" 
-                            className="group relative inline-flex items-center justify-center gap-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl px-6 py-3 text-white font-bold text-base transition-all duration-300 hover:bg-white/30 hover:scale-105 shadow-2xl w-full"
-                        >
-                            <div className="w-2 h-2 bg-cyan-400 rounded-full group-hover:animate-pulse"></div>
-                            Start Learning
-                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                        </a>
-                        <a
-                            href="/auth/register?role=tutor"
-                            className="group relative inline-flex items-center justify-center gap-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl px-6 py-3 text-white font-bold text-base transition-all duration-300 hover:bg-white/30 hover:scale-105 shadow-2xl w-full"
-                        >
-                            <div className="w-2 h-2 bg-purple-400 rounded-full group-hover:animate-pulse"></div>
-                            Start Earning
-                            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                            </svg>
-                        </a>
-                    </div>
-                </motion.div>
-            </div>
-
-            <div ref={containerRef} className="hidden lg:block relative h-[200vh] z-10">
-                <div className="sticky top-0 h-screen flex flex-col justify-center items-center px-4">
-
-                    {/* Desktop buttons - fixed until white section covers */}
-                    <motion.div
-                        style={{ 
-                            opacity: ctaOpacity,
-                            pointerEvents: ctaPointerEvents,
-                            position: "fixed",
-                            top: "70vh",
-                            left: "0",
-                            right: "0",
-                            zIndex: 25
-                        }}
-                        className="hidden lg:flex flex-col items-center"
-                    >
-                        <div className="flex flex-col sm:flex-row justify-center items-center gap-6 w-full max-w-4xl mx-auto px-4">
-                            <a 
-                                href="/auth/register?role=student" 
-                                className="group relative inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl px-8 py-4 text-white font-bold text-lg transition-all duration-300 hover:bg-white/30 hover:scale-105 shadow-2xl"
-                            >
-                                <div className="w-2 h-2 bg-cyan-400 rounded-full group-hover:animate-pulse"></div>
-                                Start Learning
-                                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                </svg>
-                            </a>
-                            
-                            <a
-                                href="/auth/register?role=tutor"
-                                className="group relative inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl px-8 py-4 text-white font-bold text-lg transition-all duration-300 hover:bg-white/30 hover:scale-105 shadow-2xl"
-                            >
-                                <div className="w-2 h-2 bg-purple-400 rounded-full group-hover:animate-pulse"></div>
-                                Start Earning
-                                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                </svg>
-                            </a>
-                        </div>
-                    </motion.div>
-
-                    
-                    
-                </div>
-            </div>
+          <motion.div
+            {...fade(0.32)}
+            className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-400 lg:justify-start"
+          >
+            <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Live 1-on-1 video
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Shared whiteboard
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Secure payments
+            </span>
+          </motion.div>
         </motion.div>
-    )
+
+        {/* Visual — faster layer */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.21, 0.5, 0.36, 1] }}
+          className="w-full max-w-xl flex-1"
+        >
+          <motion.div style={reduce ? undefined : { y: mediaY, willChange: 'transform' }}>
+            <HeroMedia />
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
 }

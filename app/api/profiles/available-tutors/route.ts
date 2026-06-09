@@ -28,8 +28,20 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const filterAvailable = searchParams.get('availableNow') === 'true';
 
+    // scope=mine: match institution_course_id (exact institution match)
+    // scope=equivalent: match subject_id (canonical — any institution)
+    const subjectId = searchParams.get('subjectId');
+    const institutionCourseId = searchParams.get('institutionCourseId');
+    const scope = searchParams.get('scope') || 'equivalent'; // 'mine' | 'equivalent'
+
+    const subjectFilter = subjectId
+      ? scope === 'mine' && institutionCourseId
+        ? { subjects: { some: { institution_course_id: institutionCourseId } } }
+        : { subjects: { some: { subject_id: subjectId } } }
+      : {};
+
     const tutors = await prisma.profiles.findMany({
-      where: { role: "tutor" },
+      where: { role: "tutor", ...subjectFilter },
       select: {
         id: true,
         name: true,
@@ -38,6 +50,8 @@ export async function GET(req: Request) {
         isAvailableNow: true,
         rating: true,
         education: true,
+        institution_id: true,
+        Institutions: { select: { id: true, name: true, abbreviation: true } },
         subjects: {
           select: {
             duration_1: true,
@@ -46,13 +60,15 @@ export async function GET(req: Request) {
             price_1: true,
             price_2: true,
             price_3: true,
-            Subjects: {
+            institution_course_id: true,
+            InstitutionCourses: {
               select: {
-                id: true,
-                name: true,
-                code: true,
-                grade: true,
-              },
+                id: true, code: true, name: true,
+                Institutions: { select: { id: true, name: true, abbreviation: true } },
+              }
+            },
+            Subjects: {
+              select: { id: true, name: true, code: true, grade: true },
             },
           },
         },

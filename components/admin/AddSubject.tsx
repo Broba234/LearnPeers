@@ -220,18 +220,13 @@ export default function AddSubject({ subjects, setSubjects, grades, categories, 
                   disabled={submitting || loading}
                   required
                 >
-                  <option value="">Select Grade</option>
-                  {loading ? (
-                    <option value="" disabled>Loading grades...</option>
-                  ) : grades.length === 0 ? (
-                    <option value="" disabled>No grades available in existing subjects</option>
-                  ) : (
-                    grades.map((grade) => (
-                      <option key={grade.id} value={grade.id}>
-                        {grade.name}
-                      </option>
-                    ))
-                  )}
+                  <option value="">Select Level</option>
+                  <optgroup label="High School">
+                    {[9, 10, 11, 12].map(g => <option key={g} value={g}>Grade {g}</option>)}
+                  </optgroup>
+                  <optgroup label="Post-Secondary">
+                    {[1, 2, 3, 4].map(g => <option key={g} value={g}>Year {g}</option>)}
+                  </optgroup>
                 </select>
                 {!loading && grades.length > 0 && (
                   <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">

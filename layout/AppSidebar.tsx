@@ -37,6 +37,12 @@ const AppSidebar: React.FC = () => {
     </svg>
   );
 
+  const FeedbackIcon = () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h6m-6 8l-4-4V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H9l-2 2z" />
+    </svg>
+  );
+
   const navItems = [
     {
       name: "Dashboard",
@@ -57,6 +63,11 @@ const AppSidebar: React.FC = () => {
       name: "Contacts",
       path: "/dashboard/contacts",
       icon: <ContactsIcon />,
+    },
+    {
+      name: "Feedback",
+      path: "/dashboard/feedback",
+      icon: <FeedbackIcon />,
     }
   ];
 

@@ -29,7 +29,23 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const pathname = request.nextUrl.pathname;
+  if (!user) {
+    if (pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/admin/login";
+      return NextResponse.redirect(loginUrl);
+    }
+    if (pathname.startsWith("/home")) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/auth/login";
+      return NextResponse.redirect(loginUrl);
+    }
+  }
 
   return response;
 }

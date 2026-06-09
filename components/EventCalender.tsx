@@ -165,6 +165,7 @@ export default function Selectable({
       startDate: formData.startDate,
       endDate: formData.endDate,
       timezone: formData.timezone,
+      day_of_week: formData.day_of_week,
       start: new Date(formData.startDate + "T" + formData.startTime),
       end: new Date(formData.endDate + "T" + formData.endTime),
     };
@@ -200,8 +201,6 @@ export default function Selectable({
     } catch (e) {
     } finally {
     }
-    setSelectedSlot(null);
-    setModalOpen(false);
   }, []);
 
   const handleViewChange = useCallback((view: View) => {

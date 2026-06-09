@@ -2,7 +2,6 @@
 import { BookOpen } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode } from "react";
 
 type RoleCardVariant = "primary" | "secondary";
 
@@ -88,11 +87,10 @@ export default function RoleChoiceSection() {
     <section className="w-full bg-slate-50 py-[150px]">
       <div className="mx-auto max-w-7xl px-4 text-center">
         <h2 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-          What You Looking for?
+          What are you here for?
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-500 sm:text-base">
-          Our dynamic educational platform offers you the tools and resources
-          to propel yourself towards a brighter future.
+          Book sessions with peer tutors when you need help—or list your subjects and earn when you teach.
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -100,19 +98,19 @@ export default function RoleChoiceSection() {
             variant="secondary"
             icon='/teacher.png'
             icon2='/dollar.svg'
-            title="Do You Want to Teach Here"
-            description="Our dynamic educational platform offers you the tools and a supportive community to share your expertise."
-            ctaLabel="Start Earning"
-            href="/home/tutor/profile" // adjust to your route
+            title="Want to teach and earn?"
+            description="Set your profile, rates, and availability. Run paid live sessions and get paid through the platform."
+            ctaLabel="Start earning"
+            href="/home/tutor/profile"
           />
 
           <RoleCard
             variant="primary"
             icon='/student.svg'
-            title="Do You Want Learn Here"
-            description="Gain access to curated lessons, real-time support, and a vibrant community of learners."
-            ctaLabel="Start Learning"
-            href="/home/student/explore" // adjust to your route
+            title="Want to learn from peers?"
+            description="Browse students offering help in your subjects, compare rates, and book live video sessions."
+            ctaLabel="Start learning"
+            href="/home/student/explore"
           />
         </div>
       </div>

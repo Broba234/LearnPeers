@@ -5,7 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const PLATFORM_FEE_PERCENT = 0.1; // 10% platform cut
+// 5% from student (charged on top) + 5% from tutor (deducted from payout) = 10% gross
+const STUDENT_FEE_PERCENT = 0.05;
+const PLATFORM_FEE_PERCENT = 0.10;
 
 export async function POST(request: NextRequest) {
   try {
@@ -100,8 +102,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const amountCents = Math.round(Number(amount) * 100);
-    const applicationFeeCents = Math.round(amountCents * PLATFORM_FEE_PERCENT);
+    // Student pays session price + 5% fee on top; tutor nets 95% of base price
+    const baseCents = Math.round(Number(amount) * 100);
+    const amountCents = Math.round(baseCents * (1 + STUDENT_FEE_PERCENT));
+    const applicationFeeCents = Math.round(baseCents * PLATFORM_FEE_PERCENT);
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amountCents,

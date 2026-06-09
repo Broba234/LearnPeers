@@ -12,7 +12,10 @@ import {
   useRoomContext,
 } from '@livekit/components-react';
 import { Track, type DataPublishOptions } from 'livekit-client';
-import { getSceneVersion } from '@excalidraw/excalidraw';
+// Inlined from @excalidraw/excalidraw to avoid a static import that pulls in
+// browser-fs-access at module-evaluation time and crashes with file.split errors.
+const getSceneVersion = (elements: any[]): number =>
+  elements.reduce((acc: number, el: any) => acc + (el.version ?? 0), 0);
 import '@livekit/components-styles';
 import dynamic from 'next/dynamic';
 // Using 'any' for imperative API type to avoid version export mismatches
@@ -88,7 +91,7 @@ const LiveKitRoom: React.FC<LiveKitRoomProps> = ({
         style={{ height: '100vh' }}
         data-lk-theme="default"
       >
-        <MainContent onDisconnect={onDisconnect} userRole={userRole} />
+        <MainContent onDisconnect={onDisconnect} userRole={userRole} userName={userName} />
         <RoomAudioRenderer />
       </LKRoom>
     </div>
@@ -118,7 +121,7 @@ function mergeWithRemoteElements(localElements: any[], remoteElements: any[]): a
   return Array.from(elementsMap.values());
 }
 
-function MainContent({ onDisconnect, userRole }: { onDisconnect?: () => void; userRole: 'tutor' | 'student' }) {
+function MainContent({ onDisconnect, userRole, userName }: { onDisconnect?: () => void; userRole: 'tutor' | 'student'; userName: string }) {
   const [activeView, setActiveView] = useState('whiteboard');
   const [sharedFile, setSharedFile] = useState<{ url: string; name: string; type: string } | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -150,6 +153,31 @@ function MainContent({ onDisconnect, userRole }: { onDisconnect?: () => void; us
 
   // Get room context for event listeners
   const room = useRoomContext();
+
+  // Mic and camera toggle state
+  const [isMicEnabled, setIsMicEnabled] = useState(true);
+  const [isCameraEnabled, setIsCameraEnabled] = useState(true);
+
+  // Set display name on the local participant once connected
+  useEffect(() => {
+    if (room?.localParticipant && userName) {
+      room.localParticipant.setName(userName);
+    }
+  }, [room, userName]);
+
+  const handleToggleMic = async () => {
+    if (!room) return;
+    const next = !isMicEnabled;
+    await room.localParticipant.setMicrophoneEnabled(next);
+    setIsMicEnabled(next);
+  };
+
+  const handleToggleCamera = async () => {
+    if (!room) return;
+    const next = !isCameraEnabled;
+    await room.localParticipant.setCameraEnabled(next);
+    setIsCameraEnabled(next);
+  };
 
   const applyExcalidrawScene = useCallback(
     (scene: { elements: any[]; files?: any } | null | undefined) => {
@@ -517,10 +545,7 @@ function MainContent({ onDisconnect, userRole }: { onDisconnect?: () => void; us
     }
   }, [screenTrackRef]);
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+  const uploadAndShareFile = async (file: File) => {
     try {
       // Sanitize filename: replace non-alphanumeric, non-hyphen, non-underscore with hyphen
       const sanitizeFileName = (fileName: string): string => {
@@ -584,6 +609,20 @@ function MainContent({ onDisconnect, userRole }: { onDisconnect?: () => void; us
     }
   };
 
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    await uploadAndShareFile(file);
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+    await uploadAndShareFile(file);
+  };
+
   // Screen sharing handlers
   const handleStartScreenShare = async () => {
     const success = await startScreenShare(room);
@@ -629,7 +668,11 @@ function MainContent({ onDisconnect, userRole }: { onDisconnect?: () => void; us
         style={{ top: '0.5in', right: '0.5in', bottom: '0.5in', left: '0.5in' }}
       >
         {activeView === 'whiteboard' && (
-          <>
+          <div
+            className="w-full h-full relative"
+            onDrop={handleDrop}
+            onDragOver={(e) => e.preventDefault()}
+          >
             <ExcalidrawWhiteboard
               sendData={sendDataSafe}
               excalidrawRef={excalidrawRef}
@@ -640,7 +683,7 @@ function MainContent({ onDisconnect, userRole }: { onDisconnect?: () => void; us
               excalidrawRef={excalidrawRef}
               pointers={remotePointers}
             />
-          </>
+          </div>
         )}
         {activeView === 'file' && sharedFile && (
           <FileViewer
@@ -699,6 +742,51 @@ function MainContent({ onDisconnect, userRole }: { onDisconnect?: () => void; us
 
       {/* Bottom center toolbar */}
       <div className="absolute left-1/2 -translate-x-1/2 bottom-4 flex items-center gap-3">
+        {/* Mic toggle */}
+        <button
+          onClick={handleToggleMic}
+          aria-label={isMicEnabled ? 'Mute microphone' : 'Unmute microphone'}
+          title={isMicEnabled ? 'Mute microphone' : 'Unmute microphone'}
+          className={`p-2.5 rounded-2xl border backdrop-blur shadow-lg ${isMicEnabled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : 'bg-red-600/90 text-white border-red-300 hover:bg-red-600'}`}
+        >
+          {isMicEnabled ? (
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <line x1="12" y1="19" x2="12" y2="23" />
+              <line x1="8" y1="23" x2="16" y2="23" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="1" y1="1" x2="23" y2="23" />
+              <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" />
+              <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23" />
+              <line x1="12" y1="19" x2="12" y2="23" />
+              <line x1="8" y1="23" x2="16" y2="23" />
+            </svg>
+          )}
+        </button>
+        {/* Camera toggle */}
+        <button
+          onClick={handleToggleCamera}
+          aria-label={isCameraEnabled ? 'Turn off camera' : 'Turn on camera'}
+          title={isCameraEnabled ? 'Turn off camera' : 'Turn on camera'}
+          className={`p-2.5 rounded-2xl border backdrop-blur shadow-lg ${isCameraEnabled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : 'bg-red-600/90 text-white border-red-300 hover:bg-red-600'}`}
+        >
+          {isCameraEnabled ? (
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="1" y1="1" x2="23" y2="23" />
+              <path d="M7 7H4a2 2 0 0 0-2 2v9.17M16 7h2a2 2 0 0 1 2 2v7.17" />
+              <line x1="16" y1="12" x2="23" y2="7" />
+              <line x1="23" y1="17" x2="16" y2="12" />
+            </svg>
+          )}
+        </button>
         <button
           onClick={() => fileInputRef.current?.click()}
           disabled={isSending}
@@ -980,7 +1068,7 @@ function PointerOverlay({ excalidrawRef, pointers }: PointerOverlayProps) {
   React.useEffect(() => {
     const id = window.setInterval(() => {
       setNow(Date.now());
-    }, 1000);
+    }, 50);
     return () => window.clearInterval(id);
   }, []);
 
@@ -1101,7 +1189,7 @@ function FloatingVideos({ allScreenShares, screenTrackRef, onSelectScreenShare }
                 <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
               </button>
               {/* Label */}
-              <div className="absolute bottom-2 left-2 bg-black/50 px-2 py-1 rounded text-[10px] text-white">{participantIdentity}</div>
+              <div className="absolute bottom-2 left-2 bg-black/50 px-2 py-1 rounded text-[10px] text-white">{trackRef.participant.name || participantIdentity}</div>
               {/* Screen share indicator + switch */}
               {sharing && (
                 <button onClick={() => participantShare && onSelectScreenShare(participantShare)} className={`absolute top-1 left-1 px-2 py-1 rounded-md text-[10px] font-semibold shadow ${isActive ? 'bg-green-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-500'}`} title={isActive ? 'Viewing screen' : `View ${participantIdentity}'s screen`}>
@@ -1132,7 +1220,7 @@ function FloatingVideos({ allScreenShares, screenTrackRef, onSelectScreenShare }
                 <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
               </button>
               {/* Label */}
-              <div className="absolute bottom-2 left-2 bg-black/50 px-2 py-1 rounded text-[10px] text-white">{participantIdentity}</div>
+              <div className="absolute bottom-2 left-2 bg-black/50 px-2 py-1 rounded text-[10px] text-white">{trackRef.participant.name || participantIdentity}</div>
               {/* Screen share indicator + switch */}
               {sharing && (
                 <button onClick={() => participantShare && onSelectScreenShare(participantShare)} className={`absolute top-1 left-1 px-2 py-1 rounded-md text-[10px] font-semibold shadow ${isActive ? 'bg-green-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-500'}`} title={isActive ? 'Viewing screen' : `View ${participantIdentity}'s screen`}>
