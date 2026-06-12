@@ -358,8 +358,8 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                             }
                             className={`inline-flex items-center gap-1 border rounded-lg text-xs px-3 py-1.5 shadow-sm transition-all duration-150 cursor-pointer ${
                               updateForm.subject_id === selectedSubject?.id
-                                ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-blue-700 ring-2 ring-blue-200"
-                                : "bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50"
+                                ? "bg-gradient-to-r from-brand-500 to-brand-500 text-white border-brand-700 ring-2 ring-brand-200"
+                                : "bg-white border-gray-200 hover:border-brand-300 hover:bg-brand-50"
                             }`}
                           >
                             <span className="font-semibold">
@@ -450,7 +450,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                       name="date"
                       value={updateForm.date}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
                       required
                     />
                   </div>
@@ -464,7 +464,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                       name="endDate"
                       value={updateForm.endDate}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
                       required
                     />
                   </div>
@@ -482,7 +482,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                       name="startTime"
                       value={updateForm.startTime}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
                       required
                     />
                   </div>
@@ -496,7 +496,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                       name="endTime"
                       value={updateForm.endTime}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
                       required
                     />
                   </div>
@@ -510,7 +510,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-gray-50 p-4 rounded-xl">
                   <div className="flex items-center gap-3 mb-2">
-                    <CalendarIcon className="w-5 h-5 text-blue-600" />
+                    <CalendarIcon className="w-5 h-5 text-brand-600" />
                     <h3 className="font-semibold text-gray-700">Date</h3>
                   </div>
                   <div className="space-y-1">
@@ -536,7 +536,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
 
                 <div className="bg-gray-50 p-4 rounded-xl">
                   <div className="flex items-center gap-3 mb-2">
-                    <Clock className="w-5 h-5 text-blue-600" />
+                    <Clock className="w-5 h-5 text-brand-600" />
                     <h3 className="font-semibold text-gray-700">
                       Time & Duration
                     </h3>
@@ -547,7 +547,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                     </p>
                     <div className="flex justify-between items-center">
                       {isMultiDay && (
-                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                        <span className="text-xs bg-brand-100 text-brand-800 px-2 py-1 rounded">
                           Multi-day
                         </span>
                       )}
@@ -560,7 +560,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-gray-50 p-4 rounded-xl">
                   <div className="flex items-center gap-3 mb-2">
-                    <BookOpen className="w-5 h-5 text-blue-600" />
+                    <BookOpen className="w-5 h-5 text-brand-600" />
                     <h3 className="font-semibold text-gray-700">Subject</h3>
                   </div>
                   <p className="text-gray-800 font-medium">
@@ -598,7 +598,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                   </button>
                   <button
                     onClick={handleUpdateSubmit}
-                    className="px-5 py-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                    className="px-5 py-2.5 bg-brand-600 text-white rounded-full hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-colors"
                   >
                     Update Event
                   </button>
@@ -607,7 +607,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                 <>
                   <button
                     onClick={() => setIsEditMode(true)}
-                    className="px-5 py-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                    className="px-5 py-2.5 bg-brand-600 text-white rounded-full hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-colors"
                   >
                     Edit
                   </button>

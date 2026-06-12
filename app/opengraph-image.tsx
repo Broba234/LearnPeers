@@ -30,7 +30,7 @@ export default function OpengraphImage() {
               display: 'flex',
             }}
           >
-            <span style={{ color: '#1f9fe0' }}>Learn</span>
+            <span style={{ color: '#1f8dcc' }}>Learn</span>
             <span style={{ color: '#ffffff' }}>Peers</span>
           </div>
           <div
@@ -69,7 +69,7 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{ height: 10, width: 10, borderRadius: 999, background: '#1f9fe0' }} />
+          <div style={{ height: 10, width: 10, borderRadius: 999, background: '#1f8dcc' }} />
           <div style={{ fontSize: 28, color: '#cdd9e1', fontWeight: 600 }}>learnpeers.com</div>
         </div>
       </div>

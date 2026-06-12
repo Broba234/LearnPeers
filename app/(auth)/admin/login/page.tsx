@@ -88,7 +88,7 @@ function LoginContent() {
                             required
                             value={email}
                             onChange={e => setEmail(e.target.value)}
-                            className="w-full mt-2 px-3 py-2 text-white bg-transparent outline-none border border-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/40 shadow-sm rounded-lg placeholder-gray-300"
+                            className="w-full mt-2 px-3 py-2 text-white bg-transparent outline-none border border-white/30 focus:border-brand-400 focus:ring-2 focus:ring-brand-400/40 shadow-sm rounded-lg placeholder-gray-300"
                         />
                     </div>
                     <div>
@@ -98,14 +98,14 @@ function LoginContent() {
                             required
                             value={password}
                             onChange={e => setPassword(e.target.value)}
-                            className="w-full mt-2 px-3 py-2 text-white bg-transparent outline-none border border-white/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/40 shadow-sm rounded-lg placeholder-gray-300"
+                            className="w-full mt-2 px-3 py-2 text-white bg-transparent outline-none border border-white/30 focus:border-brand-400 focus:ring-2 focus:ring-brand-400/40 shadow-sm rounded-lg placeholder-gray-300"
                         />
                     </div>
                     {error && <div className="text-red-400 text-sm">{error}</div>}
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full px-4 py-2 text-white font-medium bg-gradient-to-r from-blue-400 to-purple-500 hover:from-blue-500 hover:to-purple-600 active:from-blue-600 active:to-purple-700 rounded-lg duration-150 shadow-lg"
+                        className="w-full px-4 py-2 text-white font-medium bg-gradient-to-r from-brand-400 to-brand-500 hover:from-brand-500 hover:to-brand-600 active:from-brand-600 active:to-brand-700 rounded-lg duration-150 shadow-lg"
                     >
                         {loading ? "Signing in..." : "Sign in"}
                     </button>

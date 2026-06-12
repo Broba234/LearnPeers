@@ -19,6 +19,8 @@ import {
 import { cn } from "@/lib/utils";
 import WizardTimeSlot from "../ui/components/WizardTimeSlot";
 import SelectSubject from "../ui/components/SelectSubject";
+import EducationStep from "@/components/onboarding/EducationStep";
+import { GraduationCap } from "lucide-react";
 export type Subjects = {
   id: string;
   name: string;
@@ -133,10 +135,19 @@ const SignUpWizard = () => {
     }));
   };
   const [activeStep, setActiveStep] = useState(1);
+  const [educationComplete, setEducationComplete] = useState(false);
 
   const steps = [
     {
       number: 1,
+      title: "Your School",
+      des: "Tell us where you study so we can match you with the right tutors",
+      bigdes:
+        "Tell us where you study so we can match you with the right tutors",
+      icon: <GraduationCap className="w-4 h-4" />,
+    },
+    {
+      number: 2,
       title: "Select Subjects",
       des: "Select the subjects you want to learn",
       bigdes:
@@ -144,20 +155,16 @@ const SignUpWizard = () => {
       icon: <Users className="w-4 h-4" />,
     },
     {
-      number: 2,
-      title: "finalize your setup",
-      des: "finalize your setup",
+      number: 3,
+      title: "Finalize your setup",
+      des: "You're all set — jump in and find your first tutor",
       bigdes:
-        "finalize your setup",
+        "You're all set — jump in and find your first tutor",
       icon: <Book className="w-4 h-4" />,
     },
   ];
   const calculateProgress = () => {
-    if (activeStep === 2) {
-      return 75;
-    } else {
-      return 0;
-    }
+    return Math.round(((activeStep - 1) / (steps.length - 1)) * 100);
   };
 
   const HandleChangeSetUpStatus = async () => {
@@ -182,11 +189,15 @@ const SignUpWizard = () => {
   );
   const HandleNextButton = async () => {
     if (activeStep === 1) {
+      if (!educationComplete) return;
+      setActiveStep(2);
+    }
+    if (activeStep === 2) {
       if (!profile?.email) return;
       if (selectedSubjects.length === 0) return;
       setLoading(true);
       try {
-        await fetch("/api/profiles/update-subjects", {
+        const res = await fetch("/api/profiles/update-subjects", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -195,12 +206,13 @@ const SignUpWizard = () => {
           }),
         });
         setLoading(false);
+        if (!res.ok) return;
         setActiveStep(activeStep + 1);
       } catch (e) {
         setLoading(false);
       }
     }
-    if (activeStep === 2) {
+    if (activeStep === 3) {
       HandleChangeSetUpStatus();
     }
   };
@@ -219,7 +231,7 @@ const SignUpWizard = () => {
                 {/* Animated Gradient Overlay */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                   <div
-                    className={`absolute w-full h-full bg-gradient-to-tr from-blue-50/30 via-transparent to-transparent transition-all duration-700 ease-out ${activeStep != 1
+                    className={`absolute w-full h-full bg-gradient-to-tr from-brand-50/30 via-transparent to-transparent transition-all duration-700 ease-out ${activeStep != 1
                         ? "opacity-100 translate-x-0 translate-y-0"
                         : "opacity-0 translate-x-full -translate-y-full"
                       }`}
@@ -245,7 +257,7 @@ const SignUpWizard = () => {
                         {step.number < activeStep ? (
                           <CheckCircle className="w-5 h-5" />
                         ) : step.number == activeStep ? (
-                          <div className="w-5 h-5 flex items-center justify-center bg-[#cf3fad] rounded-full">
+                          <div className="w-5 h-5 flex items-center justify-center bg-brand-600 rounded-full">
                             <div className="w-3 h-3 bg-white rounded-full"></div>
                           </div>
                         ) : (
@@ -278,7 +290,7 @@ const SignUpWizard = () => {
                       </p>
                     </div>
                     <div className="flex items-center">
-                      <div className="text-2xl font-bold bg-[#cf3fad] bg-clip-text text-transparent">
+                      <div className="text-2xl font-bold text-brand-600">
                         {calculateProgress()}%
                       </div>
                       <span className="text-sm text-gray-500 ml-1">
@@ -292,7 +304,7 @@ const SignUpWizard = () => {
                     <div className="h-4 bg-gray-100/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/30 shadow-inner">
                       {/* Progress fill with gradient and animation */}
                       <div
-                        className="h-full relative bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-2xl transition-all duration-1000 ease-out"
+                        className="h-full relative bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 rounded-2xl transition-all duration-1000 ease-out"
                         style={{ width: `${calculateProgress()}%` }}
                       >
                         {/* Moving highlight */}
@@ -310,7 +322,7 @@ const SignUpWizard = () => {
                         left: `calc(${calculateProgress()}% - 12px)`,
                       }}
                     >
-                      <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-200">
+                      <div className="w-6 h-6 bg-gradient-to-br from-brand-500 to-brand-600 rounded-full flex items-center justify-center shadow-lg shadow-brand-200">
                         <svg
                           className="w-3 h-3 text-white"
                           fill="none"
@@ -325,7 +337,7 @@ const SignUpWizard = () => {
                           />
                         </svg>
                       </div>
-                      {/* <div className="text-xs font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mt-1">
+                      {/* <div className="text-xs font-semibold bg-gradient-to-r from-brand-600 to-brand-600 bg-clip-text text-transparent mt-1">
         Step {activeStep}
       </div> */}
                     </div>
@@ -341,7 +353,7 @@ const SignUpWizard = () => {
                 <div className="mb-10">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="inline-flex items-center text-[#CF3FAD] text-sm font-medium mb-3">
+                      <div className="inline-flex items-center text-brand-600 text-sm font-medium mb-3">
                         Step {activeStep} of {steps.length}
                       </div>
                       <h2 className="text-2xl font-bold text-gray-900 mb-3">
@@ -358,6 +370,21 @@ const SignUpWizard = () => {
 
                     {steps[activeStep - 1].number == 1 && (
                       <motion.div
+                        key="step-education"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                      >
+                        <EducationStep
+                          requireVerification={false}
+                          allowSkip={true}
+                          onComplete={setEducationComplete}
+                        />
+                      </motion.div>
+                    )}
+                    {steps[activeStep - 1].number == 2 && (
+                      <motion.div
                         key="step-2"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -371,7 +398,7 @@ const SignUpWizard = () => {
                         />
                       </motion.div>
                     )}
-                    {steps[activeStep - 1].number == 2 && (
+                    {steps[activeStep - 1].number == 3 && (
                       <motion.div
                         key="step-3"
                         initial={{ opacity: 0, y: 20 }}
@@ -388,7 +415,7 @@ const SignUpWizard = () => {
                         <motion.button
                           whileHover={{
                             scale: 1.05,
-                            boxShadow: "0 20px 40px rgba(139, 92, 246, 0.3)",
+                            boxShadow: "0 20px 40px rgba(0, 119, 190, 0.3)",
                           }}
                           whileTap={{ scale: 0.98 }}
                           initial={{ scale: 0.9, opacity: 0 }}
@@ -399,13 +426,13 @@ const SignUpWizard = () => {
                             delay: 0.2,
                           }}
 
-                          className="mx-auto group relative flex items-center gap-4 px-6 py-4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold text-lg shadow-lg hover:shadow-2xl transition-all duration-300 focus:outline-none"
+                          className="mx-auto group relative flex items-center gap-4 px-6 py-4 rounded-full bg-gradient-to-r from-brand-500 to-brand-500 text-white font-semibold text-lg shadow-lg hover:shadow-2xl transition-all duration-300 focus:outline-none"
                         >
                           {/* Stripe logo container */}
                           <motion.div
                             whileHover={{ rotate: [-5, 5, -5] }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white rounded-2xl px-4 py-2 flex items-center justify-center text-purple-600 font-bold text-lg"
+                            className="bg-white rounded-2xl px-4 py-2 flex items-center justify-center text-brand-600 font-bold text-lg"
                           >
 
                           </motion.div>
@@ -441,18 +468,18 @@ const SignUpWizard = () => {
                   )}
                   
                   {
-                    activeStep == 1 && (
+                    activeStep < 3 && (
                       <button
                         type="button"
-                        disabled={loading || (activeStep == 1 && !is_all_selected)}
+                        disabled={loading || (activeStep == 1 && !educationComplete) || (activeStep == 2 && selectedSubjects.length === 0)}
                         onClick={() => HandleNextButton()}
                         className={`
-    hidden md:flex items-center gap-2 px-6 py-3 
+    hidden md:flex items-center gap-2 px-6 py-3
     text-white rounded-full font-medium
     transition-all duration-300 ease-in-out
-    ${loading || (activeStep == 1 && !is_all_selected)
-                            ? "bg-[#CF3FAD]/60 cursor-not-allowed"
-                            : "bg-[#CF3FAD] hover:bg-[#CF3FAD]/80 cursor-pointer"
+    ${loading || (activeStep == 1 && !educationComplete) || (activeStep == 2 && selectedSubjects.length === 0)
+                            ? "bg-brand-600/60 cursor-not-allowed"
+                            : "bg-brand-600 hover:bg-brand-700 cursor-pointer"
                           }
   `}
                       >
@@ -476,7 +503,7 @@ const SignUpWizard = () => {
                   <button
                     type="button"
                     onClick={() => HandleNextButton()}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-600 text-white rounded-xl hover:bg-brand-700 transition-colors font-medium"
                   >
                     Continue
                     <ChevronRight className="w-5 h-5" />

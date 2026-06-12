@@ -172,7 +172,7 @@ export default function HomeLayout({
           boxShadow: '0 8px 32px 0 rgba(31,38,135,0.25)'
         }}>
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-8 h-8 bg-gradient-to-r from-brand-400 to-brand-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
               {userName.charAt(0).toUpperCase()}
             </div>
             <div className="text-white font-semibold tracking-tight">LearnPeers</div>

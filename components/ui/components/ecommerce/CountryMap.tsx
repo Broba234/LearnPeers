@@ -26,7 +26,7 @@ const CountryMap: React.FC<CountryMapProps> = ({ mapColor }) => {
             {countries.map((country) => (
               <div key={country.name} className="flex justify-between items-center p-3 bg-white rounded-lg">
                 <span className="font-medium text-gray-700">{country.name}</span>
-                <span className="text-blue-600 font-semibold">{country.visitors}</span>
+                <span className="text-brand-600 font-semibold">{country.visitors}</span>
               </div>
             ))}
           </div>

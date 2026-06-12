@@ -66,7 +66,7 @@ export default function HowItWorks() {
                 >
                     {/* For Students */}
                     <motion.div variants={itemVariants} className="space-y-8 p-10 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-blue-100">
-                        <h3 className="text-3xl font-bold text-center text-blue-900">Want to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">Learn</span>?</h3>
+                        <h3 className="text-3xl font-bold text-center text-blue-900">Want to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-brand-600">Learn</span>?</h3>
                         <div className="space-y-6">
                             <Step icon={<FiSearch size={24} />} title="Find Your Tutor">
                                 Search our network of skilled peer tutors for any subject.
@@ -104,7 +104,7 @@ export default function HowItWorks() {
                     className="mt-20 text-center"
                 >
                     <Link href="/auth/register?role=student" className="group inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 border border-blue-500 rounded-2xl px-10 py-4 text-white font-bold text-lg transition-all duration-300 hover:scale-105 shadow-xl mx-2">
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full group-hover:animate-pulse"></div>
+                        <div className="w-2 h-2 bg-brand-400 rounded-full group-hover:animate-pulse"></div>
                         Start Learning
                         <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />

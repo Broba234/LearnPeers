@@ -19,7 +19,7 @@ const TYPE_ICONS: Record<string, { bg: string; color: string }> = {
   session_requested: { bg: "bg-amber-100", color: "text-amber-600" },
   session_accepted: { bg: "bg-green-100", color: "text-green-600" },
   session_declined: { bg: "bg-red-100", color: "text-red-600" },
-  session_started: { bg: "bg-blue-100", color: "text-blue-600" },
+  session_started: { bg: "bg-brand-100", color: "text-brand-600" },
   session_completed: { bg: "bg-emerald-100", color: "text-emerald-600" },
   session_cancelled: { bg: "bg-gray-100", color: "text-gray-500" },
 };
@@ -187,7 +187,7 @@ export default function NotificationDropdown() {
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllRead}
-                  className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-xs text-brand-600 hover:text-brand-700 font-medium"
                 >
                   Mark all read
                 </button>
@@ -242,7 +242,7 @@ export default function NotificationDropdown() {
                       className={`flex gap-3 w-full text-left rounded-lg p-3 transition-colors ${
                         notif.is_read
                           ? "hover:bg-gray-50 dark:hover:bg-white/5"
-                          : "bg-blue-50/50 hover:bg-blue-50 dark:bg-blue-900/10 dark:hover:bg-blue-900/20"
+                          : "bg-brand-50/50 hover:bg-brand-50 dark:bg-brand-900/10 dark:hover:bg-brand-900/20"
                       }`}
                     >
                       <span
@@ -265,7 +265,7 @@ export default function NotificationDropdown() {
                         </span>
                       </span>
                       {!notif.is_read && (
-                        <span className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-blue-500" />
+                        <span className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-brand-500" />
                       )}
                     </button>
                   </li>

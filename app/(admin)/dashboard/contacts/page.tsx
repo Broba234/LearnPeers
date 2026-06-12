@@ -93,7 +93,7 @@ export default function ContactsPage() {
             </div>
             <div className="flex items-center gap-3">
               {unreadCount > 0 && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-300">
                   {unreadCount} new
                 </span>
               )}
@@ -118,13 +118,13 @@ export default function ContactsPage() {
 
         {/* Loading */}
         {loading && (
-          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div className="mb-6 p-4 bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800 rounded-lg">
             <div className="flex items-center">
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-brand-500" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
-              <span className="text-blue-800 dark:text-blue-300">Loading contacts...</span>
+              <span className="text-brand-800 dark:text-brand-300">Loading contacts...</span>
             </div>
           </div>
         )}
@@ -144,7 +144,7 @@ export default function ContactsPage() {
                 setCurrentPage(1);
               }}
               placeholder="Search by name, email, subject..."
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
             />
           </div>
 
@@ -159,7 +159,7 @@ export default function ContactsPage() {
                 setReadFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
             >
               <option value="all">All</option>
               <option value="unread">Unread</option>
@@ -211,7 +211,7 @@ export default function ContactsPage() {
                       <tr
                         key={contact.id}
                         className={`hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${
-                          !contact.is_read ? "bg-blue-50/50 dark:bg-blue-900/10" : ""
+                          !contact.is_read ? "bg-brand-50/50 dark:bg-brand-900/10" : ""
                         }`}
                         onClick={() =>
                           setExpandedId(expandedId === contact.id ? null : contact.id)
@@ -220,8 +220,8 @@ export default function ContactsPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-10 w-10">
-                              <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                                <span className="text-blue-600 dark:text-blue-300 font-medium">
+                              <div className="h-10 w-10 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center">
+                                <span className="text-brand-600 dark:text-brand-300 font-medium">
                                   {contact.name.charAt(0).toUpperCase()}
                                 </span>
                               </div>
@@ -250,7 +250,7 @@ export default function ContactsPage() {
                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                               contact.is_read
                                 ? "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
-                                : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                                : "bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-300"
                             }`}
                           >
                             {contact.is_read ? "Read" : "New"}
@@ -265,7 +265,7 @@ export default function ContactsPage() {
                               e.stopPropagation();
                               setExpandedId(expandedId === contact.id ? null : contact.id);
                             }}
-                            className="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 font-medium"
+                            className="text-brand-600 dark:text-brand-400 hover:text-brand-900 dark:hover:text-brand-300 font-medium"
                           >
                             {expandedId === contact.id ? "Close" : "View"}
                           </button>
@@ -286,7 +286,7 @@ export default function ContactsPage() {
                               <div className="mt-4 flex items-center gap-4">
                                 <a
                                   href={`mailto:${contact.email}?subject=Re: ${contact.subject}`}
-                                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -376,7 +376,7 @@ export default function ContactsPage() {
                     onClick={() => handlePageChange(page)}
                     className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                       currentPage === page
-                        ? "z-10 bg-blue-50 dark:bg-blue-900 border-blue-500 text-blue-600 dark:text-blue-300"
+                        ? "z-10 bg-brand-50 dark:bg-brand-900 border-brand-500 text-brand-600 dark:text-brand-300"
                         : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700"
                     }`}
                   >

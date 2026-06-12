@@ -134,7 +134,7 @@ function PaymentForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="p-4 bg-indigo-50 rounded-xl space-y-1.5 text-sm">
+      <div className="p-4 bg-brand-50 rounded-xl space-y-1.5 text-sm">
         <div className="flex justify-between items-center">
           <span className="text-gray-600">Session price</span>
           <span className="text-gray-800">${amount.toFixed(2)}</span>
@@ -143,9 +143,9 @@ function PaymentForm({
           <span className="text-gray-600">Platform fee (5%)</span>
           <span className="text-gray-800">+${(amount * 0.05).toFixed(2)}</span>
         </div>
-        <div className="flex justify-between items-center border-t border-indigo-200 pt-1.5">
+        <div className="flex justify-between items-center border-t border-brand-200 pt-1.5">
           <span className="font-semibold text-gray-800">Total charged</span>
-          <span className="font-bold text-indigo-700">${(amount * 1.05).toFixed(2)}</span>
+          <span className="font-bold text-brand-700">${(amount * 1.05).toFixed(2)}</span>
         </div>
         <p className="text-xs text-gray-500 pt-0.5">
           {tutorName} receives ${(amount * 0.95).toFixed(2)} (5% platform fee deducted from payout)
@@ -174,7 +174,7 @@ function PaymentForm({
         <button
           type="submit"
           disabled={!stripe || !elementReady || loading}
-          className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? "Processing…" : "Pay now"}
         </button>
@@ -508,7 +508,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
           <img
             src={tutor.avatar || "/default-avatar.png"}
             alt={tutor.name || "Tutor"}
-            className="w-12 h-12 rounded-full object-cover ring-2 ring-indigo-100"
+            className="w-12 h-12 rounded-full object-cover ring-2 ring-brand-100"
           />
           <div className="flex-1 min-w-0">
             <h2 className="text-lg font-semibold text-gray-900 truncate">
@@ -604,9 +604,9 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                         }}
                         className={`flex-shrink-0 flex flex-col items-center px-3 py-2 rounded-xl text-xs font-medium border transition-all min-w-[4.5rem] ${
                           isSelected
-                            ? "bg-indigo-600 text-white border-indigo-600"
+                            ? "bg-brand-600 text-white border-brand-600"
                             : hasSlots
-                              ? "bg-white text-gray-700 border-gray-200 hover:border-indigo-300"
+                              ? "bg-white text-gray-700 border-gray-200 hover:border-brand-300"
                               : "bg-gray-50 text-gray-400 border-gray-100"
                         }`}
                       >
@@ -648,14 +648,14 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                         }}
                         className={`flex-1 px-3 py-2.5 rounded-xl text-sm font-medium border transition-all ${
                           selectedDuration === option.value
-                            ? "bg-indigo-600 text-white border-indigo-600"
-                            : "bg-white text-gray-700 border-gray-200 hover:border-indigo-300"
+                            ? "bg-brand-600 text-white border-brand-600"
+                            : "bg-white text-gray-700 border-gray-200 hover:border-brand-300"
                         }`}
                       >
                         {option.label}
                         {price !== null && (
                           <span
-                            className={`block text-xs mt-0.5 ${selectedDuration === option.value ? "text-indigo-200" : "text-gray-400"}`}
+                            className={`block text-xs mt-0.5 ${selectedDuration === option.value ? "text-brand-200" : "text-gray-400"}`}
                           >
                             ${price.toFixed(2)}
                           </span>
@@ -677,7 +677,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
 
                 {calendarLoading ? (
                   <div className="flex items-center justify-center py-10">
-                    <div className="w-5 h-5 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+                    <div className="w-5 h-5 border-2 border-brand-200 border-t-brand-600 rounded-full animate-spin" />
                     <span className="ml-2 text-sm text-gray-500">
                       Loading availability…
                     </span>
@@ -725,7 +725,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                           e.target.value || selectedSubjectId
                         )
                       }
-                      className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 transition-all"
+                      className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-100 transition-all"
                     >
                       {studentSubjectsForTutor.map((subject) => (
                         <option key={subject.id} value={subject.id}>
@@ -747,7 +747,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                     value={bookingTopic}
                     onChange={(e) => setBookingTopic(e.target.value)}
                     placeholder="What would you like to study?"
-                    className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 transition-all"
+                    className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-100 transition-all"
                   />
                 </div>
                 <div>
@@ -762,7 +762,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                     onChange={(e) => setBookingNotes(e.target.value)}
                     placeholder="Any specific requirements?"
                     rows={2}
-                    className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 transition-all resize-none"
+                    className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-100 transition-all resize-none"
                   />
                 </div>
               </div>
@@ -770,7 +770,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
               {/* Summary + Action */}
               <div className="pt-4 border-t border-gray-100">
                 {selectedTime !== null && (
-                  <div className="mb-4 p-3 bg-indigo-50 rounded-xl text-sm">
+                  <div className="mb-4 p-3 bg-brand-50 rounded-xl text-sm">
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600">
                         {formatDateLabel(
@@ -784,7 +784,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                           {formatTimeLabel(selectedTime)}
                         </span>
                       </span>
-                      <span className="font-semibold text-indigo-700">
+                      <span className="font-semibold text-brand-700">
                         {selectedDuration === "0.5"
                           ? "30 min"
                           : selectedDuration === "1"
@@ -815,7 +815,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                     type="button"
                     onClick={handleConfirm}
                     disabled={selectedTime === null || paymentLoading}
-                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {paymentLoading ? "Preparing…" : "Confirm & Pay"}
                   </button>

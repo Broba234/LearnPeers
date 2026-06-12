@@ -142,7 +142,7 @@ export default function InboxPage() {
 
   const statusConfig: Record<string, { label: string; bg: string; text: string; dot: string }> = {
     pending:     { label: 'Pending',     bg: 'bg-amber-50  border-amber-200', text: 'text-amber-700',  dot: 'bg-amber-400' },
-    accepted:    { label: 'Accepted',    bg: 'bg-blue-50   border-blue-200',  text: 'text-blue-700',   dot: 'bg-blue-400' },
+    accepted:    { label: 'Accepted',    bg: 'bg-brand-50   border-brand-200',  text: 'text-brand-700',   dot: 'bg-brand-400' },
     in_progress: { label: 'In Progress', bg: 'bg-green-50  border-green-200', text: 'text-green-700',  dot: 'bg-green-400' },
     completed:   { label: 'Completed',   bg: 'bg-gray-50   border-gray-200',  text: 'text-gray-600',   dot: 'bg-gray-400' },
     declined:    { label: 'Declined',    bg: 'bg-red-50    border-red-200',   text: 'text-red-700',    dot: 'bg-red-400' },
@@ -193,7 +193,7 @@ export default function InboxPage() {
         {/* Stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           {[
-            { label: 'Upcoming',  value: upcomingCount,                    color: 'text-indigo-600' },
+            { label: 'Upcoming',  value: upcomingCount,                    color: 'text-brand-600' },
             { label: 'Pending',   value: pendingCount,                     color: 'text-amber-500' },
             { label: 'Completed', value: completedCount,                   color: 'text-green-600' },
             { label: 'Earnings',  value: `$—`,                             color: 'text-slate-300' },
@@ -216,7 +216,7 @@ export default function InboxPage() {
                 onClick={() => setFilter(opt)}
                 className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
                   filter === opt
-                    ? 'border-indigo-600 text-indigo-600'
+                    ? 'border-brand-600 text-brand-600'
                     : 'border-transparent text-slate-500 hover:text-slate-700'
                 }`}
               >
@@ -303,7 +303,7 @@ export default function InboxPage() {
                       <button
                         onClick={() => handleStartSession(request)}
                         disabled={!userInfo}
-                        className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50"
+                        className="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50"
                       >
                         Start Session
                       </button>

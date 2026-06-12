@@ -39,9 +39,9 @@ const AppHeader: React.FC = () => {
             className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none"
             aria-label="Profile menu"
           >
-            <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-brand-100 dark:bg-brand-900 rounded-full flex items-center justify-center">
               <svg
-                className="w-5 h-5 text-blue-600 dark:text-blue-300"
+                className="w-5 h-5 text-brand-600 dark:text-brand-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

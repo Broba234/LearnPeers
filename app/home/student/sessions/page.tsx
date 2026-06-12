@@ -159,7 +159,7 @@ export default function StudentSessions() {
 
   const statusDot: Record<string, string> = {
     active: 'bg-green-500',
-    pending: 'bg-indigo-400',
+    pending: 'bg-brand-400',
     completed: 'bg-slate-300',
   };
 
@@ -198,7 +198,7 @@ export default function StudentSessions() {
               onClick={() => setFilter(filterOption as any)}
               className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
                 filter === filterOption
-                  ? 'border-indigo-600 text-indigo-600'
+                  ? 'border-brand-600 text-brand-600'
                   : 'border-transparent text-slate-500 hover:text-slate-700'
               }`}
             >

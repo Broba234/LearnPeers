@@ -33,7 +33,7 @@ function RoleCard({
     "border border-transparent shadow-lg",
     "hover:-translate-y-1 hover:shadow-xl space-y-4",
     isPrimary
-      ? "bg-[#1559C6]/80 text-white"
+      ? "bg-[#0077be]/80 text-white"
       : "bg-white text-slate-900 border-slate-100",
   ].join(" ")}>
         <div
@@ -69,7 +69,7 @@ function RoleCard({
           "mt-8 inline-flex items-center justify-center rounded-full px-6 py-2 text-sm font-medium transition-colors",
           isPrimary
             ? "bg-orange-400 text-white hover:bg-orange-500"
-            : "bg-[#345267] text-white hover:bg-[#345267]/80",
+            : "bg-[#313f47] text-white hover:bg-[#313f47]/80",
         ].join(" ")}
       >
          {!icon2 && <BookOpen className="h-5 w-5" />}

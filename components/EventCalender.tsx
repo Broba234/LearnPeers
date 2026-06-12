@@ -72,7 +72,7 @@ const CustomEvent: React.FC<CustomEventProps> = ({ event, view }) => {
 
   if (view === Views.AGENDA) {
     return (
-      <div className="bg-gray-50 p-3 rounded-lg border-l-4 border-blue-500 mb-2">
+      <div className="bg-gray-50 p-3 rounded-lg border-l-4 border-brand-500 mb-2">
         <div className="flex items-center gap-3">
           <div>
             <div className="font-bold text-gray-800">
@@ -280,7 +280,7 @@ export default function Selectable({
 
               <div className="flex flex-wrap gap-4 mb-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-blue-600"></div>
+                  <div className="w-3 h-3 rounded-full bg-brand-600"></div>
                   <span className="text-sm">Lecture</span>
                 </div>
               </div>
@@ -292,7 +292,7 @@ export default function Selectable({
 
             <button
               onClick={handleAddLectureClick}
-              className="px-5 py-2.5 bg-[#1559C6] text-white rounded-full hover:bg-[#1559C6]/80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
+              className="px-5 py-2.5 bg-[#0077be] text-white rounded-full hover:bg-[#0077be]/80 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
             >
               <span><PlusIcon className="w-4 h-4" /></span>
               Create availability

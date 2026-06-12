@@ -77,83 +77,83 @@ function LoginContent() {
     }
 
     return (
-        <main className="min-h-screen w-full pt-[100px] md:pt-0 flex flex-col items-center justify-center px-4 bg-gradient-to-b from-[#F8F9FD] to-gray-400">
-        <div className="max-w-2xl w-full bg-gradient-to-b from-white via-[#f4f7fb] to-white rounded-[40px] p-6 border-4 border-white shadow-[rgba(133,189,215,0.878)_0px_30px_30px_-20px]">
+        <main className="relative min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 bg-gradient-to-b from-white via-brand-50/40 to-white">
+        <div className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-ink-100 shadow-xl shadow-ink-900/5">
         <div className="text-center">
   {/* Icon Header */}
-  <div className="flex justify-center mb-4">
-    <div className="w-16 h-16 rounded-full bg-[#1559C6] flex items-center justify-center shadow-[rgba(133,189,215,0.878)_0px_15px_20px_-10px]">
+  <div className="flex justify-center mb-5">
+    <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-600/25">
       <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
       </svg>
     </div>
   </div>
-  <h2 className="text-3xl font-black text-[#1559C6] mb-1">Sign In</h2>
-  <p className="text-gray-600 text-sm mb-4">
-   Please enter your email and password to sign in.
+  <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-ink-900 mb-1">Welcome back</h2>
+  <p className="text-ink-500 text-sm mb-2">
+   Enter your email and password to sign in.
   </p>
 </div>
-  
-          <form onSubmit={handleSubmit} className="mt-5">
+
+          <form onSubmit={handleSubmit} className="mt-6">
             <input
               type="email"
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="E-mail"
-              className="w-full focus-border-inline bg-white border-none px-5 py-4 rounded-[20px] mt-4 shadow-[#cff0ff_0px_10px_10px_-5px] placeholder-gray-400 focus:outline-none focus:[border-inline:2px_solid_#12B1D1] transition-all"
+              className="w-full bg-white border border-ink-200 px-4 py-3 rounded-xl mt-4 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
             />
-            
+
             <input
               type="password"
               required
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Password"
-              className="w-full focus-border-inline bg-white border-none px-5 py-4 rounded-[20px] mt-4 shadow-[#cff0ff_0px_10px_10px_-5px] placeholder-gray-400 focus:outline-none focus:[border-inline:2px_solid_#12B1D1] transition-all"
+              className="w-full bg-white border border-ink-200 px-4 py-3 rounded-xl mt-4 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
             />
-  
-            <div className="mt-2 ml-2">
-              <Link 
-                href="/auth/reset" 
-                className="text-[11px] text-[#1559C6] hover:text-[#1559C6] transition"
+
+            <div className="mt-2 ml-1">
+              <Link
+                href="/auth/reset"
+                className="text-xs font-medium text-brand-600 hover:text-brand-700 transition"
               >
-                Forgot Password ?
+                Forgot password?
               </Link>
             </div>
-  
+
             {error && (
-              <div className="mt-4 text-red-500 text-sm text-center bg-red-50 py-2 rounded-lg">
+              <div className="mt-4 text-red-600 text-sm text-center bg-red-50 py-2 rounded-lg">
                 {error}
               </div>
             )}
-  
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full font-bold text-white py-4 mt-5 rounded-[20px] bg-[#1559C6] shadow-[rgba(133,189,215,0.878)_0px_20px_10px_-15px] border-none transition-all duration-200 hover:scale-[1.03] hover:shadow-[rgba(133,189,215,0.878)_0px_23px_10px_-20px] active:scale-95 active:shadow-[rgba(133,189,215,0.878)_0px_15px_10px_-10px] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="w-full font-semibold text-white py-3.5 mt-5 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-600/25 ring-1 ring-white/20 transition hover:brightness-[1.04] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:brightness-100"
             >
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
-  
-          <div className="mt-6 flex gap-3 items-center justify-start flex-col sm:flex-row">
-          <p className="text-gray-600 text-sm">
-    Don't have an account? Sign up as:
+
+          <div className="mt-6 flex gap-x-2 gap-y-1 items-center justify-center flex-wrap text-sm">
+          <p className="text-ink-500">
+    Don't have an account? Sign up as
   </p>
-  
-  <div className="flex gap-3 flex-row justify-center items-center ">
+
+  <div className="flex gap-2 flex-row justify-center items-center">
     <Link
       href={`/auth/register?role=student`}
-      className="text-[#1559C6] hover:text-[#1559C6] transition text-sm underline"
+      className="font-semibold text-brand-600 hover:text-brand-700 transition"
     >
       Student
     </Link>
-    <span className="text-gray-600 text-sm">or</span>
-    
+    <span className="text-ink-400">or</span>
+
     <Link
       href={`/auth/register?role=tutor`}
-      className="text-[#1559C6] hover:text-[#1559C6] transition text-sm underline"
+      className="font-semibold text-brand-600 hover:text-brand-700 transition"
     >
       Tutor
     </Link>

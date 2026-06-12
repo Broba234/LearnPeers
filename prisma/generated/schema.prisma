@@ -459,35 +459,37 @@ model Messages {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Profiles {
-  id                                               String               @id @db.Uuid
-  email                                            String               @unique
+  id                                               String                     @id @db.Uuid
+  email                                            String                     @unique
   name                                             String?
   role                                             String?
   bio                                              String?
   avatar                                           String?
   phone                                            String?
   hourlyRate                                       Float?
-  availability                                     Json?                @db.Json
+  availability                                     Json?                      @db.Json
   isAvailableNow                                   Boolean?
   rating                                           Float?
   education                                        String?
-  experience                                       Json?                @db.Json
-  created_at                                       DateTime?            @default(now()) @db.Timestamptz(6)
-  updated_at                                       DateTime?            @default(now()) @db.Timestamptz(6)
-  profile_setup                                    Boolean?             @default(false)
-  is_tutor                                         Boolean?             @default(false)
-  stripe_account_id                                String?              @db.VarChar(255)
-  institution_id                                   String?              @db.Uuid
-  Conversations_Conversations_student_idToProfiles Conversations[]      @relation("Conversations_student_idToProfiles")
-  Conversations_Conversations_tutor_idToProfiles   Conversations[]      @relation("Conversations_tutor_idToProfiles")
+  experience                                       Json?                      @db.Json
+  created_at                                       DateTime?                  @default(now()) @db.Timestamptz(6)
+  updated_at                                       DateTime?                  @default(now()) @db.Timestamptz(6)
+  profile_setup                                    Boolean?                   @default(false)
+  is_tutor                                         Boolean?                   @default(false)
+  stripe_account_id                                String?                    @db.VarChar(255)
+  institution_id                                   String?                    @db.Uuid
+  Conversations_Conversations_student_idToProfiles Conversations[]            @relation("Conversations_student_idToProfiles")
+  Conversations_Conversations_tutor_idToProfiles   Conversations[]            @relation("Conversations_tutor_idToProfiles")
   Messages                                         Messages[]
-  users                                            users                @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                                            users                      @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   subjects                                         ProfilesOnSubjects[]
-  Sessions_Sessions_student_idToProfiles           Sessions[]           @relation("Sessions_student_idToProfiles")
-  Sessions_Sessions_tutor_idToProfiles             Sessions[]           @relation("Sessions_tutor_idToProfiles")
+  Sessions_Sessions_student_idToProfiles           Sessions[]                 @relation("Sessions_student_idToProfiles")
+  Sessions_Sessions_tutor_idToProfiles             Sessions[]                 @relation("Sessions_tutor_idToProfiles")
   TutorAvailability                                TutorAvailability[]
-  Institutions                                     Institutions?        @relation(fields: [institution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  Institutions                                     Institutions?              @relation(fields: [institution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
   Feedback                                         Feedback[]
+  ProfileInstitutions                              ProfileInstitutions[]
+  SchoolEmailVerifications                         SchoolEmailVerifications[]
 
   @@schema("public")
 }
@@ -552,16 +554,60 @@ model Subjects {
 }
 
 model Institutions {
-  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name               String
-  abbreviation       String?
-  country            String               @default("Canada")
-  province           String?
-  created_at         DateTime             @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime             @default(now()) @db.Timestamptz(6)
-  Profiles           Profiles[]
-  InstitutionCourses InstitutionCourses[]
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                     String
+  abbreviation             String?
+  country                  String                     @default("Canada")
+  province                 String?
+  type                     String                     @default("university")
+  email_domains            String[]                   @default([])
+  city                     String?
+  website                  String?
+  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  Profiles                 Profiles[]
+  InstitutionCourses       InstitutionCourses[]
+  ProfileInstitutions      ProfileInstitutions[]
+  SchoolEmailVerifications SchoolEmailVerifications[]
 
+  @@schema("public")
+}
+
+model ProfileInstitutions {
+  id                   String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id           String        @db.Uuid
+  institution_id       String?       @db.Uuid
+  institution_name_raw String?
+  kind                 String
+  status               String        @default("declared")
+  verification_method  String?
+  verified_email       String?
+  document_url         String?
+  created_at           DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime      @default(now()) @db.Timestamptz(6)
+  Profiles             Profiles      @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Institutions         Institutions? @relation(fields: [institution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@unique([profile_id, kind], map: "ProfileInstitutions_profile_kind_unique")
+  @@index([profile_id], map: "ProfileInstitutions_profile_idx")
+  @@index([institution_id], map: "ProfileInstitutions_institution_idx")
+  @@schema("public")
+}
+
+model SchoolEmailVerifications {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id     String       @db.Uuid
+  institution_id String       @db.Uuid
+  email          String
+  code_hash      String
+  expires_at     DateTime     @db.Timestamptz(6)
+  consumed_at    DateTime?    @db.Timestamptz(6)
+  attempts       Int          @default(0)
+  created_at     DateTime     @default(now()) @db.Timestamptz(6)
+  Profiles       Profiles     @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Institutions   Institutions @relation(fields: [institution_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([profile_id], map: "SchoolEmailVerifications_profile_idx")
   @@schema("public")
 }
 

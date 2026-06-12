@@ -1,0 +1,1352 @@
+{
+ "ontario_standard": [
+  {
+   "source": "ON-STD",
+   "code": "ENG1D",
+   "name": "English, Grade 9, Academic",
+   "category": "English",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "ENG1P",
+   "name": "English, Grade 9, Applied",
+   "category": "English",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "ENG2D",
+   "name": "English, Grade 10, Academic",
+   "category": "English",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "ENG2P",
+   "name": "English, Grade 10, Applied",
+   "category": "English",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "ENG3U",
+   "name": "English, Grade 11, University",
+   "category": "English",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "ENG3C",
+   "name": "English, Grade 11, College",
+   "category": "English",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "ENG3E",
+   "name": "English, Grade 11, Workplace",
+   "category": "English",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "ENG4U",
+   "name": "English, Grade 12, University",
+   "category": "English",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "ENG4C",
+   "name": "English, Grade 12, College",
+   "category": "English",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "ENG4E",
+   "name": "English, Grade 12, Workplace",
+   "category": "English",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "EWC4U",
+   "name": "The Writer's Craft, Grade 12, University",
+   "category": "English",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "MPM1D",
+   "name": "Principles of Mathematics, Grade 9, Academic",
+   "category": "Mathematics",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "MFM1P",
+   "name": "Foundations of Mathematics, Grade 9, Applied",
+   "category": "Mathematics",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "MPM2D",
+   "name": "Principles of Mathematics, Grade 10, Academic",
+   "category": "Mathematics",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "MFM2P",
+   "name": "Foundations of Mathematics, Grade 10, Applied",
+   "category": "Mathematics",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "MCR3U",
+   "name": "Functions, Grade 11, University",
+   "category": "Mathematics",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "MBF3C",
+   "name": "Foundations for College Mathematics, Grade 11, College",
+   "category": "Mathematics",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "MEL3E",
+   "name": "Mathematics for Work and Everyday Life, Grade 11, Workplace",
+   "category": "Mathematics",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "MHF4U",
+   "name": "Advanced Functions, Grade 12, University",
+   "category": "Mathematics",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "MCV4U",
+   "name": "Calculus and Vectors, Grade 12, University",
+   "category": "Mathematics",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "MDM4U",
+   "name": "Mathematics of Data Management, Grade 12, University",
+   "category": "Mathematics",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "MAP4C",
+   "name": "Foundations for College Mathematics, Grade 12, College",
+   "category": "Mathematics",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "MEL4E",
+   "name": "Mathematics for Work and Everyday Life, Grade 12, Workplace",
+   "category": "Mathematics",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "SNC1D",
+   "name": "Science, Grade 9, Academic",
+   "category": "Science",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "SNC1P",
+   "name": "Science, Grade 9, Applied",
+   "category": "Science",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "SNC2D",
+   "name": "Science, Grade 10, Academic",
+   "category": "Science",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "SNC2P",
+   "name": "Science, Grade 10, Applied",
+   "category": "Science",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "SCH3U",
+   "name": "Chemistry, Grade 11, University",
+   "category": "Science",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "SCH3C",
+   "name": "Chemistry, Grade 11, College",
+   "category": "Science",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "SBI3U",
+   "name": "Biology, Grade 11, University",
+   "category": "Science",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "SBI3C",
+   "name": "Biology, Grade 11, College",
+   "category": "Science",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "SPH3U",
+   "name": "Physics, Grade 11, University",
+   "category": "Science",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "SPH3C",
+   "name": "Physics, Grade 11, College",
+   "category": "Science",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "SES3U",
+   "name": "Earth and Space Science, Grade 11, University",
+   "category": "Science",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "SCH4U",
+   "name": "Chemistry, Grade 12, University",
+   "category": "Science",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "SBI4U",
+   "name": "Biology, Grade 12, University",
+   "category": "Science",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "SPH4U",
+   "name": "Physics, Grade 12, University",
+   "category": "Science",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "SNC4M",
+   "name": "Science, Grade 12, University/College",
+   "category": "Science",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "CHC2D",
+   "name": "Canadian History Since WW1, Grade 10, Academic",
+   "category": "Social Sciences",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "CHC2P",
+   "name": "Canadian History Since WW1, Grade 10, Applied",
+   "category": "Social Sciences",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "CGC1D",
+   "name": "Issues in Canadian Geography, Grade 9, Academic",
+   "category": "Social Sciences",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "CGC1P",
+   "name": "Issues in Canadian Geography, Grade 9, Applied",
+   "category": "Social Sciences",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "CHW3M",
+   "name": "World History to the End of the 15th Century, Grade 11",
+   "category": "Social Sciences",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "CHY4U",
+   "name": "World History Since the 15th Century, Grade 12",
+   "category": "Social Sciences",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "CGW4U",
+   "name": "World Issues: A Geographic Analysis, Grade 12",
+   "category": "Social Sciences",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "CIA4U",
+   "name": "Analyzing Current Economic Issues, Grade 12",
+   "category": "Social Sciences",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "HSP3U",
+   "name": "Introduction to Anthropology, Psychology and Sociology, Grade 11",
+   "category": "Social Sciences",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "HHS4U",
+   "name": "Families in Canada, Grade 12",
+   "category": "Social Sciences",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "HZT4U",
+   "name": "Philosophy: Questions and Theories, Grade 12",
+   "category": "Social Sciences",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "AMU1O",
+   "name": "Music, Grade 9, Open",
+   "category": "The Arts",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "AMU2O",
+   "name": "Music, Grade 10, Open",
+   "category": "The Arts",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "AMU3M",
+   "name": "Music, Grade 11, University/College",
+   "category": "The Arts",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "AMU4M",
+   "name": "Music, Grade 12, University/College",
+   "category": "The Arts",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "AVI1O",
+   "name": "Visual Arts, Grade 9, Open",
+   "category": "The Arts",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "AVI2O",
+   "name": "Visual Arts, Grade 10, Open",
+   "category": "The Arts",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "AVI3M",
+   "name": "Visual Arts, Grade 11, University/College",
+   "category": "The Arts",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "AVI4M",
+   "name": "Visual Arts, Grade 12, University/College",
+   "category": "The Arts",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "AWQ3M",
+   "name": "Photography, Grade 11, University/College",
+   "category": "The Arts",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "AWQ4M",
+   "name": "Photography, Grade 12, University/College",
+   "category": "The Arts",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "ATC3M",
+   "name": "Dance, Grade 11, University/College",
+   "category": "The Arts",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "ATC4M",
+   "name": "Dance, Grade 12, University/College",
+   "category": "The Arts",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "FSF1D",
+   "name": "Core French, Grade 9, Academic",
+   "category": "French",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "FSF1P",
+   "name": "Core French, Grade 9, Applied",
+   "category": "French",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "FSF2D",
+   "name": "Core French, Grade 10, Academic",
+   "category": "French",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "FSF2P",
+   "name": "Core French, Grade 10, Applied",
+   "category": "French",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "FSF3U",
+   "name": "Core French, Grade 11, University",
+   "category": "French",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "FSF4U",
+   "name": "Core French, Grade 12, University",
+   "category": "French",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "FIF1O",
+   "name": "French as a Second Language, Grade 9, Open",
+   "category": "French",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "FIF2O",
+   "name": "French as a Second Language, Grade 10, Open",
+   "category": "French",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "FIF3U",
+   "name": "French, Grade 11, University",
+   "category": "French",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "FIF4U",
+   "name": "French, Grade 12, University",
+   "category": "French",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "ICS2O",
+   "name": "Introduction to Computer Studies, Grade 10, Open",
+   "category": "Computer Studies",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "ICS3U",
+   "name": "Introduction to Computer Science, Grade 11, University",
+   "category": "Computer Studies",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "ICS3C",
+   "name": "Introduction to Computer Science, Grade 11, College",
+   "category": "Computer Studies",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "ICS4U",
+   "name": "Computer Science, Grade 12, University",
+   "category": "Computer Studies",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "TEJ3M",
+   "name": "Computer Engineering Technology, Grade 11, University/College",
+   "category": "Computer Studies",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "TEJ4M",
+   "name": "Computer Engineering Technology, Grade 12, University/College",
+   "category": "Computer Studies",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "TGJ3M",
+   "name": "Communications Technology, Grade 11, University/College",
+   "category": "Computer Studies",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "TGJ4M",
+   "name": "Communications Technology, Grade 12, University/College",
+   "category": "Computer Studies",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "BBI2O",
+   "name": "Introduction to Business, Grade 10, Open",
+   "category": "Business",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "BAF3M",
+   "name": "Financial Accounting Fundamentals, Grade 11",
+   "category": "Business",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "BAT4M",
+   "name": "Financial Accounting Principles, Grade 12",
+   "category": "Business",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "BBB4M",
+   "name": "International Business Fundamentals, Grade 12",
+   "category": "Business",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "BDI3C",
+   "name": "Entrepreneurship: The Venture, Grade 11, College",
+   "category": "Business",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "BMI3C",
+   "name": "Marketing: Goods, Services, Events, Grade 11, College",
+   "category": "Business",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "BOH4M",
+   "name": "Business Leadership: Management Fundamentals, Grade 12",
+   "category": "Business",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "BTT1O",
+   "name": "Information and Communication Technology in Business, Grade 9",
+   "category": "Business",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "PPL1O",
+   "name": "Healthy Active Living Education, Grade 9, Open",
+   "category": "Health and Phys Ed",
+   "grade": 9
+  },
+  {
+   "source": "ON-STD",
+   "code": "PPL2O",
+   "name": "Healthy Active Living Education, Grade 10, Open",
+   "category": "Health and Phys Ed",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "PPL3O",
+   "name": "Healthy Active Living Education, Grade 11, Open",
+   "category": "Health and Phys Ed",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "PPL4O",
+   "name": "Healthy Active Living Education, Grade 12, Open",
+   "category": "Health and Phys Ed",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "PSK4U",
+   "name": "Kinesiology, Grade 12, University",
+   "category": "Health and Phys Ed",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "PAF3O",
+   "name": "Fitness and Health Promotion, Grade 11, Open",
+   "category": "Health and Phys Ed",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "TCJ2O",
+   "name": "Construction Technology, Grade 10, Open",
+   "category": "Technological Education",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "TCJ3C",
+   "name": "Construction Technology, Grade 11, College",
+   "category": "Technological Education",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "TCJ4C",
+   "name": "Construction Technology, Grade 12, College",
+   "category": "Technological Education",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "TDJ2O",
+   "name": "Technological Design, Grade 10, Open",
+   "category": "Technological Education",
+   "grade": 10
+  },
+  {
+   "source": "ON-STD",
+   "code": "TDJ3M",
+   "name": "Technological Design, Grade 11, University/College",
+   "category": "Technological Education",
+   "grade": 11
+  },
+  {
+   "source": "ON-STD",
+   "code": "TMJ4C",
+   "name": "Manufacturing Engineering Technology, Grade 12, College",
+   "category": "Technological Education",
+   "grade": 12
+  },
+  {
+   "source": "ON-STD",
+   "code": "TTJ2O",
+   "name": "Exploring Technologies, Grade 10, Open",
+   "category": "Technological Education",
+   "grade": 10
+  }
+ ],
+ "ib": [
+  {
+   "source": "IB",
+   "code": "IB-A-ENG-HL",
+   "name": "English A: Literature \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-A-ENG-SL",
+   "name": "English A: Literature \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-A-ENG-LIT-HL",
+   "name": "English A: Language & Literature \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-A-ENG-LIT-SL",
+   "name": "English A: Language & Literature \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-A-FRE-HL",
+   "name": "French A: Literature \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-A-FRE-SL",
+   "name": "French A: Literature \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-B-FRE-HL",
+   "name": "French B \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-B-FRE-SL",
+   "name": "French B \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-B-SPA-HL",
+   "name": "Spanish B \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-B-SPA-SL",
+   "name": "Spanish B \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-HIS-HL",
+   "name": "History \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-HIS-SL",
+   "name": "History \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-GEO-HL",
+   "name": "Geography \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-GEO-SL",
+   "name": "Geography \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-ECO-HL",
+   "name": "Economics \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-ECO-SL",
+   "name": "Economics \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-PSY-HL",
+   "name": "Psychology \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-PSY-SL",
+   "name": "Psychology \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-BUS-HL",
+   "name": "Business Management \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-BUS-SL",
+   "name": "Business Management \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-BIO-HL",
+   "name": "Biology \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-BIO-SL",
+   "name": "Biology \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-CHE-HL",
+   "name": "Chemistry \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-CHE-SL",
+   "name": "Chemistry \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-PHY-HL",
+   "name": "Physics \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-PHY-SL",
+   "name": "Physics \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-ESS-SL",
+   "name": "Environmental Systems & Societies \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-CS-HL",
+   "name": "Computer Science \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-CS-SL",
+   "name": "Computer Science \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MAA-HL",
+   "name": "Mathematics: Analysis & Approaches \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MAA-SL",
+   "name": "Mathematics: Analysis & Approaches \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MAI-HL",
+   "name": "Mathematics: Applications & Interpretation \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MAI-SL",
+   "name": "Mathematics: Applications & Interpretation \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-VIS-HL",
+   "name": "Visual Arts \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-VIS-SL",
+   "name": "Visual Arts \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MUS-HL",
+   "name": "Music \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MUS-SL",
+   "name": "Music \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-THE-HL",
+   "name": "Theatre \u2014 Higher Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-THE-SL",
+   "name": "Theatre \u2014 Standard Level",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-TOK",
+   "name": "Theory of Knowledge (TOK)",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-EE",
+   "name": "Extended Essay (EE)",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-CAS",
+   "name": "Creativity, Activity, Service (CAS)",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MYP-ENG",
+   "name": "MYP Language & Literature \u2014 English",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MYP-FRE",
+   "name": "MYP Language Acquisition \u2014 French",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MYP-HUM",
+   "name": "MYP Individuals & Societies",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MYP-SCI",
+   "name": "MYP Sciences",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MYP-MAT",
+   "name": "MYP Mathematics",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MYP-ART",
+   "name": "MYP Arts",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MYP-PHE",
+   "name": "MYP Physical & Health Education",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-MYP-DES",
+   "name": "MYP Design",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-PYP-TRAN",
+   "name": "Transdisciplinary Learning",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-PYP-UOI",
+   "name": "Units of Inquiry",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-PYP-MAT",
+   "name": "PYP Mathematics",
+   "category": "IB",
+   "grade": null
+  },
+  {
+   "source": "IB",
+   "code": "IB-PYP-LIT",
+   "name": "PYP Literacy",
+   "category": "IB",
+   "grade": null
+  }
+ ],
+ "ap": [
+  {
+   "source": "AP",
+   "code": "AP-ENG-LANG",
+   "name": "AP English Language and Composition",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-ENG-LIT",
+   "name": "AP English Literature and Composition",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-HIS-ART",
+   "name": "AP Art History",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-HIS-WOR",
+   "name": "AP World History: Modern",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-HIS-USA",
+   "name": "AP United States History",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-HIS-EUR",
+   "name": "AP European History",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-HUM-GEO",
+   "name": "AP Human Geography",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-GOV-USP",
+   "name": "AP U.S. Government and Politics",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-GOV-CMP",
+   "name": "AP Comparative Government and Politics",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-PSY",
+   "name": "AP Psychology",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-MUS-THE",
+   "name": "AP Music Theory",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-LAT",
+   "name": "AP Latin",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-CAL-AB",
+   "name": "AP Calculus AB",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-CAL-BC",
+   "name": "AP Calculus BC",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-STA",
+   "name": "AP Statistics",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-CSA",
+   "name": "AP Computer Science A",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-CSP",
+   "name": "AP Computer Science Principles",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-PRE-CAL",
+   "name": "AP Precalculus",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-BIO",
+   "name": "AP Biology",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-CHE",
+   "name": "AP Chemistry",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-PHY-1",
+   "name": "AP Physics 1: Algebra-Based",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-PHY-2",
+   "name": "AP Physics 2: Algebra-Based",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-PHY-C-ME",
+   "name": "AP Physics C: Mechanics",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-PHY-C-EM",
+   "name": "AP Physics C: Electricity and Magnetism",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-ENV-SCI",
+   "name": "AP Environmental Science",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-FRE",
+   "name": "AP French Language and Culture",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-SPA-LAN",
+   "name": "AP Spanish Language and Culture",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-SPA-LIT",
+   "name": "AP Spanish Literature and Culture",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-CHI-MAN",
+   "name": "AP Chinese Language and Culture",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-GER",
+   "name": "AP German Language and Culture",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-JAP",
+   "name": "AP Japanese Language and Culture",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-ECO-MAC",
+   "name": "AP Macroeconomics",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-ECO-MIC",
+   "name": "AP Microeconomics",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-SEM",
+   "name": "AP Seminar",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-RES",
+   "name": "AP Research",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-2D-ART",
+   "name": "AP 2-D Art and Design",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-3D-ART",
+   "name": "AP 3-D Art and Design",
+   "category": "AP",
+   "grade": null
+  },
+  {
+   "source": "AP",
+   "code": "AP-DRAW",
+   "name": "AP Drawing",
+   "category": "AP",
+   "grade": null
+  }
+ ]
+}

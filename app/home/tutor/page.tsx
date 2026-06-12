@@ -244,7 +244,7 @@ export default function TutorHome() {
       <div className="max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
 
         {/* Page header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
           <div>
             <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
             <p className="text-sm text-slate-400 mt-0.5">Manage your sessions and availability</p>
@@ -271,7 +271,7 @@ export default function TutorHome() {
             </button>
             <Link
               href="/home/tutor/availability"
-              className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors"
+              className="px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors"
             >
               Availability
             </Link>
@@ -341,7 +341,7 @@ export default function TutorHome() {
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
             <h3 className="text-sm font-semibold text-slate-900">Upcoming Sessions</h3>
-            <Link href="/home/tutor/sessions" className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
+            <Link href="/home/tutor/sessions" className="text-xs text-brand-600 hover:text-brand-700 font-medium transition-colors">
               View all
             </Link>
           </div>

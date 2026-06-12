@@ -15,128 +15,121 @@ function RegisterContent() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const allowedRoles = ["student", "tutor", "admin"];
+    // Public sign-up may only create students or tutors. Admin is provisioned separately.
+    const allowedRoles = ["student", "tutor"];
     const normalizedRole = allowedRoles.includes(role.toLowerCase()) ? role.toLowerCase() : "student";
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setError("");
+
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters.");
+            return;
+        }
+
         setLoading(true);
 
         try {
-
             const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
 
+            // 1. Create the auth user, attaching name + role as metadata in one call
+            //    (no separate updateUser round-trip, which would fail without a session).
             const { data, error: signUpError } = await supabase.auth.signUp({
                 email,
-                password
+                password,
+                options: {
+                    data: { name: fullName, role: normalizedRole },
+                },
             });
 
             if (signUpError) {
-                console.error('[REGISTER] Step 1 failed - Supabase signup error:', signUpError);
+                console.error('[REGISTER] Supabase signup error:', signUpError);
                 throw signUpError;
             }
 
             if (!data.user?.id) {
-                console.error('[REGISTER] Step 1 failed - No user ID returned from Supabase');
                 throw new Error('Failed to create user account');
             }
 
-            const { error: metadataError } = await supabase.auth.updateUser({
-                data: {
-                    name: fullName,
-                    role: normalizedRole
-                }
-            });
-
-            if (metadataError) {
-                console.error('[REGISTER] Step 2 failed - Metadata update error:', metadataError);
-                throw new Error('Failed to update user profile information');
-            }
-
-
-            const requestData = {
-                id: data.user.id,
-                email,
-                name: fullName,
-                role: normalizedRole
-            };
-            
+            // 2. Create the public profile row (profile_setup defaults to false → onboarding shows).
             const profileRes = await fetch("/api/profiles/create", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(requestData),
+                body: JSON.stringify({
+                    id: data.user.id,
+                    email,
+                    name: fullName,
+                    role: normalizedRole,
+                }),
             });
 
             if (!profileRes.ok) {
-                let errorData;
-                let errorText;
-                try {
-                    errorText = await profileRes.text();
-                    errorData = JSON.parse(errorText);
-                } catch (parseError) {
-                    errorData = { error: 'Unknown error (not JSON response)' };
-                    errorText = 'Non-JSON response';
-                }
-                console.error('[REGISTER] Step 3 failed - Profile creation error:', {
-                    status: profileRes.status,
-                    statusText: profileRes.statusText,
-                    errorData,
-                    errorText,
-                    headers: Object.fromEntries(profileRes.headers.entries())
-                });
+                const errorData = await profileRes.json().catch(() => ({ error: 'Unknown error' }));
+                console.error('[REGISTER] Profile creation failed:', profileRes.status, errorData);
                 throw new Error(errorData.error || errorData.details || `Failed to create user profile (${profileRes.status})`);
             }
 
-            const profileData = await profileRes.json();
-
-            const { error: loginError } = await supabase.auth.signInWithPassword({ 
-                email, 
-                password 
-            });
-
-            if (loginError) {
-                console.error('[REGISTER] Step 4 failed - Login error:', loginError);
-                setError("Account created successfully, but failed to log in automatically. Please log in manually.");
-                setLoading(false);
-                return;
+            // 3. Get a session. When email confirmation is OFF, signUp already returns one.
+            //    Otherwise fall back to an explicit password sign-in.
+            let session = data.session;
+            if (!session) {
+                const { data: signInData, error: loginError } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
+                if (loginError || !signInData.session) {
+                    // No session means Supabase is requiring email confirmation. Surface that
+                    // clearly rather than dumping the user back to the login screen.
+                    console.error('[REGISTER] Auto sign-in failed:', loginError);
+                    setError("Account created. Please check your email to confirm your address, then log in.");
+                    setLoading(false);
+                    return;
+                }
+                session = signInData.session;
             }
-                router.push(`/home`);
+
+            // 4. Straight to onboarding — the role home renders the setup wizard until
+            //    profile_setup flips true.
+            router.push(`/home/${normalizedRole}`);
         } catch (err: any) {
             console.error('[REGISTER] Registration failed:', err);
-            setError(err.message || "An error occurred during registration. Please try again.");
+            const message = /already registered|already exists|duplicate/i.test(err?.message || "")
+                ? "An account with this email already exists. Try logging in instead."
+                : err?.message || "An error occurred during registration. Please try again.";
+            setError(message);
         } finally {
             setLoading(false);
         }
     }
 
     return (
-        <main className="min-h-screen w-full flex flex-col items-center justify-center px-4 bg-gradient-to-b from-[#F8F9FD] to-gray-400">
-        <div className="max-w-2xl w-full bg-gradient-to-b from-white via-[#f4f7fb] to-white rounded-[40px] p-6 border-4 border-white shadow-[rgba(133,189,215,0.878)_0px_30px_30px_-20px]">
+        <main className="relative min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 bg-gradient-to-b from-white via-brand-50/40 to-white">
+        <div className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 border border-ink-100 shadow-xl shadow-ink-900/5">
           <div className="text-center">
-    <div className="flex justify-center mb-4">
-      <div className="w-20 h-20 rounded-full bg-[#1559C6] flex items-center justify-center shadow-[rgba(133,189,215,0.878)_0px_20px_25px_-15px]">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div className="flex justify-center mb-5">
+      <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-600/25">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
         </svg>
       </div>
     </div>
-            <h2 className="text-3xl font-black text-[#1559C6] mb-1">Register</h2>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-ink-900 mb-1">Create your account</h2>
 
-            <div className="text-gray-600 text-sm mb-4">
+            <div className="text-ink-500 text-sm mb-2">
               Registering as {role.charAt(0).toUpperCase() + role.slice(1)}
             </div>
           </div>
-      
-          <form onSubmit={handleSubmit} className="mt-5">
-            <div className="flex gap-3">
+
+          <form onSubmit={handleSubmit} className="mt-6">
+            <div className="flex flex-col sm:flex-row gap-3">
               <input
                 type="text"
                 required
                 value={firstName}
                 onChange={e => setFirstName(e.target.value)}
                 placeholder="First Name"
-                className="flex-1 bg-white border-none px-5 py-4 rounded-[20px] mt-4 shadow-[#cff0ff_0px_10px_10px_-5px] placeholder-gray-400 focus:outline-none focus:[border-inline:2px_solid_#12B1D1] transition-all"
+                className="flex-1 bg-white border border-ink-200 px-4 py-3 rounded-xl mt-1 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
               />
               <input
                 type="text"
@@ -144,55 +137,55 @@ function RegisterContent() {
                 value={lastName}
                 onChange={e => setLastName(e.target.value)}
                 placeholder="Last Name"
-                className="flex-1 bg-white border-none px-5 py-4 rounded-[20px] mt-4 shadow-[#cff0ff_0px_10px_10px_-5px] placeholder-gray-400 focus:outline-none focus:[border-inline:2px_solid_#12B1D1] transition-all"
+                className="flex-1 bg-white border border-ink-200 px-4 py-3 rounded-xl mt-1 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
               />
             </div>
-      
+
             <input
               type="email"
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="E-mail"
-              className="w-full bg-white border-none px-5 py-4 rounded-[20px] mt-4 shadow-[#cff0ff_0px_10px_10px_-5px] placeholder-gray-400 focus:outline-none focus:[border-inline:2px_solid_#12B1D1] transition-all"
+              className="w-full bg-white border border-ink-200 px-4 py-3 rounded-xl mt-4 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
             />
-      
+
             <input
               type="password"
               required
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Password"
-              className="w-full bg-white border-none px-5 py-4 rounded-[20px] mt-4 shadow-[#cff0ff_0px_10px_10px_-5px] placeholder-gray-400 focus:outline-none focus:[border-inline:2px_solid_#12B1D1] transition-all"
+              className="w-full bg-white border border-ink-200 px-4 py-3 rounded-xl mt-4 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
             />
-      
+
             {error && (
-              <div className="mt-4 text-red-500 text-sm text-center bg-red-50 py-2 rounded-lg">
+              <div className="mt-4 text-red-600 text-sm text-center bg-red-50 py-2 rounded-lg">
                 {error}
               </div>
             )}
-      
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full font-bold text-white py-4 mt-5 rounded-[20px] bg-[#1559C6] shadow-[rgba(133,189,215,0.878)_0px_20px_10px_-15px] border-none transition-all duration-200 hover:scale-[1.03] hover:shadow-[rgba(133,189,215,0.878)_0px_23px_10px_-20px] active:scale-95 active:shadow-[rgba(133,189,215,0.878)_0px_15px_10px_-10px] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="w-full font-semibold text-white py-3.5 mt-5 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-600/25 ring-1 ring-white/20 transition hover:brightness-[1.04] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:brightness-100"
             >
               {loading ? "Creating account..." : "Create Account"}
             </button>
           </form>
-          <div className="mt-6 flex gap-3 items-center justify-start">
-        <p className="text-gray-600 text-sm">
+          <div className="mt-6 flex gap-1 items-center justify-center text-sm">
+        <p className="text-ink-500">
               Already have an account?{" "}
-              <Link 
-                href={`/auth/login?role=${role}`} 
-                className="font-medium text-[#1559C6] hover:text-[#1559C6] transition"
+              <Link
+                href={`/auth/login?role=${role}`}
+                className="font-semibold text-brand-600 hover:text-brand-700 transition"
               >
                 Log in
               </Link>
             </p>
         </div>
         </div>
- 
+
       </main>
     );
 }

@@ -213,7 +213,7 @@ export default function HomeSidebar({ userRole, userName }: HomeSidebarProps) {
               title={isCollapsed ? item.label : undefined}
               className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors relative ${
                 isActive
-                  ? "bg-indigo-50 text-indigo-600 font-medium"
+                  ? "bg-brand-50 text-brand-600 font-medium"
                   : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"
               } ${isCollapsed ? "justify-center" : ""}`}
             >
@@ -256,7 +256,7 @@ export default function HomeSidebar({ userRole, userName }: HomeSidebarProps) {
       <div className="px-2 py-3 border-t border-slate-100 flex-shrink-0 space-y-1">
         {!isCollapsed && (
           <div className="flex items-center gap-3 px-3 py-2">
-            <div className="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+            <div className="w-7 h-7 rounded-full bg-brand-600 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
               {userName.charAt(0).toUpperCase()}
             </div>
             <div className="overflow-hidden">
@@ -267,7 +267,7 @@ export default function HomeSidebar({ userRole, userName }: HomeSidebarProps) {
         )}
         {isCollapsed && (
           <div className="flex justify-center py-1">
-            <div className="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold">
+            <div className="w-7 h-7 rounded-full bg-brand-600 flex items-center justify-center text-white text-xs font-semibold">
               {userName.charAt(0).toUpperCase()}
             </div>
           </div>

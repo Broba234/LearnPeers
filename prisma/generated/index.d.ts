@@ -174,6 +174,16 @@ export type Subjects = $Result.DefaultSelection<Prisma.$SubjectsPayload>
  */
 export type Institutions = $Result.DefaultSelection<Prisma.$InstitutionsPayload>
 /**
+ * Model ProfileInstitutions
+ * 
+ */
+export type ProfileInstitutions = $Result.DefaultSelection<Prisma.$ProfileInstitutionsPayload>
+/**
+ * Model SchoolEmailVerifications
+ * 
+ */
+export type SchoolEmailVerifications = $Result.DefaultSelection<Prisma.$SchoolEmailVerificationsPayload>
+/**
  * Model InstitutionCourses
  * 
  */
@@ -728,6 +738,26 @@ export class PrismaClient<
   get institutions(): Prisma.InstitutionsDelegate<ExtArgs>;
 
   /**
+   * `prisma.profileInstitutions`: Exposes CRUD operations for the **ProfileInstitutions** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProfileInstitutions
+    * const profileInstitutions = await prisma.profileInstitutions.findMany()
+    * ```
+    */
+  get profileInstitutions(): Prisma.ProfileInstitutionsDelegate<ExtArgs>;
+
+  /**
+   * `prisma.schoolEmailVerifications`: Exposes CRUD operations for the **SchoolEmailVerifications** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SchoolEmailVerifications
+    * const schoolEmailVerifications = await prisma.schoolEmailVerifications.findMany()
+    * ```
+    */
+  get schoolEmailVerifications(): Prisma.SchoolEmailVerificationsDelegate<ExtArgs>;
+
+  /**
    * `prisma.institutionCourses`: Exposes CRUD operations for the **InstitutionCourses** model.
     * Example usage:
     * ```ts
@@ -1274,6 +1304,8 @@ export namespace Prisma {
     Sessions: 'Sessions',
     Subjects: 'Subjects',
     Institutions: 'Institutions',
+    ProfileInstitutions: 'ProfileInstitutions',
+    SchoolEmailVerifications: 'SchoolEmailVerifications',
     InstitutionCourses: 'InstitutionCourses',
     TutorAvailability: 'TutorAvailability',
     Notifications: 'Notifications',
@@ -1297,7 +1329,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "audit_log_entries" | "flow_state" | "identities" | "instances" | "mfa_amr_claims" | "mfa_challenges" | "mfa_factors" | "oauth_authorizations" | "oauth_client_states" | "oauth_clients" | "oauth_consents" | "one_time_tokens" | "refresh_tokens" | "saml_providers" | "saml_relay_states" | "schema_migrations" | "sessions" | "sso_domains" | "sso_providers" | "users" | "conversations" | "messages" | "profiles" | "profilesOnSubjects" | "sessions" | "subjects" | "institutions" | "institutionCourses" | "tutorAvailability" | "notifications" | "contacts" | "feedback" | "custom_oauth_providers" | "webauthn_challenges" | "webauthn_credentials"
+      modelProps: "audit_log_entries" | "flow_state" | "identities" | "instances" | "mfa_amr_claims" | "mfa_challenges" | "mfa_factors" | "oauth_authorizations" | "oauth_client_states" | "oauth_clients" | "oauth_consents" | "one_time_tokens" | "refresh_tokens" | "saml_providers" | "saml_relay_states" | "schema_migrations" | "sessions" | "sso_domains" | "sso_providers" | "users" | "conversations" | "messages" | "profiles" | "profilesOnSubjects" | "sessions" | "subjects" | "institutions" | "profileInstitutions" | "schoolEmailVerifications" | "institutionCourses" | "tutorAvailability" | "notifications" | "contacts" | "feedback" | "custom_oauth_providers" | "webauthn_challenges" | "webauthn_credentials"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3191,6 +3223,146 @@ export namespace Prisma {
           }
         }
       }
+      ProfileInstitutions: {
+        payload: Prisma.$ProfileInstitutionsPayload<ExtArgs>
+        fields: Prisma.ProfileInstitutionsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProfileInstitutionsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProfileInstitutionsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload>
+          }
+          findFirst: {
+            args: Prisma.ProfileInstitutionsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProfileInstitutionsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload>
+          }
+          findMany: {
+            args: Prisma.ProfileInstitutionsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload>[]
+          }
+          create: {
+            args: Prisma.ProfileInstitutionsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload>
+          }
+          createMany: {
+            args: Prisma.ProfileInstitutionsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProfileInstitutionsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload>[]
+          }
+          delete: {
+            args: Prisma.ProfileInstitutionsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload>
+          }
+          update: {
+            args: Prisma.ProfileInstitutionsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProfileInstitutionsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProfileInstitutionsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ProfileInstitutionsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileInstitutionsPayload>
+          }
+          aggregate: {
+            args: Prisma.ProfileInstitutionsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProfileInstitutions>
+          }
+          groupBy: {
+            args: Prisma.ProfileInstitutionsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProfileInstitutionsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProfileInstitutionsCountArgs<ExtArgs>
+            result: $Utils.Optional<ProfileInstitutionsCountAggregateOutputType> | number
+          }
+        }
+      }
+      SchoolEmailVerifications: {
+        payload: Prisma.$SchoolEmailVerificationsPayload<ExtArgs>
+        fields: Prisma.SchoolEmailVerificationsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SchoolEmailVerificationsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SchoolEmailVerificationsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload>
+          }
+          findFirst: {
+            args: Prisma.SchoolEmailVerificationsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SchoolEmailVerificationsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload>
+          }
+          findMany: {
+            args: Prisma.SchoolEmailVerificationsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload>[]
+          }
+          create: {
+            args: Prisma.SchoolEmailVerificationsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload>
+          }
+          createMany: {
+            args: Prisma.SchoolEmailVerificationsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SchoolEmailVerificationsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload>[]
+          }
+          delete: {
+            args: Prisma.SchoolEmailVerificationsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload>
+          }
+          update: {
+            args: Prisma.SchoolEmailVerificationsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload>
+          }
+          deleteMany: {
+            args: Prisma.SchoolEmailVerificationsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SchoolEmailVerificationsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SchoolEmailVerificationsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SchoolEmailVerificationsPayload>
+          }
+          aggregate: {
+            args: Prisma.SchoolEmailVerificationsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSchoolEmailVerifications>
+          }
+          groupBy: {
+            args: Prisma.SchoolEmailVerificationsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SchoolEmailVerificationsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SchoolEmailVerificationsCountArgs<ExtArgs>
+            result: $Utils.Optional<SchoolEmailVerificationsCountAggregateOutputType> | number
+          }
+        }
+      }
       InstitutionCourses: {
         payload: Prisma.$InstitutionCoursesPayload<ExtArgs>
         fields: Prisma.InstitutionCoursesFieldRefs
@@ -4245,6 +4417,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles: number
     TutorAvailability: number
     Feedback: number
+    ProfileInstitutions: number
+    SchoolEmailVerifications: number
   }
 
   export type ProfilesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4256,6 +4430,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: boolean | ProfilesCountOutputTypeCountSessions_Sessions_tutor_idToProfilesArgs
     TutorAvailability?: boolean | ProfilesCountOutputTypeCountTutorAvailabilityArgs
     Feedback?: boolean | ProfilesCountOutputTypeCountFeedbackArgs
+    ProfileInstitutions?: boolean | ProfilesCountOutputTypeCountProfileInstitutionsArgs
+    SchoolEmailVerifications?: boolean | ProfilesCountOutputTypeCountSchoolEmailVerificationsArgs
   }
 
   // Custom InputTypes
@@ -4323,6 +4499,20 @@ export namespace Prisma {
    */
   export type ProfilesCountOutputTypeCountFeedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FeedbackWhereInput
+  }
+
+  /**
+   * ProfilesCountOutputType without action
+   */
+  export type ProfilesCountOutputTypeCountProfileInstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProfileInstitutionsWhereInput
+  }
+
+  /**
+   * ProfilesCountOutputType without action
+   */
+  export type ProfilesCountOutputTypeCountSchoolEmailVerificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SchoolEmailVerificationsWhereInput
   }
 
 
@@ -4404,11 +4594,15 @@ export namespace Prisma {
   export type InstitutionsCountOutputType = {
     Profiles: number
     InstitutionCourses: number
+    ProfileInstitutions: number
+    SchoolEmailVerifications: number
   }
 
   export type InstitutionsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Profiles?: boolean | InstitutionsCountOutputTypeCountProfilesArgs
     InstitutionCourses?: boolean | InstitutionsCountOutputTypeCountInstitutionCoursesArgs
+    ProfileInstitutions?: boolean | InstitutionsCountOutputTypeCountProfileInstitutionsArgs
+    SchoolEmailVerifications?: boolean | InstitutionsCountOutputTypeCountSchoolEmailVerificationsArgs
   }
 
   // Custom InputTypes
@@ -4434,6 +4628,20 @@ export namespace Prisma {
    */
   export type InstitutionsCountOutputTypeCountInstitutionCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InstitutionCoursesWhereInput
+  }
+
+  /**
+   * InstitutionsCountOutputType without action
+   */
+  export type InstitutionsCountOutputTypeCountProfileInstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProfileInstitutionsWhereInput
+  }
+
+  /**
+   * InstitutionsCountOutputType without action
+   */
+  export type InstitutionsCountOutputTypeCountSchoolEmailVerificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SchoolEmailVerificationsWhereInput
   }
 
 
@@ -26893,6 +27101,8 @@ export namespace Prisma {
     TutorAvailability?: boolean | Profiles$TutorAvailabilityArgs<ExtArgs>
     Institutions?: boolean | Profiles$InstitutionsArgs<ExtArgs>
     Feedback?: boolean | Profiles$FeedbackArgs<ExtArgs>
+    ProfileInstitutions?: boolean | Profiles$ProfileInstitutionsArgs<ExtArgs>
+    SchoolEmailVerifications?: boolean | Profiles$SchoolEmailVerificationsArgs<ExtArgs>
     _count?: boolean | ProfilesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["profiles"]>
 
@@ -26953,6 +27163,8 @@ export namespace Prisma {
     TutorAvailability?: boolean | Profiles$TutorAvailabilityArgs<ExtArgs>
     Institutions?: boolean | Profiles$InstitutionsArgs<ExtArgs>
     Feedback?: boolean | Profiles$FeedbackArgs<ExtArgs>
+    ProfileInstitutions?: boolean | Profiles$ProfileInstitutionsArgs<ExtArgs>
+    SchoolEmailVerifications?: boolean | Profiles$SchoolEmailVerificationsArgs<ExtArgs>
     _count?: boolean | ProfilesCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProfilesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -26973,6 +27185,8 @@ export namespace Prisma {
       TutorAvailability: Prisma.$TutorAvailabilityPayload<ExtArgs>[]
       Institutions: Prisma.$InstitutionsPayload<ExtArgs> | null
       Feedback: Prisma.$FeedbackPayload<ExtArgs>[]
+      ProfileInstitutions: Prisma.$ProfileInstitutionsPayload<ExtArgs>[]
+      SchoolEmailVerifications: Prisma.$SchoolEmailVerificationsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -27368,6 +27582,8 @@ export namespace Prisma {
     TutorAvailability<T extends Profiles$TutorAvailabilityArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$TutorAvailabilityArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TutorAvailabilityPayload<ExtArgs>, T, "findMany"> | Null>
     Institutions<T extends Profiles$InstitutionsArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$InstitutionsArgs<ExtArgs>>): Prisma__InstitutionsClient<$Result.GetResult<Prisma.$InstitutionsPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     Feedback<T extends Profiles$FeedbackArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$FeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany"> | Null>
+    ProfileInstitutions<T extends Profiles$ProfileInstitutionsArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$ProfileInstitutionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findMany"> | Null>
+    SchoolEmailVerifications<T extends Profiles$SchoolEmailVerificationsArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$SchoolEmailVerificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -27906,6 +28122,46 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FeedbackScalarFieldEnum | FeedbackScalarFieldEnum[]
+  }
+
+  /**
+   * Profiles.ProfileInstitutions
+   */
+  export type Profiles$ProfileInstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    where?: ProfileInstitutionsWhereInput
+    orderBy?: ProfileInstitutionsOrderByWithRelationInput | ProfileInstitutionsOrderByWithRelationInput[]
+    cursor?: ProfileInstitutionsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProfileInstitutionsScalarFieldEnum | ProfileInstitutionsScalarFieldEnum[]
+  }
+
+  /**
+   * Profiles.SchoolEmailVerifications
+   */
+  export type Profiles$SchoolEmailVerificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    where?: SchoolEmailVerificationsWhereInput
+    orderBy?: SchoolEmailVerificationsOrderByWithRelationInput | SchoolEmailVerificationsOrderByWithRelationInput[]
+    cursor?: SchoolEmailVerificationsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SchoolEmailVerificationsScalarFieldEnum | SchoolEmailVerificationsScalarFieldEnum[]
   }
 
   /**
@@ -31169,6 +31425,9 @@ export namespace Prisma {
     abbreviation: string | null
     country: string | null
     province: string | null
+    type: string | null
+    city: string | null
+    website: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -31179,6 +31438,9 @@ export namespace Prisma {
     abbreviation: string | null
     country: string | null
     province: string | null
+    type: string | null
+    city: string | null
+    website: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -31189,6 +31451,10 @@ export namespace Prisma {
     abbreviation: number
     country: number
     province: number
+    type: number
+    email_domains: number
+    city: number
+    website: number
     created_at: number
     updated_at: number
     _all: number
@@ -31201,6 +31467,9 @@ export namespace Prisma {
     abbreviation?: true
     country?: true
     province?: true
+    type?: true
+    city?: true
+    website?: true
     created_at?: true
     updated_at?: true
   }
@@ -31211,6 +31480,9 @@ export namespace Prisma {
     abbreviation?: true
     country?: true
     province?: true
+    type?: true
+    city?: true
+    website?: true
     created_at?: true
     updated_at?: true
   }
@@ -31221,6 +31493,10 @@ export namespace Prisma {
     abbreviation?: true
     country?: true
     province?: true
+    type?: true
+    email_domains?: true
+    city?: true
+    website?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -31304,6 +31580,10 @@ export namespace Prisma {
     abbreviation: string | null
     country: string
     province: string | null
+    type: string
+    email_domains: string[]
+    city: string | null
+    website: string | null
     created_at: Date
     updated_at: Date
     _count: InstitutionsCountAggregateOutputType | null
@@ -31331,10 +31611,16 @@ export namespace Prisma {
     abbreviation?: boolean
     country?: boolean
     province?: boolean
+    type?: boolean
+    email_domains?: boolean
+    city?: boolean
+    website?: boolean
     created_at?: boolean
     updated_at?: boolean
     Profiles?: boolean | Institutions$ProfilesArgs<ExtArgs>
     InstitutionCourses?: boolean | Institutions$InstitutionCoursesArgs<ExtArgs>
+    ProfileInstitutions?: boolean | Institutions$ProfileInstitutionsArgs<ExtArgs>
+    SchoolEmailVerifications?: boolean | Institutions$SchoolEmailVerificationsArgs<ExtArgs>
     _count?: boolean | InstitutionsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["institutions"]>
 
@@ -31344,6 +31630,10 @@ export namespace Prisma {
     abbreviation?: boolean
     country?: boolean
     province?: boolean
+    type?: boolean
+    email_domains?: boolean
+    city?: boolean
+    website?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["institutions"]>
@@ -31354,6 +31644,10 @@ export namespace Prisma {
     abbreviation?: boolean
     country?: boolean
     province?: boolean
+    type?: boolean
+    email_domains?: boolean
+    city?: boolean
+    website?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -31361,6 +31655,8 @@ export namespace Prisma {
   export type InstitutionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Profiles?: boolean | Institutions$ProfilesArgs<ExtArgs>
     InstitutionCourses?: boolean | Institutions$InstitutionCoursesArgs<ExtArgs>
+    ProfileInstitutions?: boolean | Institutions$ProfileInstitutionsArgs<ExtArgs>
+    SchoolEmailVerifications?: boolean | Institutions$SchoolEmailVerificationsArgs<ExtArgs>
     _count?: boolean | InstitutionsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InstitutionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -31370,6 +31666,8 @@ export namespace Prisma {
     objects: {
       Profiles: Prisma.$ProfilesPayload<ExtArgs>[]
       InstitutionCourses: Prisma.$InstitutionCoursesPayload<ExtArgs>[]
+      ProfileInstitutions: Prisma.$ProfileInstitutionsPayload<ExtArgs>[]
+      SchoolEmailVerifications: Prisma.$SchoolEmailVerificationsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -31377,6 +31675,10 @@ export namespace Prisma {
       abbreviation: string | null
       country: string
       province: string | null
+      type: string
+      email_domains: string[]
+      city: string | null
+      website: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["institutions"]>
@@ -31745,6 +32047,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     Profiles<T extends Institutions$ProfilesArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$ProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfilesPayload<ExtArgs>, T, "findMany"> | Null>
     InstitutionCourses<T extends Institutions$InstitutionCoursesArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$InstitutionCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstitutionCoursesPayload<ExtArgs>, T, "findMany"> | Null>
+    ProfileInstitutions<T extends Institutions$ProfileInstitutionsArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$ProfileInstitutionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findMany"> | Null>
+    SchoolEmailVerifications<T extends Institutions$SchoolEmailVerificationsArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$SchoolEmailVerificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -31779,6 +32083,10 @@ export namespace Prisma {
     readonly abbreviation: FieldRef<"Institutions", 'String'>
     readonly country: FieldRef<"Institutions", 'String'>
     readonly province: FieldRef<"Institutions", 'String'>
+    readonly type: FieldRef<"Institutions", 'String'>
+    readonly email_domains: FieldRef<"Institutions", 'String[]'>
+    readonly city: FieldRef<"Institutions", 'String'>
+    readonly website: FieldRef<"Institutions", 'String'>
     readonly created_at: FieldRef<"Institutions", 'DateTime'>
     readonly updated_at: FieldRef<"Institutions", 'DateTime'>
   }
@@ -32135,6 +32443,46 @@ export namespace Prisma {
   }
 
   /**
+   * Institutions.ProfileInstitutions
+   */
+  export type Institutions$ProfileInstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    where?: ProfileInstitutionsWhereInput
+    orderBy?: ProfileInstitutionsOrderByWithRelationInput | ProfileInstitutionsOrderByWithRelationInput[]
+    cursor?: ProfileInstitutionsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProfileInstitutionsScalarFieldEnum | ProfileInstitutionsScalarFieldEnum[]
+  }
+
+  /**
+   * Institutions.SchoolEmailVerifications
+   */
+  export type Institutions$SchoolEmailVerificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    where?: SchoolEmailVerificationsWhereInput
+    orderBy?: SchoolEmailVerificationsOrderByWithRelationInput | SchoolEmailVerificationsOrderByWithRelationInput[]
+    cursor?: SchoolEmailVerificationsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SchoolEmailVerificationsScalarFieldEnum | SchoolEmailVerificationsScalarFieldEnum[]
+  }
+
+  /**
    * Institutions without action
    */
   export type InstitutionsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -32146,6 +32494,2053 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: InstitutionsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProfileInstitutions
+   */
+
+  export type AggregateProfileInstitutions = {
+    _count: ProfileInstitutionsCountAggregateOutputType | null
+    _min: ProfileInstitutionsMinAggregateOutputType | null
+    _max: ProfileInstitutionsMaxAggregateOutputType | null
+  }
+
+  export type ProfileInstitutionsMinAggregateOutputType = {
+    id: string | null
+    profile_id: string | null
+    institution_id: string | null
+    institution_name_raw: string | null
+    kind: string | null
+    status: string | null
+    verification_method: string | null
+    verified_email: string | null
+    document_url: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ProfileInstitutionsMaxAggregateOutputType = {
+    id: string | null
+    profile_id: string | null
+    institution_id: string | null
+    institution_name_raw: string | null
+    kind: string | null
+    status: string | null
+    verification_method: string | null
+    verified_email: string | null
+    document_url: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ProfileInstitutionsCountAggregateOutputType = {
+    id: number
+    profile_id: number
+    institution_id: number
+    institution_name_raw: number
+    kind: number
+    status: number
+    verification_method: number
+    verified_email: number
+    document_url: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type ProfileInstitutionsMinAggregateInputType = {
+    id?: true
+    profile_id?: true
+    institution_id?: true
+    institution_name_raw?: true
+    kind?: true
+    status?: true
+    verification_method?: true
+    verified_email?: true
+    document_url?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ProfileInstitutionsMaxAggregateInputType = {
+    id?: true
+    profile_id?: true
+    institution_id?: true
+    institution_name_raw?: true
+    kind?: true
+    status?: true
+    verification_method?: true
+    verified_email?: true
+    document_url?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ProfileInstitutionsCountAggregateInputType = {
+    id?: true
+    profile_id?: true
+    institution_id?: true
+    institution_name_raw?: true
+    kind?: true
+    status?: true
+    verification_method?: true
+    verified_email?: true
+    document_url?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type ProfileInstitutionsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProfileInstitutions to aggregate.
+     */
+    where?: ProfileInstitutionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProfileInstitutions to fetch.
+     */
+    orderBy?: ProfileInstitutionsOrderByWithRelationInput | ProfileInstitutionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProfileInstitutionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProfileInstitutions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProfileInstitutions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProfileInstitutions
+    **/
+    _count?: true | ProfileInstitutionsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProfileInstitutionsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProfileInstitutionsMaxAggregateInputType
+  }
+
+  export type GetProfileInstitutionsAggregateType<T extends ProfileInstitutionsAggregateArgs> = {
+        [P in keyof T & keyof AggregateProfileInstitutions]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProfileInstitutions[P]>
+      : GetScalarType<T[P], AggregateProfileInstitutions[P]>
+  }
+
+
+
+
+  export type ProfileInstitutionsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProfileInstitutionsWhereInput
+    orderBy?: ProfileInstitutionsOrderByWithAggregationInput | ProfileInstitutionsOrderByWithAggregationInput[]
+    by: ProfileInstitutionsScalarFieldEnum[] | ProfileInstitutionsScalarFieldEnum
+    having?: ProfileInstitutionsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProfileInstitutionsCountAggregateInputType | true
+    _min?: ProfileInstitutionsMinAggregateInputType
+    _max?: ProfileInstitutionsMaxAggregateInputType
+  }
+
+  export type ProfileInstitutionsGroupByOutputType = {
+    id: string
+    profile_id: string
+    institution_id: string | null
+    institution_name_raw: string | null
+    kind: string
+    status: string
+    verification_method: string | null
+    verified_email: string | null
+    document_url: string | null
+    created_at: Date
+    updated_at: Date
+    _count: ProfileInstitutionsCountAggregateOutputType | null
+    _min: ProfileInstitutionsMinAggregateOutputType | null
+    _max: ProfileInstitutionsMaxAggregateOutputType | null
+  }
+
+  type GetProfileInstitutionsGroupByPayload<T extends ProfileInstitutionsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProfileInstitutionsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProfileInstitutionsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProfileInstitutionsGroupByOutputType[P]>
+            : GetScalarType<T[P], ProfileInstitutionsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProfileInstitutionsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    profile_id?: boolean
+    institution_id?: boolean
+    institution_name_raw?: boolean
+    kind?: boolean
+    status?: boolean
+    verification_method?: boolean
+    verified_email?: boolean
+    document_url?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Institutions?: boolean | ProfileInstitutions$InstitutionsArgs<ExtArgs>
+  }, ExtArgs["result"]["profileInstitutions"]>
+
+  export type ProfileInstitutionsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    profile_id?: boolean
+    institution_id?: boolean
+    institution_name_raw?: boolean
+    kind?: boolean
+    status?: boolean
+    verification_method?: boolean
+    verified_email?: boolean
+    document_url?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Institutions?: boolean | ProfileInstitutions$InstitutionsArgs<ExtArgs>
+  }, ExtArgs["result"]["profileInstitutions"]>
+
+  export type ProfileInstitutionsSelectScalar = {
+    id?: boolean
+    profile_id?: boolean
+    institution_id?: boolean
+    institution_name_raw?: boolean
+    kind?: boolean
+    status?: boolean
+    verification_method?: boolean
+    verified_email?: boolean
+    document_url?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type ProfileInstitutionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Institutions?: boolean | ProfileInstitutions$InstitutionsArgs<ExtArgs>
+  }
+  export type ProfileInstitutionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Institutions?: boolean | ProfileInstitutions$InstitutionsArgs<ExtArgs>
+  }
+
+  export type $ProfileInstitutionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProfileInstitutions"
+    objects: {
+      Profiles: Prisma.$ProfilesPayload<ExtArgs>
+      Institutions: Prisma.$InstitutionsPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      profile_id: string
+      institution_id: string | null
+      institution_name_raw: string | null
+      kind: string
+      status: string
+      verification_method: string | null
+      verified_email: string | null
+      document_url: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["profileInstitutions"]>
+    composites: {}
+  }
+
+  type ProfileInstitutionsGetPayload<S extends boolean | null | undefined | ProfileInstitutionsDefaultArgs> = $Result.GetResult<Prisma.$ProfileInstitutionsPayload, S>
+
+  type ProfileInstitutionsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ProfileInstitutionsFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ProfileInstitutionsCountAggregateInputType | true
+    }
+
+  export interface ProfileInstitutionsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProfileInstitutions'], meta: { name: 'ProfileInstitutions' } }
+    /**
+     * Find zero or one ProfileInstitutions that matches the filter.
+     * @param {ProfileInstitutionsFindUniqueArgs} args - Arguments to find a ProfileInstitutions
+     * @example
+     * // Get one ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProfileInstitutionsFindUniqueArgs>(args: SelectSubset<T, ProfileInstitutionsFindUniqueArgs<ExtArgs>>): Prisma__ProfileInstitutionsClient<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ProfileInstitutions that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ProfileInstitutionsFindUniqueOrThrowArgs} args - Arguments to find a ProfileInstitutions
+     * @example
+     * // Get one ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProfileInstitutionsFindUniqueOrThrowArgs>(args: SelectSubset<T, ProfileInstitutionsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProfileInstitutionsClient<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ProfileInstitutions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileInstitutionsFindFirstArgs} args - Arguments to find a ProfileInstitutions
+     * @example
+     * // Get one ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProfileInstitutionsFindFirstArgs>(args?: SelectSubset<T, ProfileInstitutionsFindFirstArgs<ExtArgs>>): Prisma__ProfileInstitutionsClient<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ProfileInstitutions that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileInstitutionsFindFirstOrThrowArgs} args - Arguments to find a ProfileInstitutions
+     * @example
+     * // Get one ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProfileInstitutionsFindFirstOrThrowArgs>(args?: SelectSubset<T, ProfileInstitutionsFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProfileInstitutionsClient<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ProfileInstitutions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileInstitutionsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.findMany()
+     * 
+     * // Get first 10 ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const profileInstitutionsWithIdOnly = await prisma.profileInstitutions.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProfileInstitutionsFindManyArgs>(args?: SelectSubset<T, ProfileInstitutionsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ProfileInstitutions.
+     * @param {ProfileInstitutionsCreateArgs} args - Arguments to create a ProfileInstitutions.
+     * @example
+     * // Create one ProfileInstitutions
+     * const ProfileInstitutions = await prisma.profileInstitutions.create({
+     *   data: {
+     *     // ... data to create a ProfileInstitutions
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProfileInstitutionsCreateArgs>(args: SelectSubset<T, ProfileInstitutionsCreateArgs<ExtArgs>>): Prisma__ProfileInstitutionsClient<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ProfileInstitutions.
+     * @param {ProfileInstitutionsCreateManyArgs} args - Arguments to create many ProfileInstitutions.
+     * @example
+     * // Create many ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProfileInstitutionsCreateManyArgs>(args?: SelectSubset<T, ProfileInstitutionsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProfileInstitutions and returns the data saved in the database.
+     * @param {ProfileInstitutionsCreateManyAndReturnArgs} args - Arguments to create many ProfileInstitutions.
+     * @example
+     * // Create many ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProfileInstitutions and only return the `id`
+     * const profileInstitutionsWithIdOnly = await prisma.profileInstitutions.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProfileInstitutionsCreateManyAndReturnArgs>(args?: SelectSubset<T, ProfileInstitutionsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ProfileInstitutions.
+     * @param {ProfileInstitutionsDeleteArgs} args - Arguments to delete one ProfileInstitutions.
+     * @example
+     * // Delete one ProfileInstitutions
+     * const ProfileInstitutions = await prisma.profileInstitutions.delete({
+     *   where: {
+     *     // ... filter to delete one ProfileInstitutions
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProfileInstitutionsDeleteArgs>(args: SelectSubset<T, ProfileInstitutionsDeleteArgs<ExtArgs>>): Prisma__ProfileInstitutionsClient<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ProfileInstitutions.
+     * @param {ProfileInstitutionsUpdateArgs} args - Arguments to update one ProfileInstitutions.
+     * @example
+     * // Update one ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProfileInstitutionsUpdateArgs>(args: SelectSubset<T, ProfileInstitutionsUpdateArgs<ExtArgs>>): Prisma__ProfileInstitutionsClient<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ProfileInstitutions.
+     * @param {ProfileInstitutionsDeleteManyArgs} args - Arguments to filter ProfileInstitutions to delete.
+     * @example
+     * // Delete a few ProfileInstitutions
+     * const { count } = await prisma.profileInstitutions.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProfileInstitutionsDeleteManyArgs>(args?: SelectSubset<T, ProfileInstitutionsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProfileInstitutions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileInstitutionsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProfileInstitutionsUpdateManyArgs>(args: SelectSubset<T, ProfileInstitutionsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ProfileInstitutions.
+     * @param {ProfileInstitutionsUpsertArgs} args - Arguments to update or create a ProfileInstitutions.
+     * @example
+     * // Update or create a ProfileInstitutions
+     * const profileInstitutions = await prisma.profileInstitutions.upsert({
+     *   create: {
+     *     // ... data to create a ProfileInstitutions
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProfileInstitutions we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProfileInstitutionsUpsertArgs>(args: SelectSubset<T, ProfileInstitutionsUpsertArgs<ExtArgs>>): Prisma__ProfileInstitutionsClient<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ProfileInstitutions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileInstitutionsCountArgs} args - Arguments to filter ProfileInstitutions to count.
+     * @example
+     * // Count the number of ProfileInstitutions
+     * const count = await prisma.profileInstitutions.count({
+     *   where: {
+     *     // ... the filter for the ProfileInstitutions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProfileInstitutionsCountArgs>(
+      args?: Subset<T, ProfileInstitutionsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProfileInstitutionsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProfileInstitutions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileInstitutionsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProfileInstitutionsAggregateArgs>(args: Subset<T, ProfileInstitutionsAggregateArgs>): Prisma.PrismaPromise<GetProfileInstitutionsAggregateType<T>>
+
+    /**
+     * Group by ProfileInstitutions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileInstitutionsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProfileInstitutionsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProfileInstitutionsGroupByArgs['orderBy'] }
+        : { orderBy?: ProfileInstitutionsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProfileInstitutionsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProfileInstitutionsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProfileInstitutions model
+   */
+  readonly fields: ProfileInstitutionsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProfileInstitutions.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProfileInstitutionsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Profiles<T extends ProfilesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfilesDefaultArgs<ExtArgs>>): Prisma__ProfilesClient<$Result.GetResult<Prisma.$ProfilesPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    Institutions<T extends ProfileInstitutions$InstitutionsArgs<ExtArgs> = {}>(args?: Subset<T, ProfileInstitutions$InstitutionsArgs<ExtArgs>>): Prisma__InstitutionsClient<$Result.GetResult<Prisma.$InstitutionsPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProfileInstitutions model
+   */ 
+  interface ProfileInstitutionsFieldRefs {
+    readonly id: FieldRef<"ProfileInstitutions", 'String'>
+    readonly profile_id: FieldRef<"ProfileInstitutions", 'String'>
+    readonly institution_id: FieldRef<"ProfileInstitutions", 'String'>
+    readonly institution_name_raw: FieldRef<"ProfileInstitutions", 'String'>
+    readonly kind: FieldRef<"ProfileInstitutions", 'String'>
+    readonly status: FieldRef<"ProfileInstitutions", 'String'>
+    readonly verification_method: FieldRef<"ProfileInstitutions", 'String'>
+    readonly verified_email: FieldRef<"ProfileInstitutions", 'String'>
+    readonly document_url: FieldRef<"ProfileInstitutions", 'String'>
+    readonly created_at: FieldRef<"ProfileInstitutions", 'DateTime'>
+    readonly updated_at: FieldRef<"ProfileInstitutions", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProfileInstitutions findUnique
+   */
+  export type ProfileInstitutionsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileInstitutions to fetch.
+     */
+    where: ProfileInstitutionsWhereUniqueInput
+  }
+
+  /**
+   * ProfileInstitutions findUniqueOrThrow
+   */
+  export type ProfileInstitutionsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileInstitutions to fetch.
+     */
+    where: ProfileInstitutionsWhereUniqueInput
+  }
+
+  /**
+   * ProfileInstitutions findFirst
+   */
+  export type ProfileInstitutionsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileInstitutions to fetch.
+     */
+    where?: ProfileInstitutionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProfileInstitutions to fetch.
+     */
+    orderBy?: ProfileInstitutionsOrderByWithRelationInput | ProfileInstitutionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProfileInstitutions.
+     */
+    cursor?: ProfileInstitutionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProfileInstitutions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProfileInstitutions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProfileInstitutions.
+     */
+    distinct?: ProfileInstitutionsScalarFieldEnum | ProfileInstitutionsScalarFieldEnum[]
+  }
+
+  /**
+   * ProfileInstitutions findFirstOrThrow
+   */
+  export type ProfileInstitutionsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileInstitutions to fetch.
+     */
+    where?: ProfileInstitutionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProfileInstitutions to fetch.
+     */
+    orderBy?: ProfileInstitutionsOrderByWithRelationInput | ProfileInstitutionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProfileInstitutions.
+     */
+    cursor?: ProfileInstitutionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProfileInstitutions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProfileInstitutions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProfileInstitutions.
+     */
+    distinct?: ProfileInstitutionsScalarFieldEnum | ProfileInstitutionsScalarFieldEnum[]
+  }
+
+  /**
+   * ProfileInstitutions findMany
+   */
+  export type ProfileInstitutionsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileInstitutions to fetch.
+     */
+    where?: ProfileInstitutionsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProfileInstitutions to fetch.
+     */
+    orderBy?: ProfileInstitutionsOrderByWithRelationInput | ProfileInstitutionsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProfileInstitutions.
+     */
+    cursor?: ProfileInstitutionsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProfileInstitutions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProfileInstitutions.
+     */
+    skip?: number
+    distinct?: ProfileInstitutionsScalarFieldEnum | ProfileInstitutionsScalarFieldEnum[]
+  }
+
+  /**
+   * ProfileInstitutions create
+   */
+  export type ProfileInstitutionsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProfileInstitutions.
+     */
+    data: XOR<ProfileInstitutionsCreateInput, ProfileInstitutionsUncheckedCreateInput>
+  }
+
+  /**
+   * ProfileInstitutions createMany
+   */
+  export type ProfileInstitutionsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProfileInstitutions.
+     */
+    data: ProfileInstitutionsCreateManyInput | ProfileInstitutionsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProfileInstitutions createManyAndReturn
+   */
+  export type ProfileInstitutionsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ProfileInstitutions.
+     */
+    data: ProfileInstitutionsCreateManyInput | ProfileInstitutionsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProfileInstitutions update
+   */
+  export type ProfileInstitutionsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProfileInstitutions.
+     */
+    data: XOR<ProfileInstitutionsUpdateInput, ProfileInstitutionsUncheckedUpdateInput>
+    /**
+     * Choose, which ProfileInstitutions to update.
+     */
+    where: ProfileInstitutionsWhereUniqueInput
+  }
+
+  /**
+   * ProfileInstitutions updateMany
+   */
+  export type ProfileInstitutionsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProfileInstitutions.
+     */
+    data: XOR<ProfileInstitutionsUpdateManyMutationInput, ProfileInstitutionsUncheckedUpdateManyInput>
+    /**
+     * Filter which ProfileInstitutions to update
+     */
+    where?: ProfileInstitutionsWhereInput
+  }
+
+  /**
+   * ProfileInstitutions upsert
+   */
+  export type ProfileInstitutionsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProfileInstitutions to update in case it exists.
+     */
+    where: ProfileInstitutionsWhereUniqueInput
+    /**
+     * In case the ProfileInstitutions found by the `where` argument doesn't exist, create a new ProfileInstitutions with this data.
+     */
+    create: XOR<ProfileInstitutionsCreateInput, ProfileInstitutionsUncheckedCreateInput>
+    /**
+     * In case the ProfileInstitutions was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProfileInstitutionsUpdateInput, ProfileInstitutionsUncheckedUpdateInput>
+  }
+
+  /**
+   * ProfileInstitutions delete
+   */
+  export type ProfileInstitutionsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+    /**
+     * Filter which ProfileInstitutions to delete.
+     */
+    where: ProfileInstitutionsWhereUniqueInput
+  }
+
+  /**
+   * ProfileInstitutions deleteMany
+   */
+  export type ProfileInstitutionsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProfileInstitutions to delete
+     */
+    where?: ProfileInstitutionsWhereInput
+  }
+
+  /**
+   * ProfileInstitutions.Institutions
+   */
+  export type ProfileInstitutions$InstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Institutions
+     */
+    select?: InstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InstitutionsInclude<ExtArgs> | null
+    where?: InstitutionsWhereInput
+  }
+
+  /**
+   * ProfileInstitutions without action
+   */
+  export type ProfileInstitutionsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileInstitutions
+     */
+    select?: ProfileInstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileInstitutionsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SchoolEmailVerifications
+   */
+
+  export type AggregateSchoolEmailVerifications = {
+    _count: SchoolEmailVerificationsCountAggregateOutputType | null
+    _avg: SchoolEmailVerificationsAvgAggregateOutputType | null
+    _sum: SchoolEmailVerificationsSumAggregateOutputType | null
+    _min: SchoolEmailVerificationsMinAggregateOutputType | null
+    _max: SchoolEmailVerificationsMaxAggregateOutputType | null
+  }
+
+  export type SchoolEmailVerificationsAvgAggregateOutputType = {
+    attempts: number | null
+  }
+
+  export type SchoolEmailVerificationsSumAggregateOutputType = {
+    attempts: number | null
+  }
+
+  export type SchoolEmailVerificationsMinAggregateOutputType = {
+    id: string | null
+    profile_id: string | null
+    institution_id: string | null
+    email: string | null
+    code_hash: string | null
+    expires_at: Date | null
+    consumed_at: Date | null
+    attempts: number | null
+    created_at: Date | null
+  }
+
+  export type SchoolEmailVerificationsMaxAggregateOutputType = {
+    id: string | null
+    profile_id: string | null
+    institution_id: string | null
+    email: string | null
+    code_hash: string | null
+    expires_at: Date | null
+    consumed_at: Date | null
+    attempts: number | null
+    created_at: Date | null
+  }
+
+  export type SchoolEmailVerificationsCountAggregateOutputType = {
+    id: number
+    profile_id: number
+    institution_id: number
+    email: number
+    code_hash: number
+    expires_at: number
+    consumed_at: number
+    attempts: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type SchoolEmailVerificationsAvgAggregateInputType = {
+    attempts?: true
+  }
+
+  export type SchoolEmailVerificationsSumAggregateInputType = {
+    attempts?: true
+  }
+
+  export type SchoolEmailVerificationsMinAggregateInputType = {
+    id?: true
+    profile_id?: true
+    institution_id?: true
+    email?: true
+    code_hash?: true
+    expires_at?: true
+    consumed_at?: true
+    attempts?: true
+    created_at?: true
+  }
+
+  export type SchoolEmailVerificationsMaxAggregateInputType = {
+    id?: true
+    profile_id?: true
+    institution_id?: true
+    email?: true
+    code_hash?: true
+    expires_at?: true
+    consumed_at?: true
+    attempts?: true
+    created_at?: true
+  }
+
+  export type SchoolEmailVerificationsCountAggregateInputType = {
+    id?: true
+    profile_id?: true
+    institution_id?: true
+    email?: true
+    code_hash?: true
+    expires_at?: true
+    consumed_at?: true
+    attempts?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type SchoolEmailVerificationsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SchoolEmailVerifications to aggregate.
+     */
+    where?: SchoolEmailVerificationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SchoolEmailVerifications to fetch.
+     */
+    orderBy?: SchoolEmailVerificationsOrderByWithRelationInput | SchoolEmailVerificationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SchoolEmailVerificationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SchoolEmailVerifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SchoolEmailVerifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SchoolEmailVerifications
+    **/
+    _count?: true | SchoolEmailVerificationsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SchoolEmailVerificationsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SchoolEmailVerificationsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SchoolEmailVerificationsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SchoolEmailVerificationsMaxAggregateInputType
+  }
+
+  export type GetSchoolEmailVerificationsAggregateType<T extends SchoolEmailVerificationsAggregateArgs> = {
+        [P in keyof T & keyof AggregateSchoolEmailVerifications]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSchoolEmailVerifications[P]>
+      : GetScalarType<T[P], AggregateSchoolEmailVerifications[P]>
+  }
+
+
+
+
+  export type SchoolEmailVerificationsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SchoolEmailVerificationsWhereInput
+    orderBy?: SchoolEmailVerificationsOrderByWithAggregationInput | SchoolEmailVerificationsOrderByWithAggregationInput[]
+    by: SchoolEmailVerificationsScalarFieldEnum[] | SchoolEmailVerificationsScalarFieldEnum
+    having?: SchoolEmailVerificationsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SchoolEmailVerificationsCountAggregateInputType | true
+    _avg?: SchoolEmailVerificationsAvgAggregateInputType
+    _sum?: SchoolEmailVerificationsSumAggregateInputType
+    _min?: SchoolEmailVerificationsMinAggregateInputType
+    _max?: SchoolEmailVerificationsMaxAggregateInputType
+  }
+
+  export type SchoolEmailVerificationsGroupByOutputType = {
+    id: string
+    profile_id: string
+    institution_id: string
+    email: string
+    code_hash: string
+    expires_at: Date
+    consumed_at: Date | null
+    attempts: number
+    created_at: Date
+    _count: SchoolEmailVerificationsCountAggregateOutputType | null
+    _avg: SchoolEmailVerificationsAvgAggregateOutputType | null
+    _sum: SchoolEmailVerificationsSumAggregateOutputType | null
+    _min: SchoolEmailVerificationsMinAggregateOutputType | null
+    _max: SchoolEmailVerificationsMaxAggregateOutputType | null
+  }
+
+  type GetSchoolEmailVerificationsGroupByPayload<T extends SchoolEmailVerificationsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SchoolEmailVerificationsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SchoolEmailVerificationsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SchoolEmailVerificationsGroupByOutputType[P]>
+            : GetScalarType<T[P], SchoolEmailVerificationsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SchoolEmailVerificationsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    profile_id?: boolean
+    institution_id?: boolean
+    email?: boolean
+    code_hash?: boolean
+    expires_at?: boolean
+    consumed_at?: boolean
+    attempts?: boolean
+    created_at?: boolean
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Institutions?: boolean | InstitutionsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["schoolEmailVerifications"]>
+
+  export type SchoolEmailVerificationsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    profile_id?: boolean
+    institution_id?: boolean
+    email?: boolean
+    code_hash?: boolean
+    expires_at?: boolean
+    consumed_at?: boolean
+    attempts?: boolean
+    created_at?: boolean
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Institutions?: boolean | InstitutionsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["schoolEmailVerifications"]>
+
+  export type SchoolEmailVerificationsSelectScalar = {
+    id?: boolean
+    profile_id?: boolean
+    institution_id?: boolean
+    email?: boolean
+    code_hash?: boolean
+    expires_at?: boolean
+    consumed_at?: boolean
+    attempts?: boolean
+    created_at?: boolean
+  }
+
+  export type SchoolEmailVerificationsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Institutions?: boolean | InstitutionsDefaultArgs<ExtArgs>
+  }
+  export type SchoolEmailVerificationsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Institutions?: boolean | InstitutionsDefaultArgs<ExtArgs>
+  }
+
+  export type $SchoolEmailVerificationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SchoolEmailVerifications"
+    objects: {
+      Profiles: Prisma.$ProfilesPayload<ExtArgs>
+      Institutions: Prisma.$InstitutionsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      profile_id: string
+      institution_id: string
+      email: string
+      code_hash: string
+      expires_at: Date
+      consumed_at: Date | null
+      attempts: number
+      created_at: Date
+    }, ExtArgs["result"]["schoolEmailVerifications"]>
+    composites: {}
+  }
+
+  type SchoolEmailVerificationsGetPayload<S extends boolean | null | undefined | SchoolEmailVerificationsDefaultArgs> = $Result.GetResult<Prisma.$SchoolEmailVerificationsPayload, S>
+
+  type SchoolEmailVerificationsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SchoolEmailVerificationsFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SchoolEmailVerificationsCountAggregateInputType | true
+    }
+
+  export interface SchoolEmailVerificationsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SchoolEmailVerifications'], meta: { name: 'SchoolEmailVerifications' } }
+    /**
+     * Find zero or one SchoolEmailVerifications that matches the filter.
+     * @param {SchoolEmailVerificationsFindUniqueArgs} args - Arguments to find a SchoolEmailVerifications
+     * @example
+     * // Get one SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SchoolEmailVerificationsFindUniqueArgs>(args: SelectSubset<T, SchoolEmailVerificationsFindUniqueArgs<ExtArgs>>): Prisma__SchoolEmailVerificationsClient<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SchoolEmailVerifications that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SchoolEmailVerificationsFindUniqueOrThrowArgs} args - Arguments to find a SchoolEmailVerifications
+     * @example
+     * // Get one SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SchoolEmailVerificationsFindUniqueOrThrowArgs>(args: SelectSubset<T, SchoolEmailVerificationsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SchoolEmailVerificationsClient<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SchoolEmailVerifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SchoolEmailVerificationsFindFirstArgs} args - Arguments to find a SchoolEmailVerifications
+     * @example
+     * // Get one SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SchoolEmailVerificationsFindFirstArgs>(args?: SelectSubset<T, SchoolEmailVerificationsFindFirstArgs<ExtArgs>>): Prisma__SchoolEmailVerificationsClient<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SchoolEmailVerifications that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SchoolEmailVerificationsFindFirstOrThrowArgs} args - Arguments to find a SchoolEmailVerifications
+     * @example
+     * // Get one SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SchoolEmailVerificationsFindFirstOrThrowArgs>(args?: SelectSubset<T, SchoolEmailVerificationsFindFirstOrThrowArgs<ExtArgs>>): Prisma__SchoolEmailVerificationsClient<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SchoolEmailVerifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SchoolEmailVerificationsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.findMany()
+     * 
+     * // Get first 10 SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const schoolEmailVerificationsWithIdOnly = await prisma.schoolEmailVerifications.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SchoolEmailVerificationsFindManyArgs>(args?: SelectSubset<T, SchoolEmailVerificationsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SchoolEmailVerifications.
+     * @param {SchoolEmailVerificationsCreateArgs} args - Arguments to create a SchoolEmailVerifications.
+     * @example
+     * // Create one SchoolEmailVerifications
+     * const SchoolEmailVerifications = await prisma.schoolEmailVerifications.create({
+     *   data: {
+     *     // ... data to create a SchoolEmailVerifications
+     *   }
+     * })
+     * 
+     */
+    create<T extends SchoolEmailVerificationsCreateArgs>(args: SelectSubset<T, SchoolEmailVerificationsCreateArgs<ExtArgs>>): Prisma__SchoolEmailVerificationsClient<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SchoolEmailVerifications.
+     * @param {SchoolEmailVerificationsCreateManyArgs} args - Arguments to create many SchoolEmailVerifications.
+     * @example
+     * // Create many SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SchoolEmailVerificationsCreateManyArgs>(args?: SelectSubset<T, SchoolEmailVerificationsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SchoolEmailVerifications and returns the data saved in the database.
+     * @param {SchoolEmailVerificationsCreateManyAndReturnArgs} args - Arguments to create many SchoolEmailVerifications.
+     * @example
+     * // Create many SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SchoolEmailVerifications and only return the `id`
+     * const schoolEmailVerificationsWithIdOnly = await prisma.schoolEmailVerifications.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SchoolEmailVerificationsCreateManyAndReturnArgs>(args?: SelectSubset<T, SchoolEmailVerificationsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SchoolEmailVerifications.
+     * @param {SchoolEmailVerificationsDeleteArgs} args - Arguments to delete one SchoolEmailVerifications.
+     * @example
+     * // Delete one SchoolEmailVerifications
+     * const SchoolEmailVerifications = await prisma.schoolEmailVerifications.delete({
+     *   where: {
+     *     // ... filter to delete one SchoolEmailVerifications
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SchoolEmailVerificationsDeleteArgs>(args: SelectSubset<T, SchoolEmailVerificationsDeleteArgs<ExtArgs>>): Prisma__SchoolEmailVerificationsClient<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SchoolEmailVerifications.
+     * @param {SchoolEmailVerificationsUpdateArgs} args - Arguments to update one SchoolEmailVerifications.
+     * @example
+     * // Update one SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SchoolEmailVerificationsUpdateArgs>(args: SelectSubset<T, SchoolEmailVerificationsUpdateArgs<ExtArgs>>): Prisma__SchoolEmailVerificationsClient<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SchoolEmailVerifications.
+     * @param {SchoolEmailVerificationsDeleteManyArgs} args - Arguments to filter SchoolEmailVerifications to delete.
+     * @example
+     * // Delete a few SchoolEmailVerifications
+     * const { count } = await prisma.schoolEmailVerifications.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SchoolEmailVerificationsDeleteManyArgs>(args?: SelectSubset<T, SchoolEmailVerificationsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SchoolEmailVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SchoolEmailVerificationsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SchoolEmailVerificationsUpdateManyArgs>(args: SelectSubset<T, SchoolEmailVerificationsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SchoolEmailVerifications.
+     * @param {SchoolEmailVerificationsUpsertArgs} args - Arguments to update or create a SchoolEmailVerifications.
+     * @example
+     * // Update or create a SchoolEmailVerifications
+     * const schoolEmailVerifications = await prisma.schoolEmailVerifications.upsert({
+     *   create: {
+     *     // ... data to create a SchoolEmailVerifications
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SchoolEmailVerifications we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SchoolEmailVerificationsUpsertArgs>(args: SelectSubset<T, SchoolEmailVerificationsUpsertArgs<ExtArgs>>): Prisma__SchoolEmailVerificationsClient<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SchoolEmailVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SchoolEmailVerificationsCountArgs} args - Arguments to filter SchoolEmailVerifications to count.
+     * @example
+     * // Count the number of SchoolEmailVerifications
+     * const count = await prisma.schoolEmailVerifications.count({
+     *   where: {
+     *     // ... the filter for the SchoolEmailVerifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends SchoolEmailVerificationsCountArgs>(
+      args?: Subset<T, SchoolEmailVerificationsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SchoolEmailVerificationsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SchoolEmailVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SchoolEmailVerificationsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SchoolEmailVerificationsAggregateArgs>(args: Subset<T, SchoolEmailVerificationsAggregateArgs>): Prisma.PrismaPromise<GetSchoolEmailVerificationsAggregateType<T>>
+
+    /**
+     * Group by SchoolEmailVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SchoolEmailVerificationsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SchoolEmailVerificationsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SchoolEmailVerificationsGroupByArgs['orderBy'] }
+        : { orderBy?: SchoolEmailVerificationsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SchoolEmailVerificationsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSchoolEmailVerificationsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SchoolEmailVerifications model
+   */
+  readonly fields: SchoolEmailVerificationsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SchoolEmailVerifications.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SchoolEmailVerificationsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Profiles<T extends ProfilesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfilesDefaultArgs<ExtArgs>>): Prisma__ProfilesClient<$Result.GetResult<Prisma.$ProfilesPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    Institutions<T extends InstitutionsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InstitutionsDefaultArgs<ExtArgs>>): Prisma__InstitutionsClient<$Result.GetResult<Prisma.$InstitutionsPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SchoolEmailVerifications model
+   */ 
+  interface SchoolEmailVerificationsFieldRefs {
+    readonly id: FieldRef<"SchoolEmailVerifications", 'String'>
+    readonly profile_id: FieldRef<"SchoolEmailVerifications", 'String'>
+    readonly institution_id: FieldRef<"SchoolEmailVerifications", 'String'>
+    readonly email: FieldRef<"SchoolEmailVerifications", 'String'>
+    readonly code_hash: FieldRef<"SchoolEmailVerifications", 'String'>
+    readonly expires_at: FieldRef<"SchoolEmailVerifications", 'DateTime'>
+    readonly consumed_at: FieldRef<"SchoolEmailVerifications", 'DateTime'>
+    readonly attempts: FieldRef<"SchoolEmailVerifications", 'Int'>
+    readonly created_at: FieldRef<"SchoolEmailVerifications", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SchoolEmailVerifications findUnique
+   */
+  export type SchoolEmailVerificationsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    /**
+     * Filter, which SchoolEmailVerifications to fetch.
+     */
+    where: SchoolEmailVerificationsWhereUniqueInput
+  }
+
+  /**
+   * SchoolEmailVerifications findUniqueOrThrow
+   */
+  export type SchoolEmailVerificationsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    /**
+     * Filter, which SchoolEmailVerifications to fetch.
+     */
+    where: SchoolEmailVerificationsWhereUniqueInput
+  }
+
+  /**
+   * SchoolEmailVerifications findFirst
+   */
+  export type SchoolEmailVerificationsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    /**
+     * Filter, which SchoolEmailVerifications to fetch.
+     */
+    where?: SchoolEmailVerificationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SchoolEmailVerifications to fetch.
+     */
+    orderBy?: SchoolEmailVerificationsOrderByWithRelationInput | SchoolEmailVerificationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SchoolEmailVerifications.
+     */
+    cursor?: SchoolEmailVerificationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SchoolEmailVerifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SchoolEmailVerifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SchoolEmailVerifications.
+     */
+    distinct?: SchoolEmailVerificationsScalarFieldEnum | SchoolEmailVerificationsScalarFieldEnum[]
+  }
+
+  /**
+   * SchoolEmailVerifications findFirstOrThrow
+   */
+  export type SchoolEmailVerificationsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    /**
+     * Filter, which SchoolEmailVerifications to fetch.
+     */
+    where?: SchoolEmailVerificationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SchoolEmailVerifications to fetch.
+     */
+    orderBy?: SchoolEmailVerificationsOrderByWithRelationInput | SchoolEmailVerificationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SchoolEmailVerifications.
+     */
+    cursor?: SchoolEmailVerificationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SchoolEmailVerifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SchoolEmailVerifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SchoolEmailVerifications.
+     */
+    distinct?: SchoolEmailVerificationsScalarFieldEnum | SchoolEmailVerificationsScalarFieldEnum[]
+  }
+
+  /**
+   * SchoolEmailVerifications findMany
+   */
+  export type SchoolEmailVerificationsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    /**
+     * Filter, which SchoolEmailVerifications to fetch.
+     */
+    where?: SchoolEmailVerificationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SchoolEmailVerifications to fetch.
+     */
+    orderBy?: SchoolEmailVerificationsOrderByWithRelationInput | SchoolEmailVerificationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SchoolEmailVerifications.
+     */
+    cursor?: SchoolEmailVerificationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SchoolEmailVerifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SchoolEmailVerifications.
+     */
+    skip?: number
+    distinct?: SchoolEmailVerificationsScalarFieldEnum | SchoolEmailVerificationsScalarFieldEnum[]
+  }
+
+  /**
+   * SchoolEmailVerifications create
+   */
+  export type SchoolEmailVerificationsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SchoolEmailVerifications.
+     */
+    data: XOR<SchoolEmailVerificationsCreateInput, SchoolEmailVerificationsUncheckedCreateInput>
+  }
+
+  /**
+   * SchoolEmailVerifications createMany
+   */
+  export type SchoolEmailVerificationsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SchoolEmailVerifications.
+     */
+    data: SchoolEmailVerificationsCreateManyInput | SchoolEmailVerificationsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SchoolEmailVerifications createManyAndReturn
+   */
+  export type SchoolEmailVerificationsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SchoolEmailVerifications.
+     */
+    data: SchoolEmailVerificationsCreateManyInput | SchoolEmailVerificationsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SchoolEmailVerifications update
+   */
+  export type SchoolEmailVerificationsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SchoolEmailVerifications.
+     */
+    data: XOR<SchoolEmailVerificationsUpdateInput, SchoolEmailVerificationsUncheckedUpdateInput>
+    /**
+     * Choose, which SchoolEmailVerifications to update.
+     */
+    where: SchoolEmailVerificationsWhereUniqueInput
+  }
+
+  /**
+   * SchoolEmailVerifications updateMany
+   */
+  export type SchoolEmailVerificationsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SchoolEmailVerifications.
+     */
+    data: XOR<SchoolEmailVerificationsUpdateManyMutationInput, SchoolEmailVerificationsUncheckedUpdateManyInput>
+    /**
+     * Filter which SchoolEmailVerifications to update
+     */
+    where?: SchoolEmailVerificationsWhereInput
+  }
+
+  /**
+   * SchoolEmailVerifications upsert
+   */
+  export type SchoolEmailVerificationsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SchoolEmailVerifications to update in case it exists.
+     */
+    where: SchoolEmailVerificationsWhereUniqueInput
+    /**
+     * In case the SchoolEmailVerifications found by the `where` argument doesn't exist, create a new SchoolEmailVerifications with this data.
+     */
+    create: XOR<SchoolEmailVerificationsCreateInput, SchoolEmailVerificationsUncheckedCreateInput>
+    /**
+     * In case the SchoolEmailVerifications was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SchoolEmailVerificationsUpdateInput, SchoolEmailVerificationsUncheckedUpdateInput>
+  }
+
+  /**
+   * SchoolEmailVerifications delete
+   */
+  export type SchoolEmailVerificationsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
+    /**
+     * Filter which SchoolEmailVerifications to delete.
+     */
+    where: SchoolEmailVerificationsWhereUniqueInput
+  }
+
+  /**
+   * SchoolEmailVerifications deleteMany
+   */
+  export type SchoolEmailVerificationsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SchoolEmailVerifications to delete
+     */
+    where?: SchoolEmailVerificationsWhereInput
+  }
+
+  /**
+   * SchoolEmailVerifications without action
+   */
+  export type SchoolEmailVerificationsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SchoolEmailVerifications
+     */
+    select?: SchoolEmailVerificationsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SchoolEmailVerificationsInclude<ExtArgs> | null
   }
 
 
@@ -40655,11 +43050,47 @@ export namespace Prisma {
     abbreviation: 'abbreviation',
     country: 'country',
     province: 'province',
+    type: 'type',
+    email_domains: 'email_domains',
+    city: 'city',
+    website: 'website',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
 
   export type InstitutionsScalarFieldEnum = (typeof InstitutionsScalarFieldEnum)[keyof typeof InstitutionsScalarFieldEnum]
+
+
+  export const ProfileInstitutionsScalarFieldEnum: {
+    id: 'id',
+    profile_id: 'profile_id',
+    institution_id: 'institution_id',
+    institution_name_raw: 'institution_name_raw',
+    kind: 'kind',
+    status: 'status',
+    verification_method: 'verification_method',
+    verified_email: 'verified_email',
+    document_url: 'document_url',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type ProfileInstitutionsScalarFieldEnum = (typeof ProfileInstitutionsScalarFieldEnum)[keyof typeof ProfileInstitutionsScalarFieldEnum]
+
+
+  export const SchoolEmailVerificationsScalarFieldEnum: {
+    id: 'id',
+    profile_id: 'profile_id',
+    institution_id: 'institution_id',
+    email: 'email',
+    code_hash: 'code_hash',
+    expires_at: 'expires_at',
+    consumed_at: 'consumed_at',
+    attempts: 'attempts',
+    created_at: 'created_at'
+  };
+
+  export type SchoolEmailVerificationsScalarFieldEnum = (typeof SchoolEmailVerificationsScalarFieldEnum)[keyof typeof SchoolEmailVerificationsScalarFieldEnum]
 
 
   export const InstitutionCoursesScalarFieldEnum: {
@@ -42887,6 +45318,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityListRelationFilter
     Institutions?: XOR<InstitutionsNullableRelationFilter, InstitutionsWhereInput> | null
     Feedback?: FeedbackListRelationFilter
+    ProfileInstitutions?: ProfileInstitutionsListRelationFilter
+    SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
   }
 
   export type ProfilesOrderByWithRelationInput = {
@@ -42919,6 +45352,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityOrderByRelationAggregateInput
     Institutions?: InstitutionsOrderByWithRelationInput
     Feedback?: FeedbackOrderByRelationAggregateInput
+    ProfileInstitutions?: ProfileInstitutionsOrderByRelationAggregateInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsOrderByRelationAggregateInput
   }
 
   export type ProfilesWhereUniqueInput = Prisma.AtLeast<{
@@ -42954,6 +45389,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityListRelationFilter
     Institutions?: XOR<InstitutionsNullableRelationFilter, InstitutionsWhereInput> | null
     Feedback?: FeedbackListRelationFilter
+    ProfileInstitutions?: ProfileInstitutionsListRelationFilter
+    SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
   }, "id" | "email">
 
   export type ProfilesOrderByWithAggregationInput = {
@@ -43289,10 +45726,16 @@ export namespace Prisma {
     abbreviation?: StringNullableFilter<"Institutions"> | string | null
     country?: StringFilter<"Institutions"> | string
     province?: StringNullableFilter<"Institutions"> | string | null
+    type?: StringFilter<"Institutions"> | string
+    email_domains?: StringNullableListFilter<"Institutions">
+    city?: StringNullableFilter<"Institutions"> | string | null
+    website?: StringNullableFilter<"Institutions"> | string | null
     created_at?: DateTimeFilter<"Institutions"> | Date | string
     updated_at?: DateTimeFilter<"Institutions"> | Date | string
     Profiles?: ProfilesListRelationFilter
     InstitutionCourses?: InstitutionCoursesListRelationFilter
+    ProfileInstitutions?: ProfileInstitutionsListRelationFilter
+    SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
   }
 
   export type InstitutionsOrderByWithRelationInput = {
@@ -43301,10 +45744,16 @@ export namespace Prisma {
     abbreviation?: SortOrderInput | SortOrder
     country?: SortOrder
     province?: SortOrderInput | SortOrder
+    type?: SortOrder
+    email_domains?: SortOrder
+    city?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     Profiles?: ProfilesOrderByRelationAggregateInput
     InstitutionCourses?: InstitutionCoursesOrderByRelationAggregateInput
+    ProfileInstitutions?: ProfileInstitutionsOrderByRelationAggregateInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsOrderByRelationAggregateInput
   }
 
   export type InstitutionsWhereUniqueInput = Prisma.AtLeast<{
@@ -43316,10 +45765,16 @@ export namespace Prisma {
     abbreviation?: StringNullableFilter<"Institutions"> | string | null
     country?: StringFilter<"Institutions"> | string
     province?: StringNullableFilter<"Institutions"> | string | null
+    type?: StringFilter<"Institutions"> | string
+    email_domains?: StringNullableListFilter<"Institutions">
+    city?: StringNullableFilter<"Institutions"> | string | null
+    website?: StringNullableFilter<"Institutions"> | string | null
     created_at?: DateTimeFilter<"Institutions"> | Date | string
     updated_at?: DateTimeFilter<"Institutions"> | Date | string
     Profiles?: ProfilesListRelationFilter
     InstitutionCourses?: InstitutionCoursesListRelationFilter
+    ProfileInstitutions?: ProfileInstitutionsListRelationFilter
+    SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
   }, "id">
 
   export type InstitutionsOrderByWithAggregationInput = {
@@ -43328,6 +45783,10 @@ export namespace Prisma {
     abbreviation?: SortOrderInput | SortOrder
     country?: SortOrder
     province?: SortOrderInput | SortOrder
+    type?: SortOrder
+    email_domains?: SortOrder
+    city?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: InstitutionsCountOrderByAggregateInput
@@ -43344,8 +45803,181 @@ export namespace Prisma {
     abbreviation?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
     country?: StringWithAggregatesFilter<"Institutions"> | string
     province?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
+    type?: StringWithAggregatesFilter<"Institutions"> | string
+    email_domains?: StringNullableListFilter<"Institutions">
+    city?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
+    website?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Institutions"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Institutions"> | Date | string
+  }
+
+  export type ProfileInstitutionsWhereInput = {
+    AND?: ProfileInstitutionsWhereInput | ProfileInstitutionsWhereInput[]
+    OR?: ProfileInstitutionsWhereInput[]
+    NOT?: ProfileInstitutionsWhereInput | ProfileInstitutionsWhereInput[]
+    id?: UuidFilter<"ProfileInstitutions"> | string
+    profile_id?: UuidFilter<"ProfileInstitutions"> | string
+    institution_id?: UuidNullableFilter<"ProfileInstitutions"> | string | null
+    institution_name_raw?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    kind?: StringFilter<"ProfileInstitutions"> | string
+    status?: StringFilter<"ProfileInstitutions"> | string
+    verification_method?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    verified_email?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    document_url?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    created_at?: DateTimeFilter<"ProfileInstitutions"> | Date | string
+    updated_at?: DateTimeFilter<"ProfileInstitutions"> | Date | string
+    Profiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+    Institutions?: XOR<InstitutionsNullableRelationFilter, InstitutionsWhereInput> | null
+  }
+
+  export type ProfileInstitutionsOrderByWithRelationInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrderInput | SortOrder
+    institution_name_raw?: SortOrderInput | SortOrder
+    kind?: SortOrder
+    status?: SortOrder
+    verification_method?: SortOrderInput | SortOrder
+    verified_email?: SortOrderInput | SortOrder
+    document_url?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    Profiles?: ProfilesOrderByWithRelationInput
+    Institutions?: InstitutionsOrderByWithRelationInput
+  }
+
+  export type ProfileInstitutionsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    profile_id_kind?: ProfileInstitutionsProfile_idKindCompoundUniqueInput
+    AND?: ProfileInstitutionsWhereInput | ProfileInstitutionsWhereInput[]
+    OR?: ProfileInstitutionsWhereInput[]
+    NOT?: ProfileInstitutionsWhereInput | ProfileInstitutionsWhereInput[]
+    profile_id?: UuidFilter<"ProfileInstitutions"> | string
+    institution_id?: UuidNullableFilter<"ProfileInstitutions"> | string | null
+    institution_name_raw?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    kind?: StringFilter<"ProfileInstitutions"> | string
+    status?: StringFilter<"ProfileInstitutions"> | string
+    verification_method?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    verified_email?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    document_url?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    created_at?: DateTimeFilter<"ProfileInstitutions"> | Date | string
+    updated_at?: DateTimeFilter<"ProfileInstitutions"> | Date | string
+    Profiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+    Institutions?: XOR<InstitutionsNullableRelationFilter, InstitutionsWhereInput> | null
+  }, "id" | "profile_id_kind">
+
+  export type ProfileInstitutionsOrderByWithAggregationInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrderInput | SortOrder
+    institution_name_raw?: SortOrderInput | SortOrder
+    kind?: SortOrder
+    status?: SortOrder
+    verification_method?: SortOrderInput | SortOrder
+    verified_email?: SortOrderInput | SortOrder
+    document_url?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: ProfileInstitutionsCountOrderByAggregateInput
+    _max?: ProfileInstitutionsMaxOrderByAggregateInput
+    _min?: ProfileInstitutionsMinOrderByAggregateInput
+  }
+
+  export type ProfileInstitutionsScalarWhereWithAggregatesInput = {
+    AND?: ProfileInstitutionsScalarWhereWithAggregatesInput | ProfileInstitutionsScalarWhereWithAggregatesInput[]
+    OR?: ProfileInstitutionsScalarWhereWithAggregatesInput[]
+    NOT?: ProfileInstitutionsScalarWhereWithAggregatesInput | ProfileInstitutionsScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ProfileInstitutions"> | string
+    profile_id?: UuidWithAggregatesFilter<"ProfileInstitutions"> | string
+    institution_id?: UuidNullableWithAggregatesFilter<"ProfileInstitutions"> | string | null
+    institution_name_raw?: StringNullableWithAggregatesFilter<"ProfileInstitutions"> | string | null
+    kind?: StringWithAggregatesFilter<"ProfileInstitutions"> | string
+    status?: StringWithAggregatesFilter<"ProfileInstitutions"> | string
+    verification_method?: StringNullableWithAggregatesFilter<"ProfileInstitutions"> | string | null
+    verified_email?: StringNullableWithAggregatesFilter<"ProfileInstitutions"> | string | null
+    document_url?: StringNullableWithAggregatesFilter<"ProfileInstitutions"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"ProfileInstitutions"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"ProfileInstitutions"> | Date | string
+  }
+
+  export type SchoolEmailVerificationsWhereInput = {
+    AND?: SchoolEmailVerificationsWhereInput | SchoolEmailVerificationsWhereInput[]
+    OR?: SchoolEmailVerificationsWhereInput[]
+    NOT?: SchoolEmailVerificationsWhereInput | SchoolEmailVerificationsWhereInput[]
+    id?: UuidFilter<"SchoolEmailVerifications"> | string
+    profile_id?: UuidFilter<"SchoolEmailVerifications"> | string
+    institution_id?: UuidFilter<"SchoolEmailVerifications"> | string
+    email?: StringFilter<"SchoolEmailVerifications"> | string
+    code_hash?: StringFilter<"SchoolEmailVerifications"> | string
+    expires_at?: DateTimeFilter<"SchoolEmailVerifications"> | Date | string
+    consumed_at?: DateTimeNullableFilter<"SchoolEmailVerifications"> | Date | string | null
+    attempts?: IntFilter<"SchoolEmailVerifications"> | number
+    created_at?: DateTimeFilter<"SchoolEmailVerifications"> | Date | string
+    Profiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+    Institutions?: XOR<InstitutionsRelationFilter, InstitutionsWhereInput>
+  }
+
+  export type SchoolEmailVerificationsOrderByWithRelationInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrder
+    email?: SortOrder
+    code_hash?: SortOrder
+    expires_at?: SortOrder
+    consumed_at?: SortOrderInput | SortOrder
+    attempts?: SortOrder
+    created_at?: SortOrder
+    Profiles?: ProfilesOrderByWithRelationInput
+    Institutions?: InstitutionsOrderByWithRelationInput
+  }
+
+  export type SchoolEmailVerificationsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SchoolEmailVerificationsWhereInput | SchoolEmailVerificationsWhereInput[]
+    OR?: SchoolEmailVerificationsWhereInput[]
+    NOT?: SchoolEmailVerificationsWhereInput | SchoolEmailVerificationsWhereInput[]
+    profile_id?: UuidFilter<"SchoolEmailVerifications"> | string
+    institution_id?: UuidFilter<"SchoolEmailVerifications"> | string
+    email?: StringFilter<"SchoolEmailVerifications"> | string
+    code_hash?: StringFilter<"SchoolEmailVerifications"> | string
+    expires_at?: DateTimeFilter<"SchoolEmailVerifications"> | Date | string
+    consumed_at?: DateTimeNullableFilter<"SchoolEmailVerifications"> | Date | string | null
+    attempts?: IntFilter<"SchoolEmailVerifications"> | number
+    created_at?: DateTimeFilter<"SchoolEmailVerifications"> | Date | string
+    Profiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+    Institutions?: XOR<InstitutionsRelationFilter, InstitutionsWhereInput>
+  }, "id">
+
+  export type SchoolEmailVerificationsOrderByWithAggregationInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrder
+    email?: SortOrder
+    code_hash?: SortOrder
+    expires_at?: SortOrder
+    consumed_at?: SortOrderInput | SortOrder
+    attempts?: SortOrder
+    created_at?: SortOrder
+    _count?: SchoolEmailVerificationsCountOrderByAggregateInput
+    _avg?: SchoolEmailVerificationsAvgOrderByAggregateInput
+    _max?: SchoolEmailVerificationsMaxOrderByAggregateInput
+    _min?: SchoolEmailVerificationsMinOrderByAggregateInput
+    _sum?: SchoolEmailVerificationsSumOrderByAggregateInput
+  }
+
+  export type SchoolEmailVerificationsScalarWhereWithAggregatesInput = {
+    AND?: SchoolEmailVerificationsScalarWhereWithAggregatesInput | SchoolEmailVerificationsScalarWhereWithAggregatesInput[]
+    OR?: SchoolEmailVerificationsScalarWhereWithAggregatesInput[]
+    NOT?: SchoolEmailVerificationsScalarWhereWithAggregatesInput | SchoolEmailVerificationsScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SchoolEmailVerifications"> | string
+    profile_id?: UuidWithAggregatesFilter<"SchoolEmailVerifications"> | string
+    institution_id?: UuidWithAggregatesFilter<"SchoolEmailVerifications"> | string
+    email?: StringWithAggregatesFilter<"SchoolEmailVerifications"> | string
+    code_hash?: StringWithAggregatesFilter<"SchoolEmailVerifications"> | string
+    expires_at?: DateTimeWithAggregatesFilter<"SchoolEmailVerifications"> | Date | string
+    consumed_at?: DateTimeNullableWithAggregatesFilter<"SchoolEmailVerifications"> | Date | string | null
+    attempts?: IntWithAggregatesFilter<"SchoolEmailVerifications"> | number
+    created_at?: DateTimeWithAggregatesFilter<"SchoolEmailVerifications"> | Date | string
   }
 
   export type InstitutionCoursesWhereInput = {
@@ -46071,6 +48703,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateInput = {
@@ -46101,6 +48735,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUpdateInput = {
@@ -46131,6 +48767,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateInput = {
@@ -46161,6 +48799,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesCreateManyInput = {
@@ -46527,10 +49167,16 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUncheckedCreateInput = {
@@ -46539,10 +49185,16 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUpdateInput = {
@@ -46551,10 +49203,16 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsUncheckedUpdateInput = {
@@ -46563,10 +49221,16 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsCreateManyInput = {
@@ -46575,6 +49239,10 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -46585,6 +49253,10 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -46595,8 +49267,190 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileInstitutionsCreateInput = {
+    id?: string
+    institution_name_raw?: string | null
+    kind: string
+    status?: string
+    verification_method?: string | null
+    verified_email?: string | null
+    document_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles: ProfilesCreateNestedOneWithoutProfileInstitutionsInput
+    Institutions?: InstitutionsCreateNestedOneWithoutProfileInstitutionsInput
+  }
+
+  export type ProfileInstitutionsUncheckedCreateInput = {
+    id?: string
+    profile_id: string
+    institution_id?: string | null
+    institution_name_raw?: string | null
+    kind: string
+    status?: string
+    verification_method?: string | null
+    verified_email?: string | null
+    document_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProfileInstitutionsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateOneRequiredWithoutProfileInstitutionsNestedInput
+    Institutions?: InstitutionsUpdateOneWithoutProfileInstitutionsNestedInput
+  }
+
+  export type ProfileInstitutionsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profile_id?: StringFieldUpdateOperationsInput | string
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileInstitutionsCreateManyInput = {
+    id?: string
+    profile_id: string
+    institution_id?: string | null
+    institution_name_raw?: string | null
+    kind: string
+    status?: string
+    verification_method?: string | null
+    verified_email?: string | null
+    document_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProfileInstitutionsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileInstitutionsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profile_id?: StringFieldUpdateOperationsInput | string
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SchoolEmailVerificationsCreateInput = {
+    id?: string
+    email: string
+    code_hash: string
+    expires_at: Date | string
+    consumed_at?: Date | string | null
+    attempts?: number
+    created_at?: Date | string
+    Profiles: ProfilesCreateNestedOneWithoutSchoolEmailVerificationsInput
+    Institutions: InstitutionsCreateNestedOneWithoutSchoolEmailVerificationsInput
+  }
+
+  export type SchoolEmailVerificationsUncheckedCreateInput = {
+    id?: string
+    profile_id: string
+    institution_id: string
+    email: string
+    code_hash: string
+    expires_at: Date | string
+    consumed_at?: Date | string | null
+    attempts?: number
+    created_at?: Date | string
+  }
+
+  export type SchoolEmailVerificationsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateOneRequiredWithoutSchoolEmailVerificationsNestedInput
+    Institutions?: InstitutionsUpdateOneRequiredWithoutSchoolEmailVerificationsNestedInput
+  }
+
+  export type SchoolEmailVerificationsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profile_id?: StringFieldUpdateOperationsInput | string
+    institution_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SchoolEmailVerificationsCreateManyInput = {
+    id?: string
+    profile_id: string
+    institution_id: string
+    email: string
+    code_hash: string
+    expires_at: Date | string
+    consumed_at?: Date | string | null
+    attempts?: number
+    created_at?: Date | string
+  }
+
+  export type SchoolEmailVerificationsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SchoolEmailVerificationsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profile_id?: StringFieldUpdateOperationsInput | string
+    institution_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type InstitutionCoursesCreateInput = {
@@ -49063,6 +51917,18 @@ export namespace Prisma {
     none?: FeedbackWhereInput
   }
 
+  export type ProfileInstitutionsListRelationFilter = {
+    every?: ProfileInstitutionsWhereInput
+    some?: ProfileInstitutionsWhereInput
+    none?: ProfileInstitutionsWhereInput
+  }
+
+  export type SchoolEmailVerificationsListRelationFilter = {
+    every?: SchoolEmailVerificationsWhereInput
+    some?: SchoolEmailVerificationsWhereInput
+    none?: SchoolEmailVerificationsWhereInput
+  }
+
   export type ConversationsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -49080,6 +51946,14 @@ export namespace Prisma {
   }
 
   export type FeedbackOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProfileInstitutionsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SchoolEmailVerificationsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -49355,6 +52229,14 @@ export namespace Prisma {
     grade?: SortOrder
   }
 
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
   export type ProfilesListRelationFilter = {
     every?: ProfilesWhereInput
     some?: ProfilesWhereInput
@@ -49371,6 +52253,10 @@ export namespace Prisma {
     abbreviation?: SortOrder
     country?: SortOrder
     province?: SortOrder
+    type?: SortOrder
+    email_domains?: SortOrder
+    city?: SortOrder
+    website?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -49381,6 +52267,9 @@ export namespace Prisma {
     abbreviation?: SortOrder
     country?: SortOrder
     province?: SortOrder
+    type?: SortOrder
+    city?: SortOrder
+    website?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -49391,13 +52280,134 @@ export namespace Prisma {
     abbreviation?: SortOrder
     country?: SortOrder
     province?: SortOrder
+    type?: SortOrder
+    city?: SortOrder
+    website?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type ProfileInstitutionsProfile_idKindCompoundUniqueInput = {
+    profile_id: string
+    kind: string
+  }
+
+  export type ProfileInstitutionsCountOrderByAggregateInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrder
+    institution_name_raw?: SortOrder
+    kind?: SortOrder
+    status?: SortOrder
+    verification_method?: SortOrder
+    verified_email?: SortOrder
+    document_url?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ProfileInstitutionsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrder
+    institution_name_raw?: SortOrder
+    kind?: SortOrder
+    status?: SortOrder
+    verification_method?: SortOrder
+    verified_email?: SortOrder
+    document_url?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ProfileInstitutionsMinOrderByAggregateInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrder
+    institution_name_raw?: SortOrder
+    kind?: SortOrder
+    status?: SortOrder
+    verification_method?: SortOrder
+    verified_email?: SortOrder
+    document_url?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type InstitutionsRelationFilter = {
     is?: InstitutionsWhereInput
     isNot?: InstitutionsWhereInput
+  }
+
+  export type SchoolEmailVerificationsCountOrderByAggregateInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrder
+    email?: SortOrder
+    code_hash?: SortOrder
+    expires_at?: SortOrder
+    consumed_at?: SortOrder
+    attempts?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type SchoolEmailVerificationsAvgOrderByAggregateInput = {
+    attempts?: SortOrder
+  }
+
+  export type SchoolEmailVerificationsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrder
+    email?: SortOrder
+    code_hash?: SortOrder
+    expires_at?: SortOrder
+    consumed_at?: SortOrder
+    attempts?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type SchoolEmailVerificationsMinOrderByAggregateInput = {
+    id?: SortOrder
+    profile_id?: SortOrder
+    institution_id?: SortOrder
+    email?: SortOrder
+    code_hash?: SortOrder
+    expires_at?: SortOrder
+    consumed_at?: SortOrder
+    attempts?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type SchoolEmailVerificationsSumOrderByAggregateInput = {
+    attempts?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type InstitutionCoursesInstitution_idCodeCompoundUniqueInput = {
@@ -49614,14 +52624,6 @@ export namespace Prisma {
     user_agent?: SortOrder
     is_read?: SortOrder
     created_at?: SortOrder
-  }
-
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
   }
 
   export type custom_oauth_providersCountOrderByAggregateInput = {
@@ -51064,6 +54066,20 @@ export namespace Prisma {
     connect?: FeedbackWhereUniqueInput | FeedbackWhereUniqueInput[]
   }
 
+  export type ProfileInstitutionsCreateNestedManyWithoutProfilesInput = {
+    create?: XOR<ProfileInstitutionsCreateWithoutProfilesInput, ProfileInstitutionsUncheckedCreateWithoutProfilesInput> | ProfileInstitutionsCreateWithoutProfilesInput[] | ProfileInstitutionsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: ProfileInstitutionsCreateOrConnectWithoutProfilesInput | ProfileInstitutionsCreateOrConnectWithoutProfilesInput[]
+    createMany?: ProfileInstitutionsCreateManyProfilesInputEnvelope
+    connect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+  }
+
+  export type SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput = {
+    create?: XOR<SchoolEmailVerificationsCreateWithoutProfilesInput, SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput> | SchoolEmailVerificationsCreateWithoutProfilesInput[] | SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput | SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput[]
+    createMany?: SchoolEmailVerificationsCreateManyProfilesInputEnvelope
+    connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+  }
+
   export type ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput = {
     create?: XOR<ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput, ConversationsUncheckedCreateWithoutProfiles_Conversations_student_idToProfilesInput> | ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput[] | ConversationsUncheckedCreateWithoutProfiles_Conversations_student_idToProfilesInput[]
     connectOrCreate?: ConversationsCreateOrConnectWithoutProfiles_Conversations_student_idToProfilesInput | ConversationsCreateOrConnectWithoutProfiles_Conversations_student_idToProfilesInput[]
@@ -51118,6 +54134,20 @@ export namespace Prisma {
     connectOrCreate?: FeedbackCreateOrConnectWithoutProfilesInput | FeedbackCreateOrConnectWithoutProfilesInput[]
     createMany?: FeedbackCreateManyProfilesInputEnvelope
     connect?: FeedbackWhereUniqueInput | FeedbackWhereUniqueInput[]
+  }
+
+  export type ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput = {
+    create?: XOR<ProfileInstitutionsCreateWithoutProfilesInput, ProfileInstitutionsUncheckedCreateWithoutProfilesInput> | ProfileInstitutionsCreateWithoutProfilesInput[] | ProfileInstitutionsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: ProfileInstitutionsCreateOrConnectWithoutProfilesInput | ProfileInstitutionsCreateOrConnectWithoutProfilesInput[]
+    createMany?: ProfileInstitutionsCreateManyProfilesInputEnvelope
+    connect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+  }
+
+  export type SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput = {
+    create?: XOR<SchoolEmailVerificationsCreateWithoutProfilesInput, SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput> | SchoolEmailVerificationsCreateWithoutProfilesInput[] | SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput | SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput[]
+    createMany?: SchoolEmailVerificationsCreateManyProfilesInputEnvelope
+    connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -51258,6 +54288,34 @@ export namespace Prisma {
     deleteMany?: FeedbackScalarWhereInput | FeedbackScalarWhereInput[]
   }
 
+  export type ProfileInstitutionsUpdateManyWithoutProfilesNestedInput = {
+    create?: XOR<ProfileInstitutionsCreateWithoutProfilesInput, ProfileInstitutionsUncheckedCreateWithoutProfilesInput> | ProfileInstitutionsCreateWithoutProfilesInput[] | ProfileInstitutionsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: ProfileInstitutionsCreateOrConnectWithoutProfilesInput | ProfileInstitutionsCreateOrConnectWithoutProfilesInput[]
+    upsert?: ProfileInstitutionsUpsertWithWhereUniqueWithoutProfilesInput | ProfileInstitutionsUpsertWithWhereUniqueWithoutProfilesInput[]
+    createMany?: ProfileInstitutionsCreateManyProfilesInputEnvelope
+    set?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    disconnect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    delete?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    connect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    update?: ProfileInstitutionsUpdateWithWhereUniqueWithoutProfilesInput | ProfileInstitutionsUpdateWithWhereUniqueWithoutProfilesInput[]
+    updateMany?: ProfileInstitutionsUpdateManyWithWhereWithoutProfilesInput | ProfileInstitutionsUpdateManyWithWhereWithoutProfilesInput[]
+    deleteMany?: ProfileInstitutionsScalarWhereInput | ProfileInstitutionsScalarWhereInput[]
+  }
+
+  export type SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput = {
+    create?: XOR<SchoolEmailVerificationsCreateWithoutProfilesInput, SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput> | SchoolEmailVerificationsCreateWithoutProfilesInput[] | SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput | SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput[]
+    upsert?: SchoolEmailVerificationsUpsertWithWhereUniqueWithoutProfilesInput | SchoolEmailVerificationsUpsertWithWhereUniqueWithoutProfilesInput[]
+    createMany?: SchoolEmailVerificationsCreateManyProfilesInputEnvelope
+    set?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    disconnect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    delete?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    update?: SchoolEmailVerificationsUpdateWithWhereUniqueWithoutProfilesInput | SchoolEmailVerificationsUpdateWithWhereUniqueWithoutProfilesInput[]
+    updateMany?: SchoolEmailVerificationsUpdateManyWithWhereWithoutProfilesInput | SchoolEmailVerificationsUpdateManyWithWhereWithoutProfilesInput[]
+    deleteMany?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
+  }
+
   export type ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput = {
     create?: XOR<ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput, ConversationsUncheckedCreateWithoutProfiles_Conversations_student_idToProfilesInput> | ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput[] | ConversationsUncheckedCreateWithoutProfiles_Conversations_student_idToProfilesInput[]
     connectOrCreate?: ConversationsCreateOrConnectWithoutProfiles_Conversations_student_idToProfilesInput | ConversationsCreateOrConnectWithoutProfiles_Conversations_student_idToProfilesInput[]
@@ -51368,6 +54426,34 @@ export namespace Prisma {
     update?: FeedbackUpdateWithWhereUniqueWithoutProfilesInput | FeedbackUpdateWithWhereUniqueWithoutProfilesInput[]
     updateMany?: FeedbackUpdateManyWithWhereWithoutProfilesInput | FeedbackUpdateManyWithWhereWithoutProfilesInput[]
     deleteMany?: FeedbackScalarWhereInput | FeedbackScalarWhereInput[]
+  }
+
+  export type ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput = {
+    create?: XOR<ProfileInstitutionsCreateWithoutProfilesInput, ProfileInstitutionsUncheckedCreateWithoutProfilesInput> | ProfileInstitutionsCreateWithoutProfilesInput[] | ProfileInstitutionsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: ProfileInstitutionsCreateOrConnectWithoutProfilesInput | ProfileInstitutionsCreateOrConnectWithoutProfilesInput[]
+    upsert?: ProfileInstitutionsUpsertWithWhereUniqueWithoutProfilesInput | ProfileInstitutionsUpsertWithWhereUniqueWithoutProfilesInput[]
+    createMany?: ProfileInstitutionsCreateManyProfilesInputEnvelope
+    set?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    disconnect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    delete?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    connect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    update?: ProfileInstitutionsUpdateWithWhereUniqueWithoutProfilesInput | ProfileInstitutionsUpdateWithWhereUniqueWithoutProfilesInput[]
+    updateMany?: ProfileInstitutionsUpdateManyWithWhereWithoutProfilesInput | ProfileInstitutionsUpdateManyWithWhereWithoutProfilesInput[]
+    deleteMany?: ProfileInstitutionsScalarWhereInput | ProfileInstitutionsScalarWhereInput[]
+  }
+
+  export type SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput = {
+    create?: XOR<SchoolEmailVerificationsCreateWithoutProfilesInput, SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput> | SchoolEmailVerificationsCreateWithoutProfilesInput[] | SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput | SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput[]
+    upsert?: SchoolEmailVerificationsUpsertWithWhereUniqueWithoutProfilesInput | SchoolEmailVerificationsUpsertWithWhereUniqueWithoutProfilesInput[]
+    createMany?: SchoolEmailVerificationsCreateManyProfilesInputEnvelope
+    set?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    disconnect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    delete?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    update?: SchoolEmailVerificationsUpdateWithWhereUniqueWithoutProfilesInput | SchoolEmailVerificationsUpdateWithWhereUniqueWithoutProfilesInput[]
+    updateMany?: SchoolEmailVerificationsUpdateManyWithWhereWithoutProfilesInput | SchoolEmailVerificationsUpdateManyWithWhereWithoutProfilesInput[]
+    deleteMany?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
   }
 
   export type ProfilesCreateNestedOneWithoutSubjectsInput = {
@@ -51568,6 +54654,10 @@ export namespace Prisma {
     deleteMany?: InstitutionCoursesScalarWhereInput | InstitutionCoursesScalarWhereInput[]
   }
 
+  export type InstitutionsCreateemail_domainsInput = {
+    set: string[]
+  }
+
   export type ProfilesCreateNestedManyWithoutInstitutionsInput = {
     create?: XOR<ProfilesCreateWithoutInstitutionsInput, ProfilesUncheckedCreateWithoutInstitutionsInput> | ProfilesCreateWithoutInstitutionsInput[] | ProfilesUncheckedCreateWithoutInstitutionsInput[]
     connectOrCreate?: ProfilesCreateOrConnectWithoutInstitutionsInput | ProfilesCreateOrConnectWithoutInstitutionsInput[]
@@ -51582,6 +54672,20 @@ export namespace Prisma {
     connect?: InstitutionCoursesWhereUniqueInput | InstitutionCoursesWhereUniqueInput[]
   }
 
+  export type ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput = {
+    create?: XOR<ProfileInstitutionsCreateWithoutInstitutionsInput, ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput> | ProfileInstitutionsCreateWithoutInstitutionsInput[] | ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: ProfileInstitutionsCreateOrConnectWithoutInstitutionsInput | ProfileInstitutionsCreateOrConnectWithoutInstitutionsInput[]
+    createMany?: ProfileInstitutionsCreateManyInstitutionsInputEnvelope
+    connect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+  }
+
+  export type SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput = {
+    create?: XOR<SchoolEmailVerificationsCreateWithoutInstitutionsInput, SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput> | SchoolEmailVerificationsCreateWithoutInstitutionsInput[] | SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput | SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput[]
+    createMany?: SchoolEmailVerificationsCreateManyInstitutionsInputEnvelope
+    connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+  }
+
   export type ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput = {
     create?: XOR<ProfilesCreateWithoutInstitutionsInput, ProfilesUncheckedCreateWithoutInstitutionsInput> | ProfilesCreateWithoutInstitutionsInput[] | ProfilesUncheckedCreateWithoutInstitutionsInput[]
     connectOrCreate?: ProfilesCreateOrConnectWithoutInstitutionsInput | ProfilesCreateOrConnectWithoutInstitutionsInput[]
@@ -51594,6 +54698,25 @@ export namespace Prisma {
     connectOrCreate?: InstitutionCoursesCreateOrConnectWithoutInstitutionsInput | InstitutionCoursesCreateOrConnectWithoutInstitutionsInput[]
     createMany?: InstitutionCoursesCreateManyInstitutionsInputEnvelope
     connect?: InstitutionCoursesWhereUniqueInput | InstitutionCoursesWhereUniqueInput[]
+  }
+
+  export type ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput = {
+    create?: XOR<ProfileInstitutionsCreateWithoutInstitutionsInput, ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput> | ProfileInstitutionsCreateWithoutInstitutionsInput[] | ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: ProfileInstitutionsCreateOrConnectWithoutInstitutionsInput | ProfileInstitutionsCreateOrConnectWithoutInstitutionsInput[]
+    createMany?: ProfileInstitutionsCreateManyInstitutionsInputEnvelope
+    connect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+  }
+
+  export type SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput = {
+    create?: XOR<SchoolEmailVerificationsCreateWithoutInstitutionsInput, SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput> | SchoolEmailVerificationsCreateWithoutInstitutionsInput[] | SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput | SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput[]
+    createMany?: SchoolEmailVerificationsCreateManyInstitutionsInputEnvelope
+    connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+  }
+
+  export type InstitutionsUpdateemail_domainsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type ProfilesUpdateManyWithoutInstitutionsNestedInput = {
@@ -51624,6 +54747,34 @@ export namespace Prisma {
     deleteMany?: InstitutionCoursesScalarWhereInput | InstitutionCoursesScalarWhereInput[]
   }
 
+  export type ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput = {
+    create?: XOR<ProfileInstitutionsCreateWithoutInstitutionsInput, ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput> | ProfileInstitutionsCreateWithoutInstitutionsInput[] | ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: ProfileInstitutionsCreateOrConnectWithoutInstitutionsInput | ProfileInstitutionsCreateOrConnectWithoutInstitutionsInput[]
+    upsert?: ProfileInstitutionsUpsertWithWhereUniqueWithoutInstitutionsInput | ProfileInstitutionsUpsertWithWhereUniqueWithoutInstitutionsInput[]
+    createMany?: ProfileInstitutionsCreateManyInstitutionsInputEnvelope
+    set?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    disconnect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    delete?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    connect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    update?: ProfileInstitutionsUpdateWithWhereUniqueWithoutInstitutionsInput | ProfileInstitutionsUpdateWithWhereUniqueWithoutInstitutionsInput[]
+    updateMany?: ProfileInstitutionsUpdateManyWithWhereWithoutInstitutionsInput | ProfileInstitutionsUpdateManyWithWhereWithoutInstitutionsInput[]
+    deleteMany?: ProfileInstitutionsScalarWhereInput | ProfileInstitutionsScalarWhereInput[]
+  }
+
+  export type SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput = {
+    create?: XOR<SchoolEmailVerificationsCreateWithoutInstitutionsInput, SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput> | SchoolEmailVerificationsCreateWithoutInstitutionsInput[] | SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput | SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput[]
+    upsert?: SchoolEmailVerificationsUpsertWithWhereUniqueWithoutInstitutionsInput | SchoolEmailVerificationsUpsertWithWhereUniqueWithoutInstitutionsInput[]
+    createMany?: SchoolEmailVerificationsCreateManyInstitutionsInputEnvelope
+    set?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    disconnect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    delete?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    update?: SchoolEmailVerificationsUpdateWithWhereUniqueWithoutInstitutionsInput | SchoolEmailVerificationsUpdateWithWhereUniqueWithoutInstitutionsInput[]
+    updateMany?: SchoolEmailVerificationsUpdateManyWithWhereWithoutInstitutionsInput | SchoolEmailVerificationsUpdateManyWithWhereWithoutInstitutionsInput[]
+    deleteMany?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
+  }
+
   export type ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput = {
     create?: XOR<ProfilesCreateWithoutInstitutionsInput, ProfilesUncheckedCreateWithoutInstitutionsInput> | ProfilesCreateWithoutInstitutionsInput[] | ProfilesUncheckedCreateWithoutInstitutionsInput[]
     connectOrCreate?: ProfilesCreateOrConnectWithoutInstitutionsInput | ProfilesCreateOrConnectWithoutInstitutionsInput[]
@@ -51650,6 +54801,100 @@ export namespace Prisma {
     update?: InstitutionCoursesUpdateWithWhereUniqueWithoutInstitutionsInput | InstitutionCoursesUpdateWithWhereUniqueWithoutInstitutionsInput[]
     updateMany?: InstitutionCoursesUpdateManyWithWhereWithoutInstitutionsInput | InstitutionCoursesUpdateManyWithWhereWithoutInstitutionsInput[]
     deleteMany?: InstitutionCoursesScalarWhereInput | InstitutionCoursesScalarWhereInput[]
+  }
+
+  export type ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput = {
+    create?: XOR<ProfileInstitutionsCreateWithoutInstitutionsInput, ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput> | ProfileInstitutionsCreateWithoutInstitutionsInput[] | ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: ProfileInstitutionsCreateOrConnectWithoutInstitutionsInput | ProfileInstitutionsCreateOrConnectWithoutInstitutionsInput[]
+    upsert?: ProfileInstitutionsUpsertWithWhereUniqueWithoutInstitutionsInput | ProfileInstitutionsUpsertWithWhereUniqueWithoutInstitutionsInput[]
+    createMany?: ProfileInstitutionsCreateManyInstitutionsInputEnvelope
+    set?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    disconnect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    delete?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    connect?: ProfileInstitutionsWhereUniqueInput | ProfileInstitutionsWhereUniqueInput[]
+    update?: ProfileInstitutionsUpdateWithWhereUniqueWithoutInstitutionsInput | ProfileInstitutionsUpdateWithWhereUniqueWithoutInstitutionsInput[]
+    updateMany?: ProfileInstitutionsUpdateManyWithWhereWithoutInstitutionsInput | ProfileInstitutionsUpdateManyWithWhereWithoutInstitutionsInput[]
+    deleteMany?: ProfileInstitutionsScalarWhereInput | ProfileInstitutionsScalarWhereInput[]
+  }
+
+  export type SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput = {
+    create?: XOR<SchoolEmailVerificationsCreateWithoutInstitutionsInput, SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput> | SchoolEmailVerificationsCreateWithoutInstitutionsInput[] | SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput | SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput[]
+    upsert?: SchoolEmailVerificationsUpsertWithWhereUniqueWithoutInstitutionsInput | SchoolEmailVerificationsUpsertWithWhereUniqueWithoutInstitutionsInput[]
+    createMany?: SchoolEmailVerificationsCreateManyInstitutionsInputEnvelope
+    set?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    disconnect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    delete?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+    update?: SchoolEmailVerificationsUpdateWithWhereUniqueWithoutInstitutionsInput | SchoolEmailVerificationsUpdateWithWhereUniqueWithoutInstitutionsInput[]
+    updateMany?: SchoolEmailVerificationsUpdateManyWithWhereWithoutInstitutionsInput | SchoolEmailVerificationsUpdateManyWithWhereWithoutInstitutionsInput[]
+    deleteMany?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
+  }
+
+  export type ProfilesCreateNestedOneWithoutProfileInstitutionsInput = {
+    create?: XOR<ProfilesCreateWithoutProfileInstitutionsInput, ProfilesUncheckedCreateWithoutProfileInstitutionsInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutProfileInstitutionsInput
+    connect?: ProfilesWhereUniqueInput
+  }
+
+  export type InstitutionsCreateNestedOneWithoutProfileInstitutionsInput = {
+    create?: XOR<InstitutionsCreateWithoutProfileInstitutionsInput, InstitutionsUncheckedCreateWithoutProfileInstitutionsInput>
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutProfileInstitutionsInput
+    connect?: InstitutionsWhereUniqueInput
+  }
+
+  export type ProfilesUpdateOneRequiredWithoutProfileInstitutionsNestedInput = {
+    create?: XOR<ProfilesCreateWithoutProfileInstitutionsInput, ProfilesUncheckedCreateWithoutProfileInstitutionsInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutProfileInstitutionsInput
+    upsert?: ProfilesUpsertWithoutProfileInstitutionsInput
+    connect?: ProfilesWhereUniqueInput
+    update?: XOR<XOR<ProfilesUpdateToOneWithWhereWithoutProfileInstitutionsInput, ProfilesUpdateWithoutProfileInstitutionsInput>, ProfilesUncheckedUpdateWithoutProfileInstitutionsInput>
+  }
+
+  export type InstitutionsUpdateOneWithoutProfileInstitutionsNestedInput = {
+    create?: XOR<InstitutionsCreateWithoutProfileInstitutionsInput, InstitutionsUncheckedCreateWithoutProfileInstitutionsInput>
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutProfileInstitutionsInput
+    upsert?: InstitutionsUpsertWithoutProfileInstitutionsInput
+    disconnect?: InstitutionsWhereInput | boolean
+    delete?: InstitutionsWhereInput | boolean
+    connect?: InstitutionsWhereUniqueInput
+    update?: XOR<XOR<InstitutionsUpdateToOneWithWhereWithoutProfileInstitutionsInput, InstitutionsUpdateWithoutProfileInstitutionsInput>, InstitutionsUncheckedUpdateWithoutProfileInstitutionsInput>
+  }
+
+  export type ProfilesCreateNestedOneWithoutSchoolEmailVerificationsInput = {
+    create?: XOR<ProfilesCreateWithoutSchoolEmailVerificationsInput, ProfilesUncheckedCreateWithoutSchoolEmailVerificationsInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutSchoolEmailVerificationsInput
+    connect?: ProfilesWhereUniqueInput
+  }
+
+  export type InstitutionsCreateNestedOneWithoutSchoolEmailVerificationsInput = {
+    create?: XOR<InstitutionsCreateWithoutSchoolEmailVerificationsInput, InstitutionsUncheckedCreateWithoutSchoolEmailVerificationsInput>
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutSchoolEmailVerificationsInput
+    connect?: InstitutionsWhereUniqueInput
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type ProfilesUpdateOneRequiredWithoutSchoolEmailVerificationsNestedInput = {
+    create?: XOR<ProfilesCreateWithoutSchoolEmailVerificationsInput, ProfilesUncheckedCreateWithoutSchoolEmailVerificationsInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutSchoolEmailVerificationsInput
+    upsert?: ProfilesUpsertWithoutSchoolEmailVerificationsInput
+    connect?: ProfilesWhereUniqueInput
+    update?: XOR<XOR<ProfilesUpdateToOneWithWhereWithoutSchoolEmailVerificationsInput, ProfilesUpdateWithoutSchoolEmailVerificationsInput>, ProfilesUncheckedUpdateWithoutSchoolEmailVerificationsInput>
+  }
+
+  export type InstitutionsUpdateOneRequiredWithoutSchoolEmailVerificationsNestedInput = {
+    create?: XOR<InstitutionsCreateWithoutSchoolEmailVerificationsInput, InstitutionsUncheckedCreateWithoutSchoolEmailVerificationsInput>
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutSchoolEmailVerificationsInput
+    upsert?: InstitutionsUpsertWithoutSchoolEmailVerificationsInput
+    connect?: InstitutionsWhereUniqueInput
+    update?: XOR<XOR<InstitutionsUpdateToOneWithWhereWithoutSchoolEmailVerificationsInput, InstitutionsUpdateWithoutSchoolEmailVerificationsInput>, InstitutionsUncheckedUpdateWithoutSchoolEmailVerificationsInput>
   }
 
   export type InstitutionsCreateNestedOneWithoutInstitutionCoursesInput = {
@@ -52333,6 +55578,22 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type NestedBytesFilter<$PrismaModel = never> = {
@@ -55280,6 +58541,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutUsersInput = {
@@ -55309,6 +58572,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutUsersInput = {
@@ -55561,6 +58826,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutUsersInput = {
@@ -55590,6 +58857,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesCreateWithoutConversations_Conversations_student_idToProfilesInput = {
@@ -55619,6 +58888,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutConversations_Conversations_student_idToProfilesInput = {
@@ -55648,6 +58919,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutConversations_Conversations_student_idToProfilesInput = {
@@ -55682,6 +58955,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutConversations_Conversations_tutor_idToProfilesInput = {
@@ -55711,6 +58986,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutConversations_Conversations_tutor_idToProfilesInput = {
@@ -55784,6 +59061,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutConversations_Conversations_student_idToProfilesInput = {
@@ -55813,6 +59092,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUpsertWithoutConversations_Conversations_tutor_idToProfilesInput = {
@@ -55853,6 +59134,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutConversations_Conversations_tutor_idToProfilesInput = {
@@ -55882,6 +59165,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type MessagesUpsertWithWhereUniqueWithoutConversationsInput = {
@@ -55965,6 +59250,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutMessagesInput = {
@@ -55994,6 +59281,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutMessagesInput = {
@@ -56070,6 +59359,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutMessagesInput = {
@@ -56099,6 +59390,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput = {
@@ -56460,9 +59753,15 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUncheckedCreateWithoutProfilesInput = {
@@ -56471,9 +59770,15 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsCreateOrConnectWithoutProfilesInput = {
@@ -56510,6 +59815,74 @@ export namespace Prisma {
 
   export type FeedbackCreateManyProfilesInputEnvelope = {
     data: FeedbackCreateManyProfilesInput | FeedbackCreateManyProfilesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProfileInstitutionsCreateWithoutProfilesInput = {
+    id?: string
+    institution_name_raw?: string | null
+    kind: string
+    status?: string
+    verification_method?: string | null
+    verified_email?: string | null
+    document_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Institutions?: InstitutionsCreateNestedOneWithoutProfileInstitutionsInput
+  }
+
+  export type ProfileInstitutionsUncheckedCreateWithoutProfilesInput = {
+    id?: string
+    institution_id?: string | null
+    institution_name_raw?: string | null
+    kind: string
+    status?: string
+    verification_method?: string | null
+    verified_email?: string | null
+    document_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProfileInstitutionsCreateOrConnectWithoutProfilesInput = {
+    where: ProfileInstitutionsWhereUniqueInput
+    create: XOR<ProfileInstitutionsCreateWithoutProfilesInput, ProfileInstitutionsUncheckedCreateWithoutProfilesInput>
+  }
+
+  export type ProfileInstitutionsCreateManyProfilesInputEnvelope = {
+    data: ProfileInstitutionsCreateManyProfilesInput | ProfileInstitutionsCreateManyProfilesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SchoolEmailVerificationsCreateWithoutProfilesInput = {
+    id?: string
+    email: string
+    code_hash: string
+    expires_at: Date | string
+    consumed_at?: Date | string | null
+    attempts?: number
+    created_at?: Date | string
+    Institutions: InstitutionsCreateNestedOneWithoutSchoolEmailVerificationsInput
+  }
+
+  export type SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput = {
+    id?: string
+    institution_id: string
+    email: string
+    code_hash: string
+    expires_at: Date | string
+    consumed_at?: Date | string | null
+    attempts?: number
+    created_at?: Date | string
+  }
+
+  export type SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput = {
+    where: SchoolEmailVerificationsWhereUniqueInput
+    create: XOR<SchoolEmailVerificationsCreateWithoutProfilesInput, SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput>
+  }
+
+  export type SchoolEmailVerificationsCreateManyProfilesInputEnvelope = {
+    data: SchoolEmailVerificationsCreateManyProfilesInput | SchoolEmailVerificationsCreateManyProfilesInput[]
     skipDuplicates?: boolean
   }
 
@@ -56817,9 +60190,15 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsUncheckedUpdateWithoutProfilesInput = {
@@ -56828,9 +60207,15 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type FeedbackUpsertWithWhereUniqueWithoutProfilesInput = {
@@ -56864,6 +60249,70 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"Feedback"> | Date | string
   }
 
+  export type ProfileInstitutionsUpsertWithWhereUniqueWithoutProfilesInput = {
+    where: ProfileInstitutionsWhereUniqueInput
+    update: XOR<ProfileInstitutionsUpdateWithoutProfilesInput, ProfileInstitutionsUncheckedUpdateWithoutProfilesInput>
+    create: XOR<ProfileInstitutionsCreateWithoutProfilesInput, ProfileInstitutionsUncheckedCreateWithoutProfilesInput>
+  }
+
+  export type ProfileInstitutionsUpdateWithWhereUniqueWithoutProfilesInput = {
+    where: ProfileInstitutionsWhereUniqueInput
+    data: XOR<ProfileInstitutionsUpdateWithoutProfilesInput, ProfileInstitutionsUncheckedUpdateWithoutProfilesInput>
+  }
+
+  export type ProfileInstitutionsUpdateManyWithWhereWithoutProfilesInput = {
+    where: ProfileInstitutionsScalarWhereInput
+    data: XOR<ProfileInstitutionsUpdateManyMutationInput, ProfileInstitutionsUncheckedUpdateManyWithoutProfilesInput>
+  }
+
+  export type ProfileInstitutionsScalarWhereInput = {
+    AND?: ProfileInstitutionsScalarWhereInput | ProfileInstitutionsScalarWhereInput[]
+    OR?: ProfileInstitutionsScalarWhereInput[]
+    NOT?: ProfileInstitutionsScalarWhereInput | ProfileInstitutionsScalarWhereInput[]
+    id?: UuidFilter<"ProfileInstitutions"> | string
+    profile_id?: UuidFilter<"ProfileInstitutions"> | string
+    institution_id?: UuidNullableFilter<"ProfileInstitutions"> | string | null
+    institution_name_raw?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    kind?: StringFilter<"ProfileInstitutions"> | string
+    status?: StringFilter<"ProfileInstitutions"> | string
+    verification_method?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    verified_email?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    document_url?: StringNullableFilter<"ProfileInstitutions"> | string | null
+    created_at?: DateTimeFilter<"ProfileInstitutions"> | Date | string
+    updated_at?: DateTimeFilter<"ProfileInstitutions"> | Date | string
+  }
+
+  export type SchoolEmailVerificationsUpsertWithWhereUniqueWithoutProfilesInput = {
+    where: SchoolEmailVerificationsWhereUniqueInput
+    update: XOR<SchoolEmailVerificationsUpdateWithoutProfilesInput, SchoolEmailVerificationsUncheckedUpdateWithoutProfilesInput>
+    create: XOR<SchoolEmailVerificationsCreateWithoutProfilesInput, SchoolEmailVerificationsUncheckedCreateWithoutProfilesInput>
+  }
+
+  export type SchoolEmailVerificationsUpdateWithWhereUniqueWithoutProfilesInput = {
+    where: SchoolEmailVerificationsWhereUniqueInput
+    data: XOR<SchoolEmailVerificationsUpdateWithoutProfilesInput, SchoolEmailVerificationsUncheckedUpdateWithoutProfilesInput>
+  }
+
+  export type SchoolEmailVerificationsUpdateManyWithWhereWithoutProfilesInput = {
+    where: SchoolEmailVerificationsScalarWhereInput
+    data: XOR<SchoolEmailVerificationsUpdateManyMutationInput, SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesInput>
+  }
+
+  export type SchoolEmailVerificationsScalarWhereInput = {
+    AND?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
+    OR?: SchoolEmailVerificationsScalarWhereInput[]
+    NOT?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
+    id?: UuidFilter<"SchoolEmailVerifications"> | string
+    profile_id?: UuidFilter<"SchoolEmailVerifications"> | string
+    institution_id?: UuidFilter<"SchoolEmailVerifications"> | string
+    email?: StringFilter<"SchoolEmailVerifications"> | string
+    code_hash?: StringFilter<"SchoolEmailVerifications"> | string
+    expires_at?: DateTimeFilter<"SchoolEmailVerifications"> | Date | string
+    consumed_at?: DateTimeNullableFilter<"SchoolEmailVerifications"> | Date | string | null
+    attempts?: IntFilter<"SchoolEmailVerifications"> | number
+    created_at?: DateTimeFilter<"SchoolEmailVerifications"> | Date | string
+  }
+
   export type ProfilesCreateWithoutSubjectsInput = {
     email: string
     name?: string | null
@@ -56891,6 +60340,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutSubjectsInput = {
@@ -56920,6 +60371,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutSubjectsInput = {
@@ -57064,6 +60517,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutSubjectsInput = {
@@ -57093,6 +60548,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type SubjectsUpsertWithoutProfilesOnSubjectsInput = {
@@ -57204,6 +60661,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutSessions_Sessions_student_idToProfilesInput = {
@@ -57233,6 +60692,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutSessions_Sessions_student_idToProfilesInput = {
@@ -57267,6 +60728,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutSessions_Sessions_tutor_idToProfilesInput = {
@@ -57296,6 +60759,8 @@ export namespace Prisma {
     Sessions_Sessions_student_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutSessions_Sessions_tutor_idToProfilesInput = {
@@ -57341,6 +60806,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutSessions_Sessions_student_idToProfilesInput = {
@@ -57370,6 +60837,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUpsertWithoutSessions_Sessions_tutor_idToProfilesInput = {
@@ -57410,6 +60879,8 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutSessions_Sessions_tutor_idToProfilesInput = {
@@ -57439,6 +60910,8 @@ export namespace Prisma {
     Sessions_Sessions_student_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesOnSubjectsCreateWithoutSubjectsInput = {
@@ -57584,6 +61057,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutInstitutionsInput = {
@@ -57613,6 +61088,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutInstitutionsInput = {
@@ -57654,6 +61131,74 @@ export namespace Prisma {
 
   export type InstitutionCoursesCreateManyInstitutionsInputEnvelope = {
     data: InstitutionCoursesCreateManyInstitutionsInput | InstitutionCoursesCreateManyInstitutionsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProfileInstitutionsCreateWithoutInstitutionsInput = {
+    id?: string
+    institution_name_raw?: string | null
+    kind: string
+    status?: string
+    verification_method?: string | null
+    verified_email?: string | null
+    document_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles: ProfilesCreateNestedOneWithoutProfileInstitutionsInput
+  }
+
+  export type ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput = {
+    id?: string
+    profile_id: string
+    institution_name_raw?: string | null
+    kind: string
+    status?: string
+    verification_method?: string | null
+    verified_email?: string | null
+    document_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProfileInstitutionsCreateOrConnectWithoutInstitutionsInput = {
+    where: ProfileInstitutionsWhereUniqueInput
+    create: XOR<ProfileInstitutionsCreateWithoutInstitutionsInput, ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput>
+  }
+
+  export type ProfileInstitutionsCreateManyInstitutionsInputEnvelope = {
+    data: ProfileInstitutionsCreateManyInstitutionsInput | ProfileInstitutionsCreateManyInstitutionsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SchoolEmailVerificationsCreateWithoutInstitutionsInput = {
+    id?: string
+    email: string
+    code_hash: string
+    expires_at: Date | string
+    consumed_at?: Date | string | null
+    attempts?: number
+    created_at?: Date | string
+    Profiles: ProfilesCreateNestedOneWithoutSchoolEmailVerificationsInput
+  }
+
+  export type SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput = {
+    id?: string
+    profile_id: string
+    email: string
+    code_hash: string
+    expires_at: Date | string
+    consumed_at?: Date | string | null
+    attempts?: number
+    created_at?: Date | string
+  }
+
+  export type SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput = {
+    where: SchoolEmailVerificationsWhereUniqueInput
+    create: XOR<SchoolEmailVerificationsCreateWithoutInstitutionsInput, SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput>
+  }
+
+  export type SchoolEmailVerificationsCreateManyInstitutionsInputEnvelope = {
+    data: SchoolEmailVerificationsCreateManyInstitutionsInput | SchoolEmailVerificationsCreateManyInstitutionsInput[]
     skipDuplicates?: boolean
   }
 
@@ -57714,15 +61259,501 @@ export namespace Prisma {
     data: XOR<InstitutionCoursesUpdateManyMutationInput, InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsInput>
   }
 
+  export type ProfileInstitutionsUpsertWithWhereUniqueWithoutInstitutionsInput = {
+    where: ProfileInstitutionsWhereUniqueInput
+    update: XOR<ProfileInstitutionsUpdateWithoutInstitutionsInput, ProfileInstitutionsUncheckedUpdateWithoutInstitutionsInput>
+    create: XOR<ProfileInstitutionsCreateWithoutInstitutionsInput, ProfileInstitutionsUncheckedCreateWithoutInstitutionsInput>
+  }
+
+  export type ProfileInstitutionsUpdateWithWhereUniqueWithoutInstitutionsInput = {
+    where: ProfileInstitutionsWhereUniqueInput
+    data: XOR<ProfileInstitutionsUpdateWithoutInstitutionsInput, ProfileInstitutionsUncheckedUpdateWithoutInstitutionsInput>
+  }
+
+  export type ProfileInstitutionsUpdateManyWithWhereWithoutInstitutionsInput = {
+    where: ProfileInstitutionsScalarWhereInput
+    data: XOR<ProfileInstitutionsUpdateManyMutationInput, ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsInput>
+  }
+
+  export type SchoolEmailVerificationsUpsertWithWhereUniqueWithoutInstitutionsInput = {
+    where: SchoolEmailVerificationsWhereUniqueInput
+    update: XOR<SchoolEmailVerificationsUpdateWithoutInstitutionsInput, SchoolEmailVerificationsUncheckedUpdateWithoutInstitutionsInput>
+    create: XOR<SchoolEmailVerificationsCreateWithoutInstitutionsInput, SchoolEmailVerificationsUncheckedCreateWithoutInstitutionsInput>
+  }
+
+  export type SchoolEmailVerificationsUpdateWithWhereUniqueWithoutInstitutionsInput = {
+    where: SchoolEmailVerificationsWhereUniqueInput
+    data: XOR<SchoolEmailVerificationsUpdateWithoutInstitutionsInput, SchoolEmailVerificationsUncheckedUpdateWithoutInstitutionsInput>
+  }
+
+  export type SchoolEmailVerificationsUpdateManyWithWhereWithoutInstitutionsInput = {
+    where: SchoolEmailVerificationsScalarWhereInput
+    data: XOR<SchoolEmailVerificationsUpdateManyMutationInput, SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsInput>
+  }
+
+  export type ProfilesCreateWithoutProfileInstitutionsInput = {
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesCreateNestedManyWithoutProfilesInput
+    users: usersCreateNestedOneWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
+    Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
+    Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+  }
+
+  export type ProfilesUncheckedCreateWithoutProfileInstitutionsInput = {
+    id: string
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    institution_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesUncheckedCreateNestedManyWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
+    Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+  }
+
+  export type ProfilesCreateOrConnectWithoutProfileInstitutionsInput = {
+    where: ProfilesWhereUniqueInput
+    create: XOR<ProfilesCreateWithoutProfileInstitutionsInput, ProfilesUncheckedCreateWithoutProfileInstitutionsInput>
+  }
+
+  export type InstitutionsCreateWithoutProfileInstitutionsInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsUncheckedCreateWithoutProfileInstitutionsInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsCreateOrConnectWithoutProfileInstitutionsInput = {
+    where: InstitutionsWhereUniqueInput
+    create: XOR<InstitutionsCreateWithoutProfileInstitutionsInput, InstitutionsUncheckedCreateWithoutProfileInstitutionsInput>
+  }
+
+  export type ProfilesUpsertWithoutProfileInstitutionsInput = {
+    update: XOR<ProfilesUpdateWithoutProfileInstitutionsInput, ProfilesUncheckedUpdateWithoutProfileInstitutionsInput>
+    create: XOR<ProfilesCreateWithoutProfileInstitutionsInput, ProfilesUncheckedCreateWithoutProfileInstitutionsInput>
+    where?: ProfilesWhereInput
+  }
+
+  export type ProfilesUpdateToOneWithWhereWithoutProfileInstitutionsInput = {
+    where?: ProfilesWhereInput
+    data: XOR<ProfilesUpdateWithoutProfileInstitutionsInput, ProfilesUncheckedUpdateWithoutProfileInstitutionsInput>
+  }
+
+  export type ProfilesUpdateWithoutProfileInstitutionsInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUpdateManyWithoutProfilesNestedInput
+    users?: usersUpdateOneRequiredWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
+    Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
+    Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+  }
+
+  export type ProfilesUncheckedUpdateWithoutProfileInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUncheckedUpdateManyWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
+    Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+  }
+
+  export type InstitutionsUpsertWithoutProfileInstitutionsInput = {
+    update: XOR<InstitutionsUpdateWithoutProfileInstitutionsInput, InstitutionsUncheckedUpdateWithoutProfileInstitutionsInput>
+    create: XOR<InstitutionsCreateWithoutProfileInstitutionsInput, InstitutionsUncheckedCreateWithoutProfileInstitutionsInput>
+    where?: InstitutionsWhereInput
+  }
+
+  export type InstitutionsUpdateToOneWithWhereWithoutProfileInstitutionsInput = {
+    where?: InstitutionsWhereInput
+    data: XOR<InstitutionsUpdateWithoutProfileInstitutionsInput, InstitutionsUncheckedUpdateWithoutProfileInstitutionsInput>
+  }
+
+  export type InstitutionsUpdateWithoutProfileInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type InstitutionsUncheckedUpdateWithoutProfileInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type ProfilesCreateWithoutSchoolEmailVerificationsInput = {
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesCreateNestedManyWithoutProfilesInput
+    users: usersCreateNestedOneWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
+    Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
+    Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+  }
+
+  export type ProfilesUncheckedCreateWithoutSchoolEmailVerificationsInput = {
+    id: string
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    institution_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesUncheckedCreateNestedManyWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
+    Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+  }
+
+  export type ProfilesCreateOrConnectWithoutSchoolEmailVerificationsInput = {
+    where: ProfilesWhereUniqueInput
+    create: XOR<ProfilesCreateWithoutSchoolEmailVerificationsInput, ProfilesUncheckedCreateWithoutSchoolEmailVerificationsInput>
+  }
+
+  export type InstitutionsCreateWithoutSchoolEmailVerificationsInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsUncheckedCreateWithoutSchoolEmailVerificationsInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsCreateOrConnectWithoutSchoolEmailVerificationsInput = {
+    where: InstitutionsWhereUniqueInput
+    create: XOR<InstitutionsCreateWithoutSchoolEmailVerificationsInput, InstitutionsUncheckedCreateWithoutSchoolEmailVerificationsInput>
+  }
+
+  export type ProfilesUpsertWithoutSchoolEmailVerificationsInput = {
+    update: XOR<ProfilesUpdateWithoutSchoolEmailVerificationsInput, ProfilesUncheckedUpdateWithoutSchoolEmailVerificationsInput>
+    create: XOR<ProfilesCreateWithoutSchoolEmailVerificationsInput, ProfilesUncheckedCreateWithoutSchoolEmailVerificationsInput>
+    where?: ProfilesWhereInput
+  }
+
+  export type ProfilesUpdateToOneWithWhereWithoutSchoolEmailVerificationsInput = {
+    where?: ProfilesWhereInput
+    data: XOR<ProfilesUpdateWithoutSchoolEmailVerificationsInput, ProfilesUncheckedUpdateWithoutSchoolEmailVerificationsInput>
+  }
+
+  export type ProfilesUpdateWithoutSchoolEmailVerificationsInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUpdateManyWithoutProfilesNestedInput
+    users?: usersUpdateOneRequiredWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
+    Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
+    Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+  }
+
+  export type ProfilesUncheckedUpdateWithoutSchoolEmailVerificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUncheckedUpdateManyWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
+    Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+  }
+
+  export type InstitutionsUpsertWithoutSchoolEmailVerificationsInput = {
+    update: XOR<InstitutionsUpdateWithoutSchoolEmailVerificationsInput, InstitutionsUncheckedUpdateWithoutSchoolEmailVerificationsInput>
+    create: XOR<InstitutionsCreateWithoutSchoolEmailVerificationsInput, InstitutionsUncheckedCreateWithoutSchoolEmailVerificationsInput>
+    where?: InstitutionsWhereInput
+  }
+
+  export type InstitutionsUpdateToOneWithWhereWithoutSchoolEmailVerificationsInput = {
+    where?: InstitutionsWhereInput
+    data: XOR<InstitutionsUpdateWithoutSchoolEmailVerificationsInput, InstitutionsUncheckedUpdateWithoutSchoolEmailVerificationsInput>
+  }
+
+  export type InstitutionsUpdateWithoutSchoolEmailVerificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type InstitutionsUncheckedUpdateWithoutSchoolEmailVerificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+  }
+
   export type InstitutionsCreateWithoutInstitutionCoursesInput = {
     id?: string
     name: string
     abbreviation?: string | null
     country?: string
     province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUncheckedCreateWithoutInstitutionCoursesInput = {
@@ -57731,9 +61762,15 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsCreateOrConnectWithoutInstitutionCoursesInput = {
@@ -57823,9 +61860,15 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsUncheckedUpdateWithoutInstitutionCoursesInput = {
@@ -57834,9 +61877,15 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type SubjectsUpsertWithoutInstitutionCoursesInput = {
@@ -57915,6 +61964,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutTutorAvailabilityInput = {
@@ -57944,6 +61995,8 @@ export namespace Prisma {
     Sessions_Sessions_student_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutTutorAvailabilityInput = {
@@ -58022,6 +62075,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutTutorAvailabilityInput = {
@@ -58051,6 +62106,8 @@ export namespace Prisma {
     Sessions_Sessions_student_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesOnSubjectsUpsertWithoutTutorAvailabilityInput = {
@@ -58119,6 +62176,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesUncheckedCreateWithoutFeedbackInput = {
@@ -58148,6 +62207,8 @@ export namespace Prisma {
     Sessions_Sessions_student_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
   }
 
   export type ProfilesCreateOrConnectWithoutFeedbackInput = {
@@ -58193,6 +62254,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutFeedbackInput = {
@@ -58222,6 +62285,8 @@ export namespace Prisma {
     Sessions_Sessions_student_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type usersCreateWithoutWebauthn_challengesInput = {
@@ -59619,6 +63684,30 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type ProfileInstitutionsCreateManyProfilesInput = {
+    id?: string
+    institution_id?: string | null
+    institution_name_raw?: string | null
+    kind: string
+    status?: string
+    verification_method?: string | null
+    verified_email?: string | null
+    document_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SchoolEmailVerificationsCreateManyProfilesInput = {
+    id?: string
+    institution_id: string
+    email: string
+    code_hash: string
+    expires_at: Date | string
+    consumed_at?: Date | string | null
+    attempts?: number
+    created_at?: Date | string
+  }
+
   export type ConversationsUpdateWithoutProfiles_Conversations_student_idToProfilesInput = {
     id?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59928,6 +64017,78 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProfileInstitutionsUpdateWithoutProfilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Institutions?: InstitutionsUpdateOneWithoutProfileInstitutionsNestedInput
+  }
+
+  export type ProfileInstitutionsUncheckedUpdateWithoutProfilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileInstitutionsUncheckedUpdateManyWithoutProfilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SchoolEmailVerificationsUpdateWithoutProfilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Institutions?: InstitutionsUpdateOneRequiredWithoutSchoolEmailVerificationsNestedInput
+  }
+
+  export type SchoolEmailVerificationsUncheckedUpdateWithoutProfilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    institution_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    institution_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TutorAvailabilityCreateManyProfileSubjectInput = {
     id?: string
     day_of_week?: number | null
@@ -60124,6 +64285,30 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type ProfileInstitutionsCreateManyInstitutionsInput = {
+    id?: string
+    profile_id: string
+    institution_name_raw?: string | null
+    kind: string
+    status?: string
+    verification_method?: string | null
+    verified_email?: string | null
+    document_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SchoolEmailVerificationsCreateManyInstitutionsInput = {
+    id?: string
+    profile_id: string
+    email: string
+    code_hash: string
+    expires_at: Date | string
+    consumed_at?: Date | string | null
+    attempts?: number
+    created_at?: Date | string
+  }
+
   export type ProfilesUpdateWithoutInstitutionsInput = {
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60151,6 +64336,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutInstitutionsInput = {
@@ -60180,6 +64367,8 @@ export namespace Prisma {
     Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
   }
 
   export type ProfilesUncheckedUpdateManyWithoutInstitutionsInput = {
@@ -60233,6 +64422,78 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileInstitutionsUpdateWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateOneRequiredWithoutProfileInstitutionsNestedInput
+  }
+
+  export type ProfileInstitutionsUncheckedUpdateWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profile_id?: StringFieldUpdateOperationsInput | string
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profile_id?: StringFieldUpdateOperationsInput | string
+    institution_name_raw?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_email?: NullableStringFieldUpdateOperationsInput | string | null
+    document_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SchoolEmailVerificationsUpdateWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateOneRequiredWithoutSchoolEmailVerificationsNestedInput
+  }
+
+  export type SchoolEmailVerificationsUncheckedUpdateWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profile_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profile_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    code_hash?: StringFieldUpdateOperationsInput | string
+    expires_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    attempts?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProfilesOnSubjectsCreateManyInstitutionCoursesInput = {
@@ -60450,6 +64711,14 @@ export namespace Prisma {
      * @deprecated Use InstitutionsDefaultArgs instead
      */
     export type InstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InstitutionsDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProfileInstitutionsDefaultArgs instead
+     */
+    export type ProfileInstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProfileInstitutionsDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SchoolEmailVerificationsDefaultArgs instead
+     */
+    export type SchoolEmailVerificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SchoolEmailVerificationsDefaultArgs<ExtArgs>
     /**
      * @deprecated Use InstitutionCoursesDefaultArgs instead
      */

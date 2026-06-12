@@ -466,8 +466,38 @@ exports.Prisma.InstitutionsScalarFieldEnum = {
   abbreviation: 'abbreviation',
   country: 'country',
   province: 'province',
+  type: 'type',
+  email_domains: 'email_domains',
+  city: 'city',
+  website: 'website',
   created_at: 'created_at',
   updated_at: 'updated_at'
+};
+
+exports.Prisma.ProfileInstitutionsScalarFieldEnum = {
+  id: 'id',
+  profile_id: 'profile_id',
+  institution_id: 'institution_id',
+  institution_name_raw: 'institution_name_raw',
+  kind: 'kind',
+  status: 'status',
+  verification_method: 'verification_method',
+  verified_email: 'verified_email',
+  document_url: 'document_url',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.SchoolEmailVerificationsScalarFieldEnum = {
+  id: 'id',
+  profile_id: 'profile_id',
+  institution_id: 'institution_id',
+  email: 'email',
+  code_hash: 'code_hash',
+  expires_at: 'expires_at',
+  consumed_at: 'consumed_at',
+  attempts: 'attempts',
+  created_at: 'created_at'
 };
 
 exports.Prisma.InstitutionCoursesScalarFieldEnum = {
@@ -696,6 +726,8 @@ exports.Prisma.ModelName = {
   Sessions: 'Sessions',
   Subjects: 'Subjects',
   Institutions: 'Institutions',
+  ProfileInstitutions: 'ProfileInstitutions',
+  SchoolEmailVerifications: 'SchoolEmailVerifications',
   InstitutionCourses: 'InstitutionCourses',
   TutorAvailability: 'TutorAvailability',
   Notifications: 'Notifications',

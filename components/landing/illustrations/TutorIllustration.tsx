@@ -32,34 +32,34 @@ export default function TutorIllustration() {
         <line x1="325" y1="320" x2="340" y2="380" stroke="#6b7280" strokeWidth="4" strokeLinecap="round" />
 
         {/* Board frame */}
-        <rect x="145" y="155" width="210" height="165" rx="6" fill="#1e3a8a" />
+        <rect x="145" y="155" width="210" height="165" rx="6" fill="#0e4360" />
         <rect x="152" y="162" width="196" height="151" rx="3" fill="white" />
 
         {/* Board content - diagram */}
         {/* Central circle */}
-        <circle cx="250" cy="225" r="22" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2" />
-        <text x="250" y="229" textAnchor="middle" fill="#7c3aed" fontSize="10" fontWeight="bold">
+        <circle cx="250" cy="225" r="22" fill="#d8eefa" stroke="#0077be" strokeWidth="2" />
+        <text x="250" y="229" textAnchor="middle" fill="#0077be" fontSize="10" fontWeight="bold">
           Core
         </text>
 
         {/* Connecting nodes */}
-        <line x1="232" y1="210" x2="200" y2="190" stroke="#a78bfa" strokeWidth="1.5" />
-        <circle cx="192" cy="185" r="14" fill="#f3e8ff" stroke="#a78bfa" strokeWidth="1.5" />
+        <line x1="232" y1="210" x2="200" y2="190" stroke="#4ca9de" strokeWidth="1.5" />
+        <circle cx="192" cy="185" r="14" fill="#eff8fd" stroke="#4ca9de" strokeWidth="1.5" />
 
-        <line x1="268" y1="210" x2="300" y2="190" stroke="#a78bfa" strokeWidth="1.5" />
-        <circle cx="308" cy="185" r="14" fill="#f3e8ff" stroke="#a78bfa" strokeWidth="1.5" />
+        <line x1="268" y1="210" x2="300" y2="190" stroke="#4ca9de" strokeWidth="1.5" />
+        <circle cx="308" cy="185" r="14" fill="#eff8fd" stroke="#4ca9de" strokeWidth="1.5" />
 
-        <line x1="235" y1="243" x2="205" y2="268" stroke="#a78bfa" strokeWidth="1.5" />
-        <circle cx="198" cy="274" r="14" fill="#f3e8ff" stroke="#a78bfa" strokeWidth="1.5" />
+        <line x1="235" y1="243" x2="205" y2="268" stroke="#4ca9de" strokeWidth="1.5" />
+        <circle cx="198" cy="274" r="14" fill="#eff8fd" stroke="#4ca9de" strokeWidth="1.5" />
 
-        <line x1="265" y1="243" x2="295" y2="268" stroke="#a78bfa" strokeWidth="1.5" />
-        <circle cx="302" cy="274" r="14" fill="#f3e8ff" stroke="#a78bfa" strokeWidth="1.5" />
+        <line x1="265" y1="243" x2="295" y2="268" stroke="#4ca9de" strokeWidth="1.5" />
+        <circle cx="302" cy="274" r="14" fill="#eff8fd" stroke="#4ca9de" strokeWidth="1.5" />
 
         {/* Small dots inside nodes */}
-        <circle cx="192" cy="185" r="4" fill="#7c3aed" opacity="0.6" />
-        <circle cx="308" cy="185" r="4" fill="#7c3aed" opacity="0.6" />
-        <circle cx="198" cy="274" r="4" fill="#7c3aed" opacity="0.6" />
-        <circle cx="302" cy="274" r="4" fill="#7c3aed" opacity="0.6" />
+        <circle cx="192" cy="185" r="4" fill="#0077be" opacity="0.6" />
+        <circle cx="308" cy="185" r="4" fill="#0077be" opacity="0.6" />
+        <circle cx="198" cy="274" r="4" fill="#0077be" opacity="0.6" />
+        <circle cx="302" cy="274" r="4" fill="#0077be" opacity="0.6" />
 
         {/* Board tray */}
         <rect x="170" y="318" width="160" height="6" rx="2" fill="#374151" />
@@ -91,8 +91,8 @@ export default function TutorIllustration() {
           animate={{ y: [0, -8, 0] }}
           transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut" }}
         >
-          <rect x="365" y="115" width="80" height="50" rx="12" fill="#7c3aed" />
-          <polygon points="380,165 388,165 375,178" fill="#7c3aed" />
+          <rect x="365" y="115" width="80" height="50" rx="12" fill="#0077be" />
+          <polygon points="380,165 388,165 375,178" fill="#0077be" />
           {/* Speech lines */}
           <rect x="378" y="130" width="40" height="4" rx="2" fill="white" opacity="0.8" />
           <rect x="378" y="140" width="52" height="4" rx="2" fill="white" opacity="0.5" />
@@ -116,16 +116,16 @@ export default function TutorIllustration() {
           }}
         >
           {/* Person 1 */}
-          <circle cx="85" cy="280" r="10" fill="#c4b5fd" />
-          <rect x="75" y="294" width="20" height="24" rx="8" fill="#c4b5fd" />
+          <circle cx="85" cy="280" r="10" fill="#84c6ec" />
+          <rect x="75" y="294" width="20" height="24" rx="8" fill="#84c6ec" />
 
           {/* Person 2 */}
-          <circle cx="115" cy="275" r="10" fill="#a78bfa" />
-          <rect x="105" y="289" width="20" height="24" rx="8" fill="#a78bfa" />
+          <circle cx="115" cy="275" r="10" fill="#4ca9de" />
+          <rect x="105" y="289" width="20" height="24" rx="8" fill="#4ca9de" />
 
           {/* Person 3 */}
-          <circle cx="100" cy="250" r="10" fill="#8b5cf6" />
-          <rect x="90" y="264" width="20" height="24" rx="8" fill="#8b5cf6" />
+          <circle cx="100" cy="250" r="10" fill="#1f8dcc" />
+          <rect x="90" y="264" width="20" height="24" rx="8" fill="#1f8dcc" />
         </motion.g>
       </motion.g>
 
@@ -199,7 +199,7 @@ export default function TutorIllustration() {
           y1="265"
           x2="152"
           y2="240"
-          stroke="#a78bfa"
+          stroke="#4ca9de"
           strokeWidth="1.5"
           strokeDasharray="4 4"
           animate={{ opacity: [0.2, 0.6, 0.2] }}
@@ -210,7 +210,7 @@ export default function TutorIllustration() {
           y1="300"
           x2="395"
           y2="345"
-          stroke="#a78bfa"
+          stroke="#4ca9de"
           strokeWidth="1.5"
           strokeDasharray="4 4"
           animate={{ opacity: [0.2, 0.6, 0.2] }}
@@ -223,7 +223,7 @@ export default function TutorIllustration() {
         cx="80"
         cy="180"
         r="4"
-        fill="#c4b5fd"
+        fill="#84c6ec"
         animate={{ opacity: [0.3, 0.8, 0.3], scale: [1, 1.3, 1] }}
         transition={{ repeat: Infinity, duration: 2.5 }}
       />
@@ -231,7 +231,7 @@ export default function TutorIllustration() {
         cx="430"
         cy="230"
         r="3"
-        fill="#a78bfa"
+        fill="#4ca9de"
         animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.4, 1] }}
         transition={{ repeat: Infinity, duration: 3, delay: 0.5 }}
       />
@@ -239,7 +239,7 @@ export default function TutorIllustration() {
         cx="350"
         cy="400"
         r="4"
-        fill="#c4b5fd"
+        fill="#84c6ec"
         animate={{ opacity: [0.3, 0.7, 0.3] }}
         transition={{ repeat: Infinity, duration: 3.5, delay: 1 }}
       />
@@ -255,9 +255,9 @@ export default function TutorIllustration() {
       {/* Gradients */}
       <defs>
         <radialGradient id="tutorBg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#ede9fe" />
-          <stop offset="70%" stopColor="#f5f3ff" />
-          <stop offset="100%" stopColor="#f5f3ff" stopOpacity="0" />
+          <stop offset="0%" stopColor="#d8eefa" />
+          <stop offset="70%" stopColor="#eff8fd" />
+          <stop offset="100%" stopColor="#eff8fd" stopOpacity="0" />
         </radialGradient>
       </defs>
     </svg>

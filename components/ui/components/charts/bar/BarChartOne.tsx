@@ -15,7 +15,7 @@ export default function BarChartOne() {
             {months.map((month, index) => (
               <div key={month} className="text-center">
                 <div className="text-gray-600 mb-1">{month}</div>
-                <div className="bg-blue-500 rounded" style={{ height: `${(data[index] / 400) * 100}px` }}></div>
+                <div className="bg-brand-500 rounded" style={{ height: `${(data[index] / 400) * 100}px` }}></div>
                 <div className="text-gray-500 mt-1">{data[index]}</div>
               </div>
             ))}

@@ -291,7 +291,7 @@ export default function TutorProfile() {
                 </label>
               </div>
               <h2 className="text-base font-semibold text-slate-900">{profile.name}</h2>
-              <span className="mt-1.5 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700">Tutor</span>
+              <span className="mt-1.5 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-50 text-brand-700">Tutor</span>
               <p className="text-xs text-slate-400 mt-1.5 truncate w-full">{profile.email}</p>
             </div>
 
@@ -314,7 +314,7 @@ export default function TutorProfile() {
                 className={`w-full px-3 py-2 text-xs font-semibold rounded-xl transition-colors disabled:opacity-50 ${
                   profile.stripe_account_id
                     ? "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                    : "bg-indigo-600 text-white hover:bg-indigo-700"
+                    : "bg-brand-600 text-white hover:bg-brand-700"
                 }`}
               >
                 {stripeLoading ? "Opening…" : profile.stripe_account_id ? "Manage Stripe" : "Set up payouts"}
@@ -332,7 +332,7 @@ export default function TutorProfile() {
                 {!editMode1 && (
                   <button
                     onClick={() => { setEditMode1(true); setEditMode2(false); setEditMode3(false); }}
-                    className="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                    className="text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors"
                   >
                     Edit
                   </button>
@@ -344,7 +344,7 @@ export default function TutorProfile() {
                   <input
                     className={`w-full rounded-xl border px-3 py-2.5 text-sm text-slate-900 transition-colors ${
                       editMode1
-                        ? "bg-white border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        ? "bg-white border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                         : "bg-slate-50 border-slate-100 cursor-default"
                     }`}
                     value={editName}
@@ -358,7 +358,7 @@ export default function TutorProfile() {
                   <textarea
                     className={`w-full rounded-xl border px-3 py-2.5 text-sm text-slate-900 resize-none min-h-[96px] transition-colors ${
                       editMode1
-                        ? "bg-white border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        ? "bg-white border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                         : "bg-slate-50 border-slate-100 cursor-default"
                     }`}
                     value={editBio}
@@ -381,7 +381,7 @@ export default function TutorProfile() {
                     <input
                       className={`w-full rounded-xl border px-3 py-2.5 text-sm text-slate-900 transition-colors ${
                         editMode1
-                          ? "bg-white border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                          ? "bg-white border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                           : "bg-slate-50 border-slate-100 cursor-default"
                       }`}
                       value={editPhone}
@@ -402,7 +402,7 @@ export default function TutorProfile() {
                     <button
                       onClick={handleSave}
                       disabled={saving}
-                      className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                      className="px-4 py-2 text-sm font-medium bg-brand-600 text-white rounded-xl hover:bg-brand-700 disabled:opacity-50 transition-colors"
                     >
                       {saving ? "Saving..." : "Save"}
                     </button>
@@ -418,7 +418,7 @@ export default function TutorProfile() {
                 {!editMode3 && (
                   <button
                     onClick={() => { setEditMode3(true); setEditMode1(false); setEditMode2(false); }}
-                    className="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                    className="text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors"
                   >
                     Edit
                   </button>
@@ -461,7 +461,7 @@ export default function TutorProfile() {
                         <button
                           onClick={() => setStep(2)}
                           disabled={saving}
-                          className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                          className="px-4 py-2 text-sm font-medium bg-brand-600 text-white rounded-xl hover:bg-brand-700 disabled:opacity-50 transition-colors"
                         >
                           Next
                         </button>
@@ -470,7 +470,7 @@ export default function TutorProfile() {
                         <button
                           onClick={handleSubjectsChange}
                           disabled={saving}
-                          className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                          className="px-4 py-2 text-sm font-medium bg-brand-600 text-white rounded-xl hover:bg-brand-700 disabled:opacity-50 transition-colors"
                         >
                           Save Changes
                         </button>
@@ -506,7 +506,7 @@ export default function TutorProfile() {
                 {!editMode2 && (
                   <button
                     onClick={() => { setEditMode2(true); setEditMode1(false); setEditMode3(false); }}
-                    className="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                    className="text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors"
                   >
                     Edit
                   </button>
@@ -526,7 +526,7 @@ export default function TutorProfile() {
                       <button
                         onClick={handleSaveEducation}
                         disabled={saving}
-                        className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                        className="px-4 py-2 text-sm font-medium bg-brand-600 text-white rounded-xl hover:bg-brand-700 disabled:opacity-50 transition-colors"
                       >
                         {saving ? "Saving..." : "Save"}
                       </button>

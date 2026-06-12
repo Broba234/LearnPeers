@@ -101,18 +101,18 @@ const TimeRangeSlider: React.FC<{
     <div ref={trackRef} className="relative h-8 select-none px-2.5">
       <div className="absolute top-1/2 left-2.5 right-2.5 -translate-y-1/2 h-2 bg-gray-200 rounded-full">
         <div
-          className="absolute h-full bg-gradient-to-r from-[#cf3fad] to-pink-400 rounded-full"
+          className="absolute h-full bg-gradient-to-r from-[#0077be] to-brand-400 rounded-full"
           style={{ left: `${startPct}%`, width: `${endPct - startPct}%` }}
         />
       </div>
       <div
         {...makeHandlers("start")}
-        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#cf3fad] rounded-full shadow-md cursor-grab active:cursor-grabbing touch-none z-10"
+        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#0077be] rounded-full shadow-md cursor-grab active:cursor-grabbing touch-none z-10"
         style={{ left: `calc(${startPct}% + 10px)` }}
       />
       <div
         {...makeHandlers("end")}
-        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#cf3fad] rounded-full shadow-md cursor-grab active:cursor-grabbing touch-none z-10"
+        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#0077be] rounded-full shadow-md cursor-grab active:cursor-grabbing touch-none z-10"
         style={{ left: `calc(${endPct}% + 10px)` }}
       />
     </div>
@@ -228,8 +228,8 @@ export const EventModal: React.FC<EventModalProps> = ({
                     }}
                     className={`inline-flex items-center gap-1 border rounded-lg text-xs px-3 py-1.5 transition-all ${
                       isSelected
-                        ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-blue-700 ring-2 ring-blue-200"
-                        : "bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50"
+                        ? "bg-gradient-to-r from-brand-500 to-brand-500 text-white border-brand-700 ring-2 ring-brand-200"
+                        : "bg-white border-gray-200 hover:border-brand-300 hover:bg-brand-50"
                     }`}
                   >
                     <span className="font-semibold">{obj?.Subjects?.name}</span>
@@ -281,8 +281,8 @@ export const EventModal: React.FC<EventModalProps> = ({
                   onClick={() => toggleDay(day.idx)}
                   className={`w-10 h-10 rounded-full text-sm font-semibold transition-all duration-150 ${
                     selectedDays.includes(day.idx)
-                      ? "bg-[#cf3fad] text-white shadow-md scale-110"
-                      : "bg-white text-gray-500 border border-gray-200 hover:border-[#cf3fad] hover:text-[#cf3fad]"
+                      ? "bg-[#0077be] text-white shadow-md scale-110"
+                      : "bg-white text-gray-500 border border-gray-200 hover:border-[#0077be] hover:text-[#0077be]"
                   }`}
                 >
                   {day.label}
@@ -297,7 +297,7 @@ export const EventModal: React.FC<EventModalProps> = ({
               <Clock className="w-4 h-4" />
               Availability Hours
             </label>
-            <div className="flex justify-between text-sm font-semibold text-[#cf3fad] mb-2 px-2.5">
+            <div className="flex justify-between text-sm font-semibold text-[#0077be] mb-2 px-2.5">
               <span>{slotToLabel(startSlot)}</span>
               <span>{slotToLabel(endSlot)}{endSlot === 48 ? " +1" : ""}</span>
             </div>
@@ -327,7 +327,7 @@ export const EventModal: React.FC<EventModalProps> = ({
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 bg-[#cf3fad] text-white rounded-full hover:bg-[#cf3fad]/80 transition-colors text-sm font-medium"
+              className="px-5 py-2.5 bg-[#0077be] text-white rounded-full hover:bg-[#0077be]/80 transition-colors text-sm font-medium"
             >
               Save Availability
             </button>

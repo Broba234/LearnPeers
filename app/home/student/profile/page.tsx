@@ -132,12 +132,12 @@ export default function StudentProfile() {
               <div className="flex-1 min-w-0">
                 <h2 className="text-base font-semibold text-slate-900">{profile.name}</h2>
                 <p className="text-sm text-slate-400 mt-0.5">{profile.email}</p>
-                <span className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700">Student</span>
+                <span className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-50 text-brand-700">Student</span>
               </div>
               {!editMode ? (
                 <button
                   onClick={() => setEditMode(true)}
-                  className="flex-shrink-0 text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                  className="flex-shrink-0 text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors"
                 >
                   Edit
                 </button>
@@ -152,7 +152,7 @@ export default function StudentProfile() {
                   <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="px-3 py-1.5 text-xs font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                    className="px-3 py-1.5 text-xs font-medium bg-brand-600 text-white rounded-xl hover:bg-brand-700 disabled:opacity-50 transition-colors"
                   >
                     {saving ? "Saving..." : "Save"}
                   </button>
@@ -169,7 +169,7 @@ export default function StudentProfile() {
                 <div>
                   <label className="block text-xs font-medium text-slate-500 mb-1.5">Name</label>
                   <input
-                    className="w-full rounded-xl bg-white border border-slate-300 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full rounded-xl bg-white border border-slate-300 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
                     placeholder="Full name"
@@ -191,7 +191,7 @@ export default function StudentProfile() {
                   </div>
                 ) : (
                   <input
-                    className="w-full rounded-xl bg-white border border-slate-300 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full rounded-xl bg-white border border-slate-300 px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                     value={editPhone}
                     onChange={(e) => setEditPhone(e.target.value)}
                     placeholder="Phone number"

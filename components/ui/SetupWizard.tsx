@@ -21,6 +21,8 @@ import { cn } from "@/lib/utils";
 import { getCountryFromTimezone } from "@/lib/timezone-to-country";
 import SelectSubject from "./components/SelectSubject";
 import WizardTimeSlot from "./components/WizardTimeSlot";
+import EducationStep from "@/components/onboarding/EducationStep";
+import { GraduationCap } from "lucide-react";
 const ArrowLeftIcon = () => (
   <svg
     className="w-5 h-5"
@@ -99,19 +101,21 @@ const SetupWizard = () => {
   const [stripeConnected, setStripeConnected] = useState(false);
   const [stripeLoading, setStripeLoading] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
+  const [educationComplete, setEducationComplete] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Land on step 4 when returning from Stripe onboarding or manual back
+  // Land on the Stripe step when returning from Stripe onboarding or manual back
   useEffect(() => {
     const step = searchParams.get("setup");
     const stored = typeof window !== "undefined" && sessionStorage.getItem("setupReturnStep");
-    if (step === "4" || stored === "4") {
-      setActiveStep(4);
+    if (step === "4" || step === "5" || stored === "4" || stored === "5") {
+      setActiveStep(5);
+      setEducationComplete(true);
       if (typeof window !== "undefined") {
         sessionStorage.removeItem("setupReturnStep");
       }
-      if (step === "4") {
+      if (step === "4" || step === "5") {
         router.replace("/home/tutor", { scroll: false });
       }
     }
@@ -193,7 +197,7 @@ const SetupWizard = () => {
   }, [router]);
 
   useEffect(() => {
-    if (activeStep === 4 && profile?.email) {
+    if (activeStep === 5 && profile?.email) {
       fetch(
         `/api/stripe/connect/status?email=${encodeURIComponent(profile.email)}`
       )
@@ -219,6 +223,14 @@ const SetupWizard = () => {
   const steps = [
     {
       number: 1,
+      title: "Your School",
+      des: "Tell us where you study — university tutors verify with their school email",
+      bigdes:
+        "Tell us where you study. University tutors verify with their school email so students know who they're learning from.",
+      icon: <GraduationCap className="w-4 h-4" />,
+    },
+    {
+      number: 2,
       title: "Personal Information",
       des: "We need some information about you to set up your workspace",
       bigdes:
@@ -226,7 +238,7 @@ const SetupWizard = () => {
       icon: <Users className="w-4 h-4" />,
     },
     {
-      number: 2,
+      number: 3,
       title: "Select Subjects",
       des: "Select the subjects you are proficient in! it will help our students to find you",
       bigdes:
@@ -234,7 +246,7 @@ const SetupWizard = () => {
       icon: <Users className="w-4 h-4" />,
     },
     {
-      number: 3,
+      number: 4,
       title: "Subjects & Pricing",
       des: "Set your session pricing and durations to help students find you!",
       bigdes:
@@ -242,7 +254,7 @@ const SetupWizard = () => {
       icon: <Book className="w-4 h-4" />,
     },
     {
-      number: 4,
+      number: 5,
       title: "Stripe Integrations",
       des: "Connect your Stripe account to start accepting payments! you will be able to accept payments for your services",
       bigdes:
@@ -251,15 +263,7 @@ const SetupWizard = () => {
     },
   ];
   const calculateProgress = () => {
-    if (activeStep === 4) {
-      return 100;
-    } else if (activeStep === 2) {
-      return 25;
-    } else if (activeStep === 3) {
-      return 75;
-    }else{
-      return 0;
-    }
+    return Math.round(((activeStep - 1) / (steps.length - 1)) * 100);
   };
 
   const HandleChangeSetUpStatus = async () => {
@@ -274,8 +278,11 @@ const SetupWizard = () => {
       if (response.ok) {
         router.push("/home/tutor/availability");
       } else {
+        toast.error("Couldn't finish setup — try again");
       }
-    } catch (e) {}
+    } catch (e) {
+      toast.error("Couldn't finish setup — try again");
+    }
   };
   // Returns true if ALL subjects have valid price and duration
   let is_all_selected = selectedSubjectsWithPrice.every(
@@ -285,12 +292,20 @@ const SetupWizard = () => {
 );
   const HandleNextButton = async () => {
     if (activeStep === 1) {
+      // EducationStep persists its own data; just gate on completion
+      if (!educationComplete) {
+        toast.error("Tell us where you study first");
+        return;
+      }
+      setActiveStep(2);
+    }
+    if (activeStep === 2) {
       if (!profile?.email) return;
       if (!formData.phone) return;
       if (!formData.bio) return;
       setLoading(true);
       try {
-        await fetch("/api/profiles/update-bio", {
+        const res = await fetch("/api/profiles/update-bio", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -302,17 +317,22 @@ const SetupWizard = () => {
           }),
         });
         setLoading(false);
+        if (!res.ok) {
+          toast.error("Couldn't save your info — try again");
+          return;
+        }
         setActiveStep(activeStep + 1);
       } catch (e) {
         setLoading(false);
+        toast.error("Couldn't save your info — try again");
       }
     }
-    if (activeStep === 2) {
+    if (activeStep === 3) {
       if (!profile?.email) return;
       if (selectedSubjects.length === 0) return;
       setLoading(true);
       try {
-        await fetch("/api/profiles/update-subjects", {
+        const res = await fetch("/api/profiles/update-subjects", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -321,12 +341,17 @@ const SetupWizard = () => {
           }),
         });
         setLoading(false);
+        if (!res.ok) {
+          toast.error("Couldn't save your subjects — try again");
+          return;
+        }
         setActiveStep(activeStep + 1);
       } catch (e) {
         setLoading(false);
+        toast.error("Couldn't save your subjects — try again");
       }
     }
-    if (activeStep === 3) {
+    if (activeStep === 4) {
       if (!profile?.email) return;
       if (selectedSubjectsWithPrice.length === 0) return;
       if(!is_all_selected) return;
@@ -343,12 +368,15 @@ const SetupWizard = () => {
         setLoading(false);
         if(response.status === 200){
           setActiveStep(activeStep + 1);
+        } else {
+          toast.error("Couldn't save your pricing — try again");
         }
       } catch (e) {
         setLoading(false);
+        toast.error("Couldn't save your pricing — try again");
       }
     }
-    if (activeStep === 4) {
+    if (activeStep === 5) {
       if (formData.is_tutor && !stripeConnected) return;
       HandleChangeSetUpStatus();
     }
@@ -368,7 +396,7 @@ const SetupWizard = () => {
                 {/* Animated Gradient Overlay */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                   <div
-                    className={`absolute w-full h-full bg-gradient-to-tr from-blue-50/30 via-transparent to-transparent transition-all duration-700 ease-out ${
+                    className={`absolute w-full h-full bg-gradient-to-tr from-brand-50/30 via-transparent to-transparent transition-all duration-700 ease-out ${
                       activeStep != 1
                         ? "opacity-100 translate-x-0 translate-y-0"
                         : "opacity-0 translate-x-full -translate-y-full"
@@ -396,7 +424,7 @@ const SetupWizard = () => {
                         {step.number < activeStep ? (
                           <CheckCircle className="w-5 h-5" />
                         ) : step.number == activeStep ? (
-                          <div className="w-5 h-5 flex items-center justify-center bg-[#cf3fad] rounded-full">
+                          <div className="w-5 h-5 flex items-center justify-center bg-brand-600 rounded-full">
                             <div className="w-3 h-3 bg-white rounded-full"></div>
                           </div>
                         ) : (
@@ -429,7 +457,7 @@ const SetupWizard = () => {
                       </p>
                     </div>
                     <div className="flex items-center">
-                      <div className="text-2xl font-bold bg-[#cf3fad] bg-clip-text text-transparent">
+                      <div className="text-2xl font-bold text-brand-600">
                         {calculateProgress()}%
                       </div>
                       <span className="text-sm text-gray-500 ml-1">
@@ -443,7 +471,7 @@ const SetupWizard = () => {
                     <div className="h-4 bg-gray-100/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/30 shadow-inner">
                       {/* Progress fill with gradient and animation */}
                       <div
-                        className="h-full relative bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-2xl transition-all duration-1000 ease-out"
+                        className="h-full relative bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 rounded-2xl transition-all duration-1000 ease-out"
                         style={{ width: `${calculateProgress()}%` }}
                       >
                         {/* Moving highlight */}
@@ -461,7 +489,7 @@ const SetupWizard = () => {
                         left: `calc(${calculateProgress()}% - 12px)`,
                       }}
                     >
-                      <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-200">
+                      <div className="w-6 h-6 bg-gradient-to-br from-brand-500 to-brand-600 rounded-full flex items-center justify-center shadow-lg shadow-brand-200">
                         <svg
                           className="w-3 h-3 text-white"
                           fill="none"
@@ -476,7 +504,7 @@ const SetupWizard = () => {
                           />
                         </svg>
                       </div>
-                      {/* <div className="text-xs font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mt-1">
+                      {/* <div className="text-xs font-semibold bg-gradient-to-r from-brand-600 to-brand-600 bg-clip-text text-transparent mt-1">
         Step {activeStep}
       </div> */}
                     </div>
@@ -492,7 +520,7 @@ const SetupWizard = () => {
                 <div className="mb-10">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="inline-flex items-center text-[#CF3FAD] text-sm font-medium mb-3">
+                      <div className="inline-flex items-center text-brand-600 text-sm font-medium mb-3">
                         Step {activeStep} of {steps.length}
                       </div>
                       <h2 className="text-2xl font-bold text-gray-900 mb-3">
@@ -507,6 +535,20 @@ const SetupWizard = () => {
                 <div className="flex-1 overflow-auto scrollbar-hide relative">
                   <AnimatePresence mode="wait">
                     {steps[activeStep - 1].number == 1 && (
+                      <motion.div
+                        key="step-education"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                      >
+                        <EducationStep
+                          requireVerification={true}
+                          onComplete={setEducationComplete}
+                        />
+                      </motion.div>
+                    )}
+                    {steps[activeStep - 1].number == 2 && (
                       <motion.div
                         key="step-1"
                         initial={{ opacity: 0, x: 20 }}
@@ -577,12 +619,12 @@ const SetupWizard = () => {
                           </label>
 
                           <div className="relative">
-                            <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-brand-300 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
 
                             <motion.div
                               whileHover={{ scale: 1.005 }}
                               transition={{ duration: 0.2 }}
-                              className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-blue-300 group-focus-within:border-blue-400 group-focus-within:shadow-lg group-focus-within:shadow-blue-100"
+                              className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-brand-300 group-focus-within:border-brand-400 group-focus-within:shadow-lg group-focus-within:shadow-brand-100"
                             >
                               <div className="flex items-center">
                                 <div className="flex-1 px-4">
@@ -598,7 +640,7 @@ const SetupWizard = () => {
                               </div>
                             </motion.div>
 
-                            <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent opacity-50" />
+                            <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-brand-200 to-transparent opacity-50" />
                           </div>
                         </motion.div>
 
@@ -614,12 +656,12 @@ const SetupWizard = () => {
                           </label>
 
                           <div className="relative">
-                            <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
+                            <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-brand-300 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
 
                             <motion.div
                               whileHover={{ scale: 1.005 }}
                               transition={{ duration: 0.2 }}
-                              className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-blue-300 group-focus-within:border-blue-400 group-focus-within:shadow-lg group-focus-within:shadow-blue-100"
+                              className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-brand-300 group-focus-within:border-brand-400 group-focus-within:shadow-lg group-focus-within:shadow-brand-100"
                             >
                               <div className="flex items-center">
                                 <div className="flex-1 px-4">
@@ -635,7 +677,7 @@ const SetupWizard = () => {
                               </div>
                             </motion.div>
 
-                            <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent opacity-50" />
+                            <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-brand-200 to-transparent opacity-50" />
                           </div>
                         </motion.div>
 
@@ -652,7 +694,7 @@ const SetupWizard = () => {
                       </motion.div>
                     )}
 
-                    {steps[activeStep - 1].number == 2 && (
+                    {steps[activeStep - 1].number == 3 && (
                       <motion.div
                         key="step-2"
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -667,9 +709,9 @@ const SetupWizard = () => {
                         />
                       </motion.div>
                     )}
-                    {steps[activeStep - 1].number == 3 && (
+                    {steps[activeStep - 1].number == 4 && (
                       <motion.div
-                        key="step-2"
+                        key="step-3"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
@@ -683,7 +725,7 @@ const SetupWizard = () => {
                       </motion.div>
                     )}
 
-                    {steps[activeStep - 1].number == 4 && (
+                    {steps[activeStep - 1].number == 5 && (
                       <motion.div
                         key="step-4"
                         initial={{ opacity: 0, y: 20 }}
@@ -723,7 +765,7 @@ const SetupWizard = () => {
                                   );
                                   const data = await res.json();
                                   if (data.url) {
-                                    sessionStorage.setItem("setupReturnStep", "4");
+                                    sessionStorage.setItem("setupReturnStep", "5");
                                     window.location.href = data.url;
                                   } else {
                                     setStripeLoading(false);
@@ -749,7 +791,7 @@ const SetupWizard = () => {
                             <motion.button
                               whileHover={{
                                 scale: 1.05,
-                                boxShadow: "0 20px 40px rgba(139, 92, 246, 0.3)",
+                                boxShadow: "0 20px 40px rgba(0, 119, 190, 0.3)",
                               }}
                               whileTap={{ scale: 0.98 }}
                               initial={{ scale: 0.9, opacity: 0 }}
@@ -780,7 +822,7 @@ const SetupWizard = () => {
                                   );
                                   const data = await res.json();
                                   if (data.url) {
-                                    sessionStorage.setItem("setupReturnStep", "4");
+                                    sessionStorage.setItem("setupReturnStep", "5");
                                     window.location.href = data.url;
                                   } else {
                                     setStripeLoading(false);
@@ -791,12 +833,12 @@ const SetupWizard = () => {
                                   toast.error("Failed to connect Stripe");
                                 }
                               }}
-                              className="mx-auto group relative flex items-center gap-4 px-6 py-4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold text-lg shadow-lg hover:shadow-2xl transition-all duration-300 focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed"
+                              className="mx-auto group relative flex items-center gap-4 px-6 py-4 rounded-full bg-gradient-to-r from-brand-500 to-brand-500 text-white font-semibold text-lg shadow-lg hover:shadow-2xl transition-all duration-300 focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                               <motion.div
                                 whileHover={{ rotate: [-5, 5, -5] }}
                                 transition={{ duration: 0.5 }}
-                                className="bg-white rounded-2xl px-4 py-2 flex items-center justify-center text-purple-600 font-bold text-lg"
+                                className="bg-white rounded-2xl px-4 py-2 flex items-center justify-center text-brand-600 font-bold text-lg"
                               >
                                 stripe
                               </motion.div>
@@ -817,7 +859,7 @@ const SetupWizard = () => {
                                 </motion.div>
                               )}
                               <motion.div
-                                className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 blur-xl opacity-0 -z-10"
+                                className="absolute inset-0 rounded-full bg-gradient-to-r from-brand-500 to-brand-500 blur-xl opacity-0 -z-10"
                                 animate={{ opacity: [0, 0.3, 0] }}
                                 transition={{
                                   duration: 2,
@@ -847,20 +889,22 @@ const SetupWizard = () => {
                     type="button"
                     disabled={
                       loading ||
-                      (activeStep == 3 && !is_all_selected) ||
-                      (activeStep == 4 && formData.is_tutor && !stripeConnected)
+                      (activeStep == 1 && !educationComplete) ||
+                      (activeStep == 4 && !is_all_selected) ||
+                      (activeStep == 5 && formData.is_tutor && !stripeConnected)
                     }
                     onClick={() => HandleNextButton()}
                     className={`
-    hidden md:flex items-center gap-2 px-6 py-3 
+    hidden md:flex items-center gap-2 px-6 py-3
     text-white rounded-full font-medium
     transition-all duration-300 ease-in-out
     ${
       loading ||
-      (activeStep == 3 && !is_all_selected) ||
-      (activeStep == 4 && formData.is_tutor && !stripeConnected)
-        ? "bg-[#CF3FAD]/60 cursor-not-allowed"
-        : "bg-[#CF3FAD] hover:bg-[#CF3FAD]/80 cursor-pointer"
+      (activeStep == 1 && !educationComplete) ||
+      (activeStep == 4 && !is_all_selected) ||
+      (activeStep == 5 && formData.is_tutor && !stripeConnected)
+        ? "bg-brand-600/60 cursor-not-allowed"
+        : "bg-brand-600 hover:bg-brand-700 cursor-pointer"
     }
   `}
                   >
@@ -882,7 +926,7 @@ const SetupWizard = () => {
                   <button
                     type="button"
                     onClick={() => HandleNextButton()}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium"
+                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-600 text-white rounded-xl hover:bg-brand-700 transition-colors font-medium"
                   >
                     Continue
                     <ChevronRight className="w-5 h-5" />

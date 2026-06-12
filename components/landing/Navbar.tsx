@@ -38,8 +38,8 @@ export default function Navbar() {
             </div>
             <div className="hidden sm:flex items-center gap-4 absolute right-8 top-1/2 -translate-y-1/2">
                 <Link href="#about" className="text-gray-700 hover:text-blue-600 font-medium">About</Link>
-                <Link href="/auth/login" className="inline-flex items-center gap-2 ml-2 py-2 px-4 bg-[#1559C6] text-white rounded-full font-bold hover:bg-blue-700 transition-all duration-300 hover:scale-105 shadow-lg">
-                        <div className="w-2 h-2 bg-[#1559C6] rounded-full"></div>
+                <Link href="/auth/login" className="inline-flex items-center gap-2 ml-2 py-2 px-4 bg-[#0077be] text-white rounded-full font-bold hover:bg-blue-700 transition-all duration-300 hover:scale-105 shadow-lg">
+                        <div className="w-2 h-2 bg-[#0077be] rounded-full"></div>
                         Log In
                 </Link>
             </div>
@@ -64,7 +64,7 @@ export default function Navbar() {
                     <div className="flex flex-col p-2">
                         <Link onClick={() => setMenuOpen(false)} href="/#how-it-works" className="px-3 py-3 rounded-lg text-gray-800 hover:bg-gray-50">How it Works</Link>
                         <Link onClick={() => setMenuOpen(false)} href="#about" className="px-3 py-3 rounded-lg text-gray-800 hover:bg-gray-50">About</Link>
-                        <Link onClick={() => setMenuOpen(false)} href="/auth/login" className="mt-1 px-3 py-3 rounded-lg bg-[#1559C6] text-white text-center font-semibold hover:bg-blue-700">Log In</Link>
+                        <Link onClick={() => setMenuOpen(false)} href="/auth/login" className="mt-1 px-3 py-3 rounded-lg bg-[#0077be] text-white text-center font-semibold hover:bg-blue-700">Log In</Link>
                     </div>
                 </div>
             </div>

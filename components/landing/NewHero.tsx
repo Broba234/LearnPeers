@@ -16,11 +16,11 @@ import StudentIllustration from './illustrations/StudentIllustration';
 import TutorIllustration from './illustrations/TutorIllustration';
 
 const linkPrimaryStudent =
-  'group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20 transition hover:shadow-xl hover:shadow-blue-500/30 hover:brightness-[1.03] active:scale-[0.98] sm:text-base';
+  'group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-blue-600 via-brand-600 to-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 ring-1 ring-white/20 transition hover:shadow-xl hover:shadow-blue-500/30 hover:brightness-[1.03] active:scale-[0.98] sm:text-base';
 const linkSecondaryStudent =
   'inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200/90 bg-white/90 px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-sm transition hover:border-blue-300 hover:bg-white hover:shadow-md active:scale-[0.98] sm:text-base';
 const linkPrimaryTutor =
-  'group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 via-purple-600 to-purple-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 ring-1 ring-white/20 transition hover:shadow-xl hover:shadow-violet-500/30 hover:brightness-[1.03] active:scale-[0.98] sm:text-base';
+  'group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 via-brand-600 to-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/25 ring-1 ring-white/20 transition hover:shadow-xl hover:shadow-violet-500/30 hover:brightness-[1.03] active:scale-[0.98] sm:text-base';
 const linkSecondaryTutor =
   'inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200/90 bg-white/90 px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur-sm transition hover:border-violet-300 hover:bg-white hover:shadow-md active:scale-[0.98] sm:text-base';
 
@@ -56,8 +56,8 @@ export default function NewHero() {
           <circle cx="200" cy="200" r="180" fill="url(#leftBlob)" />
           <defs>
             <radialGradient id="leftBlob" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#93c5fd" />
-              <stop offset="100%" stopColor="#dbeafe" stopOpacity="0" />
+              <stop offset="0%" stopColor="#84c6ec" />
+              <stop offset="100%" stopColor="#d8eefa" stopOpacity="0" />
             </radialGradient>
           </defs>
         </svg>
@@ -84,7 +84,7 @@ export default function NewHero() {
           initial={false}
           animate={{ opacity: activeSection === 'tutor' ? 1 : 0 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
-          className="absolute inset-0 bg-gradient-to-br from-violet-100/45 via-transparent to-fuchsia-50/25"
+          className="absolute inset-0 bg-gradient-to-br from-violet-100/45 via-transparent to-brand-50/25"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-white/92 via-white/78 to-white/35" />
       </div>
@@ -106,7 +106,7 @@ export default function NewHero() {
           onClick={() => handleSectionChange('tutor')}
           className={`relative h-3.5 w-3.5 rounded-full transition-all duration-300 ${
             activeSection === 'tutor'
-              ? 'scale-110 bg-purple-600 shadow-md shadow-purple-500/50 ring-2 ring-white'
+              ? 'scale-110 bg-brand-600 shadow-md shadow-brand-500/50 ring-2 ring-white'
               : 'bg-slate-300/90 hover:bg-slate-400'
           }`}
         />
@@ -130,7 +130,7 @@ export default function NewHero() {
                   transition={{ delay: 0.25 }}
                   className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl lg:leading-[1.1]"
                 >
-                  <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-500 bg-clip-text text-transparent drop-shadow-sm">
+                  <span className="bg-gradient-to-r from-blue-600 via-brand-600 to-brand-500 bg-clip-text text-transparent drop-shadow-sm">
                     Learn faster
                   </span>
                   <br />
@@ -216,7 +216,7 @@ export default function NewHero() {
                   transition={{ delay: 0.25 }}
                   className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl lg:leading-[1.1]"
                 >
-                  <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-purple-500 bg-clip-text text-transparent drop-shadow-sm">
+                  <span className="bg-gradient-to-r from-violet-600 via-brand-600 to-brand-500 bg-clip-text text-transparent drop-shadow-sm">
                     Monetize your knowledge
                   </span>
                   <br />
@@ -288,7 +288,7 @@ export default function NewHero() {
           </AnimatePresence>
 
           <div className="relative lg:col-span-1">
-            <div className="pointer-events-none absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-blue-200/20 via-indigo-100/10 to-violet-200/20 blur-3xl lg:-inset-8" />
+            <div className="pointer-events-none absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-blue-200/20 via-brand-100/10 to-violet-200/20 blur-3xl lg:-inset-8" />
             <div className="relative h-[220px] w-full sm:h-[300px] md:h-[400px] lg:h-[600px]">
               <div className="absolute inset-0 rounded-[2rem] ring-1 ring-white/60 lg:rounded-[2.5rem]" />
               <motion.div

@@ -26,10 +26,8 @@ export default function HomeRedirect() {
   }, [router]);
 
       return (
-        <div className="flex h-screen items-center justify-center" style={{
-          background: 'linear-gradient(to bottom, #2b3340, #23272f, #181a1b)'
-        }}>
-          <div className="text-white text-lg">Redirecting to home...</div>
+        <div className="flex h-screen items-center justify-center bg-slate-50">
+          <div className="text-sm text-slate-400">Redirecting to home...</div>
         </div>
       );
 }

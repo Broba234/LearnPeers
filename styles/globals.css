@@ -35,7 +35,7 @@
 .feature-card-front {
   background: rgba(30, 58, 138, 0.85);
   color: #fff;
-  border: 2px solid #2563eb;
+  border: 2px solid #0077be;
   z-index: 2;
 }
 .feature-card-back {

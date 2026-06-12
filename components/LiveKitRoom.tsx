@@ -714,7 +714,7 @@ function MainContent({ onDisconnect, userRole, userName }: { onDisconnect?: () =
             onClick={() => setActiveView('file')}
             aria-label="File"
             title="File"
-            className={`p-2.5 rounded-2xl backdrop-blur shadow-lg border transition-colors ${activeView==='file' ? 'bg-blue-600/90 text-white border-blue-300' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+            className={`p-2.5 rounded-2xl backdrop-blur shadow-lg border transition-colors ${activeView==='file' ? 'bg-brand-600/90 text-white border-brand-300' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -727,7 +727,7 @@ function MainContent({ onDisconnect, userRole, userName }: { onDisconnect?: () =
             onClick={() => setActiveView('screen')}
             aria-label="Screen"
             title="Screen"
-            className={`p-2.5 rounded-2xl backdrop-blur shadow-lg border transition-colors ${activeView==='screen' ? 'bg-blue-600/90 text-white border-blue-300' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+            className={`p-2.5 rounded-2xl backdrop-blur shadow-lg border transition-colors ${activeView==='screen' ? 'bg-brand-600/90 text-white border-brand-300' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
@@ -849,7 +849,7 @@ const Excalidraw = dynamic(
             <p className="text-gray-600 mb-4">Whiteboard failed to load</p>
             <button 
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-brand-500 text-white rounded hover:bg-brand-600"
             >
               Retry
             </button>
@@ -890,7 +890,7 @@ class ExcalidrawErrorBoundary extends React.Component<
             <p className="text-gray-600 mb-4">Failed to load whiteboard</p>
             <button 
               onClick={() => this.setState({ hasError: false })}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-brand-500 text-white rounded hover:bg-brand-600"
             >
               Retry
             </button>
@@ -1192,7 +1192,7 @@ function FloatingVideos({ allScreenShares, screenTrackRef, onSelectScreenShare }
               <div className="absolute bottom-2 left-2 bg-black/50 px-2 py-1 rounded text-[10px] text-white">{trackRef.participant.name || participantIdentity}</div>
               {/* Screen share indicator + switch */}
               {sharing && (
-                <button onClick={() => participantShare && onSelectScreenShare(participantShare)} className={`absolute top-1 left-1 px-2 py-1 rounded-md text-[10px] font-semibold shadow ${isActive ? 'bg-green-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-500'}`} title={isActive ? 'Viewing screen' : `View ${participantIdentity}'s screen`}>
+                <button onClick={() => participantShare && onSelectScreenShare(participantShare)} className={`absolute top-1 left-1 px-2 py-1 rounded-md text-[10px] font-semibold shadow ${isActive ? 'bg-green-600 text-white' : 'bg-brand-600 text-white hover:bg-brand-500'}`} title={isActive ? 'Viewing screen' : `View ${participantIdentity}'s screen`}>
                   {isActive ? 'LIVE' : 'SCREEN'}
                 </button>
               )}
@@ -1223,7 +1223,7 @@ function FloatingVideos({ allScreenShares, screenTrackRef, onSelectScreenShare }
               <div className="absolute bottom-2 left-2 bg-black/50 px-2 py-1 rounded text-[10px] text-white">{trackRef.participant.name || participantIdentity}</div>
               {/* Screen share indicator + switch */}
               {sharing && (
-                <button onClick={() => participantShare && onSelectScreenShare(participantShare)} className={`absolute top-1 left-1 px-2 py-1 rounded-md text-[10px] font-semibold shadow ${isActive ? 'bg-green-600 text-white' : 'bg-blue-600 text-white hover:bg-blue-500'}`} title={isActive ? 'Viewing screen' : `View ${participantIdentity}'s screen`}>
+                <button onClick={() => participantShare && onSelectScreenShare(participantShare)} className={`absolute top-1 left-1 px-2 py-1 rounded-md text-[10px] font-semibold shadow ${isActive ? 'bg-green-600 text-white' : 'bg-brand-600 text-white hover:bg-brand-500'}`} title={isActive ? 'Viewing screen' : `View ${participantIdentity}'s screen`}>
                   {isActive ? 'LIVE' : 'SCREEN'}
                 </button>
               )}
@@ -1322,7 +1322,7 @@ function FileViewer({
                     setRetryCount((c) => c + 1);
                     setImageStatus('loading');
                   }}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
+                  className="px-4 py-2 bg-brand-500 text-white rounded hover:bg-brand-600 mr-2"
                 >
                   Retry
                 </button>
@@ -1362,7 +1362,7 @@ function FileViewer({
           <a
             href={file.url}
             download={file.name}
-            className="text-blue-300 hover:underline mt-4 inline-block"
+            className="text-brand-300 hover:underline mt-4 inline-block"
           >
             Download File
           </a>

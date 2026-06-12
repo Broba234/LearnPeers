@@ -126,13 +126,13 @@ const uniqueRoles = Array.from(new Set(users.map((user: any) => user.role)));
 
         {/* Loading State */}
         {loading && (
-          <div className="mb-6 p-4 bg-gradient-to-b from-[#F8F9FD] to-gray-400 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div className="mb-6 p-4 bg-gradient-to-b from-[#F8F9FD] to-gray-400 border border-brand-200 dark:border-brand-800 rounded-lg">
             <div className="flex items-center">
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-brand-500 dark:text-brand-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <span className="text-blue-800 dark:text-blue-300">
+              <span className="text-brand-800 dark:text-brand-300">
                 Loading users data...
               </span>
             </div>
@@ -155,7 +155,7 @@ const uniqueRoles = Array.from(new Set(users.map((user: any) => user.role)));
                 setCurrentPage(1);
               }}
               placeholder="Search by name, email, phone..."
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
             />
           </div>
           
@@ -170,7 +170,7 @@ const uniqueRoles = Array.from(new Set(users.map((user: any) => user.role)));
                 setSelectedRole(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
             >
               <option value="all">All Roles</option>
               {uniqueRoles.map(role => (
@@ -228,8 +228,8 @@ const uniqueRoles = Array.from(new Set(users.map((user: any) => user.role)));
                             {user.avatar ? (
                               <img className="h-10 w-10 rounded-full" src={user.avatar} alt={user.name} />
                             ) : (
-                              <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                                <span className="text-blue-600 dark:text-blue-300 font-medium">
+                              <div className="h-10 w-10 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center">
+                                <span className="text-brand-600 dark:text-brand-300 font-medium">
                                   {user.name?.charAt(0).toUpperCase() || 'U'}
                                 </span>
                               </div>
@@ -256,7 +256,7 @@ const uniqueRoles = Array.from(new Set(users.map((user: any) => user.role)));
                           user.role === 'admin' 
                             ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' 
                             : user.role === 'tutor'
-                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+                            ? 'bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-300'
                             : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                         }`}>
                           {user.role?.toUpperCase() || 'USER'}
@@ -370,7 +370,7 @@ const uniqueRoles = Array.from(new Set(users.map((user: any) => user.role)));
                       onClick={() => handlePageChange(page)}
                       className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                         currentPage === page
-                          ? 'z-10 bg-blue-50 dark:bg-blue-900 border-blue-500 dark:border-blue-600 text-blue-600 dark:text-blue-300'
+                          ? 'z-10 bg-brand-50 dark:bg-brand-900 border-brand-500 dark:border-brand-600 text-brand-600 dark:text-brand-300'
                           : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
                       }`}
                     >

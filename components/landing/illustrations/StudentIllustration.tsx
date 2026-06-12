@@ -28,26 +28,26 @@ export default function StudentIllustration() {
         transition={{ delay: 0.3, duration: 0.6 }}
       >
         {/* Laptop screen */}
-        <rect x="155" y="180" width="190" height="130" rx="8" fill="#1e3a8a" />
-        <rect x="163" y="188" width="174" height="114" rx="4" fill="#dbeafe" />
+        <rect x="155" y="180" width="190" height="130" rx="8" fill="#0e4360" />
+        <rect x="163" y="188" width="174" height="114" rx="4" fill="#d8eefa" />
 
         {/* Screen content - code lines */}
-        <rect x="175" y="205" width="80" height="6" rx="3" fill="#3b82f6" opacity="0.7" />
-        <rect x="175" y="218" width="110" height="6" rx="3" fill="#6366f1" opacity="0.5" />
-        <rect x="175" y="231" width="60" height="6" rx="3" fill="#3b82f6" opacity="0.7" />
-        <rect x="175" y="244" width="95" height="6" rx="3" fill="#818cf8" opacity="0.5" />
-        <rect x="175" y="257" width="130" height="6" rx="3" fill="#3b82f6" opacity="0.4" />
-        <rect x="175" y="270" width="70" height="6" rx="3" fill="#6366f1" opacity="0.6" />
+        <rect x="175" y="205" width="80" height="6" rx="3" fill="#0077be" opacity="0.7" />
+        <rect x="175" y="218" width="110" height="6" rx="3" fill="#1f8dcc" opacity="0.5" />
+        <rect x="175" y="231" width="60" height="6" rx="3" fill="#0077be" opacity="0.7" />
+        <rect x="175" y="244" width="95" height="6" rx="3" fill="#4ca9de" opacity="0.5" />
+        <rect x="175" y="257" width="130" height="6" rx="3" fill="#0077be" opacity="0.4" />
+        <rect x="175" y="270" width="70" height="6" rx="3" fill="#1f8dcc" opacity="0.6" />
 
         {/* Screen chart */}
-        <rect x="280" y="230" width="10" height="30" rx="2" fill="#3b82f6" opacity="0.6" />
-        <rect x="295" y="220" width="10" height="40" rx="2" fill="#6366f1" opacity="0.7" />
-        <rect x="310" y="210" width="10" height="50" rx="2" fill="#3b82f6" opacity="0.8" />
+        <rect x="280" y="230" width="10" height="30" rx="2" fill="#0077be" opacity="0.6" />
+        <rect x="295" y="220" width="10" height="40" rx="2" fill="#1f8dcc" opacity="0.7" />
+        <rect x="310" y="210" width="10" height="50" rx="2" fill="#0077be" opacity="0.8" />
 
         {/* Laptop keyboard */}
         <path
           d="M140 310 L155 310 L155 312 Q250 325 345 312 L345 310 L360 310 L370 330 Q250 345 130 330 Z"
-          fill="#1e3a8a"
+          fill="#0e4360"
         />
         <ellipse cx="250" cy="320" rx="110" ry="8" fill="#1e40af" opacity="0.3" />
       </motion.g>
@@ -62,11 +62,11 @@ export default function StudentIllustration() {
           animate={{ y: [0, -8, 0] }}
           transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
         >
-          <rect x="80" y="220" width="45" height="55" rx="4" fill="#3b82f6" />
-          <rect x="83" y="223" width="39" height="49" rx="2" fill="#dbeafe" />
-          <rect x="89" y="232" width="27" height="3" rx="1.5" fill="#93c5fd" />
-          <rect x="89" y="239" width="20" height="3" rx="1.5" fill="#93c5fd" />
-          <rect x="89" y="246" width="24" height="3" rx="1.5" fill="#93c5fd" />
+          <rect x="80" y="220" width="45" height="55" rx="4" fill="#0077be" />
+          <rect x="83" y="223" width="39" height="49" rx="2" fill="#d8eefa" />
+          <rect x="89" y="232" width="27" height="3" rx="1.5" fill="#84c6ec" />
+          <rect x="89" y="239" width="20" height="3" rx="1.5" fill="#84c6ec" />
+          <rect x="89" y="246" width="24" height="3" rx="1.5" fill="#84c6ec" />
         </motion.g>
       </motion.g>
 
@@ -121,7 +121,7 @@ export default function StudentIllustration() {
             delay: 1,
           }}
         >
-          <polygon points="140,130 180,115 220,130 180,145" fill="#3b82f6" />
+          <polygon points="140,130 180,115 220,130 180,145" fill="#0077be" />
           <polygon points="140,130 180,145 180,150 140,135" fill="#2563eb" />
           <polygon points="220,130 180,145 180,150 220,135" fill="#1d4ed8" />
           {/* Tassel */}
@@ -146,7 +146,7 @@ export default function StudentIllustration() {
             cy="280"
             rx="30"
             ry="10"
-            stroke="#818cf8"
+            stroke="#4ca9de"
             strokeWidth="2"
             fill="none"
             opacity="0.6"
@@ -156,7 +156,7 @@ export default function StudentIllustration() {
             cy="280"
             rx="30"
             ry="10"
-            stroke="#818cf8"
+            stroke="#4ca9de"
             strokeWidth="2"
             fill="none"
             opacity="0.6"
@@ -167,14 +167,14 @@ export default function StudentIllustration() {
             cy="280"
             rx="30"
             ry="10"
-            stroke="#818cf8"
+            stroke="#4ca9de"
             strokeWidth="2"
             fill="none"
             opacity="0.6"
             transform="rotate(120 400 280)"
           />
         </motion.g>
-        <circle cx="400" cy="280" r="5" fill="#6366f1" />
+        <circle cx="400" cy="280" r="5" fill="#1f8dcc" />
       </motion.g>
 
       {/* Pencil - bottom left */}
@@ -203,7 +203,7 @@ export default function StudentIllustration() {
           />
           <polygon
             points="88,365 95,355 100,362"
-            fill="#1e3a8a"
+            fill="#0e4360"
             transform="rotate(-25 94 360)"
           />
         </motion.g>
@@ -214,7 +214,7 @@ export default function StudentIllustration() {
         cx="120"
         cy="170"
         r="4"
-        fill="#93c5fd"
+        fill="#84c6ec"
         animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.3, 1] }}
         transition={{ repeat: Infinity, duration: 2.5 }}
       />
@@ -222,7 +222,7 @@ export default function StudentIllustration() {
         cx="420"
         cy="210"
         r="3"
-        fill="#818cf8"
+        fill="#4ca9de"
         animate={{ opacity: [0.3, 0.8, 0.3], scale: [1, 1.4, 1] }}
         transition={{ repeat: Infinity, duration: 3, delay: 0.5 }}
       />
@@ -230,7 +230,7 @@ export default function StudentIllustration() {
         cx="340"
         cy="370"
         r="5"
-        fill="#93c5fd"
+        fill="#84c6ec"
         animate={{ opacity: [0.3, 0.7, 0.3], scale: [1, 1.2, 1] }}
         transition={{ repeat: Infinity, duration: 3.5, delay: 1 }}
       />
@@ -238,7 +238,7 @@ export default function StudentIllustration() {
         cx="150"
         cy="380"
         r="3"
-        fill="#c4b5fd"
+        fill="#84c6ec"
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ repeat: Infinity, duration: 2, delay: 0.8 }}
       />
@@ -246,9 +246,9 @@ export default function StudentIllustration() {
       {/* Gradients */}
       <defs>
         <radialGradient id="studentBg" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#dbeafe" />
-          <stop offset="70%" stopColor="#eff6ff" />
-          <stop offset="100%" stopColor="#eff6ff" stopOpacity="0" />
+          <stop offset="0%" stopColor="#d8eefa" />
+          <stop offset="70%" stopColor="#eff8fd" />
+          <stop offset="100%" stopColor="#eff8fd" stopOpacity="0" />
         </radialGradient>
       </defs>
     </svg>

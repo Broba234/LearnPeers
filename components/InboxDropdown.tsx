@@ -100,7 +100,7 @@ const InboxDropdown: React.FC<InboxDropdownProps> = ({ isOpen, onClose }) => {
           </button>
         </div>
         {hasNewRequests && (
-          <p className="text-sm text-blue-400 mt-1">
+          <p className="text-sm text-brand-400 mt-1">
             {pendingRequests.length} new request{pendingRequests.length !== 1 ? 's' : ''}
           </p>
         )}
@@ -131,7 +131,7 @@ const InboxDropdown: React.FC<InboxDropdownProps> = ({ isOpen, onClose }) => {
                         {formatTimeAgo(request.requestedAt)}
                       </span>
                     </div>
-                    <p className="text-sm text-blue-400 mb-1">{request.subject}</p>
+                    <p className="text-sm text-brand-400 mb-1">{request.subject}</p>
                     {request.message && (
                       <p className="text-sm text-gray-300 mb-3 line-clamp-2">{request.message}</p>
                     )}
@@ -156,7 +156,7 @@ const InboxDropdown: React.FC<InboxDropdownProps> = ({ isOpen, onClose }) => {
                     {request.status === 'accepted' && (
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-green-400">✓ Accepted</span>
-                        <button className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-lg transition-colors">
+                        <button className="px-3 py-1 bg-brand-500 hover:bg-brand-600 text-white text-sm rounded-lg transition-colors">
                           Start Session
                         </button>
                       </div>
@@ -175,7 +175,7 @@ const InboxDropdown: React.FC<InboxDropdownProps> = ({ isOpen, onClose }) => {
 
       {hasNewRequests && (
         <div className="p-4 border-t border-white/10">
-          <button className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors text-sm">
+          <button className="w-full py-2 px-4 bg-brand-500 hover:bg-brand-600 text-white rounded-lg transition-colors text-sm">
             View All Requests
           </button>
         </div>

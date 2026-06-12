@@ -32,14 +32,14 @@ const CATEGORY_ICONS: Record<string, any> = {
 
 // Color mapping for different categories
 const CATEGORY_COLORS: Record<string, string> = {
-  "Business": "from-blue-500 to-indigo-500",
-  "English": "from-pink-500 to-purple-500",
-  "French": "from-rose-500 to-pink-500",
+  "Business": "from-brand-500 to-brand-500",
+  "English": "from-brand-500 to-brand-500",
+  "French": "from-rose-500 to-brand-500",
   "Health and Phys Ed": "from-emerald-500 to-teal-500",
-  "Mathematics": "from-purple-500 to-indigo-500",
-  "Science": "from-blue-500 to-cyan-500",
+  "Mathematics": "from-brand-500 to-brand-500",
+  "Science": "from-brand-500 to-brand-500",
   "Social Sciences": "from-yellow-500 to-orange-500",
-  "The Arts": "from-violet-500 to-purple-500",
+  "The Arts": "from-brand-500 to-brand-500",
 };
 
 // Default categories data in case none is provided
@@ -296,8 +296,8 @@ export default function SelectSubject({
           Search Subjects
         </label>
         <div className="relative">
-          <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
-          <div className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-purple-300 group-focus-within:border-purple-400 group-focus-within:shadow-lg group-focus-within:shadow-purple-100">
+          <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-brand-300 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
+          <div className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-brand-300 group-focus-within:border-brand-400 group-focus-within:shadow-lg group-focus-within:shadow-brand-100">
             <div className="flex items-center">
               <div className="pl-4 text-gray-400">
                 <Search size={18} />
@@ -321,7 +321,7 @@ export default function SelectSubject({
               )}
             </div>
           </div>
-          <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-purple-200 to-transparent opacity-50" />
+          <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-brand-200 to-transparent opacity-50" />
         </div>
       </div>
 
@@ -330,8 +330,8 @@ export default function SelectSubject({
           Select Grade
         </label>
         <div className="relative">
-          <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
-          <div className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-blue-300 group-focus-within:border-blue-400 group-focus-within:shadow-lg group-focus-within:shadow-blue-100">
+          <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-brand-300 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
+          <div className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-brand-300 group-focus-within:border-brand-400 group-focus-within:shadow-lg group-focus-within:shadow-brand-100">
             <div className="flex items-center">
               <div className="flex-1 px-4">
                 <select
@@ -352,7 +352,7 @@ export default function SelectSubject({
               </div>
             </div>
           </div>
-          <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent opacity-50" />
+          <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-brand-200 to-transparent opacity-50" />
         </div>
       </div>
       
@@ -395,18 +395,18 @@ export default function SelectSubject({
                     {subjects.map((subject) => (
                       <div
                         key={subject.id}
-                        className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 px-3 py-1.5 rounded-lg text-sm"
+                        className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-3 py-1.5 rounded-lg text-sm"
                       >
-                        <CheckCircle size={14} className="text-purple-500" />
+                        <CheckCircle size={14} className="text-brand-500" />
                         <span>{subject.name}</span>
                         {subject.code && (
-                          <span className="text-xs text-purple-500 ml-1">
+                          <span className="text-xs text-brand-500 ml-1">
                             ({subject.code})
                           </span>
                         )}
                         <button
                           onClick={() => removeSubject(subject.id)}
-                          className="text-purple-400 hover:text-purple-600 ml-1"
+                          className="text-brand-400 hover:text-brand-600 ml-1"
                         >
                           <X size={14} />
                         </button>
@@ -442,7 +442,7 @@ export default function SelectSubject({
                     onClick={() => toggleSubject(subject)}
                     className={`rounded-xl border p-3 text-sm transition-all ${
                       selected
-                        ? "bg-purple-600 text-white border-purple-600"
+                        ? "bg-brand-600 text-white border-brand-600"
                         : "hover:border-gray-400 hover:shadow-sm"
                     }`}
                   >
@@ -456,7 +456,7 @@ export default function SelectSubject({
                         {subject.name}
                       </span>
                       <span className={`text-[10px] rounded-lg px-3 py-0.5 ${
-                        selected ? 'bg-purple-500 text-white' : 'bg-slate-600 text-white'
+                        selected ? 'bg-brand-500 text-white' : 'bg-slate-600 text-white'
                       }`}>
                         {subject.code}
                       </span>
@@ -505,9 +505,9 @@ export default function SelectSubject({
                     className={`relative rounded-2xl border p-2 flex items-center gap-4 transition-all w-full
                     ${
                       isActive
-                        ? "border-purple-500 bg-purple-50"
+                        ? "border-brand-500 bg-brand-50"
                         : selectedCount > 0
-                        ? "border-purple-300 bg-purple-50/50"
+                        ? "border-brand-300 bg-brand-50/50"
                         : "hover:border-gray-300"
                     }`}
                   >
@@ -516,7 +516,7 @@ export default function SelectSubject({
                     >
                       <Icon size={15} />
                       {selectedCount > 0 && (
-                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-purple-600 rounded-full flex items-center justify-center text-xs text-white">
+                        <div className="absolute -top-1 -right-1 w-5 h-5 bg-brand-600 rounded-full flex items-center justify-center text-xs text-white">
                           {selectedCount}
                         </div>
                       )}
@@ -578,7 +578,7 @@ export default function SelectSubject({
                                   onClick={() => toggleSubject(subject)}
                                   className={`rounded-xl border px-2 py-2 text-sm transition gap-2 ${
                                     selected
-                                      ? "bg-purple-600 text-white border-purple-600"
+                                      ? "bg-brand-600 text-white border-brand-600"
                                       : "hover:border-gray-400"
                                   }`}
                                 >

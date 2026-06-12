@@ -170,34 +170,34 @@ export default function StudentHome() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
 
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
             <div>
               <h1 className="text-2xl font-semibold text-slate-900">Hello, {firstName}</h1>
               <p className="text-sm text-slate-400 mt-0.5">Here's what's coming up for you</p>
             </div>
             <Link
               href="/home/student/explore"
-              className="px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors"
+              className="px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors text-center w-full sm:w-auto"
             >
               Find a Tutor
             </Link>
           </div>
 
           {/* Stats row */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-              <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">Total</p>
-              <p className="text-3xl font-bold text-slate-900 mt-2">{stats.totalSessions}</p>
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6">
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-5">
+              <p className="text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-widest">Total</p>
+              <p className="text-2xl sm:text-3xl font-bold text-slate-900 mt-2">{stats.totalSessions}</p>
               <p className="text-xs text-slate-400 mt-1">sessions booked</p>
             </div>
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-              <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">Completed</p>
-              <p className="text-3xl font-bold text-slate-900 mt-2">{stats.completedSessions}</p>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-5">
+              <p className="text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-widest">Completed</p>
+              <p className="text-2xl sm:text-3xl font-bold text-slate-900 mt-2">{stats.completedSessions}</p>
               <p className="text-xs text-slate-400 mt-1">sessions done</p>
             </div>
-            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-              <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">Upcoming</p>
-              <p className="text-3xl font-bold text-indigo-600 mt-2">{stats.upcomingSessions}</p>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-5">
+              <p className="text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-widest">Upcoming</p>
+              <p className="text-2xl sm:text-3xl font-bold text-brand-600 mt-2">{stats.upcomingSessions}</p>
               <p className="text-xs text-slate-400 mt-1">sessions ahead</p>
             </div>
           </div>
@@ -206,7 +206,7 @@ export default function StudentHome() {
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
               <h3 className="text-sm font-semibold text-slate-900">Upcoming Sessions</h3>
-              <Link href="/home/student/sessions" className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
+              <Link href="/home/student/sessions" className="text-xs text-brand-600 hover:text-brand-700 font-medium transition-colors">
                 View all
               </Link>
             </div>
@@ -220,7 +220,7 @@ export default function StudentHome() {
                   </svg>
                   <p className="text-sm text-slate-500">No upcoming sessions</p>
                   <p className="text-xs text-slate-400 mt-1">Book a session to see it here.</p>
-                  <Link href="/home/student/explore" className="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white text-xs font-medium rounded-xl hover:bg-indigo-700 transition-colors">
+                  <Link href="/home/student/explore" className="inline-block mt-4 px-4 py-2 bg-brand-600 text-white text-xs font-medium rounded-xl hover:bg-brand-700 transition-colors">
                     Find a Tutor
                   </Link>
                 </div>

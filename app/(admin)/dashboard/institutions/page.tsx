@@ -158,7 +158,7 @@ export default function InstitutionsPage() {
           </div>
           <button
             onClick={() => setShowInstForm(true)}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
+            className="bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-brand-700 transition"
           >
             + Add Institution
           </button>
@@ -177,7 +177,7 @@ export default function InstitutionsPage() {
                 <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Country" value={instCountry} onChange={e => setInstCountry(e.target.value)} />
                 <div className="flex gap-2 pt-2">
                   <button type="button" onClick={() => setShowInstForm(false)} className="flex-1 border border-gray-200 rounded-lg py-2 text-sm">Cancel</button>
-                  <button type="submit" disabled={instSubmitting} className="flex-1 bg-indigo-600 text-white rounded-lg py-2 text-sm font-medium disabled:opacity-50">
+                  <button type="submit" disabled={instSubmitting} className="flex-1 bg-brand-600 text-white rounded-lg py-2 text-sm font-medium disabled:opacity-50">
                     {instSubmitting ? "Saving..." : "Add"}
                   </button>
                 </div>
@@ -203,7 +203,7 @@ export default function InstitutionsPage() {
                     <li
                       key={inst.id}
                       onClick={() => { setActiveInstitution(inst.id); setShowCourseForm(false); setShowBulk(false); setBulkResult(null); }}
-                      className={`px-4 py-3 cursor-pointer hover:bg-indigo-50 transition ${activeInstitution === inst.id ? "bg-indigo-50 border-l-2 border-indigo-600" : ""}`}
+                      className={`px-4 py-3 cursor-pointer hover:bg-brand-50 transition ${activeInstitution === inst.id ? "bg-brand-50 border-l-2 border-brand-600" : ""}`}
                     >
                       <div className="font-medium text-sm text-gray-900">{inst.name}</div>
                       <div className="text-xs text-gray-400 mt-0.5">{inst.abbreviation}{inst.province ? ` · ${inst.province}` : ""}</div>
@@ -232,7 +232,7 @@ export default function InstitutionsPage() {
                       <button onClick={() => { setShowBulk(!showBulk); setShowCourseForm(false); }} className="text-xs px-3 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50">
                         Bulk Import
                       </button>
-                      <button onClick={() => { setShowCourseForm(!showCourseForm); setShowBulk(false); }} className="text-xs px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                      <button onClick={() => { setShowCourseForm(!showCourseForm); setShowBulk(false); }} className="text-xs px-3 py-1.5 bg-brand-600 text-white rounded-lg hover:bg-brand-700">
                         + Add Course
                       </button>
                     </div>
@@ -243,7 +243,7 @@ export default function InstitutionsPage() {
                     <form onSubmit={handleAddCourse} className="bg-gray-50 rounded-xl p-4 mb-4 space-y-3">
                       <h3 className="text-sm font-medium text-gray-700">Add Course Code</h3>
                       {courseError && <p className="text-red-600 text-xs">{courseError}</p>}
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <input className="border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Code (e.g. MATH 140)" value={courseCode} onChange={e => setCourseCode(e.target.value)} required />
                         <input className="border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Course title (optional)" value={courseName} onChange={e => setCourseName(e.target.value)} />
                       </div>
@@ -255,7 +255,7 @@ export default function InstitutionsPage() {
                       </select>
                       <div className="flex gap-2">
                         <button type="button" onClick={() => setShowCourseForm(false)} className="flex-1 border border-gray-200 rounded-lg py-2 text-xs">Cancel</button>
-                        <button type="submit" disabled={courseSubmitting} className="flex-1 bg-indigo-600 text-white rounded-lg py-2 text-xs font-medium disabled:opacity-50">
+                        <button type="submit" disabled={courseSubmitting} className="flex-1 bg-brand-600 text-white rounded-lg py-2 text-xs font-medium disabled:opacity-50">
                           {courseSubmitting ? "Saving..." : "Add"}
                         </button>
                       </div>
@@ -275,10 +275,10 @@ export default function InstitutionsPage() {
                         value={bulkJson}
                         onChange={e => setBulkJson(e.target.value)}
                       />
-                      {bulkResult && <p className="text-xs text-indigo-700 bg-indigo-50 rounded-lg px-3 py-2">{bulkResult}</p>}
+                      {bulkResult && <p className="text-xs text-brand-700 bg-brand-50 rounded-lg px-3 py-2">{bulkResult}</p>}
                       <div className="flex gap-2">
                         <button type="button" onClick={() => { setShowBulk(false); setBulkResult(null); }} className="flex-1 border border-gray-200 rounded-lg py-2 text-xs">Cancel</button>
-                        <button type="submit" disabled={bulkSubmitting} className="flex-1 bg-indigo-600 text-white rounded-lg py-2 text-xs font-medium disabled:opacity-50">
+                        <button type="submit" disabled={bulkSubmitting} className="flex-1 bg-brand-600 text-white rounded-lg py-2 text-xs font-medium disabled:opacity-50">
                           {bulkSubmitting ? "Importing..." : "Import"}
                         </button>
                       </div>
@@ -301,7 +301,7 @@ export default function InstitutionsPage() {
                         <tbody className="divide-y divide-gray-50">
                           {courses.map(c => (
                             <tr key={c.id} className="hover:bg-gray-50">
-                              <td className="py-2.5 pr-4 font-mono text-indigo-700 font-medium">{c.code}</td>
+                              <td className="py-2.5 pr-4 font-mono text-brand-700 font-medium">{c.code}</td>
                               <td className="py-2.5 pr-4 text-gray-700">{c.name || <span className="text-gray-300">—</span>}</td>
                               <td className="py-2.5 text-gray-500">{c.Subjects?.name}</td>
                             </tr>

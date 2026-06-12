@@ -14,6 +14,15 @@ export async function POST(req: Request) {
       );
     }
 
+    // Public sign-up may only create students or tutors. Privileged roles
+    // (e.g. admin) must never be self-assignable from a client request.
+    if (role !== "student" && role !== "tutor") {
+      return NextResponse.json(
+        { error: "Invalid role" },
+        { status: 400 }
+      );
+    }
+
     const profile = await prisma.profiles.create({
       data: {
         id,

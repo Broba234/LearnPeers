@@ -277,7 +277,7 @@ export default function SubjectsPage() {
               Total: {filteredSubjects.length} subjects
             </div>
             <div className="flex items-center gap-2">
-              <button onClick={() => setShowAddSubject(true)} className="bg-blue-500 text-white px-4 py-2 rounded-md flex items-center gap-2">
+              <button onClick={() => setShowAddSubject(true)} className="bg-brand-500 text-white px-4 py-2 rounded-md flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
@@ -313,13 +313,13 @@ export default function SubjectsPage() {
 
         {/* Loading State */}
         {loading && (
-          <div className="mb-6 p-4 bg-gradient-to-b from-[#F8F9FD] to-gray-400 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div className="mb-6 p-4 bg-gradient-to-b from-[#F8F9FD] to-gray-400 border border-brand-200 dark:border-brand-800 rounded-lg">
             <div className="flex items-center">
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-brand-500 dark:text-brand-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <span className="text-blue-800 dark:text-blue-300">
+              <span className="text-brand-800 dark:text-brand-300">
                 Loading subjects data...
               </span>
             </div>
@@ -341,7 +341,7 @@ export default function SubjectsPage() {
                 setCurrentPage(1);
               }}
               placeholder="Search by name, code, category..."
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
             />
           </div>
           
@@ -356,7 +356,7 @@ export default function SubjectsPage() {
                 setSelectedGradeFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
             >
               <option value="all">All Levels</option>
               {uniqueGrades.sort((a, b) => parseInt(a) - parseInt(b)).map(grade => (
@@ -378,7 +378,7 @@ export default function SubjectsPage() {
                 setSelectedCategoryFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
             >
               <option value="all">All Categories</option>
               {uniqueCategories.sort().map(category => (
@@ -429,8 +429,8 @@ export default function SubjectsPage() {
                       <td className="px-6 py-4">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                              <span className="text-blue-600 dark:text-blue-300 font-medium">
+                            <div className="h-10 w-10 rounded-full bg-brand-100 dark:bg-brand-900 flex items-center justify-center">
+                              <span className="text-brand-600 dark:text-brand-300 font-medium">
                                 {subject.name?.charAt(0).toUpperCase() || 'S'}
                               </span>
                             </div>
@@ -458,11 +458,11 @@ export default function SubjectsPage() {
                           subject.category === 'Science' 
                             ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' 
                             : subject.category === 'Mathematics'
-                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
+                            ? 'bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-300'
                             : subject.category === 'Languages'
                             ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
                             : subject.category === 'Arts'
-                            ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300'
+                            ? 'bg-brand-100 text-brand-800 dark:bg-brand-900 dark:text-brand-300'
                             : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
                         }`}>
                           {subject.category}
@@ -561,7 +561,7 @@ export default function SubjectsPage() {
                       onClick={() => handlePageChange(page)}
                       className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                         currentPage === page
-                          ? 'z-10 bg-blue-50 dark:bg-blue-900 border-blue-500 dark:border-blue-600 text-blue-600 dark:text-blue-300'
+                          ? 'z-10 bg-brand-50 dark:bg-brand-900 border-brand-500 dark:border-brand-600 text-brand-600 dark:text-brand-300'
                           : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
                       }`}
                     >
@@ -606,7 +606,7 @@ export default function SubjectsPage() {
                   value={subjectName}
                   onChange={(e) => setSubjectName(e.target.value)}
                   placeholder="Enter subject name"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
                   required
                 />
               </div>
@@ -621,7 +621,7 @@ export default function SubjectsPage() {
                   value={subjectCode}
                   onChange={(e) => setSubjectCode(e.target.value)}
                   placeholder="Enter subject code (e.g., MATH101)"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
                   required
                 />
               </div>
@@ -634,7 +634,7 @@ export default function SubjectsPage() {
                   id="grade"
                   value={selectedGrade}
                   onChange={(e) => setSelectedGrade(e.target.value ? parseInt(e.target.value) : "")}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
                   required
                 >
                   <option value="">Select Grade</option>
@@ -654,7 +654,7 @@ export default function SubjectsPage() {
                   id="category"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-600 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
                   required
                 >
                   <option value="">Select Category</option>
@@ -671,7 +671,7 @@ export default function SubjectsPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className={`px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors ${
+                className={`px-6 py-2 bg-brand-600 hover:bg-brand-700 dark:bg-brand-700 dark:hover:bg-brand-600 text-white font-medium rounded-lg transition-colors ${
                   submitting ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >

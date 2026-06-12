@@ -72,11 +72,11 @@ function ProductMock() {
   return (
     <div className="relative aspect-[4/3] w-full bg-gradient-to-br from-ink-900 via-ink-800 to-brand-900 p-5">
       <svg className="pointer-events-none absolute right-6 top-6 h-24 w-24 opacity-60" viewBox="0 0 100 100" fill="none">
-        <line x1="20" y1="80" x2="55" y2="45" stroke="#1f9fe0" strokeWidth="2" />
-        <line x1="55" y1="45" x2="80" y2="70" stroke="#1f9fe0" strokeWidth="2" />
-        <circle cx="20" cy="80" r="6" fill="#1f9fe0" />
+        <line x1="20" y1="80" x2="55" y2="45" stroke="#1f8dcc" strokeWidth="2" />
+        <line x1="55" y1="45" x2="80" y2="70" stroke="#1f8dcc" strokeWidth="2" />
+        <circle cx="20" cy="80" r="6" fill="#1f8dcc" />
         <circle cx="55" cy="45" r="8" fill="#ffffff" />
-        <circle cx="80" cy="70" r="6" fill="#1f9fe0" />
+        <circle cx="80" cy="70" r="6" fill="#1f8dcc" />
       </svg>
 
       <div className="mb-4 flex items-center gap-1.5">

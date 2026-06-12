@@ -92,11 +92,11 @@ const AppSidebar: React.FC = () => {
               href={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 ${
                 isActive(item.path)
-                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                  ? "bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400"
                   : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
               }`}
             >
-              <span className={`${isActive(item.path) ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`}>
+              <span className={`${isActive(item.path) ? 'text-brand-600 dark:text-brand-400' : 'text-gray-500 dark:text-gray-400'}`}>
                 {item.icon}
               </span>
               <span className="font-medium">{item.name}</span>

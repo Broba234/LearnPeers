@@ -4,7 +4,7 @@ import { BookOpen, Users, Target, GraduationCap } from 'lucide-react';
 
 const OurMission = () => {
   return (
-    <section id="our-mission" className=" px-4 sm:px-6 lg:px-8 py-[150px] bg-gradient-to-br from-blue-50 to-indigo-50">
+    <section id="our-mission" className=" px-4 sm:px-6 lg:px-8 py-[150px] bg-gradient-to-br from-blue-50 to-brand-50">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
@@ -62,7 +62,7 @@ const OurMission = () => {
               </div>
               
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <Users className="h-8 w-8 text-indigo-500 mb-3" />
+                <Users className="h-8 w-8 text-brand-500 mb-3" />
                 <h4 className="font-bold text-gray-900 mb-2">Community First</h4>
                 <p className="text-sm text-gray-600">
                   Knowledge flourishes in collaborative, supportive environments
@@ -72,7 +72,7 @@ const OurMission = () => {
           </div>
 
           {/* Right Column - Global Vision */}
-          <div className="bg-[#1559C6]/80 rounded-se-[100px] p-8 text-white shadow-xl">
+          <div className="bg-[#0077be]/80 rounded-se-[100px] p-8 text-white shadow-xl">
             <div className="mb-8">
               <h3 className="text-2xl font-bold mb-4">A marketplace built on peers</h3>
               <p className="text-blue-100 mb-6">
@@ -129,7 +129,7 @@ const OurMission = () => {
         <div className="mt-16 text-center">
           <Link
             href="/home/student/explore"
-            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:brightness-105"
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-brand-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:brightness-105"
           >
             <BookOpen className="h-5 w-5" />
             Find a peer tutor

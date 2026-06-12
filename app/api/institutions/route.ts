@@ -1,8 +1,11 @@
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const type = searchParams.get('type');
     const institutions = await prisma.institutions.findMany({
+      where: type ? { type } : undefined,
       orderBy: [{ country: 'asc' }, { name: 'asc' }],
     });
     return Response.json(institutions);
@@ -11,9 +14,11 @@ export async function GET() {
   }
 }
 
+const ALLOWED_TYPES = ['university', 'high_school', 'school_board'];
+
 export async function POST(req: Request) {
   try {
-    const { name, abbreviation, country, province } = await req.json();
+    const { name, abbreviation, country, province, type, city } = await req.json();
     if (!name?.trim()) return Response.json({ error: 'Name is required' }, { status: 400 });
 
     const institution = await prisma.institutions.create({
@@ -22,6 +27,8 @@ export async function POST(req: Request) {
         abbreviation: abbreviation?.trim() || null,
         country: country?.trim() || 'Canada',
         province: province?.trim() || null,
+        type: ALLOWED_TYPES.includes(type) ? type : 'high_school',
+        city: city?.trim() || null,
       },
     });
     return Response.json(institution);

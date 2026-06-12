@@ -64,13 +64,13 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
   }, []);
   // Subjects data
   const categoryName = "Mathematics";
-  const color = "from-blue-500 to-indigo-600";
+  const color = "from-brand-500 to-brand-600";
   const Icon = Clock;
 
   const durationOptions = [
-    { value: "0.5", label: "30 min", name: "duration_1", color: "bg-blue-100 text-blue-800" },
-    { value: "1", label: "1 hour", name: "duration_2", color: "bg-indigo-100 text-indigo-800" },
-    { value: "1.5", label: "1.5 hour", name: "duration_3", color: "bg-purple-100 text-purple-800" },
+    { value: "0.5", label: "30 min", name: "duration_1", color: "bg-brand-100 text-brand-800" },
+    { value: "1", label: "1 hour", name: "duration_2", color: "bg-brand-100 text-brand-800" },
+    { value: "1.5", label: "1.5 hour", name: "duration_3", color: "bg-brand-100 text-brand-800" },
   ];
   console.log(selectedSubjects);
 
@@ -144,15 +144,15 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
               }}
               className={`inline-flex items-center gap-2 border px-4 py-2.5 rounded-xl text-sm shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group ${
                 selectedSubjectId === index
-                  ? "bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-700 ring-2 ring-blue-100 ring-opacity-50"
-                  : "bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-100 hover:border-blue-200"
+                  ? "bg-gradient-to-r from-brand-50 to-brand-50 border-brand-700 ring-2 ring-brand-100 ring-opacity-50"
+                  : "bg-gradient-to-r from-brand-50 to-brand-50 border-brand-100 hover:border-brand-200"
               }`}
             >
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 ${
                   selectedSubjectId === index
-                    ? "bg-gradient-to-r from-blue-500 to-indigo-500"
-                    : "bg-gradient-to-r from-blue-400 to-indigo-400"
+                    ? "bg-gradient-to-r from-brand-500 to-brand-500"
+                    : "bg-gradient-to-r from-brand-400 to-brand-400"
                 }`}
               >
                 <CheckCircle size={12} className="text-white" />
@@ -171,9 +171,9 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
               </div>
 
               {/* Show price/duration badge for each subject */}
-              <div className="ml-2 px-2 py-1 bg-white/80 rounded-lg text-xs border border-blue-100">
+              <div className="ml-2 px-2 py-1 bg-white/80 rounded-lg text-xs border border-brand-100">
                 <div className="flex items-center gap-1">
-                  <Clock size={10} className="text-blue-500" />
+                  <Clock size={10} className="text-brand-500" />
                   <span>
                     {subject.duration_1 == "0.5" && "30 min"}
                   </span>
@@ -182,7 +182,7 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
                   <span>${subject.price_1 || "0"}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Clock size={10} className="text-blue-500" />
+                  <Clock size={10} className="text-brand-500" />
                   <span>
                     {subject.duration_2 == "1" && "1 hour"}
                   </span>
@@ -191,7 +191,7 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
                   <span>${subject.price_2 || "0"}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Clock size={10} className="text-blue-500" />
+                  <Clock size={10} className="text-brand-500" />
                   <span>
                     {subject.duration_3 == "1.5" && "1.5 hour"}
                   </span>
@@ -233,7 +233,7 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
                     key={option.value}
                     className={`flex-1 cursor-pointer transition-all duration-300 ${
                       selectedDuration === option.value
-                        ? "ring-2 rounded-xl ring-offset-2 ring-indigo-500 transform scale-[1.02]"
+                        ? "ring-2 rounded-xl ring-offset-2 ring-brand-500 transform scale-[1.02]"
                         : "hover:scale-[1.02]"
                     }`}
                   >
@@ -285,7 +285,7 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
                     updateSubjectPrice(selectedSubjectId, priceKey, e.target.value);
                   }}
                   placeholder="0.00"
-                  className="block w-full pl-7 pr-12 py-3 border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  className="block w-full pl-7 pr-12 py-3 border border-gray-300 rounded-xl bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all duration-200"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                   <span className="text-gray-500 sm:text-sm">USD</span>

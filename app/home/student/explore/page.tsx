@@ -143,7 +143,7 @@ const AvailableNowRail = ({
               />
               <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white" />
             </div>
-            <span className="text-xs font-medium text-slate-700 max-w-[56px] truncate text-center group-hover:text-indigo-600 transition-colors">
+            <span className="text-xs font-medium text-slate-700 max-w-[56px] truncate text-center group-hover:text-brand-600 transition-colors">
               {tutor.name.split(" ")[0]}
             </span>
           </button>
@@ -256,7 +256,7 @@ const TutorCard = ({
               className="px-2.5 py-0.5 bg-slate-100 text-slate-600 text-[11px] font-medium rounded-full"
             >
               {subject.InstitutionCourses?.code
-                ? <><span className="font-mono text-indigo-700">{subject.InstitutionCourses.code}</span> · {subject.Subjects?.name || subject.name}</>
+                ? <><span className="font-mono text-brand-700">{subject.InstitutionCourses.code}</span> · {subject.Subjects?.name || subject.name}</>
                 : subject.name}
             </span>
           ))}
@@ -280,7 +280,7 @@ const TutorCard = ({
           ) : (
             <button
               onClick={() => onBook(tutor)}
-              className="w-full py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors"
+              className="w-full py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors"
             >
               Book Session
             </button>
@@ -557,7 +557,7 @@ export default function ExploreTutors() {
               <SlidersHorizontal className="w-4 h-4" />
               Filters
               {activeFilterCount > 0 && (
-                <span className="w-4 h-4 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-brand-600 text-white text-[10px] font-bold flex items-center justify-center">
                   {activeFilterCount}
                 </span>
               )}
@@ -569,13 +569,13 @@ export default function ExploreTutors() {
             <div className="flex items-center gap-2 mt-3">
               <button
                 onClick={() => setScope('mine')}
-                className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-all ${scope === 'mine' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+                className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-all ${scope === 'mine' ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
               >
                 Only at my institution
               </button>
               <button
                 onClick={() => setScope('equivalent')}
-                className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-all ${scope === 'equivalent' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+                className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-all ${scope === 'equivalent' ? 'bg-brand-600 text-white border-brand-600' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
               >
                 Include equivalent courses
               </button>
@@ -608,10 +608,10 @@ export default function ExploreTutors() {
               {selectedSubjects.map((subject) => (
                 <span
                   key={subject.id}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-medium rounded-full"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-brand-50 text-brand-700 text-xs font-medium rounded-full"
                 >
                   {subject.name}
-                  <button onClick={() => removeSubject(subject.id)} className="ml-0.5 hover:text-indigo-900">
+                  <button onClick={() => removeSubject(subject.id)} className="ml-0.5 hover:text-brand-900">
                     <X className="w-3 h-3" />
                   </button>
                 </span>
@@ -643,7 +643,7 @@ export default function ExploreTutors() {
         {validStudentSubjectIds.length === 0 && (
           <TutorSection
             title="All Tutors"
-            icon={<Users className="w-4 h-4 text-indigo-500" />}
+            icon={<Users className="w-4 h-4 text-brand-500" />}
             tutors={tutors}
             loading={loading}
             onBook={openTutorProfileModal}
@@ -674,7 +674,7 @@ export default function ExploreTutors() {
                 <TutorSection
                   key={`subject-${subjectId}`}
                   title={`${subject.name} (${subject.code})`}
-                  icon={<BookOpen className="w-4 h-4 text-indigo-500" />}
+                  icon={<BookOpen className="w-4 h-4 text-brand-500" />}
                   tutors={tutorsForSubject}
                   loading={loading}
                   onBook={openTutorProfileModal}
@@ -686,7 +686,7 @@ export default function ExploreTutors() {
         {validStudentSubjectIds.length > 0 && (
           <TutorSection
             title="All Matching Tutors"
-            icon={<Users className="w-4 h-4 text-indigo-500" />}
+            icon={<Users className="w-4 h-4 text-brand-500" />}
             tutors={allTutorsForSelectedSubjects}
             loading={loading}
             onBook={openTutorProfileModal}
