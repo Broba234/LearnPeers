@@ -269,9 +269,12 @@ export const EventModal: React.FC<EventModalProps> = ({
 
           {/* Day Selector */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Available Days *
             </label>
+            <p className="mb-3 text-xs text-gray-500">
+              Selected days repeat <span className="font-medium text-[#0077be]">every week</span>.
+            </p>
             <div className="flex gap-2 justify-between">
               {DAYS.map((day) => (
                 <button

@@ -112,23 +112,40 @@ export default function Selectable({
   data,
   subjects,
 }: SelectableProps) {
+  // Availability is a *weekly recurring* rule (day_of_week + start/end time),
+  // so each stored slot is expanded into one calendar event per week across a
+  // window around today. This makes the schedule visibly repeat every week.
+  const RECURRENCE_WEEKS_BACK = 2;
+  const RECURRENCE_WEEKS_AHEAD = 26;
+
   const transformEvents = (eventsData: any[]): any[] => {
-    return eventsData.map((event) => {
-      if (event.start_date && event.end_date) {
-        const start = moment.utc(event.start_date).local();
-        const end = moment.utc(event.end_date).local();
-        return {
-          id: event.id,
+    return eventsData.flatMap((event) => {
+      if (!event?.start_date || !event?.end_date) return [];
+
+      const baseStart = moment.utc(event.start_date).local();
+      const baseEnd = moment.utc(event.end_date).local();
+      const durationMs = baseEnd.diff(baseStart);
+
+      // Walk weekly forward/back from the slot's own week so we cover the
+      // visible range regardless of when the slot was originally created.
+      const events: any[] = [];
+      for (let wk = -RECURRENCE_WEEKS_BACK; wk <= RECURRENCE_WEEKS_AHEAD; wk++) {
+        const start = baseStart.clone().add(wk, "weeks");
+        const end = start.clone().add(durationMs, "milliseconds");
+        events.push({
+          id: wk === 0 ? event.id : `${event.id}__wk${wk}`,
           title: event.subject || "Available Slot",
           price: event.price?.toString() || "0",
-          start: start.toDate(), // Convert to Date object
+          start: start.toDate(),
           end: end.toDate(),
-          start_time: start, // Optional: store formatted time
+          start_time: start,
           end_time: end,
           allDay: false,
+          recurring: true,
           originalData: event,
-        };
+        });
       }
+      return events;
     });
   };
 
@@ -150,6 +167,22 @@ export default function Selectable({
   // const handleDeleteEvent = useCallback((eventId: string) => {
   //   setEvents((prev) => prev.filter((ev) => ev.id !== eventId));
   // }, []);
+
+  // Re-pull availability from the server and re-expand it into weekly
+  // occurrences. Used after create / edit / delete to keep the calendar in sync.
+  const refreshEvents = useCallback(async () => {
+    try {
+      const res = await fetch(
+        `/api/tutor-availability/get?email=${encodeURIComponent(email)}`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setEvents(transformEvents(data));
+      }
+    } catch (e) {
+      // keep current events on failure
+    }
+  }, [email]);
 
   const handleCreateEvent = useCallback(async (formData: EventFormData) => {
     const newEvent = {
@@ -190,18 +223,8 @@ export default function Selectable({
     } finally {
       // setSaving(false);
     }
-    try {
-      const res = await fetch(`/api/tutor-availability/get?email=${encodeURIComponent(email)}`);
-      
-      if (res.ok) {
-        const data = await res.json();
-        console.log('data updated', data);
-        setEvents(transformEvents(data));
-      }
-    } catch (e) {
-    } finally {
-    }
-  }, []);
+    await refreshEvents();
+  }, [email, id, refreshEvents]);
 
   const handleViewChange = useCallback((view: View) => {
     setCurrentView(view);
@@ -214,17 +237,22 @@ export default function Selectable({
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
   const handleEventSelect = (event: any) => {
-    setSelectedEvent(event);
+    // Occurrences of a recurring slot carry a synthetic id (`<id>__wk<n>`);
+    // edit/delete must act on the real underlying record, so normalize the id
+    // to the stored record id while keeping the clicked occurrence's date/time.
+    const recordId = event?.originalData?.id ?? event?.id;
+    setSelectedEvent({ ...event, id: recordId });
     setIsDetailModalOpen(true);
   };
 
-  const handleEventUpdate = async (eventId: string, updatedData: any) => {
-    setEvents((prev) => prev.map((e) => (e.id === eventId ? updatedData : e)));
+  const handleEventUpdate = async (_eventId: string, _updatedData: any) => {
+    // The edit hit the server; re-expand the rule into weekly occurrences.
+    await refreshEvents();
   };
 
-  const handleEventDelete = (eventId: string) => {
-    // Remove event from state
-    setEvents((prev) => prev.filter((e) => e.id !== eventId));
+  const handleEventDelete = (_eventId: string) => {
+    // The delete hit the server; drop all weekly occurrences of the rule.
+    refreshEvents();
   };
 
   // Custom components for different views

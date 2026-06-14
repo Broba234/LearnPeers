@@ -7,8 +7,18 @@ interface Institution {
   abbreviation: string | null;
   country: string;
   province: string | null;
+  province_id: string | null;
+  type: string;
   created_at: string;
 }
+
+interface Province { id: string; code: string; name: string; }
+
+const TYPE_LABEL: Record<string, string> = {
+  university: "University",
+  school_board: "School board",
+  high_school: "High school",
+};
 
 interface Subject {
   id: string;
@@ -34,9 +44,12 @@ export default function InstitutionsPage() {
   const [activeInstitution, setActiveInstitution] = useState<string | null>(null);
 
   // Institution form
+  const [provinces, setProvinces] = useState<Province[]>([]);
   const [instName, setInstName] = useState("");
   const [instAbbr, setInstAbbr] = useState("");
-  const [instProvince, setInstProvince] = useState("");
+  const [instProvinceId, setInstProvinceId] = useState("");
+  const [instType, setInstType] = useState("university");
+  const [instDomains, setInstDomains] = useState("");
   const [instCountry, setInstCountry] = useState("Canada");
   const [instError, setInstError] = useState<string | null>(null);
   const [instSubmitting, setInstSubmitting] = useState(false);
@@ -60,9 +73,11 @@ export default function InstitutionsPage() {
     Promise.all([
       fetch("/api/institutions").then(r => r.json()),
       fetch("/api/subjects").then(r => r.json()),
-    ]).then(([insts, subjs]) => {
+      fetch("/api/provinces").then(r => r.json()),
+    ]).then(([insts, subjs, provs]) => {
       setInstitutions(Array.isArray(insts) ? insts : []);
       setSubjects(Array.isArray(subjs) ? subjs : []);
+      setProvinces(Array.isArray(provs) ? provs : []);
       setLoading(false);
     });
   }, []);
@@ -83,12 +98,19 @@ export default function InstitutionsPage() {
       const res = await fetch("/api/institutions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: instName, abbreviation: instAbbr, country: instCountry, province: instProvince }),
+        body: JSON.stringify({
+          name: instName,
+          abbreviation: instAbbr,
+          country: instCountry,
+          province_id: instProvinceId || undefined,
+          type: instType,
+          email_domains: instDomains.split(",").map(d => d.trim()).filter(Boolean),
+        }),
       });
       if (!res.ok) throw new Error((await res.json()).error);
       const inst = await res.json();
       setInstitutions(prev => [inst, ...prev]);
-      setInstName(""); setInstAbbr(""); setInstProvince(""); setInstCountry("Canada");
+      setInstName(""); setInstAbbr(""); setInstProvinceId(""); setInstType("university"); setInstDomains(""); setInstCountry("Canada");
       setShowInstForm(false);
     } catch (err: any) {
       setInstError(err.message);
@@ -173,7 +195,16 @@ export default function InstitutionsPage() {
               <form onSubmit={handleAddInstitution} className="space-y-3">
                 <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Name (e.g. McGill University)" value={instName} onChange={e => setInstName(e.target.value)} required />
                 <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Abbreviation (e.g. McGill)" value={instAbbr} onChange={e => setInstAbbr(e.target.value)} />
-                <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Province (e.g. Quebec)" value={instProvince} onChange={e => setInstProvince(e.target.value)} />
+                <select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" value={instType} onChange={e => setInstType(e.target.value)}>
+                  {Object.entries(TYPE_LABEL).map(([k, label]) => <option key={k} value={k}>{label}</option>)}
+                </select>
+                <select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" value={instProvinceId} onChange={e => setInstProvinceId(e.target.value)}>
+                  <option value="">Select province…</option>
+                  {provinces.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                </select>
+                {instType === "university" && (
+                  <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Email domains for verification (comma-separated, e.g. mail.mcgill.ca)" value={instDomains} onChange={e => setInstDomains(e.target.value)} />
+                )}
                 <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Country" value={instCountry} onChange={e => setInstCountry(e.target.value)} />
                 <div className="flex gap-2 pt-2">
                   <button type="button" onClick={() => setShowInstForm(false)} className="flex-1 border border-gray-200 rounded-lg py-2 text-sm">Cancel</button>
@@ -206,7 +237,7 @@ export default function InstitutionsPage() {
                       className={`px-4 py-3 cursor-pointer hover:bg-brand-50 transition ${activeInstitution === inst.id ? "bg-brand-50 border-l-2 border-brand-600" : ""}`}
                     >
                       <div className="font-medium text-sm text-gray-900">{inst.name}</div>
-                      <div className="text-xs text-gray-400 mt-0.5">{inst.abbreviation}{inst.province ? ` · ${inst.province}` : ""}</div>
+                      <div className="text-xs text-gray-400 mt-0.5">{TYPE_LABEL[inst.type] || inst.type}{inst.province ? ` · ${inst.province}` : ""}</div>
                     </li>
                   ))}
                 </ul>

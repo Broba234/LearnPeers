@@ -174,6 +174,16 @@ export type Subjects = $Result.DefaultSelection<Prisma.$SubjectsPayload>
  */
 export type Institutions = $Result.DefaultSelection<Prisma.$InstitutionsPayload>
 /**
+ * Model Provinces
+ * 
+ */
+export type Provinces = $Result.DefaultSelection<Prisma.$ProvincesPayload>
+/**
+ * Model Curricula
+ * 
+ */
+export type Curricula = $Result.DefaultSelection<Prisma.$CurriculaPayload>
+/**
  * Model ProfileInstitutions
  * 
  */
@@ -736,6 +746,26 @@ export class PrismaClient<
     * ```
     */
   get institutions(): Prisma.InstitutionsDelegate<ExtArgs>;
+
+  /**
+   * `prisma.provinces`: Exposes CRUD operations for the **Provinces** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Provinces
+    * const provinces = await prisma.provinces.findMany()
+    * ```
+    */
+  get provinces(): Prisma.ProvincesDelegate<ExtArgs>;
+
+  /**
+   * `prisma.curricula`: Exposes CRUD operations for the **Curricula** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Curricula
+    * const curricula = await prisma.curricula.findMany()
+    * ```
+    */
+  get curricula(): Prisma.CurriculaDelegate<ExtArgs>;
 
   /**
    * `prisma.profileInstitutions`: Exposes CRUD operations for the **ProfileInstitutions** model.
@@ -1304,6 +1334,8 @@ export namespace Prisma {
     Sessions: 'Sessions',
     Subjects: 'Subjects',
     Institutions: 'Institutions',
+    Provinces: 'Provinces',
+    Curricula: 'Curricula',
     ProfileInstitutions: 'ProfileInstitutions',
     SchoolEmailVerifications: 'SchoolEmailVerifications',
     InstitutionCourses: 'InstitutionCourses',
@@ -1329,7 +1361,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "audit_log_entries" | "flow_state" | "identities" | "instances" | "mfa_amr_claims" | "mfa_challenges" | "mfa_factors" | "oauth_authorizations" | "oauth_client_states" | "oauth_clients" | "oauth_consents" | "one_time_tokens" | "refresh_tokens" | "saml_providers" | "saml_relay_states" | "schema_migrations" | "sessions" | "sso_domains" | "sso_providers" | "users" | "conversations" | "messages" | "profiles" | "profilesOnSubjects" | "sessions" | "subjects" | "institutions" | "profileInstitutions" | "schoolEmailVerifications" | "institutionCourses" | "tutorAvailability" | "notifications" | "contacts" | "feedback" | "custom_oauth_providers" | "webauthn_challenges" | "webauthn_credentials"
+      modelProps: "audit_log_entries" | "flow_state" | "identities" | "instances" | "mfa_amr_claims" | "mfa_challenges" | "mfa_factors" | "oauth_authorizations" | "oauth_client_states" | "oauth_clients" | "oauth_consents" | "one_time_tokens" | "refresh_tokens" | "saml_providers" | "saml_relay_states" | "schema_migrations" | "sessions" | "sso_domains" | "sso_providers" | "users" | "conversations" | "messages" | "profiles" | "profilesOnSubjects" | "sessions" | "subjects" | "institutions" | "provinces" | "curricula" | "profileInstitutions" | "schoolEmailVerifications" | "institutionCourses" | "tutorAvailability" | "notifications" | "contacts" | "feedback" | "custom_oauth_providers" | "webauthn_challenges" | "webauthn_credentials"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3223,6 +3255,146 @@ export namespace Prisma {
           }
         }
       }
+      Provinces: {
+        payload: Prisma.$ProvincesPayload<ExtArgs>
+        fields: Prisma.ProvincesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProvincesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProvincesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload>
+          }
+          findFirst: {
+            args: Prisma.ProvincesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProvincesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload>
+          }
+          findMany: {
+            args: Prisma.ProvincesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload>[]
+          }
+          create: {
+            args: Prisma.ProvincesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload>
+          }
+          createMany: {
+            args: Prisma.ProvincesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProvincesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload>[]
+          }
+          delete: {
+            args: Prisma.ProvincesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload>
+          }
+          update: {
+            args: Prisma.ProvincesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProvincesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProvincesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ProvincesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProvincesPayload>
+          }
+          aggregate: {
+            args: Prisma.ProvincesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProvinces>
+          }
+          groupBy: {
+            args: Prisma.ProvincesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProvincesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProvincesCountArgs<ExtArgs>
+            result: $Utils.Optional<ProvincesCountAggregateOutputType> | number
+          }
+        }
+      }
+      Curricula: {
+        payload: Prisma.$CurriculaPayload<ExtArgs>
+        fields: Prisma.CurriculaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CurriculaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CurriculaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload>
+          }
+          findFirst: {
+            args: Prisma.CurriculaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CurriculaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload>
+          }
+          findMany: {
+            args: Prisma.CurriculaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload>[]
+          }
+          create: {
+            args: Prisma.CurriculaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload>
+          }
+          createMany: {
+            args: Prisma.CurriculaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CurriculaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload>[]
+          }
+          delete: {
+            args: Prisma.CurriculaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload>
+          }
+          update: {
+            args: Prisma.CurriculaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload>
+          }
+          deleteMany: {
+            args: Prisma.CurriculaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CurriculaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CurriculaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CurriculaPayload>
+          }
+          aggregate: {
+            args: Prisma.CurriculaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCurricula>
+          }
+          groupBy: {
+            args: Prisma.CurriculaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CurriculaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CurriculaCountArgs<ExtArgs>
+            result: $Utils.Optional<CurriculaCountAggregateOutputType> | number
+          }
+        }
+      }
       ProfileInstitutions: {
         payload: Prisma.$ProfileInstitutionsPayload<ExtArgs>
         fields: Prisma.ProfileInstitutionsFieldRefs
@@ -4596,6 +4768,7 @@ export namespace Prisma {
     InstitutionCourses: number
     ProfileInstitutions: number
     SchoolEmailVerifications: number
+    Curricula: number
   }
 
   export type InstitutionsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4603,6 +4776,7 @@ export namespace Prisma {
     InstitutionCourses?: boolean | InstitutionsCountOutputTypeCountInstitutionCoursesArgs
     ProfileInstitutions?: boolean | InstitutionsCountOutputTypeCountProfileInstitutionsArgs
     SchoolEmailVerifications?: boolean | InstitutionsCountOutputTypeCountSchoolEmailVerificationsArgs
+    Curricula?: boolean | InstitutionsCountOutputTypeCountCurriculaArgs
   }
 
   // Custom InputTypes
@@ -4642,6 +4816,84 @@ export namespace Prisma {
    */
   export type InstitutionsCountOutputTypeCountSchoolEmailVerificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SchoolEmailVerificationsWhereInput
+  }
+
+  /**
+   * InstitutionsCountOutputType without action
+   */
+  export type InstitutionsCountOutputTypeCountCurriculaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CurriculaWhereInput
+  }
+
+
+  /**
+   * Count Type ProvincesCountOutputType
+   */
+
+  export type ProvincesCountOutputType = {
+    Institutions: number
+    Curricula: number
+  }
+
+  export type ProvincesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Institutions?: boolean | ProvincesCountOutputTypeCountInstitutionsArgs
+    Curricula?: boolean | ProvincesCountOutputTypeCountCurriculaArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProvincesCountOutputType without action
+   */
+  export type ProvincesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProvincesCountOutputType
+     */
+    select?: ProvincesCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProvincesCountOutputType without action
+   */
+  export type ProvincesCountOutputTypeCountInstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InstitutionsWhereInput
+  }
+
+  /**
+   * ProvincesCountOutputType without action
+   */
+  export type ProvincesCountOutputTypeCountCurriculaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CurriculaWhereInput
+  }
+
+
+  /**
+   * Count Type CurriculaCountOutputType
+   */
+
+  export type CurriculaCountOutputType = {
+    Subjects: number
+  }
+
+  export type CurriculaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Subjects?: boolean | CurriculaCountOutputTypeCountSubjectsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CurriculaCountOutputType without action
+   */
+  export type CurriculaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CurriculaCountOutputType
+     */
+    select?: CurriculaCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CurriculaCountOutputType without action
+   */
+  export type CurriculaCountOutputTypeCountSubjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubjectsWhereInput
   }
 
 
@@ -30405,6 +30657,7 @@ export namespace Prisma {
     code: string | null
     grade: number | null
     category: string | null
+    curriculum_id: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -30415,6 +30668,7 @@ export namespace Prisma {
     code: string | null
     grade: number | null
     category: string | null
+    curriculum_id: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -30425,6 +30679,7 @@ export namespace Prisma {
     code: number
     grade: number
     category: number
+    curriculum_id: number
     created_at: number
     updated_at: number
     _all: number
@@ -30445,6 +30700,7 @@ export namespace Prisma {
     code?: true
     grade?: true
     category?: true
+    curriculum_id?: true
     created_at?: true
     updated_at?: true
   }
@@ -30455,6 +30711,7 @@ export namespace Prisma {
     code?: true
     grade?: true
     category?: true
+    curriculum_id?: true
     created_at?: true
     updated_at?: true
   }
@@ -30465,6 +30722,7 @@ export namespace Prisma {
     code?: true
     grade?: true
     category?: true
+    curriculum_id?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -30562,6 +30820,7 @@ export namespace Prisma {
     code: string | null
     grade: number | null
     category: string | null
+    curriculum_id: string | null
     created_at: Date | null
     updated_at: Date | null
     _count: SubjectsCountAggregateOutputType | null
@@ -30591,10 +30850,12 @@ export namespace Prisma {
     code?: boolean
     grade?: boolean
     category?: boolean
+    curriculum_id?: boolean
     created_at?: boolean
     updated_at?: boolean
     ProfilesOnSubjects?: boolean | Subjects$ProfilesOnSubjectsArgs<ExtArgs>
     InstitutionCourses?: boolean | Subjects$InstitutionCoursesArgs<ExtArgs>
+    Curricula?: boolean | Subjects$CurriculaArgs<ExtArgs>
     _count?: boolean | SubjectsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subjects"]>
 
@@ -30604,8 +30865,10 @@ export namespace Prisma {
     code?: boolean
     grade?: boolean
     category?: boolean
+    curriculum_id?: boolean
     created_at?: boolean
     updated_at?: boolean
+    Curricula?: boolean | Subjects$CurriculaArgs<ExtArgs>
   }, ExtArgs["result"]["subjects"]>
 
   export type SubjectsSelectScalar = {
@@ -30614,6 +30877,7 @@ export namespace Prisma {
     code?: boolean
     grade?: boolean
     category?: boolean
+    curriculum_id?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -30621,15 +30885,19 @@ export namespace Prisma {
   export type SubjectsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ProfilesOnSubjects?: boolean | Subjects$ProfilesOnSubjectsArgs<ExtArgs>
     InstitutionCourses?: boolean | Subjects$InstitutionCoursesArgs<ExtArgs>
+    Curricula?: boolean | Subjects$CurriculaArgs<ExtArgs>
     _count?: boolean | SubjectsCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type SubjectsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type SubjectsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Curricula?: boolean | Subjects$CurriculaArgs<ExtArgs>
+  }
 
   export type $SubjectsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Subjects"
     objects: {
       ProfilesOnSubjects: Prisma.$ProfilesOnSubjectsPayload<ExtArgs>[]
       InstitutionCourses: Prisma.$InstitutionCoursesPayload<ExtArgs>[]
+      Curricula: Prisma.$CurriculaPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -30637,6 +30905,7 @@ export namespace Prisma {
       code: string | null
       grade: number | null
       category: string | null
+      curriculum_id: string | null
       created_at: Date | null
       updated_at: Date | null
     }, ExtArgs["result"]["subjects"]>
@@ -31005,6 +31274,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     ProfilesOnSubjects<T extends Subjects$ProfilesOnSubjectsArgs<ExtArgs> = {}>(args?: Subset<T, Subjects$ProfilesOnSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfilesOnSubjectsPayload<ExtArgs>, T, "findMany"> | Null>
     InstitutionCourses<T extends Subjects$InstitutionCoursesArgs<ExtArgs> = {}>(args?: Subset<T, Subjects$InstitutionCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstitutionCoursesPayload<ExtArgs>, T, "findMany"> | Null>
+    Curricula<T extends Subjects$CurriculaArgs<ExtArgs> = {}>(args?: Subset<T, Subjects$CurriculaArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -31039,6 +31309,7 @@ export namespace Prisma {
     readonly code: FieldRef<"Subjects", 'String'>
     readonly grade: FieldRef<"Subjects", 'Int'>
     readonly category: FieldRef<"Subjects", 'String'>
+    readonly curriculum_id: FieldRef<"Subjects", 'String'>
     readonly created_at: FieldRef<"Subjects", 'DateTime'>
     readonly updated_at: FieldRef<"Subjects", 'DateTime'>
   }
@@ -31262,6 +31533,10 @@ export namespace Prisma {
      */
     data: SubjectsCreateManyInput | SubjectsCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectsIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -31395,6 +31670,21 @@ export namespace Prisma {
   }
 
   /**
+   * Subjects.Curricula
+   */
+  export type Subjects$CurriculaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    where?: CurriculaWhereInput
+  }
+
+  /**
    * Subjects without action
    */
   export type SubjectsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -31425,6 +31715,7 @@ export namespace Prisma {
     abbreviation: string | null
     country: string | null
     province: string | null
+    province_id: string | null
     type: string | null
     city: string | null
     website: string | null
@@ -31438,6 +31729,7 @@ export namespace Prisma {
     abbreviation: string | null
     country: string | null
     province: string | null
+    province_id: string | null
     type: string | null
     city: string | null
     website: string | null
@@ -31451,6 +31743,7 @@ export namespace Prisma {
     abbreviation: number
     country: number
     province: number
+    province_id: number
     type: number
     email_domains: number
     city: number
@@ -31467,6 +31760,7 @@ export namespace Prisma {
     abbreviation?: true
     country?: true
     province?: true
+    province_id?: true
     type?: true
     city?: true
     website?: true
@@ -31480,6 +31774,7 @@ export namespace Prisma {
     abbreviation?: true
     country?: true
     province?: true
+    province_id?: true
     type?: true
     city?: true
     website?: true
@@ -31493,6 +31788,7 @@ export namespace Prisma {
     abbreviation?: true
     country?: true
     province?: true
+    province_id?: true
     type?: true
     email_domains?: true
     city?: true
@@ -31580,6 +31876,7 @@ export namespace Prisma {
     abbreviation: string | null
     country: string
     province: string | null
+    province_id: string | null
     type: string
     email_domains: string[]
     city: string | null
@@ -31611,6 +31908,7 @@ export namespace Prisma {
     abbreviation?: boolean
     country?: boolean
     province?: boolean
+    province_id?: boolean
     type?: boolean
     email_domains?: boolean
     city?: boolean
@@ -31621,6 +31919,8 @@ export namespace Prisma {
     InstitutionCourses?: boolean | Institutions$InstitutionCoursesArgs<ExtArgs>
     ProfileInstitutions?: boolean | Institutions$ProfileInstitutionsArgs<ExtArgs>
     SchoolEmailVerifications?: boolean | Institutions$SchoolEmailVerificationsArgs<ExtArgs>
+    Provinces?: boolean | Institutions$ProvincesArgs<ExtArgs>
+    Curricula?: boolean | Institutions$CurriculaArgs<ExtArgs>
     _count?: boolean | InstitutionsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["institutions"]>
 
@@ -31630,12 +31930,14 @@ export namespace Prisma {
     abbreviation?: boolean
     country?: boolean
     province?: boolean
+    province_id?: boolean
     type?: boolean
     email_domains?: boolean
     city?: boolean
     website?: boolean
     created_at?: boolean
     updated_at?: boolean
+    Provinces?: boolean | Institutions$ProvincesArgs<ExtArgs>
   }, ExtArgs["result"]["institutions"]>
 
   export type InstitutionsSelectScalar = {
@@ -31644,6 +31946,7 @@ export namespace Prisma {
     abbreviation?: boolean
     country?: boolean
     province?: boolean
+    province_id?: boolean
     type?: boolean
     email_domains?: boolean
     city?: boolean
@@ -31657,9 +31960,13 @@ export namespace Prisma {
     InstitutionCourses?: boolean | Institutions$InstitutionCoursesArgs<ExtArgs>
     ProfileInstitutions?: boolean | Institutions$ProfileInstitutionsArgs<ExtArgs>
     SchoolEmailVerifications?: boolean | Institutions$SchoolEmailVerificationsArgs<ExtArgs>
+    Provinces?: boolean | Institutions$ProvincesArgs<ExtArgs>
+    Curricula?: boolean | Institutions$CurriculaArgs<ExtArgs>
     _count?: boolean | InstitutionsCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type InstitutionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type InstitutionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Provinces?: boolean | Institutions$ProvincesArgs<ExtArgs>
+  }
 
   export type $InstitutionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Institutions"
@@ -31668,6 +31975,8 @@ export namespace Prisma {
       InstitutionCourses: Prisma.$InstitutionCoursesPayload<ExtArgs>[]
       ProfileInstitutions: Prisma.$ProfileInstitutionsPayload<ExtArgs>[]
       SchoolEmailVerifications: Prisma.$SchoolEmailVerificationsPayload<ExtArgs>[]
+      Provinces: Prisma.$ProvincesPayload<ExtArgs> | null
+      Curricula: Prisma.$CurriculaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -31675,6 +31984,7 @@ export namespace Prisma {
       abbreviation: string | null
       country: string
       province: string | null
+      province_id: string | null
       type: string
       email_domains: string[]
       city: string | null
@@ -32049,6 +32359,8 @@ export namespace Prisma {
     InstitutionCourses<T extends Institutions$InstitutionCoursesArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$InstitutionCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstitutionCoursesPayload<ExtArgs>, T, "findMany"> | Null>
     ProfileInstitutions<T extends Institutions$ProfileInstitutionsArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$ProfileInstitutionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findMany"> | Null>
     SchoolEmailVerifications<T extends Institutions$SchoolEmailVerificationsArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$SchoolEmailVerificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findMany"> | Null>
+    Provinces<T extends Institutions$ProvincesArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$ProvincesArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    Curricula<T extends Institutions$CurriculaArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$CurriculaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -32083,6 +32395,7 @@ export namespace Prisma {
     readonly abbreviation: FieldRef<"Institutions", 'String'>
     readonly country: FieldRef<"Institutions", 'String'>
     readonly province: FieldRef<"Institutions", 'String'>
+    readonly province_id: FieldRef<"Institutions", 'String'>
     readonly type: FieldRef<"Institutions", 'String'>
     readonly email_domains: FieldRef<"Institutions", 'String[]'>
     readonly city: FieldRef<"Institutions", 'String'>
@@ -32310,6 +32623,10 @@ export namespace Prisma {
      */
     data: InstitutionsCreateManyInput | InstitutionsCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InstitutionsIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -32483,6 +32800,41 @@ export namespace Prisma {
   }
 
   /**
+   * Institutions.Provinces
+   */
+  export type Institutions$ProvincesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    where?: ProvincesWhereInput
+  }
+
+  /**
+   * Institutions.Curricula
+   */
+  export type Institutions$CurriculaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    where?: CurriculaWhereInput
+    orderBy?: CurriculaOrderByWithRelationInput | CurriculaOrderByWithRelationInput[]
+    cursor?: CurriculaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CurriculaScalarFieldEnum | CurriculaScalarFieldEnum[]
+  }
+
+  /**
    * Institutions without action
    */
   export type InstitutionsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -32494,6 +32846,2009 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: InstitutionsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Provinces
+   */
+
+  export type AggregateProvinces = {
+    _count: ProvincesCountAggregateOutputType | null
+    _min: ProvincesMinAggregateOutputType | null
+    _max: ProvincesMaxAggregateOutputType | null
+  }
+
+  export type ProvincesMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    country: string | null
+    is_territory: boolean | null
+    created_at: Date | null
+  }
+
+  export type ProvincesMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    country: string | null
+    is_territory: boolean | null
+    created_at: Date | null
+  }
+
+  export type ProvincesCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    country: number
+    is_territory: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type ProvincesMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    country?: true
+    is_territory?: true
+    created_at?: true
+  }
+
+  export type ProvincesMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    country?: true
+    is_territory?: true
+    created_at?: true
+  }
+
+  export type ProvincesCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    country?: true
+    is_territory?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type ProvincesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Provinces to aggregate.
+     */
+    where?: ProvincesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Provinces to fetch.
+     */
+    orderBy?: ProvincesOrderByWithRelationInput | ProvincesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProvincesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Provinces.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Provinces
+    **/
+    _count?: true | ProvincesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProvincesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProvincesMaxAggregateInputType
+  }
+
+  export type GetProvincesAggregateType<T extends ProvincesAggregateArgs> = {
+        [P in keyof T & keyof AggregateProvinces]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProvinces[P]>
+      : GetScalarType<T[P], AggregateProvinces[P]>
+  }
+
+
+
+
+  export type ProvincesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProvincesWhereInput
+    orderBy?: ProvincesOrderByWithAggregationInput | ProvincesOrderByWithAggregationInput[]
+    by: ProvincesScalarFieldEnum[] | ProvincesScalarFieldEnum
+    having?: ProvincesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProvincesCountAggregateInputType | true
+    _min?: ProvincesMinAggregateInputType
+    _max?: ProvincesMaxAggregateInputType
+  }
+
+  export type ProvincesGroupByOutputType = {
+    id: string
+    code: string
+    name: string
+    country: string
+    is_territory: boolean
+    created_at: Date
+    _count: ProvincesCountAggregateOutputType | null
+    _min: ProvincesMinAggregateOutputType | null
+    _max: ProvincesMaxAggregateOutputType | null
+  }
+
+  type GetProvincesGroupByPayload<T extends ProvincesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProvincesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProvincesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProvincesGroupByOutputType[P]>
+            : GetScalarType<T[P], ProvincesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProvincesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    country?: boolean
+    is_territory?: boolean
+    created_at?: boolean
+    Institutions?: boolean | Provinces$InstitutionsArgs<ExtArgs>
+    Curricula?: boolean | Provinces$CurriculaArgs<ExtArgs>
+    _count?: boolean | ProvincesCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["provinces"]>
+
+  export type ProvincesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    country?: boolean
+    is_territory?: boolean
+    created_at?: boolean
+  }, ExtArgs["result"]["provinces"]>
+
+  export type ProvincesSelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    country?: boolean
+    is_territory?: boolean
+    created_at?: boolean
+  }
+
+  export type ProvincesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Institutions?: boolean | Provinces$InstitutionsArgs<ExtArgs>
+    Curricula?: boolean | Provinces$CurriculaArgs<ExtArgs>
+    _count?: boolean | ProvincesCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProvincesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ProvincesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Provinces"
+    objects: {
+      Institutions: Prisma.$InstitutionsPayload<ExtArgs>[]
+      Curricula: Prisma.$CurriculaPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      name: string
+      country: string
+      is_territory: boolean
+      created_at: Date
+    }, ExtArgs["result"]["provinces"]>
+    composites: {}
+  }
+
+  type ProvincesGetPayload<S extends boolean | null | undefined | ProvincesDefaultArgs> = $Result.GetResult<Prisma.$ProvincesPayload, S>
+
+  type ProvincesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ProvincesFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ProvincesCountAggregateInputType | true
+    }
+
+  export interface ProvincesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Provinces'], meta: { name: 'Provinces' } }
+    /**
+     * Find zero or one Provinces that matches the filter.
+     * @param {ProvincesFindUniqueArgs} args - Arguments to find a Provinces
+     * @example
+     * // Get one Provinces
+     * const provinces = await prisma.provinces.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProvincesFindUniqueArgs>(args: SelectSubset<T, ProvincesFindUniqueArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Provinces that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ProvincesFindUniqueOrThrowArgs} args - Arguments to find a Provinces
+     * @example
+     * // Get one Provinces
+     * const provinces = await prisma.provinces.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProvincesFindUniqueOrThrowArgs>(args: SelectSubset<T, ProvincesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Provinces that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvincesFindFirstArgs} args - Arguments to find a Provinces
+     * @example
+     * // Get one Provinces
+     * const provinces = await prisma.provinces.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProvincesFindFirstArgs>(args?: SelectSubset<T, ProvincesFindFirstArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Provinces that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvincesFindFirstOrThrowArgs} args - Arguments to find a Provinces
+     * @example
+     * // Get one Provinces
+     * const provinces = await prisma.provinces.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProvincesFindFirstOrThrowArgs>(args?: SelectSubset<T, ProvincesFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Provinces that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvincesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Provinces
+     * const provinces = await prisma.provinces.findMany()
+     * 
+     * // Get first 10 Provinces
+     * const provinces = await prisma.provinces.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const provincesWithIdOnly = await prisma.provinces.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProvincesFindManyArgs>(args?: SelectSubset<T, ProvincesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Provinces.
+     * @param {ProvincesCreateArgs} args - Arguments to create a Provinces.
+     * @example
+     * // Create one Provinces
+     * const Provinces = await prisma.provinces.create({
+     *   data: {
+     *     // ... data to create a Provinces
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProvincesCreateArgs>(args: SelectSubset<T, ProvincesCreateArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Provinces.
+     * @param {ProvincesCreateManyArgs} args - Arguments to create many Provinces.
+     * @example
+     * // Create many Provinces
+     * const provinces = await prisma.provinces.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProvincesCreateManyArgs>(args?: SelectSubset<T, ProvincesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Provinces and returns the data saved in the database.
+     * @param {ProvincesCreateManyAndReturnArgs} args - Arguments to create many Provinces.
+     * @example
+     * // Create many Provinces
+     * const provinces = await prisma.provinces.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Provinces and only return the `id`
+     * const provincesWithIdOnly = await prisma.provinces.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProvincesCreateManyAndReturnArgs>(args?: SelectSubset<T, ProvincesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Provinces.
+     * @param {ProvincesDeleteArgs} args - Arguments to delete one Provinces.
+     * @example
+     * // Delete one Provinces
+     * const Provinces = await prisma.provinces.delete({
+     *   where: {
+     *     // ... filter to delete one Provinces
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProvincesDeleteArgs>(args: SelectSubset<T, ProvincesDeleteArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Provinces.
+     * @param {ProvincesUpdateArgs} args - Arguments to update one Provinces.
+     * @example
+     * // Update one Provinces
+     * const provinces = await prisma.provinces.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProvincesUpdateArgs>(args: SelectSubset<T, ProvincesUpdateArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Provinces.
+     * @param {ProvincesDeleteManyArgs} args - Arguments to filter Provinces to delete.
+     * @example
+     * // Delete a few Provinces
+     * const { count } = await prisma.provinces.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProvincesDeleteManyArgs>(args?: SelectSubset<T, ProvincesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvincesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Provinces
+     * const provinces = await prisma.provinces.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProvincesUpdateManyArgs>(args: SelectSubset<T, ProvincesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Provinces.
+     * @param {ProvincesUpsertArgs} args - Arguments to update or create a Provinces.
+     * @example
+     * // Update or create a Provinces
+     * const provinces = await prisma.provinces.upsert({
+     *   create: {
+     *     // ... data to create a Provinces
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Provinces we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProvincesUpsertArgs>(args: SelectSubset<T, ProvincesUpsertArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvincesCountArgs} args - Arguments to filter Provinces to count.
+     * @example
+     * // Count the number of Provinces
+     * const count = await prisma.provinces.count({
+     *   where: {
+     *     // ... the filter for the Provinces we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProvincesCountArgs>(
+      args?: Subset<T, ProvincesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProvincesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvincesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProvincesAggregateArgs>(args: Subset<T, ProvincesAggregateArgs>): Prisma.PrismaPromise<GetProvincesAggregateType<T>>
+
+    /**
+     * Group by Provinces.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProvincesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProvincesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProvincesGroupByArgs['orderBy'] }
+        : { orderBy?: ProvincesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProvincesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProvincesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Provinces model
+   */
+  readonly fields: ProvincesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Provinces.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProvincesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Institutions<T extends Provinces$InstitutionsArgs<ExtArgs> = {}>(args?: Subset<T, Provinces$InstitutionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstitutionsPayload<ExtArgs>, T, "findMany"> | Null>
+    Curricula<T extends Provinces$CurriculaArgs<ExtArgs> = {}>(args?: Subset<T, Provinces$CurriculaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Provinces model
+   */ 
+  interface ProvincesFieldRefs {
+    readonly id: FieldRef<"Provinces", 'String'>
+    readonly code: FieldRef<"Provinces", 'String'>
+    readonly name: FieldRef<"Provinces", 'String'>
+    readonly country: FieldRef<"Provinces", 'String'>
+    readonly is_territory: FieldRef<"Provinces", 'Boolean'>
+    readonly created_at: FieldRef<"Provinces", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Provinces findUnique
+   */
+  export type ProvincesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    /**
+     * Filter, which Provinces to fetch.
+     */
+    where: ProvincesWhereUniqueInput
+  }
+
+  /**
+   * Provinces findUniqueOrThrow
+   */
+  export type ProvincesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    /**
+     * Filter, which Provinces to fetch.
+     */
+    where: ProvincesWhereUniqueInput
+  }
+
+  /**
+   * Provinces findFirst
+   */
+  export type ProvincesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    /**
+     * Filter, which Provinces to fetch.
+     */
+    where?: ProvincesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Provinces to fetch.
+     */
+    orderBy?: ProvincesOrderByWithRelationInput | ProvincesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Provinces.
+     */
+    cursor?: ProvincesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Provinces.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Provinces.
+     */
+    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
+  }
+
+  /**
+   * Provinces findFirstOrThrow
+   */
+  export type ProvincesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    /**
+     * Filter, which Provinces to fetch.
+     */
+    where?: ProvincesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Provinces to fetch.
+     */
+    orderBy?: ProvincesOrderByWithRelationInput | ProvincesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Provinces.
+     */
+    cursor?: ProvincesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Provinces.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Provinces.
+     */
+    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
+  }
+
+  /**
+   * Provinces findMany
+   */
+  export type ProvincesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    /**
+     * Filter, which Provinces to fetch.
+     */
+    where?: ProvincesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Provinces to fetch.
+     */
+    orderBy?: ProvincesOrderByWithRelationInput | ProvincesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Provinces.
+     */
+    cursor?: ProvincesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Provinces from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Provinces.
+     */
+    skip?: number
+    distinct?: ProvincesScalarFieldEnum | ProvincesScalarFieldEnum[]
+  }
+
+  /**
+   * Provinces create
+   */
+  export type ProvincesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Provinces.
+     */
+    data: XOR<ProvincesCreateInput, ProvincesUncheckedCreateInput>
+  }
+
+  /**
+   * Provinces createMany
+   */
+  export type ProvincesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Provinces.
+     */
+    data: ProvincesCreateManyInput | ProvincesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Provinces createManyAndReturn
+   */
+  export type ProvincesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Provinces.
+     */
+    data: ProvincesCreateManyInput | ProvincesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Provinces update
+   */
+  export type ProvincesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Provinces.
+     */
+    data: XOR<ProvincesUpdateInput, ProvincesUncheckedUpdateInput>
+    /**
+     * Choose, which Provinces to update.
+     */
+    where: ProvincesWhereUniqueInput
+  }
+
+  /**
+   * Provinces updateMany
+   */
+  export type ProvincesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Provinces.
+     */
+    data: XOR<ProvincesUpdateManyMutationInput, ProvincesUncheckedUpdateManyInput>
+    /**
+     * Filter which Provinces to update
+     */
+    where?: ProvincesWhereInput
+  }
+
+  /**
+   * Provinces upsert
+   */
+  export type ProvincesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Provinces to update in case it exists.
+     */
+    where: ProvincesWhereUniqueInput
+    /**
+     * In case the Provinces found by the `where` argument doesn't exist, create a new Provinces with this data.
+     */
+    create: XOR<ProvincesCreateInput, ProvincesUncheckedCreateInput>
+    /**
+     * In case the Provinces was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProvincesUpdateInput, ProvincesUncheckedUpdateInput>
+  }
+
+  /**
+   * Provinces delete
+   */
+  export type ProvincesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    /**
+     * Filter which Provinces to delete.
+     */
+    where: ProvincesWhereUniqueInput
+  }
+
+  /**
+   * Provinces deleteMany
+   */
+  export type ProvincesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Provinces to delete
+     */
+    where?: ProvincesWhereInput
+  }
+
+  /**
+   * Provinces.Institutions
+   */
+  export type Provinces$InstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Institutions
+     */
+    select?: InstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InstitutionsInclude<ExtArgs> | null
+    where?: InstitutionsWhereInput
+    orderBy?: InstitutionsOrderByWithRelationInput | InstitutionsOrderByWithRelationInput[]
+    cursor?: InstitutionsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InstitutionsScalarFieldEnum | InstitutionsScalarFieldEnum[]
+  }
+
+  /**
+   * Provinces.Curricula
+   */
+  export type Provinces$CurriculaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    where?: CurriculaWhereInput
+    orderBy?: CurriculaOrderByWithRelationInput | CurriculaOrderByWithRelationInput[]
+    cursor?: CurriculaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CurriculaScalarFieldEnum | CurriculaScalarFieldEnum[]
+  }
+
+  /**
+   * Provinces without action
+   */
+  export type ProvincesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Curricula
+   */
+
+  export type AggregateCurricula = {
+    _count: CurriculaCountAggregateOutputType | null
+    _min: CurriculaMinAggregateOutputType | null
+    _max: CurriculaMaxAggregateOutputType | null
+  }
+
+  export type CurriculaMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    kind: string | null
+    province_id: string | null
+    institution_id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CurriculaMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    kind: string | null
+    province_id: string | null
+    institution_id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CurriculaCountAggregateOutputType = {
+    id: number
+    name: number
+    kind: number
+    province_id: number
+    institution_id: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type CurriculaMinAggregateInputType = {
+    id?: true
+    name?: true
+    kind?: true
+    province_id?: true
+    institution_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CurriculaMaxAggregateInputType = {
+    id?: true
+    name?: true
+    kind?: true
+    province_id?: true
+    institution_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CurriculaCountAggregateInputType = {
+    id?: true
+    name?: true
+    kind?: true
+    province_id?: true
+    institution_id?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type CurriculaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Curricula to aggregate.
+     */
+    where?: CurriculaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Curricula to fetch.
+     */
+    orderBy?: CurriculaOrderByWithRelationInput | CurriculaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CurriculaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Curricula from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Curricula.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Curricula
+    **/
+    _count?: true | CurriculaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CurriculaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CurriculaMaxAggregateInputType
+  }
+
+  export type GetCurriculaAggregateType<T extends CurriculaAggregateArgs> = {
+        [P in keyof T & keyof AggregateCurricula]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCurricula[P]>
+      : GetScalarType<T[P], AggregateCurricula[P]>
+  }
+
+
+
+
+  export type CurriculaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CurriculaWhereInput
+    orderBy?: CurriculaOrderByWithAggregationInput | CurriculaOrderByWithAggregationInput[]
+    by: CurriculaScalarFieldEnum[] | CurriculaScalarFieldEnum
+    having?: CurriculaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CurriculaCountAggregateInputType | true
+    _min?: CurriculaMinAggregateInputType
+    _max?: CurriculaMaxAggregateInputType
+  }
+
+  export type CurriculaGroupByOutputType = {
+    id: string
+    name: string
+    kind: string
+    province_id: string | null
+    institution_id: string | null
+    created_at: Date
+    updated_at: Date
+    _count: CurriculaCountAggregateOutputType | null
+    _min: CurriculaMinAggregateOutputType | null
+    _max: CurriculaMaxAggregateOutputType | null
+  }
+
+  type GetCurriculaGroupByPayload<T extends CurriculaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CurriculaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CurriculaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CurriculaGroupByOutputType[P]>
+            : GetScalarType<T[P], CurriculaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CurriculaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    kind?: boolean
+    province_id?: boolean
+    institution_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    Provinces?: boolean | Curricula$ProvincesArgs<ExtArgs>
+    Institutions?: boolean | Curricula$InstitutionsArgs<ExtArgs>
+    Subjects?: boolean | Curricula$SubjectsArgs<ExtArgs>
+    _count?: boolean | CurriculaCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["curricula"]>
+
+  export type CurriculaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    kind?: boolean
+    province_id?: boolean
+    institution_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    Provinces?: boolean | Curricula$ProvincesArgs<ExtArgs>
+    Institutions?: boolean | Curricula$InstitutionsArgs<ExtArgs>
+  }, ExtArgs["result"]["curricula"]>
+
+  export type CurriculaSelectScalar = {
+    id?: boolean
+    name?: boolean
+    kind?: boolean
+    province_id?: boolean
+    institution_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type CurriculaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Provinces?: boolean | Curricula$ProvincesArgs<ExtArgs>
+    Institutions?: boolean | Curricula$InstitutionsArgs<ExtArgs>
+    Subjects?: boolean | Curricula$SubjectsArgs<ExtArgs>
+    _count?: boolean | CurriculaCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CurriculaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Provinces?: boolean | Curricula$ProvincesArgs<ExtArgs>
+    Institutions?: boolean | Curricula$InstitutionsArgs<ExtArgs>
+  }
+
+  export type $CurriculaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Curricula"
+    objects: {
+      Provinces: Prisma.$ProvincesPayload<ExtArgs> | null
+      Institutions: Prisma.$InstitutionsPayload<ExtArgs> | null
+      Subjects: Prisma.$SubjectsPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      kind: string
+      province_id: string | null
+      institution_id: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["curricula"]>
+    composites: {}
+  }
+
+  type CurriculaGetPayload<S extends boolean | null | undefined | CurriculaDefaultArgs> = $Result.GetResult<Prisma.$CurriculaPayload, S>
+
+  type CurriculaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CurriculaFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CurriculaCountAggregateInputType | true
+    }
+
+  export interface CurriculaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Curricula'], meta: { name: 'Curricula' } }
+    /**
+     * Find zero or one Curricula that matches the filter.
+     * @param {CurriculaFindUniqueArgs} args - Arguments to find a Curricula
+     * @example
+     * // Get one Curricula
+     * const curricula = await prisma.curricula.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CurriculaFindUniqueArgs>(args: SelectSubset<T, CurriculaFindUniqueArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Curricula that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CurriculaFindUniqueOrThrowArgs} args - Arguments to find a Curricula
+     * @example
+     * // Get one Curricula
+     * const curricula = await prisma.curricula.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CurriculaFindUniqueOrThrowArgs>(args: SelectSubset<T, CurriculaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Curricula that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CurriculaFindFirstArgs} args - Arguments to find a Curricula
+     * @example
+     * // Get one Curricula
+     * const curricula = await prisma.curricula.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CurriculaFindFirstArgs>(args?: SelectSubset<T, CurriculaFindFirstArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Curricula that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CurriculaFindFirstOrThrowArgs} args - Arguments to find a Curricula
+     * @example
+     * // Get one Curricula
+     * const curricula = await prisma.curricula.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CurriculaFindFirstOrThrowArgs>(args?: SelectSubset<T, CurriculaFindFirstOrThrowArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Curricula that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CurriculaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Curricula
+     * const curricula = await prisma.curricula.findMany()
+     * 
+     * // Get first 10 Curricula
+     * const curricula = await prisma.curricula.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const curriculaWithIdOnly = await prisma.curricula.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CurriculaFindManyArgs>(args?: SelectSubset<T, CurriculaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Curricula.
+     * @param {CurriculaCreateArgs} args - Arguments to create a Curricula.
+     * @example
+     * // Create one Curricula
+     * const Curricula = await prisma.curricula.create({
+     *   data: {
+     *     // ... data to create a Curricula
+     *   }
+     * })
+     * 
+     */
+    create<T extends CurriculaCreateArgs>(args: SelectSubset<T, CurriculaCreateArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Curricula.
+     * @param {CurriculaCreateManyArgs} args - Arguments to create many Curricula.
+     * @example
+     * // Create many Curricula
+     * const curricula = await prisma.curricula.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CurriculaCreateManyArgs>(args?: SelectSubset<T, CurriculaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Curricula and returns the data saved in the database.
+     * @param {CurriculaCreateManyAndReturnArgs} args - Arguments to create many Curricula.
+     * @example
+     * // Create many Curricula
+     * const curricula = await prisma.curricula.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Curricula and only return the `id`
+     * const curriculaWithIdOnly = await prisma.curricula.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CurriculaCreateManyAndReturnArgs>(args?: SelectSubset<T, CurriculaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Curricula.
+     * @param {CurriculaDeleteArgs} args - Arguments to delete one Curricula.
+     * @example
+     * // Delete one Curricula
+     * const Curricula = await prisma.curricula.delete({
+     *   where: {
+     *     // ... filter to delete one Curricula
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CurriculaDeleteArgs>(args: SelectSubset<T, CurriculaDeleteArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Curricula.
+     * @param {CurriculaUpdateArgs} args - Arguments to update one Curricula.
+     * @example
+     * // Update one Curricula
+     * const curricula = await prisma.curricula.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CurriculaUpdateArgs>(args: SelectSubset<T, CurriculaUpdateArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Curricula.
+     * @param {CurriculaDeleteManyArgs} args - Arguments to filter Curricula to delete.
+     * @example
+     * // Delete a few Curricula
+     * const { count } = await prisma.curricula.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CurriculaDeleteManyArgs>(args?: SelectSubset<T, CurriculaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Curricula.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CurriculaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Curricula
+     * const curricula = await prisma.curricula.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CurriculaUpdateManyArgs>(args: SelectSubset<T, CurriculaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Curricula.
+     * @param {CurriculaUpsertArgs} args - Arguments to update or create a Curricula.
+     * @example
+     * // Update or create a Curricula
+     * const curricula = await prisma.curricula.upsert({
+     *   create: {
+     *     // ... data to create a Curricula
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Curricula we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CurriculaUpsertArgs>(args: SelectSubset<T, CurriculaUpsertArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Curricula.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CurriculaCountArgs} args - Arguments to filter Curricula to count.
+     * @example
+     * // Count the number of Curricula
+     * const count = await prisma.curricula.count({
+     *   where: {
+     *     // ... the filter for the Curricula we want to count
+     *   }
+     * })
+    **/
+    count<T extends CurriculaCountArgs>(
+      args?: Subset<T, CurriculaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CurriculaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Curricula.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CurriculaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CurriculaAggregateArgs>(args: Subset<T, CurriculaAggregateArgs>): Prisma.PrismaPromise<GetCurriculaAggregateType<T>>
+
+    /**
+     * Group by Curricula.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CurriculaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CurriculaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CurriculaGroupByArgs['orderBy'] }
+        : { orderBy?: CurriculaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CurriculaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCurriculaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Curricula model
+   */
+  readonly fields: CurriculaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Curricula.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CurriculaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Provinces<T extends Curricula$ProvincesArgs<ExtArgs> = {}>(args?: Subset<T, Curricula$ProvincesArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    Institutions<T extends Curricula$InstitutionsArgs<ExtArgs> = {}>(args?: Subset<T, Curricula$InstitutionsArgs<ExtArgs>>): Prisma__InstitutionsClient<$Result.GetResult<Prisma.$InstitutionsPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    Subjects<T extends Curricula$SubjectsArgs<ExtArgs> = {}>(args?: Subset<T, Curricula$SubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectsPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Curricula model
+   */ 
+  interface CurriculaFieldRefs {
+    readonly id: FieldRef<"Curricula", 'String'>
+    readonly name: FieldRef<"Curricula", 'String'>
+    readonly kind: FieldRef<"Curricula", 'String'>
+    readonly province_id: FieldRef<"Curricula", 'String'>
+    readonly institution_id: FieldRef<"Curricula", 'String'>
+    readonly created_at: FieldRef<"Curricula", 'DateTime'>
+    readonly updated_at: FieldRef<"Curricula", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Curricula findUnique
+   */
+  export type CurriculaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    /**
+     * Filter, which Curricula to fetch.
+     */
+    where: CurriculaWhereUniqueInput
+  }
+
+  /**
+   * Curricula findUniqueOrThrow
+   */
+  export type CurriculaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    /**
+     * Filter, which Curricula to fetch.
+     */
+    where: CurriculaWhereUniqueInput
+  }
+
+  /**
+   * Curricula findFirst
+   */
+  export type CurriculaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    /**
+     * Filter, which Curricula to fetch.
+     */
+    where?: CurriculaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Curricula to fetch.
+     */
+    orderBy?: CurriculaOrderByWithRelationInput | CurriculaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Curricula.
+     */
+    cursor?: CurriculaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Curricula from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Curricula.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Curricula.
+     */
+    distinct?: CurriculaScalarFieldEnum | CurriculaScalarFieldEnum[]
+  }
+
+  /**
+   * Curricula findFirstOrThrow
+   */
+  export type CurriculaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    /**
+     * Filter, which Curricula to fetch.
+     */
+    where?: CurriculaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Curricula to fetch.
+     */
+    orderBy?: CurriculaOrderByWithRelationInput | CurriculaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Curricula.
+     */
+    cursor?: CurriculaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Curricula from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Curricula.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Curricula.
+     */
+    distinct?: CurriculaScalarFieldEnum | CurriculaScalarFieldEnum[]
+  }
+
+  /**
+   * Curricula findMany
+   */
+  export type CurriculaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    /**
+     * Filter, which Curricula to fetch.
+     */
+    where?: CurriculaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Curricula to fetch.
+     */
+    orderBy?: CurriculaOrderByWithRelationInput | CurriculaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Curricula.
+     */
+    cursor?: CurriculaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Curricula from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Curricula.
+     */
+    skip?: number
+    distinct?: CurriculaScalarFieldEnum | CurriculaScalarFieldEnum[]
+  }
+
+  /**
+   * Curricula create
+   */
+  export type CurriculaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Curricula.
+     */
+    data: XOR<CurriculaCreateInput, CurriculaUncheckedCreateInput>
+  }
+
+  /**
+   * Curricula createMany
+   */
+  export type CurriculaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Curricula.
+     */
+    data: CurriculaCreateManyInput | CurriculaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Curricula createManyAndReturn
+   */
+  export type CurriculaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Curricula.
+     */
+    data: CurriculaCreateManyInput | CurriculaCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Curricula update
+   */
+  export type CurriculaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Curricula.
+     */
+    data: XOR<CurriculaUpdateInput, CurriculaUncheckedUpdateInput>
+    /**
+     * Choose, which Curricula to update.
+     */
+    where: CurriculaWhereUniqueInput
+  }
+
+  /**
+   * Curricula updateMany
+   */
+  export type CurriculaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Curricula.
+     */
+    data: XOR<CurriculaUpdateManyMutationInput, CurriculaUncheckedUpdateManyInput>
+    /**
+     * Filter which Curricula to update
+     */
+    where?: CurriculaWhereInput
+  }
+
+  /**
+   * Curricula upsert
+   */
+  export type CurriculaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Curricula to update in case it exists.
+     */
+    where: CurriculaWhereUniqueInput
+    /**
+     * In case the Curricula found by the `where` argument doesn't exist, create a new Curricula with this data.
+     */
+    create: XOR<CurriculaCreateInput, CurriculaUncheckedCreateInput>
+    /**
+     * In case the Curricula was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CurriculaUpdateInput, CurriculaUncheckedUpdateInput>
+  }
+
+  /**
+   * Curricula delete
+   */
+  export type CurriculaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
+    /**
+     * Filter which Curricula to delete.
+     */
+    where: CurriculaWhereUniqueInput
+  }
+
+  /**
+   * Curricula deleteMany
+   */
+  export type CurriculaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Curricula to delete
+     */
+    where?: CurriculaWhereInput
+  }
+
+  /**
+   * Curricula.Provinces
+   */
+  export type Curricula$ProvincesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Provinces
+     */
+    select?: ProvincesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProvincesInclude<ExtArgs> | null
+    where?: ProvincesWhereInput
+  }
+
+  /**
+   * Curricula.Institutions
+   */
+  export type Curricula$InstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Institutions
+     */
+    select?: InstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InstitutionsInclude<ExtArgs> | null
+    where?: InstitutionsWhereInput
+  }
+
+  /**
+   * Curricula.Subjects
+   */
+  export type Curricula$SubjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Subjects
+     */
+    select?: SubjectsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SubjectsInclude<ExtArgs> | null
+    where?: SubjectsWhereInput
+    orderBy?: SubjectsOrderByWithRelationInput | SubjectsOrderByWithRelationInput[]
+    cursor?: SubjectsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SubjectsScalarFieldEnum | SubjectsScalarFieldEnum[]
+  }
+
+  /**
+   * Curricula without action
+   */
+  export type CurriculaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Curricula
+     */
+    select?: CurriculaSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CurriculaInclude<ExtArgs> | null
   }
 
 
@@ -43037,6 +45392,7 @@ export namespace Prisma {
     code: 'code',
     grade: 'grade',
     category: 'category',
+    curriculum_id: 'curriculum_id',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -43050,6 +45406,7 @@ export namespace Prisma {
     abbreviation: 'abbreviation',
     country: 'country',
     province: 'province',
+    province_id: 'province_id',
     type: 'type',
     email_domains: 'email_domains',
     city: 'city',
@@ -43059,6 +45416,31 @@ export namespace Prisma {
   };
 
   export type InstitutionsScalarFieldEnum = (typeof InstitutionsScalarFieldEnum)[keyof typeof InstitutionsScalarFieldEnum]
+
+
+  export const ProvincesScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    name: 'name',
+    country: 'country',
+    is_territory: 'is_territory',
+    created_at: 'created_at'
+  };
+
+  export type ProvincesScalarFieldEnum = (typeof ProvincesScalarFieldEnum)[keyof typeof ProvincesScalarFieldEnum]
+
+
+  export const CurriculaScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    kind: 'kind',
+    province_id: 'province_id',
+    institution_id: 'institution_id',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type CurriculaScalarFieldEnum = (typeof CurriculaScalarFieldEnum)[keyof typeof CurriculaScalarFieldEnum]
 
 
   export const ProfileInstitutionsScalarFieldEnum: {
@@ -45656,10 +48038,12 @@ export namespace Prisma {
     code?: StringNullableFilter<"Subjects"> | string | null
     grade?: IntNullableFilter<"Subjects"> | number | null
     category?: StringNullableFilter<"Subjects"> | string | null
+    curriculum_id?: UuidNullableFilter<"Subjects"> | string | null
     created_at?: DateTimeNullableFilter<"Subjects"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"Subjects"> | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsListRelationFilter
     InstitutionCourses?: InstitutionCoursesListRelationFilter
+    Curricula?: XOR<CurriculaNullableRelationFilter, CurriculaWhereInput> | null
   }
 
   export type SubjectsOrderByWithRelationInput = {
@@ -45668,10 +48052,12 @@ export namespace Prisma {
     code?: SortOrderInput | SortOrder
     grade?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
+    curriculum_id?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     ProfilesOnSubjects?: ProfilesOnSubjectsOrderByRelationAggregateInput
     InstitutionCourses?: InstitutionCoursesOrderByRelationAggregateInput
+    Curricula?: CurriculaOrderByWithRelationInput
   }
 
   export type SubjectsWhereUniqueInput = Prisma.AtLeast<{
@@ -45683,10 +48069,12 @@ export namespace Prisma {
     code?: StringNullableFilter<"Subjects"> | string | null
     grade?: IntNullableFilter<"Subjects"> | number | null
     category?: StringNullableFilter<"Subjects"> | string | null
+    curriculum_id?: UuidNullableFilter<"Subjects"> | string | null
     created_at?: DateTimeNullableFilter<"Subjects"> | Date | string | null
     updated_at?: DateTimeNullableFilter<"Subjects"> | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsListRelationFilter
     InstitutionCourses?: InstitutionCoursesListRelationFilter
+    Curricula?: XOR<CurriculaNullableRelationFilter, CurriculaWhereInput> | null
   }, "id">
 
   export type SubjectsOrderByWithAggregationInput = {
@@ -45695,6 +48083,7 @@ export namespace Prisma {
     code?: SortOrderInput | SortOrder
     grade?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
+    curriculum_id?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     _count?: SubjectsCountOrderByAggregateInput
@@ -45713,6 +48102,7 @@ export namespace Prisma {
     code?: StringNullableWithAggregatesFilter<"Subjects"> | string | null
     grade?: IntNullableWithAggregatesFilter<"Subjects"> | number | null
     category?: StringNullableWithAggregatesFilter<"Subjects"> | string | null
+    curriculum_id?: UuidNullableWithAggregatesFilter<"Subjects"> | string | null
     created_at?: DateTimeNullableWithAggregatesFilter<"Subjects"> | Date | string | null
     updated_at?: DateTimeNullableWithAggregatesFilter<"Subjects"> | Date | string | null
   }
@@ -45726,6 +48116,7 @@ export namespace Prisma {
     abbreviation?: StringNullableFilter<"Institutions"> | string | null
     country?: StringFilter<"Institutions"> | string
     province?: StringNullableFilter<"Institutions"> | string | null
+    province_id?: UuidNullableFilter<"Institutions"> | string | null
     type?: StringFilter<"Institutions"> | string
     email_domains?: StringNullableListFilter<"Institutions">
     city?: StringNullableFilter<"Institutions"> | string | null
@@ -45736,6 +48127,8 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesListRelationFilter
     ProfileInstitutions?: ProfileInstitutionsListRelationFilter
     SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
+    Provinces?: XOR<ProvincesNullableRelationFilter, ProvincesWhereInput> | null
+    Curricula?: CurriculaListRelationFilter
   }
 
   export type InstitutionsOrderByWithRelationInput = {
@@ -45744,6 +48137,7 @@ export namespace Prisma {
     abbreviation?: SortOrderInput | SortOrder
     country?: SortOrder
     province?: SortOrderInput | SortOrder
+    province_id?: SortOrderInput | SortOrder
     type?: SortOrder
     email_domains?: SortOrder
     city?: SortOrderInput | SortOrder
@@ -45754,6 +48148,8 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesOrderByRelationAggregateInput
     ProfileInstitutions?: ProfileInstitutionsOrderByRelationAggregateInput
     SchoolEmailVerifications?: SchoolEmailVerificationsOrderByRelationAggregateInput
+    Provinces?: ProvincesOrderByWithRelationInput
+    Curricula?: CurriculaOrderByRelationAggregateInput
   }
 
   export type InstitutionsWhereUniqueInput = Prisma.AtLeast<{
@@ -45765,6 +48161,7 @@ export namespace Prisma {
     abbreviation?: StringNullableFilter<"Institutions"> | string | null
     country?: StringFilter<"Institutions"> | string
     province?: StringNullableFilter<"Institutions"> | string | null
+    province_id?: UuidNullableFilter<"Institutions"> | string | null
     type?: StringFilter<"Institutions"> | string
     email_domains?: StringNullableListFilter<"Institutions">
     city?: StringNullableFilter<"Institutions"> | string | null
@@ -45775,6 +48172,8 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesListRelationFilter
     ProfileInstitutions?: ProfileInstitutionsListRelationFilter
     SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
+    Provinces?: XOR<ProvincesNullableRelationFilter, ProvincesWhereInput> | null
+    Curricula?: CurriculaListRelationFilter
   }, "id">
 
   export type InstitutionsOrderByWithAggregationInput = {
@@ -45783,6 +48182,7 @@ export namespace Prisma {
     abbreviation?: SortOrderInput | SortOrder
     country?: SortOrder
     province?: SortOrderInput | SortOrder
+    province_id?: SortOrderInput | SortOrder
     type?: SortOrder
     email_domains?: SortOrder
     city?: SortOrderInput | SortOrder
@@ -45803,12 +48203,147 @@ export namespace Prisma {
     abbreviation?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
     country?: StringWithAggregatesFilter<"Institutions"> | string
     province?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
+    province_id?: UuidNullableWithAggregatesFilter<"Institutions"> | string | null
     type?: StringWithAggregatesFilter<"Institutions"> | string
     email_domains?: StringNullableListFilter<"Institutions">
     city?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
     website?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Institutions"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Institutions"> | Date | string
+  }
+
+  export type ProvincesWhereInput = {
+    AND?: ProvincesWhereInput | ProvincesWhereInput[]
+    OR?: ProvincesWhereInput[]
+    NOT?: ProvincesWhereInput | ProvincesWhereInput[]
+    id?: UuidFilter<"Provinces"> | string
+    code?: StringFilter<"Provinces"> | string
+    name?: StringFilter<"Provinces"> | string
+    country?: StringFilter<"Provinces"> | string
+    is_territory?: BoolFilter<"Provinces"> | boolean
+    created_at?: DateTimeFilter<"Provinces"> | Date | string
+    Institutions?: InstitutionsListRelationFilter
+    Curricula?: CurriculaListRelationFilter
+  }
+
+  export type ProvincesOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    country?: SortOrder
+    is_territory?: SortOrder
+    created_at?: SortOrder
+    Institutions?: InstitutionsOrderByRelationAggregateInput
+    Curricula?: CurriculaOrderByRelationAggregateInput
+  }
+
+  export type ProvincesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: ProvincesWhereInput | ProvincesWhereInput[]
+    OR?: ProvincesWhereInput[]
+    NOT?: ProvincesWhereInput | ProvincesWhereInput[]
+    name?: StringFilter<"Provinces"> | string
+    country?: StringFilter<"Provinces"> | string
+    is_territory?: BoolFilter<"Provinces"> | boolean
+    created_at?: DateTimeFilter<"Provinces"> | Date | string
+    Institutions?: InstitutionsListRelationFilter
+    Curricula?: CurriculaListRelationFilter
+  }, "id" | "code">
+
+  export type ProvincesOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    country?: SortOrder
+    is_territory?: SortOrder
+    created_at?: SortOrder
+    _count?: ProvincesCountOrderByAggregateInput
+    _max?: ProvincesMaxOrderByAggregateInput
+    _min?: ProvincesMinOrderByAggregateInput
+  }
+
+  export type ProvincesScalarWhereWithAggregatesInput = {
+    AND?: ProvincesScalarWhereWithAggregatesInput | ProvincesScalarWhereWithAggregatesInput[]
+    OR?: ProvincesScalarWhereWithAggregatesInput[]
+    NOT?: ProvincesScalarWhereWithAggregatesInput | ProvincesScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Provinces"> | string
+    code?: StringWithAggregatesFilter<"Provinces"> | string
+    name?: StringWithAggregatesFilter<"Provinces"> | string
+    country?: StringWithAggregatesFilter<"Provinces"> | string
+    is_territory?: BoolWithAggregatesFilter<"Provinces"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"Provinces"> | Date | string
+  }
+
+  export type CurriculaWhereInput = {
+    AND?: CurriculaWhereInput | CurriculaWhereInput[]
+    OR?: CurriculaWhereInput[]
+    NOT?: CurriculaWhereInput | CurriculaWhereInput[]
+    id?: UuidFilter<"Curricula"> | string
+    name?: StringFilter<"Curricula"> | string
+    kind?: StringFilter<"Curricula"> | string
+    province_id?: UuidNullableFilter<"Curricula"> | string | null
+    institution_id?: UuidNullableFilter<"Curricula"> | string | null
+    created_at?: DateTimeFilter<"Curricula"> | Date | string
+    updated_at?: DateTimeFilter<"Curricula"> | Date | string
+    Provinces?: XOR<ProvincesNullableRelationFilter, ProvincesWhereInput> | null
+    Institutions?: XOR<InstitutionsNullableRelationFilter, InstitutionsWhereInput> | null
+    Subjects?: SubjectsListRelationFilter
+  }
+
+  export type CurriculaOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    kind?: SortOrder
+    province_id?: SortOrderInput | SortOrder
+    institution_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    Provinces?: ProvincesOrderByWithRelationInput
+    Institutions?: InstitutionsOrderByWithRelationInput
+    Subjects?: SubjectsOrderByRelationAggregateInput
+  }
+
+  export type CurriculaWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CurriculaWhereInput | CurriculaWhereInput[]
+    OR?: CurriculaWhereInput[]
+    NOT?: CurriculaWhereInput | CurriculaWhereInput[]
+    name?: StringFilter<"Curricula"> | string
+    kind?: StringFilter<"Curricula"> | string
+    province_id?: UuidNullableFilter<"Curricula"> | string | null
+    institution_id?: UuidNullableFilter<"Curricula"> | string | null
+    created_at?: DateTimeFilter<"Curricula"> | Date | string
+    updated_at?: DateTimeFilter<"Curricula"> | Date | string
+    Provinces?: XOR<ProvincesNullableRelationFilter, ProvincesWhereInput> | null
+    Institutions?: XOR<InstitutionsNullableRelationFilter, InstitutionsWhereInput> | null
+    Subjects?: SubjectsListRelationFilter
+  }, "id">
+
+  export type CurriculaOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    kind?: SortOrder
+    province_id?: SortOrderInput | SortOrder
+    institution_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: CurriculaCountOrderByAggregateInput
+    _max?: CurriculaMaxOrderByAggregateInput
+    _min?: CurriculaMinOrderByAggregateInput
+  }
+
+  export type CurriculaScalarWhereWithAggregatesInput = {
+    AND?: CurriculaScalarWhereWithAggregatesInput | CurriculaScalarWhereWithAggregatesInput[]
+    OR?: CurriculaScalarWhereWithAggregatesInput[]
+    NOT?: CurriculaScalarWhereWithAggregatesInput | CurriculaScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Curricula"> | string
+    name?: StringWithAggregatesFilter<"Curricula"> | string
+    kind?: StringWithAggregatesFilter<"Curricula"> | string
+    province_id?: UuidNullableWithAggregatesFilter<"Curricula"> | string | null
+    institution_id?: UuidNullableWithAggregatesFilter<"Curricula"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"Curricula"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Curricula"> | Date | string
   }
 
   export type ProfileInstitutionsWhereInput = {
@@ -49093,6 +51628,7 @@ export namespace Prisma {
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutSubjectsInput
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutSubjectsInput
+    Curricula?: CurriculaCreateNestedOneWithoutSubjectsInput
   }
 
   export type SubjectsUncheckedCreateInput = {
@@ -49101,6 +51637,7 @@ export namespace Prisma {
     code?: string | null
     grade?: number | null
     category?: string | null
+    curriculum_id?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutSubjectsInput
@@ -49117,6 +51654,7 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutSubjectsNestedInput
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutSubjectsNestedInput
+    Curricula?: CurriculaUpdateOneWithoutSubjectsNestedInput
   }
 
   export type SubjectsUncheckedUpdateInput = {
@@ -49125,6 +51663,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculum_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutSubjectsNestedInput
@@ -49137,6 +51676,7 @@ export namespace Prisma {
     code?: string | null
     grade?: number | null
     category?: string | null
+    curriculum_id?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
   }
@@ -49157,6 +51697,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculum_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -49177,6 +51718,8 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+    Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUncheckedCreateInput = {
@@ -49185,6 +51728,7 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    province_id?: string | null
     type?: string
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
@@ -49195,6 +51739,7 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUpdateInput = {
@@ -49213,6 +51758,8 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+    Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsUncheckedUpdateInput = {
@@ -49221,6 +51768,7 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49231,6 +51779,7 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsCreateManyInput = {
@@ -49239,6 +51788,7 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    province_id?: string | null
     type?: string
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
@@ -49267,10 +51817,154 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProvincesCreateInput = {
+    id?: string
+    code: string
+    name: string
+    country?: string
+    is_territory?: boolean
+    created_at?: Date | string
+    Institutions?: InstitutionsCreateNestedManyWithoutProvincesInput
+    Curricula?: CurriculaCreateNestedManyWithoutProvincesInput
+  }
+
+  export type ProvincesUncheckedCreateInput = {
+    id?: string
+    code: string
+    name: string
+    country?: string
+    is_territory?: boolean
+    created_at?: Date | string
+    Institutions?: InstitutionsUncheckedCreateNestedManyWithoutProvincesInput
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutProvincesInput
+  }
+
+  export type ProvincesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    is_territory?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Institutions?: InstitutionsUpdateManyWithoutProvincesNestedInput
+    Curricula?: CurriculaUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type ProvincesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    is_territory?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Institutions?: InstitutionsUncheckedUpdateManyWithoutProvincesNestedInput
+    Curricula?: CurriculaUncheckedUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type ProvincesCreateManyInput = {
+    id?: string
+    code: string
+    name: string
+    country?: string
+    is_territory?: boolean
+    created_at?: Date | string
+  }
+
+  export type ProvincesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    is_territory?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProvincesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    is_territory?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CurriculaCreateInput = {
+    id?: string
+    name: string
+    kind: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    Provinces?: ProvincesCreateNestedOneWithoutCurriculaInput
+    Institutions?: InstitutionsCreateNestedOneWithoutCurriculaInput
+    Subjects?: SubjectsCreateNestedManyWithoutCurriculaInput
+  }
+
+  export type CurriculaUncheckedCreateInput = {
+    id?: string
+    name: string
+    kind: string
+    province_id?: string | null
+    institution_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Subjects?: SubjectsUncheckedCreateNestedManyWithoutCurriculaInput
+  }
+
+  export type CurriculaUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Provinces?: ProvincesUpdateOneWithoutCurriculaNestedInput
+    Institutions?: InstitutionsUpdateOneWithoutCurriculaNestedInput
+    Subjects?: SubjectsUpdateManyWithoutCurriculaNestedInput
+  }
+
+  export type CurriculaUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Subjects?: SubjectsUncheckedUpdateManyWithoutCurriculaNestedInput
+  }
+
+  export type CurriculaCreateManyInput = {
+    id?: string
+    name: string
+    kind: string
+    province_id?: string | null
+    institution_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CurriculaUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CurriculaUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52187,6 +54881,11 @@ export namespace Prisma {
     none?: InstitutionCoursesWhereInput
   }
 
+  export type CurriculaNullableRelationFilter = {
+    is?: CurriculaWhereInput | null
+    isNot?: CurriculaWhereInput | null
+  }
+
   export type InstitutionCoursesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -52197,6 +54896,7 @@ export namespace Prisma {
     code?: SortOrder
     grade?: SortOrder
     category?: SortOrder
+    curriculum_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -52211,6 +54911,7 @@ export namespace Prisma {
     code?: SortOrder
     grade?: SortOrder
     category?: SortOrder
+    curriculum_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -52221,6 +54922,7 @@ export namespace Prisma {
     code?: SortOrder
     grade?: SortOrder
     category?: SortOrder
+    curriculum_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -52243,7 +54945,22 @@ export namespace Prisma {
     none?: ProfilesWhereInput
   }
 
+  export type ProvincesNullableRelationFilter = {
+    is?: ProvincesWhereInput | null
+    isNot?: ProvincesWhereInput | null
+  }
+
+  export type CurriculaListRelationFilter = {
+    every?: CurriculaWhereInput
+    some?: CurriculaWhereInput
+    none?: CurriculaWhereInput
+  }
+
   export type ProfilesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CurriculaOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -52253,6 +54970,7 @@ export namespace Prisma {
     abbreviation?: SortOrder
     country?: SortOrder
     province?: SortOrder
+    province_id?: SortOrder
     type?: SortOrder
     email_domains?: SortOrder
     city?: SortOrder
@@ -52267,6 +54985,7 @@ export namespace Prisma {
     abbreviation?: SortOrder
     country?: SortOrder
     province?: SortOrder
+    province_id?: SortOrder
     type?: SortOrder
     city?: SortOrder
     website?: SortOrder
@@ -52280,9 +54999,87 @@ export namespace Prisma {
     abbreviation?: SortOrder
     country?: SortOrder
     province?: SortOrder
+    province_id?: SortOrder
     type?: SortOrder
     city?: SortOrder
     website?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type InstitutionsListRelationFilter = {
+    every?: InstitutionsWhereInput
+    some?: InstitutionsWhereInput
+    none?: InstitutionsWhereInput
+  }
+
+  export type InstitutionsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProvincesCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    country?: SortOrder
+    is_territory?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ProvincesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    country?: SortOrder
+    is_territory?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ProvincesMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    country?: SortOrder
+    is_territory?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type SubjectsListRelationFilter = {
+    every?: SubjectsWhereInput
+    some?: SubjectsWhereInput
+    none?: SubjectsWhereInput
+  }
+
+  export type SubjectsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CurriculaCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    kind?: SortOrder
+    province_id?: SortOrder
+    institution_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CurriculaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    kind?: SortOrder
+    province_id?: SortOrder
+    institution_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CurriculaMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    kind?: SortOrder
+    province_id?: SortOrder
+    institution_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -54584,6 +57381,12 @@ export namespace Prisma {
     connect?: InstitutionCoursesWhereUniqueInput | InstitutionCoursesWhereUniqueInput[]
   }
 
+  export type CurriculaCreateNestedOneWithoutSubjectsInput = {
+    create?: XOR<CurriculaCreateWithoutSubjectsInput, CurriculaUncheckedCreateWithoutSubjectsInput>
+    connectOrCreate?: CurriculaCreateOrConnectWithoutSubjectsInput
+    connect?: CurriculaWhereUniqueInput
+  }
+
   export type ProfilesOnSubjectsUncheckedCreateNestedManyWithoutSubjectsInput = {
     create?: XOR<ProfilesOnSubjectsCreateWithoutSubjectsInput, ProfilesOnSubjectsUncheckedCreateWithoutSubjectsInput> | ProfilesOnSubjectsCreateWithoutSubjectsInput[] | ProfilesOnSubjectsUncheckedCreateWithoutSubjectsInput[]
     connectOrCreate?: ProfilesOnSubjectsCreateOrConnectWithoutSubjectsInput | ProfilesOnSubjectsCreateOrConnectWithoutSubjectsInput[]
@@ -54624,6 +57427,16 @@ export namespace Prisma {
     update?: InstitutionCoursesUpdateWithWhereUniqueWithoutSubjectsInput | InstitutionCoursesUpdateWithWhereUniqueWithoutSubjectsInput[]
     updateMany?: InstitutionCoursesUpdateManyWithWhereWithoutSubjectsInput | InstitutionCoursesUpdateManyWithWhereWithoutSubjectsInput[]
     deleteMany?: InstitutionCoursesScalarWhereInput | InstitutionCoursesScalarWhereInput[]
+  }
+
+  export type CurriculaUpdateOneWithoutSubjectsNestedInput = {
+    create?: XOR<CurriculaCreateWithoutSubjectsInput, CurriculaUncheckedCreateWithoutSubjectsInput>
+    connectOrCreate?: CurriculaCreateOrConnectWithoutSubjectsInput
+    upsert?: CurriculaUpsertWithoutSubjectsInput
+    disconnect?: CurriculaWhereInput | boolean
+    delete?: CurriculaWhereInput | boolean
+    connect?: CurriculaWhereUniqueInput
+    update?: XOR<XOR<CurriculaUpdateToOneWithWhereWithoutSubjectsInput, CurriculaUpdateWithoutSubjectsInput>, CurriculaUncheckedUpdateWithoutSubjectsInput>
   }
 
   export type ProfilesOnSubjectsUncheckedUpdateManyWithoutSubjectsNestedInput = {
@@ -54686,6 +57499,19 @@ export namespace Prisma {
     connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
   }
 
+  export type ProvincesCreateNestedOneWithoutInstitutionsInput = {
+    create?: XOR<ProvincesCreateWithoutInstitutionsInput, ProvincesUncheckedCreateWithoutInstitutionsInput>
+    connectOrCreate?: ProvincesCreateOrConnectWithoutInstitutionsInput
+    connect?: ProvincesWhereUniqueInput
+  }
+
+  export type CurriculaCreateNestedManyWithoutInstitutionsInput = {
+    create?: XOR<CurriculaCreateWithoutInstitutionsInput, CurriculaUncheckedCreateWithoutInstitutionsInput> | CurriculaCreateWithoutInstitutionsInput[] | CurriculaUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: CurriculaCreateOrConnectWithoutInstitutionsInput | CurriculaCreateOrConnectWithoutInstitutionsInput[]
+    createMany?: CurriculaCreateManyInstitutionsInputEnvelope
+    connect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+  }
+
   export type ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput = {
     create?: XOR<ProfilesCreateWithoutInstitutionsInput, ProfilesUncheckedCreateWithoutInstitutionsInput> | ProfilesCreateWithoutInstitutionsInput[] | ProfilesUncheckedCreateWithoutInstitutionsInput[]
     connectOrCreate?: ProfilesCreateOrConnectWithoutInstitutionsInput | ProfilesCreateOrConnectWithoutInstitutionsInput[]
@@ -54712,6 +57538,13 @@ export namespace Prisma {
     connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput | SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput[]
     createMany?: SchoolEmailVerificationsCreateManyInstitutionsInputEnvelope
     connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+  }
+
+  export type CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput = {
+    create?: XOR<CurriculaCreateWithoutInstitutionsInput, CurriculaUncheckedCreateWithoutInstitutionsInput> | CurriculaCreateWithoutInstitutionsInput[] | CurriculaUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: CurriculaCreateOrConnectWithoutInstitutionsInput | CurriculaCreateOrConnectWithoutInstitutionsInput[]
+    createMany?: CurriculaCreateManyInstitutionsInputEnvelope
+    connect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
   }
 
   export type InstitutionsUpdateemail_domainsInput = {
@@ -54775,6 +57608,30 @@ export namespace Prisma {
     deleteMany?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
   }
 
+  export type ProvincesUpdateOneWithoutInstitutionsNestedInput = {
+    create?: XOR<ProvincesCreateWithoutInstitutionsInput, ProvincesUncheckedCreateWithoutInstitutionsInput>
+    connectOrCreate?: ProvincesCreateOrConnectWithoutInstitutionsInput
+    upsert?: ProvincesUpsertWithoutInstitutionsInput
+    disconnect?: ProvincesWhereInput | boolean
+    delete?: ProvincesWhereInput | boolean
+    connect?: ProvincesWhereUniqueInput
+    update?: XOR<XOR<ProvincesUpdateToOneWithWhereWithoutInstitutionsInput, ProvincesUpdateWithoutInstitutionsInput>, ProvincesUncheckedUpdateWithoutInstitutionsInput>
+  }
+
+  export type CurriculaUpdateManyWithoutInstitutionsNestedInput = {
+    create?: XOR<CurriculaCreateWithoutInstitutionsInput, CurriculaUncheckedCreateWithoutInstitutionsInput> | CurriculaCreateWithoutInstitutionsInput[] | CurriculaUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: CurriculaCreateOrConnectWithoutInstitutionsInput | CurriculaCreateOrConnectWithoutInstitutionsInput[]
+    upsert?: CurriculaUpsertWithWhereUniqueWithoutInstitutionsInput | CurriculaUpsertWithWhereUniqueWithoutInstitutionsInput[]
+    createMany?: CurriculaCreateManyInstitutionsInputEnvelope
+    set?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    disconnect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    delete?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    connect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    update?: CurriculaUpdateWithWhereUniqueWithoutInstitutionsInput | CurriculaUpdateWithWhereUniqueWithoutInstitutionsInput[]
+    updateMany?: CurriculaUpdateManyWithWhereWithoutInstitutionsInput | CurriculaUpdateManyWithWhereWithoutInstitutionsInput[]
+    deleteMany?: CurriculaScalarWhereInput | CurriculaScalarWhereInput[]
+  }
+
   export type ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput = {
     create?: XOR<ProfilesCreateWithoutInstitutionsInput, ProfilesUncheckedCreateWithoutInstitutionsInput> | ProfilesCreateWithoutInstitutionsInput[] | ProfilesUncheckedCreateWithoutInstitutionsInput[]
     connectOrCreate?: ProfilesCreateOrConnectWithoutInstitutionsInput | ProfilesCreateOrConnectWithoutInstitutionsInput[]
@@ -54829,6 +57686,178 @@ export namespace Prisma {
     update?: SchoolEmailVerificationsUpdateWithWhereUniqueWithoutInstitutionsInput | SchoolEmailVerificationsUpdateWithWhereUniqueWithoutInstitutionsInput[]
     updateMany?: SchoolEmailVerificationsUpdateManyWithWhereWithoutInstitutionsInput | SchoolEmailVerificationsUpdateManyWithWhereWithoutInstitutionsInput[]
     deleteMany?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
+  }
+
+  export type CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput = {
+    create?: XOR<CurriculaCreateWithoutInstitutionsInput, CurriculaUncheckedCreateWithoutInstitutionsInput> | CurriculaCreateWithoutInstitutionsInput[] | CurriculaUncheckedCreateWithoutInstitutionsInput[]
+    connectOrCreate?: CurriculaCreateOrConnectWithoutInstitutionsInput | CurriculaCreateOrConnectWithoutInstitutionsInput[]
+    upsert?: CurriculaUpsertWithWhereUniqueWithoutInstitutionsInput | CurriculaUpsertWithWhereUniqueWithoutInstitutionsInput[]
+    createMany?: CurriculaCreateManyInstitutionsInputEnvelope
+    set?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    disconnect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    delete?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    connect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    update?: CurriculaUpdateWithWhereUniqueWithoutInstitutionsInput | CurriculaUpdateWithWhereUniqueWithoutInstitutionsInput[]
+    updateMany?: CurriculaUpdateManyWithWhereWithoutInstitutionsInput | CurriculaUpdateManyWithWhereWithoutInstitutionsInput[]
+    deleteMany?: CurriculaScalarWhereInput | CurriculaScalarWhereInput[]
+  }
+
+  export type InstitutionsCreateNestedManyWithoutProvincesInput = {
+    create?: XOR<InstitutionsCreateWithoutProvincesInput, InstitutionsUncheckedCreateWithoutProvincesInput> | InstitutionsCreateWithoutProvincesInput[] | InstitutionsUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutProvincesInput | InstitutionsCreateOrConnectWithoutProvincesInput[]
+    createMany?: InstitutionsCreateManyProvincesInputEnvelope
+    connect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+  }
+
+  export type CurriculaCreateNestedManyWithoutProvincesInput = {
+    create?: XOR<CurriculaCreateWithoutProvincesInput, CurriculaUncheckedCreateWithoutProvincesInput> | CurriculaCreateWithoutProvincesInput[] | CurriculaUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: CurriculaCreateOrConnectWithoutProvincesInput | CurriculaCreateOrConnectWithoutProvincesInput[]
+    createMany?: CurriculaCreateManyProvincesInputEnvelope
+    connect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+  }
+
+  export type InstitutionsUncheckedCreateNestedManyWithoutProvincesInput = {
+    create?: XOR<InstitutionsCreateWithoutProvincesInput, InstitutionsUncheckedCreateWithoutProvincesInput> | InstitutionsCreateWithoutProvincesInput[] | InstitutionsUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutProvincesInput | InstitutionsCreateOrConnectWithoutProvincesInput[]
+    createMany?: InstitutionsCreateManyProvincesInputEnvelope
+    connect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+  }
+
+  export type CurriculaUncheckedCreateNestedManyWithoutProvincesInput = {
+    create?: XOR<CurriculaCreateWithoutProvincesInput, CurriculaUncheckedCreateWithoutProvincesInput> | CurriculaCreateWithoutProvincesInput[] | CurriculaUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: CurriculaCreateOrConnectWithoutProvincesInput | CurriculaCreateOrConnectWithoutProvincesInput[]
+    createMany?: CurriculaCreateManyProvincesInputEnvelope
+    connect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+  }
+
+  export type InstitutionsUpdateManyWithoutProvincesNestedInput = {
+    create?: XOR<InstitutionsCreateWithoutProvincesInput, InstitutionsUncheckedCreateWithoutProvincesInput> | InstitutionsCreateWithoutProvincesInput[] | InstitutionsUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutProvincesInput | InstitutionsCreateOrConnectWithoutProvincesInput[]
+    upsert?: InstitutionsUpsertWithWhereUniqueWithoutProvincesInput | InstitutionsUpsertWithWhereUniqueWithoutProvincesInput[]
+    createMany?: InstitutionsCreateManyProvincesInputEnvelope
+    set?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    disconnect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    delete?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    connect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    update?: InstitutionsUpdateWithWhereUniqueWithoutProvincesInput | InstitutionsUpdateWithWhereUniqueWithoutProvincesInput[]
+    updateMany?: InstitutionsUpdateManyWithWhereWithoutProvincesInput | InstitutionsUpdateManyWithWhereWithoutProvincesInput[]
+    deleteMany?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
+  }
+
+  export type CurriculaUpdateManyWithoutProvincesNestedInput = {
+    create?: XOR<CurriculaCreateWithoutProvincesInput, CurriculaUncheckedCreateWithoutProvincesInput> | CurriculaCreateWithoutProvincesInput[] | CurriculaUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: CurriculaCreateOrConnectWithoutProvincesInput | CurriculaCreateOrConnectWithoutProvincesInput[]
+    upsert?: CurriculaUpsertWithWhereUniqueWithoutProvincesInput | CurriculaUpsertWithWhereUniqueWithoutProvincesInput[]
+    createMany?: CurriculaCreateManyProvincesInputEnvelope
+    set?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    disconnect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    delete?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    connect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    update?: CurriculaUpdateWithWhereUniqueWithoutProvincesInput | CurriculaUpdateWithWhereUniqueWithoutProvincesInput[]
+    updateMany?: CurriculaUpdateManyWithWhereWithoutProvincesInput | CurriculaUpdateManyWithWhereWithoutProvincesInput[]
+    deleteMany?: CurriculaScalarWhereInput | CurriculaScalarWhereInput[]
+  }
+
+  export type InstitutionsUncheckedUpdateManyWithoutProvincesNestedInput = {
+    create?: XOR<InstitutionsCreateWithoutProvincesInput, InstitutionsUncheckedCreateWithoutProvincesInput> | InstitutionsCreateWithoutProvincesInput[] | InstitutionsUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutProvincesInput | InstitutionsCreateOrConnectWithoutProvincesInput[]
+    upsert?: InstitutionsUpsertWithWhereUniqueWithoutProvincesInput | InstitutionsUpsertWithWhereUniqueWithoutProvincesInput[]
+    createMany?: InstitutionsCreateManyProvincesInputEnvelope
+    set?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    disconnect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    delete?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    connect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    update?: InstitutionsUpdateWithWhereUniqueWithoutProvincesInput | InstitutionsUpdateWithWhereUniqueWithoutProvincesInput[]
+    updateMany?: InstitutionsUpdateManyWithWhereWithoutProvincesInput | InstitutionsUpdateManyWithWhereWithoutProvincesInput[]
+    deleteMany?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
+  }
+
+  export type CurriculaUncheckedUpdateManyWithoutProvincesNestedInput = {
+    create?: XOR<CurriculaCreateWithoutProvincesInput, CurriculaUncheckedCreateWithoutProvincesInput> | CurriculaCreateWithoutProvincesInput[] | CurriculaUncheckedCreateWithoutProvincesInput[]
+    connectOrCreate?: CurriculaCreateOrConnectWithoutProvincesInput | CurriculaCreateOrConnectWithoutProvincesInput[]
+    upsert?: CurriculaUpsertWithWhereUniqueWithoutProvincesInput | CurriculaUpsertWithWhereUniqueWithoutProvincesInput[]
+    createMany?: CurriculaCreateManyProvincesInputEnvelope
+    set?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    disconnect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    delete?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    connect?: CurriculaWhereUniqueInput | CurriculaWhereUniqueInput[]
+    update?: CurriculaUpdateWithWhereUniqueWithoutProvincesInput | CurriculaUpdateWithWhereUniqueWithoutProvincesInput[]
+    updateMany?: CurriculaUpdateManyWithWhereWithoutProvincesInput | CurriculaUpdateManyWithWhereWithoutProvincesInput[]
+    deleteMany?: CurriculaScalarWhereInput | CurriculaScalarWhereInput[]
+  }
+
+  export type ProvincesCreateNestedOneWithoutCurriculaInput = {
+    create?: XOR<ProvincesCreateWithoutCurriculaInput, ProvincesUncheckedCreateWithoutCurriculaInput>
+    connectOrCreate?: ProvincesCreateOrConnectWithoutCurriculaInput
+    connect?: ProvincesWhereUniqueInput
+  }
+
+  export type InstitutionsCreateNestedOneWithoutCurriculaInput = {
+    create?: XOR<InstitutionsCreateWithoutCurriculaInput, InstitutionsUncheckedCreateWithoutCurriculaInput>
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutCurriculaInput
+    connect?: InstitutionsWhereUniqueInput
+  }
+
+  export type SubjectsCreateNestedManyWithoutCurriculaInput = {
+    create?: XOR<SubjectsCreateWithoutCurriculaInput, SubjectsUncheckedCreateWithoutCurriculaInput> | SubjectsCreateWithoutCurriculaInput[] | SubjectsUncheckedCreateWithoutCurriculaInput[]
+    connectOrCreate?: SubjectsCreateOrConnectWithoutCurriculaInput | SubjectsCreateOrConnectWithoutCurriculaInput[]
+    createMany?: SubjectsCreateManyCurriculaInputEnvelope
+    connect?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+  }
+
+  export type SubjectsUncheckedCreateNestedManyWithoutCurriculaInput = {
+    create?: XOR<SubjectsCreateWithoutCurriculaInput, SubjectsUncheckedCreateWithoutCurriculaInput> | SubjectsCreateWithoutCurriculaInput[] | SubjectsUncheckedCreateWithoutCurriculaInput[]
+    connectOrCreate?: SubjectsCreateOrConnectWithoutCurriculaInput | SubjectsCreateOrConnectWithoutCurriculaInput[]
+    createMany?: SubjectsCreateManyCurriculaInputEnvelope
+    connect?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+  }
+
+  export type ProvincesUpdateOneWithoutCurriculaNestedInput = {
+    create?: XOR<ProvincesCreateWithoutCurriculaInput, ProvincesUncheckedCreateWithoutCurriculaInput>
+    connectOrCreate?: ProvincesCreateOrConnectWithoutCurriculaInput
+    upsert?: ProvincesUpsertWithoutCurriculaInput
+    disconnect?: ProvincesWhereInput | boolean
+    delete?: ProvincesWhereInput | boolean
+    connect?: ProvincesWhereUniqueInput
+    update?: XOR<XOR<ProvincesUpdateToOneWithWhereWithoutCurriculaInput, ProvincesUpdateWithoutCurriculaInput>, ProvincesUncheckedUpdateWithoutCurriculaInput>
+  }
+
+  export type InstitutionsUpdateOneWithoutCurriculaNestedInput = {
+    create?: XOR<InstitutionsCreateWithoutCurriculaInput, InstitutionsUncheckedCreateWithoutCurriculaInput>
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutCurriculaInput
+    upsert?: InstitutionsUpsertWithoutCurriculaInput
+    disconnect?: InstitutionsWhereInput | boolean
+    delete?: InstitutionsWhereInput | boolean
+    connect?: InstitutionsWhereUniqueInput
+    update?: XOR<XOR<InstitutionsUpdateToOneWithWhereWithoutCurriculaInput, InstitutionsUpdateWithoutCurriculaInput>, InstitutionsUncheckedUpdateWithoutCurriculaInput>
+  }
+
+  export type SubjectsUpdateManyWithoutCurriculaNestedInput = {
+    create?: XOR<SubjectsCreateWithoutCurriculaInput, SubjectsUncheckedCreateWithoutCurriculaInput> | SubjectsCreateWithoutCurriculaInput[] | SubjectsUncheckedCreateWithoutCurriculaInput[]
+    connectOrCreate?: SubjectsCreateOrConnectWithoutCurriculaInput | SubjectsCreateOrConnectWithoutCurriculaInput[]
+    upsert?: SubjectsUpsertWithWhereUniqueWithoutCurriculaInput | SubjectsUpsertWithWhereUniqueWithoutCurriculaInput[]
+    createMany?: SubjectsCreateManyCurriculaInputEnvelope
+    set?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+    disconnect?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+    delete?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+    connect?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+    update?: SubjectsUpdateWithWhereUniqueWithoutCurriculaInput | SubjectsUpdateWithWhereUniqueWithoutCurriculaInput[]
+    updateMany?: SubjectsUpdateManyWithWhereWithoutCurriculaInput | SubjectsUpdateManyWithWhereWithoutCurriculaInput[]
+    deleteMany?: SubjectsScalarWhereInput | SubjectsScalarWhereInput[]
+  }
+
+  export type SubjectsUncheckedUpdateManyWithoutCurriculaNestedInput = {
+    create?: XOR<SubjectsCreateWithoutCurriculaInput, SubjectsUncheckedCreateWithoutCurriculaInput> | SubjectsCreateWithoutCurriculaInput[] | SubjectsUncheckedCreateWithoutCurriculaInput[]
+    connectOrCreate?: SubjectsCreateOrConnectWithoutCurriculaInput | SubjectsCreateOrConnectWithoutCurriculaInput[]
+    upsert?: SubjectsUpsertWithWhereUniqueWithoutCurriculaInput | SubjectsUpsertWithWhereUniqueWithoutCurriculaInput[]
+    createMany?: SubjectsCreateManyCurriculaInputEnvelope
+    set?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+    disconnect?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+    delete?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+    connect?: SubjectsWhereUniqueInput | SubjectsWhereUniqueInput[]
+    update?: SubjectsUpdateWithWhereUniqueWithoutCurriculaInput | SubjectsUpdateWithWhereUniqueWithoutCurriculaInput[]
+    updateMany?: SubjectsUpdateManyWithWhereWithoutCurriculaInput | SubjectsUpdateManyWithWhereWithoutCurriculaInput[]
+    deleteMany?: SubjectsScalarWhereInput | SubjectsScalarWhereInput[]
   }
 
   export type ProfilesCreateNestedOneWithoutProfileInstitutionsInput = {
@@ -59762,6 +62791,8 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+    Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUncheckedCreateWithoutProfilesInput = {
@@ -59770,6 +62801,7 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    province_id?: string | null
     type?: string
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
@@ -59779,6 +62811,7 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsCreateOrConnectWithoutProfilesInput = {
@@ -60199,6 +63232,8 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+    Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsUncheckedUpdateWithoutProfilesInput = {
@@ -60207,6 +63242,7 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60216,6 +63252,7 @@ export namespace Prisma {
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type FeedbackUpsertWithWhereUniqueWithoutProfilesInput = {
@@ -60389,6 +63426,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutSubjectsInput
+    Curricula?: CurriculaCreateNestedOneWithoutSubjectsInput
   }
 
   export type SubjectsUncheckedCreateWithoutProfilesOnSubjectsInput = {
@@ -60397,6 +63435,7 @@ export namespace Prisma {
     code?: string | null
     grade?: number | null
     category?: string | null
+    curriculum_id?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutSubjectsInput
@@ -60572,6 +63611,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutSubjectsNestedInput
+    Curricula?: CurriculaUpdateOneWithoutSubjectsNestedInput
   }
 
   export type SubjectsUncheckedUpdateWithoutProfilesOnSubjectsInput = {
@@ -60580,6 +63620,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculum_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutSubjectsNestedInput
@@ -60984,6 +64025,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CurriculaCreateWithoutSubjectsInput = {
+    id?: string
+    name: string
+    kind: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    Provinces?: ProvincesCreateNestedOneWithoutCurriculaInput
+    Institutions?: InstitutionsCreateNestedOneWithoutCurriculaInput
+  }
+
+  export type CurriculaUncheckedCreateWithoutSubjectsInput = {
+    id?: string
+    name: string
+    kind: string
+    province_id?: string | null
+    institution_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CurriculaCreateOrConnectWithoutSubjectsInput = {
+    where: CurriculaWhereUniqueInput
+    create: XOR<CurriculaCreateWithoutSubjectsInput, CurriculaUncheckedCreateWithoutSubjectsInput>
+  }
+
   export type ProfilesOnSubjectsUpsertWithWhereUniqueWithoutSubjectsInput = {
     where: ProfilesOnSubjectsWhereUniqueInput
     update: XOR<ProfilesOnSubjectsUpdateWithoutSubjectsInput, ProfilesOnSubjectsUncheckedUpdateWithoutSubjectsInput>
@@ -61028,6 +64094,37 @@ export namespace Prisma {
     description?: StringNullableFilter<"InstitutionCourses"> | string | null
     created_at?: DateTimeFilter<"InstitutionCourses"> | Date | string
     updated_at?: DateTimeFilter<"InstitutionCourses"> | Date | string
+  }
+
+  export type CurriculaUpsertWithoutSubjectsInput = {
+    update: XOR<CurriculaUpdateWithoutSubjectsInput, CurriculaUncheckedUpdateWithoutSubjectsInput>
+    create: XOR<CurriculaCreateWithoutSubjectsInput, CurriculaUncheckedCreateWithoutSubjectsInput>
+    where?: CurriculaWhereInput
+  }
+
+  export type CurriculaUpdateToOneWithWhereWithoutSubjectsInput = {
+    where?: CurriculaWhereInput
+    data: XOR<CurriculaUpdateWithoutSubjectsInput, CurriculaUncheckedUpdateWithoutSubjectsInput>
+  }
+
+  export type CurriculaUpdateWithoutSubjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Provinces?: ProvincesUpdateOneWithoutCurriculaNestedInput
+    Institutions?: InstitutionsUpdateOneWithoutCurriculaNestedInput
+  }
+
+  export type CurriculaUncheckedUpdateWithoutSubjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProfilesCreateWithoutInstitutionsInput = {
@@ -61202,6 +64299,61 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProvincesCreateWithoutInstitutionsInput = {
+    id?: string
+    code: string
+    name: string
+    country?: string
+    is_territory?: boolean
+    created_at?: Date | string
+    Curricula?: CurriculaCreateNestedManyWithoutProvincesInput
+  }
+
+  export type ProvincesUncheckedCreateWithoutInstitutionsInput = {
+    id?: string
+    code: string
+    name: string
+    country?: string
+    is_territory?: boolean
+    created_at?: Date | string
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutProvincesInput
+  }
+
+  export type ProvincesCreateOrConnectWithoutInstitutionsInput = {
+    where: ProvincesWhereUniqueInput
+    create: XOR<ProvincesCreateWithoutInstitutionsInput, ProvincesUncheckedCreateWithoutInstitutionsInput>
+  }
+
+  export type CurriculaCreateWithoutInstitutionsInput = {
+    id?: string
+    name: string
+    kind: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    Provinces?: ProvincesCreateNestedOneWithoutCurriculaInput
+    Subjects?: SubjectsCreateNestedManyWithoutCurriculaInput
+  }
+
+  export type CurriculaUncheckedCreateWithoutInstitutionsInput = {
+    id?: string
+    name: string
+    kind: string
+    province_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Subjects?: SubjectsUncheckedCreateNestedManyWithoutCurriculaInput
+  }
+
+  export type CurriculaCreateOrConnectWithoutInstitutionsInput = {
+    where: CurriculaWhereUniqueInput
+    create: XOR<CurriculaCreateWithoutInstitutionsInput, CurriculaUncheckedCreateWithoutInstitutionsInput>
+  }
+
+  export type CurriculaCreateManyInstitutionsInputEnvelope = {
+    data: CurriculaCreateManyInstitutionsInput | CurriculaCreateManyInstitutionsInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProfilesUpsertWithWhereUniqueWithoutInstitutionsInput = {
     where: ProfilesWhereUniqueInput
     update: XOR<ProfilesUpdateWithoutInstitutionsInput, ProfilesUncheckedUpdateWithoutInstitutionsInput>
@@ -61291,6 +64443,406 @@ export namespace Prisma {
     data: XOR<SchoolEmailVerificationsUpdateManyMutationInput, SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsInput>
   }
 
+  export type ProvincesUpsertWithoutInstitutionsInput = {
+    update: XOR<ProvincesUpdateWithoutInstitutionsInput, ProvincesUncheckedUpdateWithoutInstitutionsInput>
+    create: XOR<ProvincesCreateWithoutInstitutionsInput, ProvincesUncheckedCreateWithoutInstitutionsInput>
+    where?: ProvincesWhereInput
+  }
+
+  export type ProvincesUpdateToOneWithWhereWithoutInstitutionsInput = {
+    where?: ProvincesWhereInput
+    data: XOR<ProvincesUpdateWithoutInstitutionsInput, ProvincesUncheckedUpdateWithoutInstitutionsInput>
+  }
+
+  export type ProvincesUpdateWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    is_territory?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Curricula?: CurriculaUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type ProvincesUncheckedUpdateWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    is_territory?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Curricula?: CurriculaUncheckedUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type CurriculaUpsertWithWhereUniqueWithoutInstitutionsInput = {
+    where: CurriculaWhereUniqueInput
+    update: XOR<CurriculaUpdateWithoutInstitutionsInput, CurriculaUncheckedUpdateWithoutInstitutionsInput>
+    create: XOR<CurriculaCreateWithoutInstitutionsInput, CurriculaUncheckedCreateWithoutInstitutionsInput>
+  }
+
+  export type CurriculaUpdateWithWhereUniqueWithoutInstitutionsInput = {
+    where: CurriculaWhereUniqueInput
+    data: XOR<CurriculaUpdateWithoutInstitutionsInput, CurriculaUncheckedUpdateWithoutInstitutionsInput>
+  }
+
+  export type CurriculaUpdateManyWithWhereWithoutInstitutionsInput = {
+    where: CurriculaScalarWhereInput
+    data: XOR<CurriculaUpdateManyMutationInput, CurriculaUncheckedUpdateManyWithoutInstitutionsInput>
+  }
+
+  export type CurriculaScalarWhereInput = {
+    AND?: CurriculaScalarWhereInput | CurriculaScalarWhereInput[]
+    OR?: CurriculaScalarWhereInput[]
+    NOT?: CurriculaScalarWhereInput | CurriculaScalarWhereInput[]
+    id?: UuidFilter<"Curricula"> | string
+    name?: StringFilter<"Curricula"> | string
+    kind?: StringFilter<"Curricula"> | string
+    province_id?: UuidNullableFilter<"Curricula"> | string | null
+    institution_id?: UuidNullableFilter<"Curricula"> | string | null
+    created_at?: DateTimeFilter<"Curricula"> | Date | string
+    updated_at?: DateTimeFilter<"Curricula"> | Date | string
+  }
+
+  export type InstitutionsCreateWithoutProvincesInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+    Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsUncheckedCreateWithoutProvincesInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsCreateOrConnectWithoutProvincesInput = {
+    where: InstitutionsWhereUniqueInput
+    create: XOR<InstitutionsCreateWithoutProvincesInput, InstitutionsUncheckedCreateWithoutProvincesInput>
+  }
+
+  export type InstitutionsCreateManyProvincesInputEnvelope = {
+    data: InstitutionsCreateManyProvincesInput | InstitutionsCreateManyProvincesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CurriculaCreateWithoutProvincesInput = {
+    id?: string
+    name: string
+    kind: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    Institutions?: InstitutionsCreateNestedOneWithoutCurriculaInput
+    Subjects?: SubjectsCreateNestedManyWithoutCurriculaInput
+  }
+
+  export type CurriculaUncheckedCreateWithoutProvincesInput = {
+    id?: string
+    name: string
+    kind: string
+    institution_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Subjects?: SubjectsUncheckedCreateNestedManyWithoutCurriculaInput
+  }
+
+  export type CurriculaCreateOrConnectWithoutProvincesInput = {
+    where: CurriculaWhereUniqueInput
+    create: XOR<CurriculaCreateWithoutProvincesInput, CurriculaUncheckedCreateWithoutProvincesInput>
+  }
+
+  export type CurriculaCreateManyProvincesInputEnvelope = {
+    data: CurriculaCreateManyProvincesInput | CurriculaCreateManyProvincesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InstitutionsUpsertWithWhereUniqueWithoutProvincesInput = {
+    where: InstitutionsWhereUniqueInput
+    update: XOR<InstitutionsUpdateWithoutProvincesInput, InstitutionsUncheckedUpdateWithoutProvincesInput>
+    create: XOR<InstitutionsCreateWithoutProvincesInput, InstitutionsUncheckedCreateWithoutProvincesInput>
+  }
+
+  export type InstitutionsUpdateWithWhereUniqueWithoutProvincesInput = {
+    where: InstitutionsWhereUniqueInput
+    data: XOR<InstitutionsUpdateWithoutProvincesInput, InstitutionsUncheckedUpdateWithoutProvincesInput>
+  }
+
+  export type InstitutionsUpdateManyWithWhereWithoutProvincesInput = {
+    where: InstitutionsScalarWhereInput
+    data: XOR<InstitutionsUpdateManyMutationInput, InstitutionsUncheckedUpdateManyWithoutProvincesInput>
+  }
+
+  export type InstitutionsScalarWhereInput = {
+    AND?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
+    OR?: InstitutionsScalarWhereInput[]
+    NOT?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
+    id?: UuidFilter<"Institutions"> | string
+    name?: StringFilter<"Institutions"> | string
+    abbreviation?: StringNullableFilter<"Institutions"> | string | null
+    country?: StringFilter<"Institutions"> | string
+    province?: StringNullableFilter<"Institutions"> | string | null
+    province_id?: UuidNullableFilter<"Institutions"> | string | null
+    type?: StringFilter<"Institutions"> | string
+    email_domains?: StringNullableListFilter<"Institutions">
+    city?: StringNullableFilter<"Institutions"> | string | null
+    website?: StringNullableFilter<"Institutions"> | string | null
+    created_at?: DateTimeFilter<"Institutions"> | Date | string
+    updated_at?: DateTimeFilter<"Institutions"> | Date | string
+  }
+
+  export type CurriculaUpsertWithWhereUniqueWithoutProvincesInput = {
+    where: CurriculaWhereUniqueInput
+    update: XOR<CurriculaUpdateWithoutProvincesInput, CurriculaUncheckedUpdateWithoutProvincesInput>
+    create: XOR<CurriculaCreateWithoutProvincesInput, CurriculaUncheckedCreateWithoutProvincesInput>
+  }
+
+  export type CurriculaUpdateWithWhereUniqueWithoutProvincesInput = {
+    where: CurriculaWhereUniqueInput
+    data: XOR<CurriculaUpdateWithoutProvincesInput, CurriculaUncheckedUpdateWithoutProvincesInput>
+  }
+
+  export type CurriculaUpdateManyWithWhereWithoutProvincesInput = {
+    where: CurriculaScalarWhereInput
+    data: XOR<CurriculaUpdateManyMutationInput, CurriculaUncheckedUpdateManyWithoutProvincesInput>
+  }
+
+  export type ProvincesCreateWithoutCurriculaInput = {
+    id?: string
+    code: string
+    name: string
+    country?: string
+    is_territory?: boolean
+    created_at?: Date | string
+    Institutions?: InstitutionsCreateNestedManyWithoutProvincesInput
+  }
+
+  export type ProvincesUncheckedCreateWithoutCurriculaInput = {
+    id?: string
+    code: string
+    name: string
+    country?: string
+    is_territory?: boolean
+    created_at?: Date | string
+    Institutions?: InstitutionsUncheckedCreateNestedManyWithoutProvincesInput
+  }
+
+  export type ProvincesCreateOrConnectWithoutCurriculaInput = {
+    where: ProvincesWhereUniqueInput
+    create: XOR<ProvincesCreateWithoutCurriculaInput, ProvincesUncheckedCreateWithoutCurriculaInput>
+  }
+
+  export type InstitutionsCreateWithoutCurriculaInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+    Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+  }
+
+  export type InstitutionsUncheckedCreateWithoutCurriculaInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    province_id?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsCreateOrConnectWithoutCurriculaInput = {
+    where: InstitutionsWhereUniqueInput
+    create: XOR<InstitutionsCreateWithoutCurriculaInput, InstitutionsUncheckedCreateWithoutCurriculaInput>
+  }
+
+  export type SubjectsCreateWithoutCurriculaInput = {
+    id?: string
+    name: string
+    code?: string | null
+    grade?: number | null
+    category?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutSubjectsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutSubjectsInput
+  }
+
+  export type SubjectsUncheckedCreateWithoutCurriculaInput = {
+    id?: string
+    name: string
+    code?: string | null
+    grade?: number | null
+    category?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutSubjectsInput
+    InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutSubjectsInput
+  }
+
+  export type SubjectsCreateOrConnectWithoutCurriculaInput = {
+    where: SubjectsWhereUniqueInput
+    create: XOR<SubjectsCreateWithoutCurriculaInput, SubjectsUncheckedCreateWithoutCurriculaInput>
+  }
+
+  export type SubjectsCreateManyCurriculaInputEnvelope = {
+    data: SubjectsCreateManyCurriculaInput | SubjectsCreateManyCurriculaInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProvincesUpsertWithoutCurriculaInput = {
+    update: XOR<ProvincesUpdateWithoutCurriculaInput, ProvincesUncheckedUpdateWithoutCurriculaInput>
+    create: XOR<ProvincesCreateWithoutCurriculaInput, ProvincesUncheckedCreateWithoutCurriculaInput>
+    where?: ProvincesWhereInput
+  }
+
+  export type ProvincesUpdateToOneWithWhereWithoutCurriculaInput = {
+    where?: ProvincesWhereInput
+    data: XOR<ProvincesUpdateWithoutCurriculaInput, ProvincesUncheckedUpdateWithoutCurriculaInput>
+  }
+
+  export type ProvincesUpdateWithoutCurriculaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    is_territory?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Institutions?: InstitutionsUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type ProvincesUncheckedUpdateWithoutCurriculaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    is_territory?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Institutions?: InstitutionsUncheckedUpdateManyWithoutProvincesNestedInput
+  }
+
+  export type InstitutionsUpsertWithoutCurriculaInput = {
+    update: XOR<InstitutionsUpdateWithoutCurriculaInput, InstitutionsUncheckedUpdateWithoutCurriculaInput>
+    create: XOR<InstitutionsCreateWithoutCurriculaInput, InstitutionsUncheckedCreateWithoutCurriculaInput>
+    where?: InstitutionsWhereInput
+  }
+
+  export type InstitutionsUpdateToOneWithWhereWithoutCurriculaInput = {
+    where?: InstitutionsWhereInput
+    data: XOR<InstitutionsUpdateWithoutCurriculaInput, InstitutionsUncheckedUpdateWithoutCurriculaInput>
+  }
+
+  export type InstitutionsUpdateWithoutCurriculaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+    Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+  }
+
+  export type InstitutionsUncheckedUpdateWithoutCurriculaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type SubjectsUpsertWithWhereUniqueWithoutCurriculaInput = {
+    where: SubjectsWhereUniqueInput
+    update: XOR<SubjectsUpdateWithoutCurriculaInput, SubjectsUncheckedUpdateWithoutCurriculaInput>
+    create: XOR<SubjectsCreateWithoutCurriculaInput, SubjectsUncheckedCreateWithoutCurriculaInput>
+  }
+
+  export type SubjectsUpdateWithWhereUniqueWithoutCurriculaInput = {
+    where: SubjectsWhereUniqueInput
+    data: XOR<SubjectsUpdateWithoutCurriculaInput, SubjectsUncheckedUpdateWithoutCurriculaInput>
+  }
+
+  export type SubjectsUpdateManyWithWhereWithoutCurriculaInput = {
+    where: SubjectsScalarWhereInput
+    data: XOR<SubjectsUpdateManyMutationInput, SubjectsUncheckedUpdateManyWithoutCurriculaInput>
+  }
+
+  export type SubjectsScalarWhereInput = {
+    AND?: SubjectsScalarWhereInput | SubjectsScalarWhereInput[]
+    OR?: SubjectsScalarWhereInput[]
+    NOT?: SubjectsScalarWhereInput | SubjectsScalarWhereInput[]
+    id?: UuidFilter<"Subjects"> | string
+    name?: StringFilter<"Subjects"> | string
+    code?: StringNullableFilter<"Subjects"> | string | null
+    grade?: IntNullableFilter<"Subjects"> | number | null
+    category?: StringNullableFilter<"Subjects"> | string | null
+    curriculum_id?: UuidNullableFilter<"Subjects"> | string | null
+    created_at?: DateTimeNullableFilter<"Subjects"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"Subjects"> | Date | string | null
+  }
+
   export type ProfilesCreateWithoutProfileInstitutionsInput = {
     email: string
     name?: string | null
@@ -61373,6 +64925,8 @@ export namespace Prisma {
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+    Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUncheckedCreateWithoutProfileInstitutionsInput = {
@@ -61381,6 +64935,7 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    province_id?: string | null
     type?: string
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
@@ -61390,6 +64945,7 @@ export namespace Prisma {
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsCreateOrConnectWithoutProfileInstitutionsInput = {
@@ -61496,6 +65052,8 @@ export namespace Prisma {
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+    Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsUncheckedUpdateWithoutProfileInstitutionsInput = {
@@ -61504,6 +65062,7 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61513,6 +65072,7 @@ export namespace Prisma {
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type ProfilesCreateWithoutSchoolEmailVerificationsInput = {
@@ -61597,6 +65157,8 @@ export namespace Prisma {
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
+    Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUncheckedCreateWithoutSchoolEmailVerificationsInput = {
@@ -61605,6 +65167,7 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    province_id?: string | null
     type?: string
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
@@ -61614,6 +65177,7 @@ export namespace Prisma {
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsCreateOrConnectWithoutSchoolEmailVerificationsInput = {
@@ -61720,6 +65284,8 @@ export namespace Prisma {
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
+    Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsUncheckedUpdateWithoutSchoolEmailVerificationsInput = {
@@ -61728,6 +65294,7 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61737,6 +65304,7 @@ export namespace Prisma {
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsCreateWithoutInstitutionCoursesInput = {
@@ -61754,6 +65322,8 @@ export namespace Prisma {
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+    Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsUncheckedCreateWithoutInstitutionCoursesInput = {
@@ -61762,6 +65332,7 @@ export namespace Prisma {
     abbreviation?: string | null
     country?: string
     province?: string | null
+    province_id?: string | null
     type?: string
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
@@ -61771,6 +65342,7 @@ export namespace Prisma {
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
   export type InstitutionsCreateOrConnectWithoutInstitutionCoursesInput = {
@@ -61787,6 +65359,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutSubjectsInput
+    Curricula?: CurriculaCreateNestedOneWithoutSubjectsInput
   }
 
   export type SubjectsUncheckedCreateWithoutInstitutionCoursesInput = {
@@ -61795,6 +65368,7 @@ export namespace Prisma {
     code?: string | null
     grade?: number | null
     category?: string | null
+    curriculum_id?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutSubjectsInput
@@ -61869,6 +65443,8 @@ export namespace Prisma {
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+    Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type InstitutionsUncheckedUpdateWithoutInstitutionCoursesInput = {
@@ -61877,6 +65453,7 @@ export namespace Prisma {
     abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
     country?: StringFieldUpdateOperationsInput | string
     province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61886,6 +65463,7 @@ export namespace Prisma {
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
   export type SubjectsUpsertWithoutInstitutionCoursesInput = {
@@ -61908,6 +65486,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutSubjectsNestedInput
+    Curricula?: CurriculaUpdateOneWithoutSubjectsNestedInput
   }
 
   export type SubjectsUncheckedUpdateWithoutInstitutionCoursesInput = {
@@ -61916,6 +65495,7 @@ export namespace Prisma {
     code?: NullableStringFieldUpdateOperationsInput | string | null
     grade?: NullableIntFieldUpdateOperationsInput | number | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculum_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutSubjectsNestedInput
@@ -64309,6 +67889,15 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type CurriculaCreateManyInstitutionsInput = {
+    id?: string
+    name: string
+    kind: string
+    province_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type ProfilesUpdateWithoutInstitutionsInput = {
     email?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64496,6 +68085,183 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CurriculaUpdateWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Provinces?: ProvincesUpdateOneWithoutCurriculaNestedInput
+    Subjects?: SubjectsUpdateManyWithoutCurriculaNestedInput
+  }
+
+  export type CurriculaUncheckedUpdateWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Subjects?: SubjectsUncheckedUpdateManyWithoutCurriculaNestedInput
+  }
+
+  export type CurriculaUncheckedUpdateManyWithoutInstitutionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstitutionsCreateManyProvincesInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CurriculaCreateManyProvincesInput = {
+    id?: string
+    name: string
+    kind: string
+    institution_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InstitutionsUpdateWithoutProvincesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type InstitutionsUncheckedUpdateWithoutProvincesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type InstitutionsUncheckedUpdateManyWithoutProvincesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CurriculaUpdateWithoutProvincesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Institutions?: InstitutionsUpdateOneWithoutCurriculaNestedInput
+    Subjects?: SubjectsUpdateManyWithoutCurriculaNestedInput
+  }
+
+  export type CurriculaUncheckedUpdateWithoutProvincesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Subjects?: SubjectsUncheckedUpdateManyWithoutCurriculaNestedInput
+  }
+
+  export type CurriculaUncheckedUpdateManyWithoutProvincesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    kind?: StringFieldUpdateOperationsInput | string
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SubjectsCreateManyCurriculaInput = {
+    id?: string
+    name: string
+    code?: string | null
+    grade?: number | null
+    category?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+  }
+
+  export type SubjectsUpdateWithoutCurriculaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    grade?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutSubjectsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateManyWithoutSubjectsNestedInput
+  }
+
+  export type SubjectsUncheckedUpdateWithoutCurriculaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    grade?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutSubjectsNestedInput
+    InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutSubjectsNestedInput
+  }
+
+  export type SubjectsUncheckedUpdateManyWithoutCurriculaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    grade?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type ProfilesOnSubjectsCreateManyInstitutionCoursesInput = {
     profile_id: string
     subject_id: string
@@ -64599,6 +68365,14 @@ export namespace Prisma {
      * @deprecated Use InstitutionsCountOutputTypeDefaultArgs instead
      */
     export type InstitutionsCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InstitutionsCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProvincesCountOutputTypeDefaultArgs instead
+     */
+    export type ProvincesCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProvincesCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CurriculaCountOutputTypeDefaultArgs instead
+     */
+    export type CurriculaCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CurriculaCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use InstitutionCoursesCountOutputTypeDefaultArgs instead
      */
@@ -64711,6 +68485,14 @@ export namespace Prisma {
      * @deprecated Use InstitutionsDefaultArgs instead
      */
     export type InstitutionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InstitutionsDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProvincesDefaultArgs instead
+     */
+    export type ProvincesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProvincesDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CurriculaDefaultArgs instead
+     */
+    export type CurriculaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CurriculaDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ProfileInstitutionsDefaultArgs instead
      */

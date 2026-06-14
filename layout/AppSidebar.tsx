@@ -60,6 +60,11 @@ const AppSidebar: React.FC = () => {
       icon: <InstitutionsIcon />,
     },
     {
+      name: "Curricula",
+      path: "/dashboard/curricula",
+      icon: <SubjectsIcon />,
+    },
+    {
       name: "Contacts",
       path: "/dashboard/contacts",
       icon: <ContactsIcon />,
