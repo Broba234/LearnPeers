@@ -23,6 +23,7 @@ import SelectSubject from "./components/SelectSubject";
 import WizardTimeSlot from "./components/WizardTimeSlot";
 import EducationStep from "@/components/onboarding/EducationStep";
 import { GraduationCap } from "lucide-react";
+import EmbeddedOnboarding from "@/components/stripe/EmbeddedOnboarding";
 const ArrowLeftIcon = () => (
   <svg
     className="w-5 h-5"
@@ -100,6 +101,7 @@ const SetupWizard = () => {
   >([]);
   const [stripeConnected, setStripeConnected] = useState(false);
   const [stripeLoading, setStripeLoading] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const [educationComplete, setEducationComplete] = useState(false);
   const router = useRouter();
@@ -196,18 +198,26 @@ const SetupWizard = () => {
       });
   }, [router]);
 
+  const refreshStripeStatus = () => {
+    if (!profile?.email) return;
+    fetch(`/api/stripe/connect/status?email=${encodeURIComponent(profile.email)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setStripeConnected(Boolean(data.onboardingComplete));
+      })
+      .catch(() => {});
+  };
+
   useEffect(() => {
     if (activeStep === 5 && profile?.email) {
-      fetch(
-        `/api/stripe/connect/status?email=${encodeURIComponent(profile.email)}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.connected) setStripeConnected(true);
-        })
-        .catch(() => {});
+      refreshStripeStatus();
     }
   }, [activeStep, profile?.email]);
+
+  const handleOnboardingExit = () => {
+    setShowOnboarding(false);
+    refreshStripeStatus();
+  };
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     let processedValue = value;
@@ -802,37 +812,7 @@ const SetupWizard = () => {
                                 delay: 0.2,
                               }}
                               disabled={stripeLoading}
-                              onClick={async () => {
-                                setStripeLoading(true);
-                                try {
-                                  // System timezone → country (e.g. Asia/Kolkata → IN)
-                                  const country = getCountryFromTimezone();
-                                  const res = await fetch(
-                                    "/api/stripe/connect/create-account-link",
-                                    {
-                                      method: "POST",
-                                      headers: {
-                                        "Content-Type": "application/json",
-                                      },
-                                      body: JSON.stringify({
-                                        email: profile?.email,
-                                        country,
-                                      }),
-                                    }
-                                  );
-                                  const data = await res.json();
-                                  if (data.url) {
-                                    sessionStorage.setItem("setupReturnStep", "5");
-                                    window.location.href = data.url;
-                                  } else {
-                                    setStripeLoading(false);
-                                    toast.error(data.error || "Failed to connect Stripe");
-                                  }
-                                } catch {
-                                  setStripeLoading(false);
-                                  toast.error("Failed to connect Stripe");
-                                }
-                              }}
+                              onClick={() => setShowOnboarding(true)}
                               className="mx-auto group relative flex items-center gap-4 px-6 py-4 rounded-full bg-gradient-to-r from-brand-500 to-brand-500 text-white font-semibold text-lg shadow-lg hover:shadow-2xl transition-all duration-300 focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed"
                             >
                               <motion.div
@@ -937,6 +917,15 @@ const SetupWizard = () => {
           </div>
         </div>
       </div>
+
+      {showOnboarding && profile?.email && (
+        <EmbeddedOnboarding
+          email={profile.email}
+          country={getCountryFromTimezone()}
+          onExit={handleOnboardingExit}
+          onClose={handleOnboardingExit}
+        />
+      )}
     </div>
   );
 };

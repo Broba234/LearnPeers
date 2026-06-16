@@ -11,6 +11,7 @@ import { getCountryFromTimezone } from "@/lib/timezone-to-country";
 import { toast } from "sonner";
 import UpdateProfileTimeSlot from "@/components/ui/components/UpdateProfileTimeSlot";
 import Image from "next/image";
+import EmbeddedOnboarding from "@/components/stripe/EmbeddedOnboarding";
 
 export type Subjects = {
   id: string;
@@ -48,6 +49,20 @@ export default function TutorProfile() {
   const [error, setError] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [stripeLoading, setStripeLoading] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingComplete, setOnboardingComplete] = useState(false);
+
+  const fetchStripeStatus = async (email: string) => {
+    try {
+      const res = await fetch(`/api/stripe/connect/status?email=${encodeURIComponent(email)}`);
+      if (res.ok) {
+        const data = await res.json();
+        setOnboardingComplete(Boolean(data.onboardingComplete));
+      }
+    } catch {
+      /* non-fatal */
+    }
+  };
 
   const fetchProfile = async () => {
     try {
@@ -57,6 +72,7 @@ export default function TutorProfile() {
       if (profileRes.ok) {
         const profileData = await profileRes.json();
         setProfile(profileData);
+        if (profileData?.email) fetchStripeStatus(profileData.email);
         setEditName(profileData.name || "");
         setEditPhone(profileData.phone || "");
         setEditBio(profileData.bio || "");
@@ -207,30 +223,37 @@ export default function TutorProfile() {
   };
 
   const handleStripe = async () => {
+    // Not fully onboarded yet → embedded onboarding (in-app, no redirect).
+    if (!onboardingComplete) {
+      setShowOnboarding(true);
+      return;
+    }
+    // Fully onboarded → open the Stripe Express dashboard to manage payouts.
     setStripeLoading(true);
     try {
-      const endpoint = profile.stripe_account_id
-        ? "/api/stripe/connect/login-link"
-        : "/api/stripe/connect/create-account-link";
-      const body = endpoint === "/api/stripe/connect/create-account-link"
-        ? JSON.stringify({ email: profile.email, country: getCountryFromTimezone() })
-        : undefined;
-      const res = await fetch(endpoint, {
+      const res = await fetch("/api/stripe/connect/login-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        ...(body && { body }),
       });
       const data = await res.json();
       if (data.url) {
-        sessionStorage.setItem("setupReturnStep", "4");
         window.location.href = data.url;
       } else {
         setStripeLoading(false);
-        toast.error(data.error || "Failed to connect Stripe");
+        toast.error(data.error || "Failed to open Stripe dashboard");
       }
     } catch {
       setStripeLoading(false);
-      toast.error("Failed to connect Stripe");
+      toast.error("Failed to open Stripe dashboard");
+    }
+  };
+
+  const handleOnboardingExit = () => {
+    setShowOnboarding(false);
+    // Re-check status; capabilities may now be active.
+    if (profile?.email) {
+      fetchStripeStatus(profile.email);
+      fetchProfile();
     }
   };
 
@@ -296,28 +319,40 @@ export default function TutorProfile() {
             </div>
 
             {/* Payout card */}
-            <div className={`bg-white rounded-2xl border shadow-sm p-5 ${!profile.stripe_account_id ? "border-amber-200" : "border-slate-100"}`}>
+            <div className={`bg-white rounded-2xl border shadow-sm p-5 ${!onboardingComplete ? "border-amber-200" : "border-slate-100"}`}>
               <div className="flex items-center gap-3 mb-4">
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${profile.stripe_account_id ? "bg-green-50" : "bg-amber-50"}`}>
-                  <svg className={`w-4 h-4 ${profile.stripe_account_id ? "text-green-600" : "text-amber-500"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${onboardingComplete ? "bg-green-50" : "bg-amber-50"}`}>
+                  <svg className={`w-4 h-4 ${onboardingComplete ? "text-green-600" : "text-amber-500"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                   </svg>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-slate-900">Payouts</p>
-                  <p className="text-xs text-slate-500">{profile.stripe_account_id ? "Stripe connected" : "Not connected"}</p>
+                  <p className="text-xs text-slate-500">
+                    {onboardingComplete
+                      ? "Payouts active"
+                      : profile.stripe_account_id
+                        ? "Setup incomplete"
+                        : "Not connected"}
+                  </p>
                 </div>
               </div>
               <button
                 onClick={handleStripe}
                 disabled={stripeLoading}
                 className={`w-full px-3 py-2 text-xs font-semibold rounded-xl transition-colors disabled:opacity-50 ${
-                  profile.stripe_account_id
+                  onboardingComplete
                     ? "bg-slate-100 text-slate-700 hover:bg-slate-200"
                     : "bg-brand-600 text-white hover:bg-brand-700"
                 }`}
               >
-                {stripeLoading ? "Opening…" : profile.stripe_account_id ? "Manage Stripe" : "Set up payouts"}
+                {stripeLoading
+                  ? "Opening…"
+                  : onboardingComplete
+                    ? "Manage payouts"
+                    : profile.stripe_account_id
+                      ? "Finish setup"
+                      : "Set up payouts"}
               </button>
             </div>
           </div>
@@ -499,6 +534,15 @@ export default function TutorProfile() {
           </div>
         </div>
       </div>
+
+      {showOnboarding && profile?.email && (
+        <EmbeddedOnboarding
+          email={profile.email}
+          country={getCountryFromTimezone()}
+          onExit={handleOnboardingExit}
+          onClose={handleOnboardingExit}
+        />
+      )}
     </div>
   );
 }

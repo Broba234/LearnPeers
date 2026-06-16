@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import { stripe } from "@/lib/stripe";
 import { NextRequest } from "next/server";
+
+export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,12 +21,28 @@ export async function GET(request: NextRequest) {
       select: { stripe_account_id: true },
     });
 
-    const connected = Boolean(profile?.stripe_account_id);
+    const accountId = profile?.stripe_account_id ?? null;
+    const connected = Boolean(accountId);
+
+    // Determine real onboarding completeness by inspecting the Stripe account.
+    let onboardingComplete = false;
+    if (connected && stripe && accountId) {
+      try {
+        const account = await stripe.accounts.retrieve(accountId);
+        onboardingComplete =
+          account.capabilities?.transfers === "active" &&
+          Boolean(account.details_submitted) &&
+          Boolean(account.payouts_enabled);
+      } catch (e) {
+        console.error("[Stripe Connect] status retrieve error:", e);
+      }
+    }
 
     return new Response(
       JSON.stringify({
         connected,
-        stripe_account_id: profile?.stripe_account_id ?? null,
+        onboardingComplete,
+        stripe_account_id: accountId,
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
