@@ -20,32 +20,37 @@ const tierForXp = (xp) => { let k = 'bronze'; for (const [key, min] of TIERS) if
     where: { profile_id: { in: [...tutorIds] } },
   });
 
-  let created = 0, skipped = 0;
+  let created = 0, skipped = 0, unlisted = 0;
   for (const row of pos) {
     const existing = await prisma.courseAssets.findUnique({
       where: { tutor_id_subject_id: { tutor_id: row.profile_id, subject_id: row.subject_id } },
     });
-    // An existing ProfilesOnSubjects row means the tutor was already listed/bookable,
-    // so grandfather it as live. Invariant: status === 'live' iff a PoS row exists.
-    const xp = XP_VERIFY + XP_GO_LIVE;
+    // Migrated courses are NOT pre-approved — they come in greyed/locked (`claimed`)
+    // and must be verified (grade + transcript -> admin approval) like any other.
+    // Their old pricing is kept on the asset to pre-fill go-live, but the bookable
+    // listing (PoS) is removed so nothing is bookable until verified+approved.
     const data = {
       institution_course_id: row.institution_course_id ?? null,
-      status: 'live',
+      status: 'claimed',
       grade_value: null,
       grade_scale: null,
-      verification_method: 'self_attested',
-      verified_at: new Date(),
+      verification_method: null,
+      verified_at: null,
       price_1: row.price_1, price_2: row.price_2, price_3: row.price_3,
       duration_1: row.duration_1 ?? 0.5, duration_2: row.duration_2 ?? 1, duration_3: row.duration_3 ?? 1.5,
-      xp, tier: tierForXp(xp),
+      xp: 0, tier: 'bronze',
     };
-    if (existing) { skipped++; continue; }
-    await prisma.courseAssets.create({
-      data: { tutor_id: row.profile_id, subject_id: row.subject_id, ...data },
-    });
-    created++;
+    if (!existing) {
+      await prisma.courseAssets.create({ data: { tutor_id: row.profile_id, subject_id: row.subject_id, ...data } });
+      created++;
+    } else {
+      skipped++;
+    }
+    // Pull the bookable listing — greyed courses are not bookable.
+    await prisma.profilesOnSubjects.deleteMany({ where: { profile_id: row.profile_id, subject_id: row.subject_id } });
+    unlisted++;
   }
 
-  console.log(`tutors: ${tutorIds.size} | PoS rows scanned: ${pos.length} | created: ${created} | skipped(existing): ${skipped}`);
+  console.log(`tutors: ${tutorIds.size} | PoS scanned: ${pos.length} | created(claimed): ${created} | skipped(existing): ${skipped} | unlisted: ${unlisted}`);
   await prisma.$disconnect();
 })().catch((e) => { console.error('FAIL:', e.message); process.exit(1); });

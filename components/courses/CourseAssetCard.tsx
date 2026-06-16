@@ -92,6 +92,13 @@ export default function CourseAssetCard({
           <p className="mt-3 text-xs text-slate-400">Locked — verify your grade to unlock the right to tutor this course.</p>
         )}
 
+        {/* pending hint */}
+        {asset.status === "pending" && (
+          <p className="mt-3 text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-lg px-2.5 py-1.5">
+            Submitted for review{asset.grade_label ? ` · grade ${asset.grade_label}` : ""}. An admin is reviewing your transcript.
+          </p>
+        )}
+
         {/* standing row (rating + tier + xp) */}
         {(asset.rating_count > 0 || asset.xp > 0) && (
           <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -153,6 +160,11 @@ export default function CourseAssetCard({
               {asset.status === "rejected" ? "Try another grade" : "Verify grade →"}
             </button>
           )}
+          {asset.status === "pending" && (
+            <div className="flex-1 px-3 py-2 text-xs font-semibold rounded-xl bg-amber-50 text-amber-700 text-center inline-flex items-center justify-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" /> Awaiting approval
+            </div>
+          )}
           {asset.status === "verified" && (
             <button
               onClick={() => onGoLive(asset)}
@@ -178,10 +190,10 @@ export default function CourseAssetCard({
               </button>
             </>
           )}
-          {locked && (
+          {(locked || asset.status === "pending") && (
             <button
               onClick={() => onUnclaim(asset)}
-              title="Remove from portfolio"
+              title={asset.status === "pending" ? "Withdraw request" : "Remove from portfolio"}
               className="px-2.5 py-2 text-xs font-medium rounded-xl border border-slate-200 text-slate-400 hover:bg-slate-50 hover:text-rose-500 transition-colors"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
