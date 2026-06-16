@@ -1,5 +1,6 @@
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
+import { getAuthedUser } from "@/lib/api-auth";
 import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,6 +9,17 @@ export const runtime = "nodejs";
 // 5% from student (charged on top) + 5% from tutor (deducted from payout) = 10% gross
 const STUDENT_FEE_PERCENT = 0.05;
 const PLATFORM_FEE_PERCENT = 0.10;
+
+/** Map a session duration (hours) to the tutor's matching price column. */
+function priceForDuration(
+  pos: { price_1: number | null; price_2: number | null; price_3: number | null },
+  duration: number
+): number | null {
+  if (duration === 0.5) return pos.price_1;
+  if (duration === 1) return pos.price_2;
+  if (duration === 1.5) return pos.price_3;
+  return null;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,11 +30,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Identity comes from the session cookie, never the request body.
+    const user = await getAuthedUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+    const studentId = user.id;
+
     const body = await request.json();
     const {
       tutorId,
-      studentId,
-      amount,
       start_time,
       duration,
       topic,
@@ -31,9 +48,24 @@ export async function POST(request: NextRequest) {
       subjectId,
     } = body;
 
-    if (!tutorId || !studentId || amount == null || amount <= 0) {
+    const durationNum = Number(duration);
+    if (!tutorId || !subjectId || ![0.5, 1, 1.5].includes(durationNum)) {
       return NextResponse.json(
-        { error: "Missing required fields: tutorId, studentId, amount" },
+        { error: "Missing/invalid fields: tutorId, subjectId, duration" },
+        { status: 400 }
+      );
+    }
+
+    // Server-side price: look up the tutor's configured price for this subject
+    // and duration. NEVER trust a client-supplied amount.
+    const pos = await prisma.profilesOnSubjects.findUnique({
+      where: { profile_id_subject_id: { profile_id: tutorId, subject_id: subjectId } },
+      select: { price_1: true, price_2: true, price_3: true },
+    });
+    const amount = pos ? priceForDuration(pos, durationNum) : null;
+    if (amount == null || !(amount > 0)) {
+      return NextResponse.json(
+        { error: "This tutor has no price set for the selected subject/duration." },
         { status: 400 }
       );
     }

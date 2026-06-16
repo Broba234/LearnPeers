@@ -11,6 +11,7 @@ import { getCountryFromTimezone } from "@/lib/timezone-to-country";
 import { toast } from "sonner";
 import UpdateProfileTimeSlot from "@/components/ui/components/UpdateProfileTimeSlot";
 import Image from "next/image";
+import DOMPurify from "dompurify";
 import EmbeddedOnboarding from "@/components/stripe/EmbeddedOnboarding";
 
 export type Subjects = {
@@ -522,7 +523,7 @@ export default function TutorProfile() {
                 ) : (
                   <div className="education-content">
                     {educationText ? (
-                      <div className="rendered-html-content text-sm text-slate-700" dangerouslySetInnerHTML={{ __html: educationText }} />
+                      <div className="rendered-html-content text-sm text-slate-700" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(educationText) }} />
                     ) : (
                       <p className="text-sm text-slate-400">No education info yet. Click Edit to add your qualifications.</p>
                     )}

@@ -2,9 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 export const runtime = 'nodejs';
 import { createClient } from '@supabase/supabase-js';
 import { notifySessionCreated } from '@/lib/notifications';
+import { getAuthedUser } from '@/lib/api-auth';
 
 export async function POST(request: NextRequest) {
   try {
+    // Identity from the session cookie, not the request body.
+    const user = await getAuthedUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+    const studentId = user.id;
 
     // Create server-side Supabase client with service role key
     const supabase = createClient(
@@ -12,10 +19,10 @@ export async function POST(request: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    const { tutorId, studentId, topic, notes, start_time, duration, date, amount, subjectId } = await request.json();
-    
-    if (!tutorId || !studentId) {
-      return NextResponse.json({ error: 'Missing tutorId or studentId' }, { status: 400 });
+    const { tutorId, topic, notes, start_time, duration, date, amount, subjectId } = await request.json();
+
+    if (!tutorId) {
+      return NextResponse.json({ error: 'Missing tutorId' }, { status: 400 });
     }
 
     // Reject sessions scheduled in the past

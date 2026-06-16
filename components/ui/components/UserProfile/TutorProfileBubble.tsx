@@ -115,7 +115,7 @@ function PaymentForm({
         const res = await fetch("/api/sessions/confirm-payment", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ sessionId }),
+          body: JSON.stringify({ sessionId, paymentIntentId: paymentIntent.id }),
         });
         if (res.ok) {
           onSuccess();

@@ -2,15 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { stripe } from "@/lib/stripe";
 import { notifySessionStatusChanged } from "@/lib/notifications";
+import { getAuthedUser } from "@/lib/api-auth";
 import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export async function POST(req: NextRequest) {
   try {
-    const { sessionId, userId } = await req.json();
-    if (!sessionId || !userId) {
-      return NextResponse.json({ error: "sessionId and userId required" }, { status: 400 });
+    // Identity from the session cookie, not the request body.
+    const user = await getAuthedUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+    const userId = user.id;
+
+    const { sessionId } = await req.json();
+    if (!sessionId || !UUID_RE.test(sessionId)) {
+      return NextResponse.json({ error: "Valid sessionId required" }, { status: 400 });
     }
 
     const supabase = createClient(

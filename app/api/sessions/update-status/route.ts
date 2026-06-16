@@ -1,20 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { notifySessionStatusChanged } from '@/lib/notifications';
+import { getAuthedUser } from '@/lib/api-auth';
 
 export async function PATCH(request: NextRequest) {
   try {
+    // Identity from the session cookie, not the request body.
+    const user = await getAuthedUser();
+    if (!user) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+    const userId = user.id;
+
     // Create server-side Supabase client with service role key
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    const { sessionId, status, userId } = await request.json();
+    const { sessionId, status } = await request.json();
 
     // Validate input
-    if (!sessionId || !status || !userId) {
-      return NextResponse.json({ error: 'Missing sessionId, status, or userId' }, { status: 400 });
+    if (!sessionId || !status) {
+      return NextResponse.json({ error: 'Missing sessionId or status' }, { status: 400 });
     }
 
     const validStatuses = ['pending', 'accepted', 'declined', 'in_progress', 'completed', 'cancelled'];

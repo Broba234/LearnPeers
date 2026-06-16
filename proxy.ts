@@ -34,6 +34,31 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
+
+  // API routes that must work without an authenticated session.
+  // Everything else under /api requires a logged-in user (these routes use the
+  // service-role key, which bypasses row-level security, so the session is the
+  // only gate).
+  const PUBLIC_API = [
+    "/api/stripe/webhook", // Stripe server-to-server (no cookie); signature-verified
+    "/api/stripe/connect/return", // browser redirect back from Stripe onboarding
+    "/api/stripe/connect/refresh",
+    "/api/profiles/create", // sign-up
+    "/api/profiles/get", // login role lookup
+    "/api/contacts", // public contact form
+    "/api/education/verify-email/confirm", // email-link, token-verified
+  ];
+
+  if (pathname.startsWith("/api/")) {
+    const isPublic = PUBLIC_API.some(
+      (p) => pathname === p || pathname.startsWith(p + "/")
+    );
+    if (!isPublic && !user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+    return response;
+  }
+
   if (!user) {
     if (pathname === "/dashboard" || pathname.startsWith("/dashboard/")) {
       const loginUrl = request.nextUrl.clone();
