@@ -276,7 +276,7 @@ const SetupWizard = () => {
         }),
       }); 
       if (response.ok) {
-        router.push("/home/tutor/availability");
+        router.push("/home/tutor/courses");
       } else {
         toast.error("Couldn't finish setup — try again");
       }

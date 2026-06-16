@@ -490,6 +490,9 @@ model Profiles {
   Feedback                                         Feedback[]
   ProfileInstitutions                              ProfileInstitutions[]
   SchoolEmailVerifications                         SchoolEmailVerifications[]
+  CourseAssets                                     CourseAssets[]
+  CourseReviews_as_tutor                           CourseReviews[]            @relation("CourseReviews_tutor")
+  CourseReviews_as_student                         CourseReviews[]            @relation("CourseReviews_student")
 
   @@schema("public")
 }
@@ -550,6 +553,7 @@ model Subjects {
   updated_at         DateTime?            @default(now()) @db.Timestamptz(6)
   ProfilesOnSubjects ProfilesOnSubjects[]
   InstitutionCourses InstitutionCourses[]
+  CourseAssets       CourseAssets[]
   Curricula          Curricula?           @relation(fields: [curriculum_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   @@index([curriculum_id], map: "Subjects_curriculum_idx")
@@ -662,8 +666,69 @@ model InstitutionCourses {
   Institutions       Institutions         @relation(fields: [institution_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   Subjects           Subjects             @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   ProfilesOnSubjects ProfilesOnSubjects[]
+  CourseAssets       CourseAssets[]
 
   @@unique([institution_id, code])
+  @@schema("public")
+}
+
+/// The tutor's owned, income-producing course-asset. One per (tutor, subject).
+/// Holds verification/grade state plus per-course gamification (rating, XP, tier).
+/// A course becomes bookable (mirrored into ProfilesOnSubjects) only when it goes live.
+model CourseAssets {
+  id                    String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tutor_id              String              @db.Uuid
+  subject_id            String              @db.Uuid
+  institution_course_id String?             @db.Uuid
+  status                String              @default("claimed") // claimed | pending | verified | live | rejected
+  grade_value           String?
+  grade_scale           String? // percentage | letter | gpa | ib | ap
+  grade_proof_url       String?
+  verification_method   String? // self_attested | document | school_email | transcript
+  verified_at           DateTime?           @db.Timestamptz(6)
+  rejected_reason       String?
+  rating                Float               @default(0)
+  rating_count          Int                 @default(0)
+  xp                    Int                 @default(0)
+  tier                  String              @default("bronze") // bronze | silver | gold | platinum | diamond
+  sessions_count        Int                 @default(0)
+  total_earnings        Float               @default(0)
+  price_1               Float?
+  price_2               Float?
+  price_3               Float?
+  duration_1            Float?              @default(0.5)
+  duration_2            Float?              @default(1)
+  duration_3            Float?              @default(1.5)
+  created_at            DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime            @default(now()) @db.Timestamptz(6)
+  Profiles              Profiles            @relation(fields: [tutor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Subjects              Subjects            @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  InstitutionCourses    InstitutionCourses? @relation(fields: [institution_course_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  CourseReviews         CourseReviews[]
+
+  @@unique([tutor_id, subject_id])
+  @@index([tutor_id])
+  @@index([status])
+  @@schema("public")
+}
+
+/// A per-course review left by a student after a session. Reviews compound the
+/// tutor's per-course rating, XP and tier — and roll up into their overall rating.
+model CourseReviews {
+  id               String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_asset_id  String       @db.Uuid
+  tutor_id         String       @db.Uuid
+  student_id       String       @db.Uuid
+  session_id       String?      @db.Uuid
+  rating           Int
+  comment          String?
+  created_at       DateTime     @default(now()) @db.Timestamptz(6)
+  CourseAssets     CourseAssets @relation(fields: [course_asset_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Profiles_tutor   Profiles     @relation("CourseReviews_tutor", fields: [tutor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Profiles_student Profiles     @relation("CourseReviews_student", fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([course_asset_id])
+  @@index([tutor_id])
   @@schema("public")
 }
 

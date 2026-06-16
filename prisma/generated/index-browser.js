@@ -532,6 +532,45 @@ exports.Prisma.InstitutionCoursesScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.CourseAssetsScalarFieldEnum = {
+  id: 'id',
+  tutor_id: 'tutor_id',
+  subject_id: 'subject_id',
+  institution_course_id: 'institution_course_id',
+  status: 'status',
+  grade_value: 'grade_value',
+  grade_scale: 'grade_scale',
+  grade_proof_url: 'grade_proof_url',
+  verification_method: 'verification_method',
+  verified_at: 'verified_at',
+  rejected_reason: 'rejected_reason',
+  rating: 'rating',
+  rating_count: 'rating_count',
+  xp: 'xp',
+  tier: 'tier',
+  sessions_count: 'sessions_count',
+  total_earnings: 'total_earnings',
+  price_1: 'price_1',
+  price_2: 'price_2',
+  price_3: 'price_3',
+  duration_1: 'duration_1',
+  duration_2: 'duration_2',
+  duration_3: 'duration_3',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.CourseReviewsScalarFieldEnum = {
+  id: 'id',
+  course_asset_id: 'course_asset_id',
+  tutor_id: 'tutor_id',
+  student_id: 'student_id',
+  session_id: 'session_id',
+  rating: 'rating',
+  comment: 'comment',
+  created_at: 'created_at'
+};
+
 exports.Prisma.TutorAvailabilityScalarFieldEnum = {
   id: 'id',
   tutor_id: 'tutor_id',
@@ -752,6 +791,8 @@ exports.Prisma.ModelName = {
   ProfileInstitutions: 'ProfileInstitutions',
   SchoolEmailVerifications: 'SchoolEmailVerifications',
   InstitutionCourses: 'InstitutionCourses',
+  CourseAssets: 'CourseAssets',
+  CourseReviews: 'CourseReviews',
   TutorAvailability: 'TutorAvailability',
   Notifications: 'Notifications',
   Contacts: 'Contacts',

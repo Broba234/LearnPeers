@@ -411,87 +411,39 @@ export default function TutorProfile() {
               </div>
             </div>
 
-            {/* Subjects */}
+            {/* Courses — managed in the gamified portfolio */}
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
               <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-                <h3 className="text-sm font-semibold text-slate-900">Subjects you teach</h3>
-                {!editMode3 && (
-                  <button
-                    onClick={() => { setEditMode3(true); setEditMode1(false); setEditMode2(false); }}
-                    className="text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors"
-                  >
-                    Edit
-                  </button>
-                )}
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-900">Courses you tutor</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">Live courses students can book right now</p>
+                </div>
+                <button
+                  onClick={() => router.push("/home/tutor/courses")}
+                  className="text-xs font-medium text-brand-600 hover:text-brand-700 transition-colors"
+                >
+                  Manage portfolio →
+                </button>
               </div>
               <div className="px-6 py-5">
-                {editMode3 ? (
-                  <>
-                    {error && <div className="text-red-500 text-sm mb-3">{errorMsg}</div>}
-                    {step === 1 && (
-                      <motion.div
-                        key="subjects-step"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                      >
-                        <SubjectSelectProfile categories={categories} selectedSubjects={selectedSubjects} onSubjectsChange={onSubjectsChange} />
-                      </motion.div>
-                    )}
-                    {step === 2 && (
-                      <motion.div
-                        key="timeslot-step"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                      >
-                        <UpdateProfileTimeSlot selectedSubjectsfromProfile={selectedSubjects} setSelectedSubjectsWithPrice={setSelectedSubjectsWithPrice} />
-                      </motion.div>
-                    )}
-                    <div className="pt-5 flex justify-end gap-2">
-                      <button
-                        onClick={() => { setEditMode3(false); setStep(1); }}
-                        className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
-                      >
-                        Cancel
-                      </button>
-                      {step === 1 && (
-                        <button
-                          onClick={() => setStep(2)}
-                          disabled={saving}
-                          className="px-4 py-2 text-sm font-medium bg-brand-600 text-white rounded-xl hover:bg-brand-700 disabled:opacity-50 transition-colors"
-                        >
-                          Next
-                        </button>
-                      )}
-                      {step === 2 && (
-                        <button
-                          onClick={handleSubjectsChange}
-                          disabled={saving}
-                          className="px-4 py-2 text-sm font-medium bg-brand-600 text-white rounded-xl hover:bg-brand-700 disabled:opacity-50 transition-colors"
-                        >
-                          Save Changes
-                        </button>
-                      )}
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {Array.isArray(profile.subjects) && profile.subjects.length > 0 ? (
-                      <div className="flex flex-wrap gap-2">
-                        {profile.subjects.map((subject: any, index: number) => (
-                          <div key={index} className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50">
-                            <span className="text-sm text-slate-900">{subject.Subjects?.name || subject.name}</span>
-                            <span className="text-xs font-medium text-slate-500 bg-slate-200 px-2 py-0.5 rounded-md">{subject.Subjects?.code || subject.code}</span>
-                          </div>
-                        ))}
+                {Array.isArray(profile.subjects) && profile.subjects.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {profile.subjects.map((subject: any, index: number) => (
+                      <div key={index} className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-emerald-100 bg-emerald-50/60">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <span className="text-sm text-slate-900">{subject.Subjects?.name || subject.name}</span>
+                        <span className="text-xs font-medium text-slate-500 bg-white px-2 py-0.5 rounded-md border border-slate-100">{subject.Subjects?.code || subject.code}</span>
                       </div>
-                    ) : (
-                      <p className="text-sm text-slate-400">No subjects yet. Click Edit to add subjects you teach.</p>
-                    )}
-                  </>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-slate-400">
+                    No live courses yet. Head to{" "}
+                    <button onClick={() => router.push("/home/tutor/courses")} className="text-brand-600 font-medium hover:underline">
+                      your course portfolio
+                    </button>{" "}
+                    to verify a grade and unlock the right to tutor.
+                  </div>
                 )}
               </div>
             </div>

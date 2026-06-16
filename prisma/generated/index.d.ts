@@ -199,6 +199,19 @@ export type SchoolEmailVerifications = $Result.DefaultSelection<Prisma.$SchoolEm
  */
 export type InstitutionCourses = $Result.DefaultSelection<Prisma.$InstitutionCoursesPayload>
 /**
+ * Model CourseAssets
+ * The tutor's owned, income-producing course-asset. One per (tutor, subject).
+ * Holds verification/grade state plus per-course gamification (rating, XP, tier).
+ * A course becomes bookable (mirrored into ProfilesOnSubjects) only when it goes live.
+ */
+export type CourseAssets = $Result.DefaultSelection<Prisma.$CourseAssetsPayload>
+/**
+ * Model CourseReviews
+ * A per-course review left by a student after a session. Reviews compound the
+ * tutor's per-course rating, XP and tier — and roll up into their overall rating.
+ */
+export type CourseReviews = $Result.DefaultSelection<Prisma.$CourseReviewsPayload>
+/**
  * Model TutorAvailability
  * 
  */
@@ -798,6 +811,26 @@ export class PrismaClient<
   get institutionCourses(): Prisma.InstitutionCoursesDelegate<ExtArgs>;
 
   /**
+   * `prisma.courseAssets`: Exposes CRUD operations for the **CourseAssets** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CourseAssets
+    * const courseAssets = await prisma.courseAssets.findMany()
+    * ```
+    */
+  get courseAssets(): Prisma.CourseAssetsDelegate<ExtArgs>;
+
+  /**
+   * `prisma.courseReviews`: Exposes CRUD operations for the **CourseReviews** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CourseReviews
+    * const courseReviews = await prisma.courseReviews.findMany()
+    * ```
+    */
+  get courseReviews(): Prisma.CourseReviewsDelegate<ExtArgs>;
+
+  /**
    * `prisma.tutorAvailability`: Exposes CRUD operations for the **TutorAvailability** model.
     * Example usage:
     * ```ts
@@ -1339,6 +1372,8 @@ export namespace Prisma {
     ProfileInstitutions: 'ProfileInstitutions',
     SchoolEmailVerifications: 'SchoolEmailVerifications',
     InstitutionCourses: 'InstitutionCourses',
+    CourseAssets: 'CourseAssets',
+    CourseReviews: 'CourseReviews',
     TutorAvailability: 'TutorAvailability',
     Notifications: 'Notifications',
     Contacts: 'Contacts',
@@ -1361,7 +1396,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "audit_log_entries" | "flow_state" | "identities" | "instances" | "mfa_amr_claims" | "mfa_challenges" | "mfa_factors" | "oauth_authorizations" | "oauth_client_states" | "oauth_clients" | "oauth_consents" | "one_time_tokens" | "refresh_tokens" | "saml_providers" | "saml_relay_states" | "schema_migrations" | "sessions" | "sso_domains" | "sso_providers" | "users" | "conversations" | "messages" | "profiles" | "profilesOnSubjects" | "sessions" | "subjects" | "institutions" | "provinces" | "curricula" | "profileInstitutions" | "schoolEmailVerifications" | "institutionCourses" | "tutorAvailability" | "notifications" | "contacts" | "feedback" | "custom_oauth_providers" | "webauthn_challenges" | "webauthn_credentials"
+      modelProps: "audit_log_entries" | "flow_state" | "identities" | "instances" | "mfa_amr_claims" | "mfa_challenges" | "mfa_factors" | "oauth_authorizations" | "oauth_client_states" | "oauth_clients" | "oauth_consents" | "one_time_tokens" | "refresh_tokens" | "saml_providers" | "saml_relay_states" | "schema_migrations" | "sessions" | "sso_domains" | "sso_providers" | "users" | "conversations" | "messages" | "profiles" | "profilesOnSubjects" | "sessions" | "subjects" | "institutions" | "provinces" | "curricula" | "profileInstitutions" | "schoolEmailVerifications" | "institutionCourses" | "courseAssets" | "courseReviews" | "tutorAvailability" | "notifications" | "contacts" | "feedback" | "custom_oauth_providers" | "webauthn_challenges" | "webauthn_credentials"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3605,6 +3640,146 @@ export namespace Prisma {
           }
         }
       }
+      CourseAssets: {
+        payload: Prisma.$CourseAssetsPayload<ExtArgs>
+        fields: Prisma.CourseAssetsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CourseAssetsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CourseAssetsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload>
+          }
+          findFirst: {
+            args: Prisma.CourseAssetsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CourseAssetsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload>
+          }
+          findMany: {
+            args: Prisma.CourseAssetsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload>[]
+          }
+          create: {
+            args: Prisma.CourseAssetsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload>
+          }
+          createMany: {
+            args: Prisma.CourseAssetsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CourseAssetsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload>[]
+          }
+          delete: {
+            args: Prisma.CourseAssetsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload>
+          }
+          update: {
+            args: Prisma.CourseAssetsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload>
+          }
+          deleteMany: {
+            args: Prisma.CourseAssetsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CourseAssetsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CourseAssetsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseAssetsPayload>
+          }
+          aggregate: {
+            args: Prisma.CourseAssetsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCourseAssets>
+          }
+          groupBy: {
+            args: Prisma.CourseAssetsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CourseAssetsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CourseAssetsCountArgs<ExtArgs>
+            result: $Utils.Optional<CourseAssetsCountAggregateOutputType> | number
+          }
+        }
+      }
+      CourseReviews: {
+        payload: Prisma.$CourseReviewsPayload<ExtArgs>
+        fields: Prisma.CourseReviewsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CourseReviewsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CourseReviewsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload>
+          }
+          findFirst: {
+            args: Prisma.CourseReviewsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CourseReviewsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload>
+          }
+          findMany: {
+            args: Prisma.CourseReviewsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload>[]
+          }
+          create: {
+            args: Prisma.CourseReviewsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload>
+          }
+          createMany: {
+            args: Prisma.CourseReviewsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CourseReviewsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload>[]
+          }
+          delete: {
+            args: Prisma.CourseReviewsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload>
+          }
+          update: {
+            args: Prisma.CourseReviewsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload>
+          }
+          deleteMany: {
+            args: Prisma.CourseReviewsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CourseReviewsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CourseReviewsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseReviewsPayload>
+          }
+          aggregate: {
+            args: Prisma.CourseReviewsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCourseReviews>
+          }
+          groupBy: {
+            args: Prisma.CourseReviewsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CourseReviewsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CourseReviewsCountArgs<ExtArgs>
+            result: $Utils.Optional<CourseReviewsCountAggregateOutputType> | number
+          }
+        }
+      }
       TutorAvailability: {
         payload: Prisma.$TutorAvailabilityPayload<ExtArgs>
         fields: Prisma.TutorAvailabilityFieldRefs
@@ -4591,6 +4766,9 @@ export namespace Prisma {
     Feedback: number
     ProfileInstitutions: number
     SchoolEmailVerifications: number
+    CourseAssets: number
+    CourseReviews_as_tutor: number
+    CourseReviews_as_student: number
   }
 
   export type ProfilesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4604,6 +4782,9 @@ export namespace Prisma {
     Feedback?: boolean | ProfilesCountOutputTypeCountFeedbackArgs
     ProfileInstitutions?: boolean | ProfilesCountOutputTypeCountProfileInstitutionsArgs
     SchoolEmailVerifications?: boolean | ProfilesCountOutputTypeCountSchoolEmailVerificationsArgs
+    CourseAssets?: boolean | ProfilesCountOutputTypeCountCourseAssetsArgs
+    CourseReviews_as_tutor?: boolean | ProfilesCountOutputTypeCountCourseReviews_as_tutorArgs
+    CourseReviews_as_student?: boolean | ProfilesCountOutputTypeCountCourseReviews_as_studentArgs
   }
 
   // Custom InputTypes
@@ -4687,6 +4868,27 @@ export namespace Prisma {
     where?: SchoolEmailVerificationsWhereInput
   }
 
+  /**
+   * ProfilesCountOutputType without action
+   */
+  export type ProfilesCountOutputTypeCountCourseAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseAssetsWhereInput
+  }
+
+  /**
+   * ProfilesCountOutputType without action
+   */
+  export type ProfilesCountOutputTypeCountCourseReviews_as_tutorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseReviewsWhereInput
+  }
+
+  /**
+   * ProfilesCountOutputType without action
+   */
+  export type ProfilesCountOutputTypeCountCourseReviews_as_studentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseReviewsWhereInput
+  }
+
 
   /**
    * Count Type ProfilesOnSubjectsCountOutputType
@@ -4726,11 +4928,13 @@ export namespace Prisma {
   export type SubjectsCountOutputType = {
     ProfilesOnSubjects: number
     InstitutionCourses: number
+    CourseAssets: number
   }
 
   export type SubjectsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ProfilesOnSubjects?: boolean | SubjectsCountOutputTypeCountProfilesOnSubjectsArgs
     InstitutionCourses?: boolean | SubjectsCountOutputTypeCountInstitutionCoursesArgs
+    CourseAssets?: boolean | SubjectsCountOutputTypeCountCourseAssetsArgs
   }
 
   // Custom InputTypes
@@ -4756,6 +4960,13 @@ export namespace Prisma {
    */
   export type SubjectsCountOutputTypeCountInstitutionCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: InstitutionCoursesWhereInput
+  }
+
+  /**
+   * SubjectsCountOutputType without action
+   */
+  export type SubjectsCountOutputTypeCountCourseAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseAssetsWhereInput
   }
 
 
@@ -4903,10 +5114,12 @@ export namespace Prisma {
 
   export type InstitutionCoursesCountOutputType = {
     ProfilesOnSubjects: number
+    CourseAssets: number
   }
 
   export type InstitutionCoursesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ProfilesOnSubjects?: boolean | InstitutionCoursesCountOutputTypeCountProfilesOnSubjectsArgs
+    CourseAssets?: boolean | InstitutionCoursesCountOutputTypeCountCourseAssetsArgs
   }
 
   // Custom InputTypes
@@ -4925,6 +5138,44 @@ export namespace Prisma {
    */
   export type InstitutionCoursesCountOutputTypeCountProfilesOnSubjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProfilesOnSubjectsWhereInput
+  }
+
+  /**
+   * InstitutionCoursesCountOutputType without action
+   */
+  export type InstitutionCoursesCountOutputTypeCountCourseAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseAssetsWhereInput
+  }
+
+
+  /**
+   * Count Type CourseAssetsCountOutputType
+   */
+
+  export type CourseAssetsCountOutputType = {
+    CourseReviews: number
+  }
+
+  export type CourseAssetsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    CourseReviews?: boolean | CourseAssetsCountOutputTypeCountCourseReviewsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CourseAssetsCountOutputType without action
+   */
+  export type CourseAssetsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssetsCountOutputType
+     */
+    select?: CourseAssetsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CourseAssetsCountOutputType without action
+   */
+  export type CourseAssetsCountOutputTypeCountCourseReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseReviewsWhereInput
   }
 
 
@@ -27355,6 +27606,9 @@ export namespace Prisma {
     Feedback?: boolean | Profiles$FeedbackArgs<ExtArgs>
     ProfileInstitutions?: boolean | Profiles$ProfileInstitutionsArgs<ExtArgs>
     SchoolEmailVerifications?: boolean | Profiles$SchoolEmailVerificationsArgs<ExtArgs>
+    CourseAssets?: boolean | Profiles$CourseAssetsArgs<ExtArgs>
+    CourseReviews_as_tutor?: boolean | Profiles$CourseReviews_as_tutorArgs<ExtArgs>
+    CourseReviews_as_student?: boolean | Profiles$CourseReviews_as_studentArgs<ExtArgs>
     _count?: boolean | ProfilesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["profiles"]>
 
@@ -27417,6 +27671,9 @@ export namespace Prisma {
     Feedback?: boolean | Profiles$FeedbackArgs<ExtArgs>
     ProfileInstitutions?: boolean | Profiles$ProfileInstitutionsArgs<ExtArgs>
     SchoolEmailVerifications?: boolean | Profiles$SchoolEmailVerificationsArgs<ExtArgs>
+    CourseAssets?: boolean | Profiles$CourseAssetsArgs<ExtArgs>
+    CourseReviews_as_tutor?: boolean | Profiles$CourseReviews_as_tutorArgs<ExtArgs>
+    CourseReviews_as_student?: boolean | Profiles$CourseReviews_as_studentArgs<ExtArgs>
     _count?: boolean | ProfilesCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProfilesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -27439,6 +27696,9 @@ export namespace Prisma {
       Feedback: Prisma.$FeedbackPayload<ExtArgs>[]
       ProfileInstitutions: Prisma.$ProfileInstitutionsPayload<ExtArgs>[]
       SchoolEmailVerifications: Prisma.$SchoolEmailVerificationsPayload<ExtArgs>[]
+      CourseAssets: Prisma.$CourseAssetsPayload<ExtArgs>[]
+      CourseReviews_as_tutor: Prisma.$CourseReviewsPayload<ExtArgs>[]
+      CourseReviews_as_student: Prisma.$CourseReviewsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -27836,6 +28096,9 @@ export namespace Prisma {
     Feedback<T extends Profiles$FeedbackArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$FeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany"> | Null>
     ProfileInstitutions<T extends Profiles$ProfileInstitutionsArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$ProfileInstitutionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findMany"> | Null>
     SchoolEmailVerifications<T extends Profiles$SchoolEmailVerificationsArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$SchoolEmailVerificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findMany"> | Null>
+    CourseAssets<T extends Profiles$CourseAssetsArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$CourseAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "findMany"> | Null>
+    CourseReviews_as_tutor<T extends Profiles$CourseReviews_as_tutorArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$CourseReviews_as_tutorArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "findMany"> | Null>
+    CourseReviews_as_student<T extends Profiles$CourseReviews_as_studentArgs<ExtArgs> = {}>(args?: Subset<T, Profiles$CourseReviews_as_studentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -28414,6 +28677,66 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SchoolEmailVerificationsScalarFieldEnum | SchoolEmailVerificationsScalarFieldEnum[]
+  }
+
+  /**
+   * Profiles.CourseAssets
+   */
+  export type Profiles$CourseAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    where?: CourseAssetsWhereInput
+    orderBy?: CourseAssetsOrderByWithRelationInput | CourseAssetsOrderByWithRelationInput[]
+    cursor?: CourseAssetsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseAssetsScalarFieldEnum | CourseAssetsScalarFieldEnum[]
+  }
+
+  /**
+   * Profiles.CourseReviews_as_tutor
+   */
+  export type Profiles$CourseReviews_as_tutorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    where?: CourseReviewsWhereInput
+    orderBy?: CourseReviewsOrderByWithRelationInput | CourseReviewsOrderByWithRelationInput[]
+    cursor?: CourseReviewsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseReviewsScalarFieldEnum | CourseReviewsScalarFieldEnum[]
+  }
+
+  /**
+   * Profiles.CourseReviews_as_student
+   */
+  export type Profiles$CourseReviews_as_studentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    where?: CourseReviewsWhereInput
+    orderBy?: CourseReviewsOrderByWithRelationInput | CourseReviewsOrderByWithRelationInput[]
+    cursor?: CourseReviewsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseReviewsScalarFieldEnum | CourseReviewsScalarFieldEnum[]
   }
 
   /**
@@ -30855,6 +31178,7 @@ export namespace Prisma {
     updated_at?: boolean
     ProfilesOnSubjects?: boolean | Subjects$ProfilesOnSubjectsArgs<ExtArgs>
     InstitutionCourses?: boolean | Subjects$InstitutionCoursesArgs<ExtArgs>
+    CourseAssets?: boolean | Subjects$CourseAssetsArgs<ExtArgs>
     Curricula?: boolean | Subjects$CurriculaArgs<ExtArgs>
     _count?: boolean | SubjectsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subjects"]>
@@ -30885,6 +31209,7 @@ export namespace Prisma {
   export type SubjectsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ProfilesOnSubjects?: boolean | Subjects$ProfilesOnSubjectsArgs<ExtArgs>
     InstitutionCourses?: boolean | Subjects$InstitutionCoursesArgs<ExtArgs>
+    CourseAssets?: boolean | Subjects$CourseAssetsArgs<ExtArgs>
     Curricula?: boolean | Subjects$CurriculaArgs<ExtArgs>
     _count?: boolean | SubjectsCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -30897,6 +31222,7 @@ export namespace Prisma {
     objects: {
       ProfilesOnSubjects: Prisma.$ProfilesOnSubjectsPayload<ExtArgs>[]
       InstitutionCourses: Prisma.$InstitutionCoursesPayload<ExtArgs>[]
+      CourseAssets: Prisma.$CourseAssetsPayload<ExtArgs>[]
       Curricula: Prisma.$CurriculaPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -31274,6 +31600,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     ProfilesOnSubjects<T extends Subjects$ProfilesOnSubjectsArgs<ExtArgs> = {}>(args?: Subset<T, Subjects$ProfilesOnSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfilesOnSubjectsPayload<ExtArgs>, T, "findMany"> | Null>
     InstitutionCourses<T extends Subjects$InstitutionCoursesArgs<ExtArgs> = {}>(args?: Subset<T, Subjects$InstitutionCoursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstitutionCoursesPayload<ExtArgs>, T, "findMany"> | Null>
+    CourseAssets<T extends Subjects$CourseAssetsArgs<ExtArgs> = {}>(args?: Subset<T, Subjects$CourseAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "findMany"> | Null>
     Curricula<T extends Subjects$CurriculaArgs<ExtArgs> = {}>(args?: Subset<T, Subjects$CurriculaArgs<ExtArgs>>): Prisma__CurriculaClient<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -31667,6 +31994,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: InstitutionCoursesScalarFieldEnum | InstitutionCoursesScalarFieldEnum[]
+  }
+
+  /**
+   * Subjects.CourseAssets
+   */
+  export type Subjects$CourseAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    where?: CourseAssetsWhereInput
+    orderBy?: CourseAssetsOrderByWithRelationInput | CourseAssetsOrderByWithRelationInput[]
+    cursor?: CourseAssetsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseAssetsScalarFieldEnum | CourseAssetsScalarFieldEnum[]
   }
 
   /**
@@ -37090,6 +37437,7 @@ export namespace Prisma {
     Institutions?: boolean | InstitutionsDefaultArgs<ExtArgs>
     Subjects?: boolean | SubjectsDefaultArgs<ExtArgs>
     ProfilesOnSubjects?: boolean | InstitutionCourses$ProfilesOnSubjectsArgs<ExtArgs>
+    CourseAssets?: boolean | InstitutionCourses$CourseAssetsArgs<ExtArgs>
     _count?: boolean | InstitutionCoursesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["institutionCourses"]>
 
@@ -37121,6 +37469,7 @@ export namespace Prisma {
     Institutions?: boolean | InstitutionsDefaultArgs<ExtArgs>
     Subjects?: boolean | SubjectsDefaultArgs<ExtArgs>
     ProfilesOnSubjects?: boolean | InstitutionCourses$ProfilesOnSubjectsArgs<ExtArgs>
+    CourseAssets?: boolean | InstitutionCourses$CourseAssetsArgs<ExtArgs>
     _count?: boolean | InstitutionCoursesCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InstitutionCoursesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -37134,6 +37483,7 @@ export namespace Prisma {
       Institutions: Prisma.$InstitutionsPayload<ExtArgs>
       Subjects: Prisma.$SubjectsPayload<ExtArgs>
       ProfilesOnSubjects: Prisma.$ProfilesOnSubjectsPayload<ExtArgs>[]
+      CourseAssets: Prisma.$CourseAssetsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -37511,6 +37861,7 @@ export namespace Prisma {
     Institutions<T extends InstitutionsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, InstitutionsDefaultArgs<ExtArgs>>): Prisma__InstitutionsClient<$Result.GetResult<Prisma.$InstitutionsPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     Subjects<T extends SubjectsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectsDefaultArgs<ExtArgs>>): Prisma__SubjectsClient<$Result.GetResult<Prisma.$SubjectsPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     ProfilesOnSubjects<T extends InstitutionCourses$ProfilesOnSubjectsArgs<ExtArgs> = {}>(args?: Subset<T, InstitutionCourses$ProfilesOnSubjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfilesOnSubjectsPayload<ExtArgs>, T, "findMany"> | Null>
+    CourseAssets<T extends InstitutionCourses$CourseAssetsArgs<ExtArgs> = {}>(args?: Subset<T, InstitutionCourses$CourseAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -37886,6 +38237,26 @@ export namespace Prisma {
   }
 
   /**
+   * InstitutionCourses.CourseAssets
+   */
+  export type InstitutionCourses$CourseAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    where?: CourseAssetsWhereInput
+    orderBy?: CourseAssetsOrderByWithRelationInput | CourseAssetsOrderByWithRelationInput[]
+    cursor?: CourseAssetsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseAssetsScalarFieldEnum | CourseAssetsScalarFieldEnum[]
+  }
+
+  /**
    * InstitutionCourses without action
    */
   export type InstitutionCoursesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -37897,6 +38268,2321 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: InstitutionCoursesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CourseAssets
+   */
+
+  export type AggregateCourseAssets = {
+    _count: CourseAssetsCountAggregateOutputType | null
+    _avg: CourseAssetsAvgAggregateOutputType | null
+    _sum: CourseAssetsSumAggregateOutputType | null
+    _min: CourseAssetsMinAggregateOutputType | null
+    _max: CourseAssetsMaxAggregateOutputType | null
+  }
+
+  export type CourseAssetsAvgAggregateOutputType = {
+    rating: number | null
+    rating_count: number | null
+    xp: number | null
+    sessions_count: number | null
+    total_earnings: number | null
+    price_1: number | null
+    price_2: number | null
+    price_3: number | null
+    duration_1: number | null
+    duration_2: number | null
+    duration_3: number | null
+  }
+
+  export type CourseAssetsSumAggregateOutputType = {
+    rating: number | null
+    rating_count: number | null
+    xp: number | null
+    sessions_count: number | null
+    total_earnings: number | null
+    price_1: number | null
+    price_2: number | null
+    price_3: number | null
+    duration_1: number | null
+    duration_2: number | null
+    duration_3: number | null
+  }
+
+  export type CourseAssetsMinAggregateOutputType = {
+    id: string | null
+    tutor_id: string | null
+    subject_id: string | null
+    institution_course_id: string | null
+    status: string | null
+    grade_value: string | null
+    grade_scale: string | null
+    grade_proof_url: string | null
+    verification_method: string | null
+    verified_at: Date | null
+    rejected_reason: string | null
+    rating: number | null
+    rating_count: number | null
+    xp: number | null
+    tier: string | null
+    sessions_count: number | null
+    total_earnings: number | null
+    price_1: number | null
+    price_2: number | null
+    price_3: number | null
+    duration_1: number | null
+    duration_2: number | null
+    duration_3: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CourseAssetsMaxAggregateOutputType = {
+    id: string | null
+    tutor_id: string | null
+    subject_id: string | null
+    institution_course_id: string | null
+    status: string | null
+    grade_value: string | null
+    grade_scale: string | null
+    grade_proof_url: string | null
+    verification_method: string | null
+    verified_at: Date | null
+    rejected_reason: string | null
+    rating: number | null
+    rating_count: number | null
+    xp: number | null
+    tier: string | null
+    sessions_count: number | null
+    total_earnings: number | null
+    price_1: number | null
+    price_2: number | null
+    price_3: number | null
+    duration_1: number | null
+    duration_2: number | null
+    duration_3: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CourseAssetsCountAggregateOutputType = {
+    id: number
+    tutor_id: number
+    subject_id: number
+    institution_course_id: number
+    status: number
+    grade_value: number
+    grade_scale: number
+    grade_proof_url: number
+    verification_method: number
+    verified_at: number
+    rejected_reason: number
+    rating: number
+    rating_count: number
+    xp: number
+    tier: number
+    sessions_count: number
+    total_earnings: number
+    price_1: number
+    price_2: number
+    price_3: number
+    duration_1: number
+    duration_2: number
+    duration_3: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type CourseAssetsAvgAggregateInputType = {
+    rating?: true
+    rating_count?: true
+    xp?: true
+    sessions_count?: true
+    total_earnings?: true
+    price_1?: true
+    price_2?: true
+    price_3?: true
+    duration_1?: true
+    duration_2?: true
+    duration_3?: true
+  }
+
+  export type CourseAssetsSumAggregateInputType = {
+    rating?: true
+    rating_count?: true
+    xp?: true
+    sessions_count?: true
+    total_earnings?: true
+    price_1?: true
+    price_2?: true
+    price_3?: true
+    duration_1?: true
+    duration_2?: true
+    duration_3?: true
+  }
+
+  export type CourseAssetsMinAggregateInputType = {
+    id?: true
+    tutor_id?: true
+    subject_id?: true
+    institution_course_id?: true
+    status?: true
+    grade_value?: true
+    grade_scale?: true
+    grade_proof_url?: true
+    verification_method?: true
+    verified_at?: true
+    rejected_reason?: true
+    rating?: true
+    rating_count?: true
+    xp?: true
+    tier?: true
+    sessions_count?: true
+    total_earnings?: true
+    price_1?: true
+    price_2?: true
+    price_3?: true
+    duration_1?: true
+    duration_2?: true
+    duration_3?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CourseAssetsMaxAggregateInputType = {
+    id?: true
+    tutor_id?: true
+    subject_id?: true
+    institution_course_id?: true
+    status?: true
+    grade_value?: true
+    grade_scale?: true
+    grade_proof_url?: true
+    verification_method?: true
+    verified_at?: true
+    rejected_reason?: true
+    rating?: true
+    rating_count?: true
+    xp?: true
+    tier?: true
+    sessions_count?: true
+    total_earnings?: true
+    price_1?: true
+    price_2?: true
+    price_3?: true
+    duration_1?: true
+    duration_2?: true
+    duration_3?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CourseAssetsCountAggregateInputType = {
+    id?: true
+    tutor_id?: true
+    subject_id?: true
+    institution_course_id?: true
+    status?: true
+    grade_value?: true
+    grade_scale?: true
+    grade_proof_url?: true
+    verification_method?: true
+    verified_at?: true
+    rejected_reason?: true
+    rating?: true
+    rating_count?: true
+    xp?: true
+    tier?: true
+    sessions_count?: true
+    total_earnings?: true
+    price_1?: true
+    price_2?: true
+    price_3?: true
+    duration_1?: true
+    duration_2?: true
+    duration_3?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type CourseAssetsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseAssets to aggregate.
+     */
+    where?: CourseAssetsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseAssets to fetch.
+     */
+    orderBy?: CourseAssetsOrderByWithRelationInput | CourseAssetsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CourseAssetsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseAssets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseAssets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CourseAssets
+    **/
+    _count?: true | CourseAssetsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CourseAssetsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CourseAssetsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CourseAssetsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CourseAssetsMaxAggregateInputType
+  }
+
+  export type GetCourseAssetsAggregateType<T extends CourseAssetsAggregateArgs> = {
+        [P in keyof T & keyof AggregateCourseAssets]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCourseAssets[P]>
+      : GetScalarType<T[P], AggregateCourseAssets[P]>
+  }
+
+
+
+
+  export type CourseAssetsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseAssetsWhereInput
+    orderBy?: CourseAssetsOrderByWithAggregationInput | CourseAssetsOrderByWithAggregationInput[]
+    by: CourseAssetsScalarFieldEnum[] | CourseAssetsScalarFieldEnum
+    having?: CourseAssetsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CourseAssetsCountAggregateInputType | true
+    _avg?: CourseAssetsAvgAggregateInputType
+    _sum?: CourseAssetsSumAggregateInputType
+    _min?: CourseAssetsMinAggregateInputType
+    _max?: CourseAssetsMaxAggregateInputType
+  }
+
+  export type CourseAssetsGroupByOutputType = {
+    id: string
+    tutor_id: string
+    subject_id: string
+    institution_course_id: string | null
+    status: string
+    grade_value: string | null
+    grade_scale: string | null
+    grade_proof_url: string | null
+    verification_method: string | null
+    verified_at: Date | null
+    rejected_reason: string | null
+    rating: number
+    rating_count: number
+    xp: number
+    tier: string
+    sessions_count: number
+    total_earnings: number
+    price_1: number | null
+    price_2: number | null
+    price_3: number | null
+    duration_1: number | null
+    duration_2: number | null
+    duration_3: number | null
+    created_at: Date
+    updated_at: Date
+    _count: CourseAssetsCountAggregateOutputType | null
+    _avg: CourseAssetsAvgAggregateOutputType | null
+    _sum: CourseAssetsSumAggregateOutputType | null
+    _min: CourseAssetsMinAggregateOutputType | null
+    _max: CourseAssetsMaxAggregateOutputType | null
+  }
+
+  type GetCourseAssetsGroupByPayload<T extends CourseAssetsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CourseAssetsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CourseAssetsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CourseAssetsGroupByOutputType[P]>
+            : GetScalarType<T[P], CourseAssetsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CourseAssetsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tutor_id?: boolean
+    subject_id?: boolean
+    institution_course_id?: boolean
+    status?: boolean
+    grade_value?: boolean
+    grade_scale?: boolean
+    grade_proof_url?: boolean
+    verification_method?: boolean
+    verified_at?: boolean
+    rejected_reason?: boolean
+    rating?: boolean
+    rating_count?: boolean
+    xp?: boolean
+    tier?: boolean
+    sessions_count?: boolean
+    total_earnings?: boolean
+    price_1?: boolean
+    price_2?: boolean
+    price_3?: boolean
+    duration_1?: boolean
+    duration_2?: boolean
+    duration_3?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Subjects?: boolean | SubjectsDefaultArgs<ExtArgs>
+    InstitutionCourses?: boolean | CourseAssets$InstitutionCoursesArgs<ExtArgs>
+    CourseReviews?: boolean | CourseAssets$CourseReviewsArgs<ExtArgs>
+    _count?: boolean | CourseAssetsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["courseAssets"]>
+
+  export type CourseAssetsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tutor_id?: boolean
+    subject_id?: boolean
+    institution_course_id?: boolean
+    status?: boolean
+    grade_value?: boolean
+    grade_scale?: boolean
+    grade_proof_url?: boolean
+    verification_method?: boolean
+    verified_at?: boolean
+    rejected_reason?: boolean
+    rating?: boolean
+    rating_count?: boolean
+    xp?: boolean
+    tier?: boolean
+    sessions_count?: boolean
+    total_earnings?: boolean
+    price_1?: boolean
+    price_2?: boolean
+    price_3?: boolean
+    duration_1?: boolean
+    duration_2?: boolean
+    duration_3?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Subjects?: boolean | SubjectsDefaultArgs<ExtArgs>
+    InstitutionCourses?: boolean | CourseAssets$InstitutionCoursesArgs<ExtArgs>
+  }, ExtArgs["result"]["courseAssets"]>
+
+  export type CourseAssetsSelectScalar = {
+    id?: boolean
+    tutor_id?: boolean
+    subject_id?: boolean
+    institution_course_id?: boolean
+    status?: boolean
+    grade_value?: boolean
+    grade_scale?: boolean
+    grade_proof_url?: boolean
+    verification_method?: boolean
+    verified_at?: boolean
+    rejected_reason?: boolean
+    rating?: boolean
+    rating_count?: boolean
+    xp?: boolean
+    tier?: boolean
+    sessions_count?: boolean
+    total_earnings?: boolean
+    price_1?: boolean
+    price_2?: boolean
+    price_3?: boolean
+    duration_1?: boolean
+    duration_2?: boolean
+    duration_3?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type CourseAssetsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Subjects?: boolean | SubjectsDefaultArgs<ExtArgs>
+    InstitutionCourses?: boolean | CourseAssets$InstitutionCoursesArgs<ExtArgs>
+    CourseReviews?: boolean | CourseAssets$CourseReviewsArgs<ExtArgs>
+    _count?: boolean | CourseAssetsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CourseAssetsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Profiles?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Subjects?: boolean | SubjectsDefaultArgs<ExtArgs>
+    InstitutionCourses?: boolean | CourseAssets$InstitutionCoursesArgs<ExtArgs>
+  }
+
+  export type $CourseAssetsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CourseAssets"
+    objects: {
+      Profiles: Prisma.$ProfilesPayload<ExtArgs>
+      Subjects: Prisma.$SubjectsPayload<ExtArgs>
+      InstitutionCourses: Prisma.$InstitutionCoursesPayload<ExtArgs> | null
+      CourseReviews: Prisma.$CourseReviewsPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tutor_id: string
+      subject_id: string
+      institution_course_id: string | null
+      status: string
+      grade_value: string | null
+      grade_scale: string | null
+      grade_proof_url: string | null
+      verification_method: string | null
+      verified_at: Date | null
+      rejected_reason: string | null
+      rating: number
+      rating_count: number
+      xp: number
+      tier: string
+      sessions_count: number
+      total_earnings: number
+      price_1: number | null
+      price_2: number | null
+      price_3: number | null
+      duration_1: number | null
+      duration_2: number | null
+      duration_3: number | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["courseAssets"]>
+    composites: {}
+  }
+
+  type CourseAssetsGetPayload<S extends boolean | null | undefined | CourseAssetsDefaultArgs> = $Result.GetResult<Prisma.$CourseAssetsPayload, S>
+
+  type CourseAssetsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CourseAssetsFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CourseAssetsCountAggregateInputType | true
+    }
+
+  export interface CourseAssetsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CourseAssets'], meta: { name: 'CourseAssets' } }
+    /**
+     * Find zero or one CourseAssets that matches the filter.
+     * @param {CourseAssetsFindUniqueArgs} args - Arguments to find a CourseAssets
+     * @example
+     * // Get one CourseAssets
+     * const courseAssets = await prisma.courseAssets.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CourseAssetsFindUniqueArgs>(args: SelectSubset<T, CourseAssetsFindUniqueArgs<ExtArgs>>): Prisma__CourseAssetsClient<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CourseAssets that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CourseAssetsFindUniqueOrThrowArgs} args - Arguments to find a CourseAssets
+     * @example
+     * // Get one CourseAssets
+     * const courseAssets = await prisma.courseAssets.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CourseAssetsFindUniqueOrThrowArgs>(args: SelectSubset<T, CourseAssetsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CourseAssetsClient<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CourseAssets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseAssetsFindFirstArgs} args - Arguments to find a CourseAssets
+     * @example
+     * // Get one CourseAssets
+     * const courseAssets = await prisma.courseAssets.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CourseAssetsFindFirstArgs>(args?: SelectSubset<T, CourseAssetsFindFirstArgs<ExtArgs>>): Prisma__CourseAssetsClient<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CourseAssets that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseAssetsFindFirstOrThrowArgs} args - Arguments to find a CourseAssets
+     * @example
+     * // Get one CourseAssets
+     * const courseAssets = await prisma.courseAssets.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CourseAssetsFindFirstOrThrowArgs>(args?: SelectSubset<T, CourseAssetsFindFirstOrThrowArgs<ExtArgs>>): Prisma__CourseAssetsClient<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CourseAssets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseAssetsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CourseAssets
+     * const courseAssets = await prisma.courseAssets.findMany()
+     * 
+     * // Get first 10 CourseAssets
+     * const courseAssets = await prisma.courseAssets.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const courseAssetsWithIdOnly = await prisma.courseAssets.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CourseAssetsFindManyArgs>(args?: SelectSubset<T, CourseAssetsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CourseAssets.
+     * @param {CourseAssetsCreateArgs} args - Arguments to create a CourseAssets.
+     * @example
+     * // Create one CourseAssets
+     * const CourseAssets = await prisma.courseAssets.create({
+     *   data: {
+     *     // ... data to create a CourseAssets
+     *   }
+     * })
+     * 
+     */
+    create<T extends CourseAssetsCreateArgs>(args: SelectSubset<T, CourseAssetsCreateArgs<ExtArgs>>): Prisma__CourseAssetsClient<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CourseAssets.
+     * @param {CourseAssetsCreateManyArgs} args - Arguments to create many CourseAssets.
+     * @example
+     * // Create many CourseAssets
+     * const courseAssets = await prisma.courseAssets.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CourseAssetsCreateManyArgs>(args?: SelectSubset<T, CourseAssetsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CourseAssets and returns the data saved in the database.
+     * @param {CourseAssetsCreateManyAndReturnArgs} args - Arguments to create many CourseAssets.
+     * @example
+     * // Create many CourseAssets
+     * const courseAssets = await prisma.courseAssets.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CourseAssets and only return the `id`
+     * const courseAssetsWithIdOnly = await prisma.courseAssets.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CourseAssetsCreateManyAndReturnArgs>(args?: SelectSubset<T, CourseAssetsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CourseAssets.
+     * @param {CourseAssetsDeleteArgs} args - Arguments to delete one CourseAssets.
+     * @example
+     * // Delete one CourseAssets
+     * const CourseAssets = await prisma.courseAssets.delete({
+     *   where: {
+     *     // ... filter to delete one CourseAssets
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CourseAssetsDeleteArgs>(args: SelectSubset<T, CourseAssetsDeleteArgs<ExtArgs>>): Prisma__CourseAssetsClient<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CourseAssets.
+     * @param {CourseAssetsUpdateArgs} args - Arguments to update one CourseAssets.
+     * @example
+     * // Update one CourseAssets
+     * const courseAssets = await prisma.courseAssets.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CourseAssetsUpdateArgs>(args: SelectSubset<T, CourseAssetsUpdateArgs<ExtArgs>>): Prisma__CourseAssetsClient<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CourseAssets.
+     * @param {CourseAssetsDeleteManyArgs} args - Arguments to filter CourseAssets to delete.
+     * @example
+     * // Delete a few CourseAssets
+     * const { count } = await prisma.courseAssets.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CourseAssetsDeleteManyArgs>(args?: SelectSubset<T, CourseAssetsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CourseAssets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseAssetsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CourseAssets
+     * const courseAssets = await prisma.courseAssets.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CourseAssetsUpdateManyArgs>(args: SelectSubset<T, CourseAssetsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CourseAssets.
+     * @param {CourseAssetsUpsertArgs} args - Arguments to update or create a CourseAssets.
+     * @example
+     * // Update or create a CourseAssets
+     * const courseAssets = await prisma.courseAssets.upsert({
+     *   create: {
+     *     // ... data to create a CourseAssets
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CourseAssets we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CourseAssetsUpsertArgs>(args: SelectSubset<T, CourseAssetsUpsertArgs<ExtArgs>>): Prisma__CourseAssetsClient<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CourseAssets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseAssetsCountArgs} args - Arguments to filter CourseAssets to count.
+     * @example
+     * // Count the number of CourseAssets
+     * const count = await prisma.courseAssets.count({
+     *   where: {
+     *     // ... the filter for the CourseAssets we want to count
+     *   }
+     * })
+    **/
+    count<T extends CourseAssetsCountArgs>(
+      args?: Subset<T, CourseAssetsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CourseAssetsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CourseAssets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseAssetsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CourseAssetsAggregateArgs>(args: Subset<T, CourseAssetsAggregateArgs>): Prisma.PrismaPromise<GetCourseAssetsAggregateType<T>>
+
+    /**
+     * Group by CourseAssets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseAssetsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CourseAssetsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CourseAssetsGroupByArgs['orderBy'] }
+        : { orderBy?: CourseAssetsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CourseAssetsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCourseAssetsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CourseAssets model
+   */
+  readonly fields: CourseAssetsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CourseAssets.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CourseAssetsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    Profiles<T extends ProfilesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfilesDefaultArgs<ExtArgs>>): Prisma__ProfilesClient<$Result.GetResult<Prisma.$ProfilesPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    Subjects<T extends SubjectsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectsDefaultArgs<ExtArgs>>): Prisma__SubjectsClient<$Result.GetResult<Prisma.$SubjectsPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    InstitutionCourses<T extends CourseAssets$InstitutionCoursesArgs<ExtArgs> = {}>(args?: Subset<T, CourseAssets$InstitutionCoursesArgs<ExtArgs>>): Prisma__InstitutionCoursesClient<$Result.GetResult<Prisma.$InstitutionCoursesPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    CourseReviews<T extends CourseAssets$CourseReviewsArgs<ExtArgs> = {}>(args?: Subset<T, CourseAssets$CourseReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CourseAssets model
+   */ 
+  interface CourseAssetsFieldRefs {
+    readonly id: FieldRef<"CourseAssets", 'String'>
+    readonly tutor_id: FieldRef<"CourseAssets", 'String'>
+    readonly subject_id: FieldRef<"CourseAssets", 'String'>
+    readonly institution_course_id: FieldRef<"CourseAssets", 'String'>
+    readonly status: FieldRef<"CourseAssets", 'String'>
+    readonly grade_value: FieldRef<"CourseAssets", 'String'>
+    readonly grade_scale: FieldRef<"CourseAssets", 'String'>
+    readonly grade_proof_url: FieldRef<"CourseAssets", 'String'>
+    readonly verification_method: FieldRef<"CourseAssets", 'String'>
+    readonly verified_at: FieldRef<"CourseAssets", 'DateTime'>
+    readonly rejected_reason: FieldRef<"CourseAssets", 'String'>
+    readonly rating: FieldRef<"CourseAssets", 'Float'>
+    readonly rating_count: FieldRef<"CourseAssets", 'Int'>
+    readonly xp: FieldRef<"CourseAssets", 'Int'>
+    readonly tier: FieldRef<"CourseAssets", 'String'>
+    readonly sessions_count: FieldRef<"CourseAssets", 'Int'>
+    readonly total_earnings: FieldRef<"CourseAssets", 'Float'>
+    readonly price_1: FieldRef<"CourseAssets", 'Float'>
+    readonly price_2: FieldRef<"CourseAssets", 'Float'>
+    readonly price_3: FieldRef<"CourseAssets", 'Float'>
+    readonly duration_1: FieldRef<"CourseAssets", 'Float'>
+    readonly duration_2: FieldRef<"CourseAssets", 'Float'>
+    readonly duration_3: FieldRef<"CourseAssets", 'Float'>
+    readonly created_at: FieldRef<"CourseAssets", 'DateTime'>
+    readonly updated_at: FieldRef<"CourseAssets", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CourseAssets findUnique
+   */
+  export type CourseAssetsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseAssets to fetch.
+     */
+    where: CourseAssetsWhereUniqueInput
+  }
+
+  /**
+   * CourseAssets findUniqueOrThrow
+   */
+  export type CourseAssetsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseAssets to fetch.
+     */
+    where: CourseAssetsWhereUniqueInput
+  }
+
+  /**
+   * CourseAssets findFirst
+   */
+  export type CourseAssetsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseAssets to fetch.
+     */
+    where?: CourseAssetsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseAssets to fetch.
+     */
+    orderBy?: CourseAssetsOrderByWithRelationInput | CourseAssetsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseAssets.
+     */
+    cursor?: CourseAssetsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseAssets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseAssets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseAssets.
+     */
+    distinct?: CourseAssetsScalarFieldEnum | CourseAssetsScalarFieldEnum[]
+  }
+
+  /**
+   * CourseAssets findFirstOrThrow
+   */
+  export type CourseAssetsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseAssets to fetch.
+     */
+    where?: CourseAssetsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseAssets to fetch.
+     */
+    orderBy?: CourseAssetsOrderByWithRelationInput | CourseAssetsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseAssets.
+     */
+    cursor?: CourseAssetsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseAssets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseAssets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseAssets.
+     */
+    distinct?: CourseAssetsScalarFieldEnum | CourseAssetsScalarFieldEnum[]
+  }
+
+  /**
+   * CourseAssets findMany
+   */
+  export type CourseAssetsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseAssets to fetch.
+     */
+    where?: CourseAssetsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseAssets to fetch.
+     */
+    orderBy?: CourseAssetsOrderByWithRelationInput | CourseAssetsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CourseAssets.
+     */
+    cursor?: CourseAssetsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseAssets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseAssets.
+     */
+    skip?: number
+    distinct?: CourseAssetsScalarFieldEnum | CourseAssetsScalarFieldEnum[]
+  }
+
+  /**
+   * CourseAssets create
+   */
+  export type CourseAssetsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CourseAssets.
+     */
+    data: XOR<CourseAssetsCreateInput, CourseAssetsUncheckedCreateInput>
+  }
+
+  /**
+   * CourseAssets createMany
+   */
+  export type CourseAssetsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CourseAssets.
+     */
+    data: CourseAssetsCreateManyInput | CourseAssetsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CourseAssets createManyAndReturn
+   */
+  export type CourseAssetsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CourseAssets.
+     */
+    data: CourseAssetsCreateManyInput | CourseAssetsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CourseAssets update
+   */
+  export type CourseAssetsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CourseAssets.
+     */
+    data: XOR<CourseAssetsUpdateInput, CourseAssetsUncheckedUpdateInput>
+    /**
+     * Choose, which CourseAssets to update.
+     */
+    where: CourseAssetsWhereUniqueInput
+  }
+
+  /**
+   * CourseAssets updateMany
+   */
+  export type CourseAssetsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CourseAssets.
+     */
+    data: XOR<CourseAssetsUpdateManyMutationInput, CourseAssetsUncheckedUpdateManyInput>
+    /**
+     * Filter which CourseAssets to update
+     */
+    where?: CourseAssetsWhereInput
+  }
+
+  /**
+   * CourseAssets upsert
+   */
+  export type CourseAssetsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CourseAssets to update in case it exists.
+     */
+    where: CourseAssetsWhereUniqueInput
+    /**
+     * In case the CourseAssets found by the `where` argument doesn't exist, create a new CourseAssets with this data.
+     */
+    create: XOR<CourseAssetsCreateInput, CourseAssetsUncheckedCreateInput>
+    /**
+     * In case the CourseAssets was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CourseAssetsUpdateInput, CourseAssetsUncheckedUpdateInput>
+  }
+
+  /**
+   * CourseAssets delete
+   */
+  export type CourseAssetsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+    /**
+     * Filter which CourseAssets to delete.
+     */
+    where: CourseAssetsWhereUniqueInput
+  }
+
+  /**
+   * CourseAssets deleteMany
+   */
+  export type CourseAssetsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseAssets to delete
+     */
+    where?: CourseAssetsWhereInput
+  }
+
+  /**
+   * CourseAssets.InstitutionCourses
+   */
+  export type CourseAssets$InstitutionCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstitutionCourses
+     */
+    select?: InstitutionCoursesSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InstitutionCoursesInclude<ExtArgs> | null
+    where?: InstitutionCoursesWhereInput
+  }
+
+  /**
+   * CourseAssets.CourseReviews
+   */
+  export type CourseAssets$CourseReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    where?: CourseReviewsWhereInput
+    orderBy?: CourseReviewsOrderByWithRelationInput | CourseReviewsOrderByWithRelationInput[]
+    cursor?: CourseReviewsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseReviewsScalarFieldEnum | CourseReviewsScalarFieldEnum[]
+  }
+
+  /**
+   * CourseAssets without action
+   */
+  export type CourseAssetsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseAssets
+     */
+    select?: CourseAssetsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseAssetsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CourseReviews
+   */
+
+  export type AggregateCourseReviews = {
+    _count: CourseReviewsCountAggregateOutputType | null
+    _avg: CourseReviewsAvgAggregateOutputType | null
+    _sum: CourseReviewsSumAggregateOutputType | null
+    _min: CourseReviewsMinAggregateOutputType | null
+    _max: CourseReviewsMaxAggregateOutputType | null
+  }
+
+  export type CourseReviewsAvgAggregateOutputType = {
+    rating: number | null
+  }
+
+  export type CourseReviewsSumAggregateOutputType = {
+    rating: number | null
+  }
+
+  export type CourseReviewsMinAggregateOutputType = {
+    id: string | null
+    course_asset_id: string | null
+    tutor_id: string | null
+    student_id: string | null
+    session_id: string | null
+    rating: number | null
+    comment: string | null
+    created_at: Date | null
+  }
+
+  export type CourseReviewsMaxAggregateOutputType = {
+    id: string | null
+    course_asset_id: string | null
+    tutor_id: string | null
+    student_id: string | null
+    session_id: string | null
+    rating: number | null
+    comment: string | null
+    created_at: Date | null
+  }
+
+  export type CourseReviewsCountAggregateOutputType = {
+    id: number
+    course_asset_id: number
+    tutor_id: number
+    student_id: number
+    session_id: number
+    rating: number
+    comment: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type CourseReviewsAvgAggregateInputType = {
+    rating?: true
+  }
+
+  export type CourseReviewsSumAggregateInputType = {
+    rating?: true
+  }
+
+  export type CourseReviewsMinAggregateInputType = {
+    id?: true
+    course_asset_id?: true
+    tutor_id?: true
+    student_id?: true
+    session_id?: true
+    rating?: true
+    comment?: true
+    created_at?: true
+  }
+
+  export type CourseReviewsMaxAggregateInputType = {
+    id?: true
+    course_asset_id?: true
+    tutor_id?: true
+    student_id?: true
+    session_id?: true
+    rating?: true
+    comment?: true
+    created_at?: true
+  }
+
+  export type CourseReviewsCountAggregateInputType = {
+    id?: true
+    course_asset_id?: true
+    tutor_id?: true
+    student_id?: true
+    session_id?: true
+    rating?: true
+    comment?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type CourseReviewsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseReviews to aggregate.
+     */
+    where?: CourseReviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseReviews to fetch.
+     */
+    orderBy?: CourseReviewsOrderByWithRelationInput | CourseReviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CourseReviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseReviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CourseReviews
+    **/
+    _count?: true | CourseReviewsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CourseReviewsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CourseReviewsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CourseReviewsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CourseReviewsMaxAggregateInputType
+  }
+
+  export type GetCourseReviewsAggregateType<T extends CourseReviewsAggregateArgs> = {
+        [P in keyof T & keyof AggregateCourseReviews]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCourseReviews[P]>
+      : GetScalarType<T[P], AggregateCourseReviews[P]>
+  }
+
+
+
+
+  export type CourseReviewsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseReviewsWhereInput
+    orderBy?: CourseReviewsOrderByWithAggregationInput | CourseReviewsOrderByWithAggregationInput[]
+    by: CourseReviewsScalarFieldEnum[] | CourseReviewsScalarFieldEnum
+    having?: CourseReviewsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CourseReviewsCountAggregateInputType | true
+    _avg?: CourseReviewsAvgAggregateInputType
+    _sum?: CourseReviewsSumAggregateInputType
+    _min?: CourseReviewsMinAggregateInputType
+    _max?: CourseReviewsMaxAggregateInputType
+  }
+
+  export type CourseReviewsGroupByOutputType = {
+    id: string
+    course_asset_id: string
+    tutor_id: string
+    student_id: string
+    session_id: string | null
+    rating: number
+    comment: string | null
+    created_at: Date
+    _count: CourseReviewsCountAggregateOutputType | null
+    _avg: CourseReviewsAvgAggregateOutputType | null
+    _sum: CourseReviewsSumAggregateOutputType | null
+    _min: CourseReviewsMinAggregateOutputType | null
+    _max: CourseReviewsMaxAggregateOutputType | null
+  }
+
+  type GetCourseReviewsGroupByPayload<T extends CourseReviewsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CourseReviewsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CourseReviewsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CourseReviewsGroupByOutputType[P]>
+            : GetScalarType<T[P], CourseReviewsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CourseReviewsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    course_asset_id?: boolean
+    tutor_id?: boolean
+    student_id?: boolean
+    session_id?: boolean
+    rating?: boolean
+    comment?: boolean
+    created_at?: boolean
+    CourseAssets?: boolean | CourseAssetsDefaultArgs<ExtArgs>
+    Profiles_tutor?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Profiles_student?: boolean | ProfilesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["courseReviews"]>
+
+  export type CourseReviewsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    course_asset_id?: boolean
+    tutor_id?: boolean
+    student_id?: boolean
+    session_id?: boolean
+    rating?: boolean
+    comment?: boolean
+    created_at?: boolean
+    CourseAssets?: boolean | CourseAssetsDefaultArgs<ExtArgs>
+    Profiles_tutor?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Profiles_student?: boolean | ProfilesDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["courseReviews"]>
+
+  export type CourseReviewsSelectScalar = {
+    id?: boolean
+    course_asset_id?: boolean
+    tutor_id?: boolean
+    student_id?: boolean
+    session_id?: boolean
+    rating?: boolean
+    comment?: boolean
+    created_at?: boolean
+  }
+
+  export type CourseReviewsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    CourseAssets?: boolean | CourseAssetsDefaultArgs<ExtArgs>
+    Profiles_tutor?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Profiles_student?: boolean | ProfilesDefaultArgs<ExtArgs>
+  }
+  export type CourseReviewsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    CourseAssets?: boolean | CourseAssetsDefaultArgs<ExtArgs>
+    Profiles_tutor?: boolean | ProfilesDefaultArgs<ExtArgs>
+    Profiles_student?: boolean | ProfilesDefaultArgs<ExtArgs>
+  }
+
+  export type $CourseReviewsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CourseReviews"
+    objects: {
+      CourseAssets: Prisma.$CourseAssetsPayload<ExtArgs>
+      Profiles_tutor: Prisma.$ProfilesPayload<ExtArgs>
+      Profiles_student: Prisma.$ProfilesPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      course_asset_id: string
+      tutor_id: string
+      student_id: string
+      session_id: string | null
+      rating: number
+      comment: string | null
+      created_at: Date
+    }, ExtArgs["result"]["courseReviews"]>
+    composites: {}
+  }
+
+  type CourseReviewsGetPayload<S extends boolean | null | undefined | CourseReviewsDefaultArgs> = $Result.GetResult<Prisma.$CourseReviewsPayload, S>
+
+  type CourseReviewsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CourseReviewsFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CourseReviewsCountAggregateInputType | true
+    }
+
+  export interface CourseReviewsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CourseReviews'], meta: { name: 'CourseReviews' } }
+    /**
+     * Find zero or one CourseReviews that matches the filter.
+     * @param {CourseReviewsFindUniqueArgs} args - Arguments to find a CourseReviews
+     * @example
+     * // Get one CourseReviews
+     * const courseReviews = await prisma.courseReviews.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CourseReviewsFindUniqueArgs>(args: SelectSubset<T, CourseReviewsFindUniqueArgs<ExtArgs>>): Prisma__CourseReviewsClient<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CourseReviews that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CourseReviewsFindUniqueOrThrowArgs} args - Arguments to find a CourseReviews
+     * @example
+     * // Get one CourseReviews
+     * const courseReviews = await prisma.courseReviews.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CourseReviewsFindUniqueOrThrowArgs>(args: SelectSubset<T, CourseReviewsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CourseReviewsClient<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CourseReviews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseReviewsFindFirstArgs} args - Arguments to find a CourseReviews
+     * @example
+     * // Get one CourseReviews
+     * const courseReviews = await prisma.courseReviews.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CourseReviewsFindFirstArgs>(args?: SelectSubset<T, CourseReviewsFindFirstArgs<ExtArgs>>): Prisma__CourseReviewsClient<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CourseReviews that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseReviewsFindFirstOrThrowArgs} args - Arguments to find a CourseReviews
+     * @example
+     * // Get one CourseReviews
+     * const courseReviews = await prisma.courseReviews.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CourseReviewsFindFirstOrThrowArgs>(args?: SelectSubset<T, CourseReviewsFindFirstOrThrowArgs<ExtArgs>>): Prisma__CourseReviewsClient<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CourseReviews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseReviewsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CourseReviews
+     * const courseReviews = await prisma.courseReviews.findMany()
+     * 
+     * // Get first 10 CourseReviews
+     * const courseReviews = await prisma.courseReviews.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const courseReviewsWithIdOnly = await prisma.courseReviews.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CourseReviewsFindManyArgs>(args?: SelectSubset<T, CourseReviewsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CourseReviews.
+     * @param {CourseReviewsCreateArgs} args - Arguments to create a CourseReviews.
+     * @example
+     * // Create one CourseReviews
+     * const CourseReviews = await prisma.courseReviews.create({
+     *   data: {
+     *     // ... data to create a CourseReviews
+     *   }
+     * })
+     * 
+     */
+    create<T extends CourseReviewsCreateArgs>(args: SelectSubset<T, CourseReviewsCreateArgs<ExtArgs>>): Prisma__CourseReviewsClient<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CourseReviews.
+     * @param {CourseReviewsCreateManyArgs} args - Arguments to create many CourseReviews.
+     * @example
+     * // Create many CourseReviews
+     * const courseReviews = await prisma.courseReviews.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CourseReviewsCreateManyArgs>(args?: SelectSubset<T, CourseReviewsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CourseReviews and returns the data saved in the database.
+     * @param {CourseReviewsCreateManyAndReturnArgs} args - Arguments to create many CourseReviews.
+     * @example
+     * // Create many CourseReviews
+     * const courseReviews = await prisma.courseReviews.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CourseReviews and only return the `id`
+     * const courseReviewsWithIdOnly = await prisma.courseReviews.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CourseReviewsCreateManyAndReturnArgs>(args?: SelectSubset<T, CourseReviewsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CourseReviews.
+     * @param {CourseReviewsDeleteArgs} args - Arguments to delete one CourseReviews.
+     * @example
+     * // Delete one CourseReviews
+     * const CourseReviews = await prisma.courseReviews.delete({
+     *   where: {
+     *     // ... filter to delete one CourseReviews
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CourseReviewsDeleteArgs>(args: SelectSubset<T, CourseReviewsDeleteArgs<ExtArgs>>): Prisma__CourseReviewsClient<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CourseReviews.
+     * @param {CourseReviewsUpdateArgs} args - Arguments to update one CourseReviews.
+     * @example
+     * // Update one CourseReviews
+     * const courseReviews = await prisma.courseReviews.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CourseReviewsUpdateArgs>(args: SelectSubset<T, CourseReviewsUpdateArgs<ExtArgs>>): Prisma__CourseReviewsClient<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CourseReviews.
+     * @param {CourseReviewsDeleteManyArgs} args - Arguments to filter CourseReviews to delete.
+     * @example
+     * // Delete a few CourseReviews
+     * const { count } = await prisma.courseReviews.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CourseReviewsDeleteManyArgs>(args?: SelectSubset<T, CourseReviewsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CourseReviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseReviewsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CourseReviews
+     * const courseReviews = await prisma.courseReviews.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CourseReviewsUpdateManyArgs>(args: SelectSubset<T, CourseReviewsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CourseReviews.
+     * @param {CourseReviewsUpsertArgs} args - Arguments to update or create a CourseReviews.
+     * @example
+     * // Update or create a CourseReviews
+     * const courseReviews = await prisma.courseReviews.upsert({
+     *   create: {
+     *     // ... data to create a CourseReviews
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CourseReviews we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CourseReviewsUpsertArgs>(args: SelectSubset<T, CourseReviewsUpsertArgs<ExtArgs>>): Prisma__CourseReviewsClient<$Result.GetResult<Prisma.$CourseReviewsPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CourseReviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseReviewsCountArgs} args - Arguments to filter CourseReviews to count.
+     * @example
+     * // Count the number of CourseReviews
+     * const count = await prisma.courseReviews.count({
+     *   where: {
+     *     // ... the filter for the CourseReviews we want to count
+     *   }
+     * })
+    **/
+    count<T extends CourseReviewsCountArgs>(
+      args?: Subset<T, CourseReviewsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CourseReviewsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CourseReviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseReviewsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CourseReviewsAggregateArgs>(args: Subset<T, CourseReviewsAggregateArgs>): Prisma.PrismaPromise<GetCourseReviewsAggregateType<T>>
+
+    /**
+     * Group by CourseReviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseReviewsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CourseReviewsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CourseReviewsGroupByArgs['orderBy'] }
+        : { orderBy?: CourseReviewsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CourseReviewsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCourseReviewsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CourseReviews model
+   */
+  readonly fields: CourseReviewsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CourseReviews.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CourseReviewsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    CourseAssets<T extends CourseAssetsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseAssetsDefaultArgs<ExtArgs>>): Prisma__CourseAssetsClient<$Result.GetResult<Prisma.$CourseAssetsPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    Profiles_tutor<T extends ProfilesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfilesDefaultArgs<ExtArgs>>): Prisma__ProfilesClient<$Result.GetResult<Prisma.$ProfilesPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    Profiles_student<T extends ProfilesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfilesDefaultArgs<ExtArgs>>): Prisma__ProfilesClient<$Result.GetResult<Prisma.$ProfilesPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CourseReviews model
+   */ 
+  interface CourseReviewsFieldRefs {
+    readonly id: FieldRef<"CourseReviews", 'String'>
+    readonly course_asset_id: FieldRef<"CourseReviews", 'String'>
+    readonly tutor_id: FieldRef<"CourseReviews", 'String'>
+    readonly student_id: FieldRef<"CourseReviews", 'String'>
+    readonly session_id: FieldRef<"CourseReviews", 'String'>
+    readonly rating: FieldRef<"CourseReviews", 'Int'>
+    readonly comment: FieldRef<"CourseReviews", 'String'>
+    readonly created_at: FieldRef<"CourseReviews", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CourseReviews findUnique
+   */
+  export type CourseReviewsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseReviews to fetch.
+     */
+    where: CourseReviewsWhereUniqueInput
+  }
+
+  /**
+   * CourseReviews findUniqueOrThrow
+   */
+  export type CourseReviewsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseReviews to fetch.
+     */
+    where: CourseReviewsWhereUniqueInput
+  }
+
+  /**
+   * CourseReviews findFirst
+   */
+  export type CourseReviewsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseReviews to fetch.
+     */
+    where?: CourseReviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseReviews to fetch.
+     */
+    orderBy?: CourseReviewsOrderByWithRelationInput | CourseReviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseReviews.
+     */
+    cursor?: CourseReviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseReviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseReviews.
+     */
+    distinct?: CourseReviewsScalarFieldEnum | CourseReviewsScalarFieldEnum[]
+  }
+
+  /**
+   * CourseReviews findFirstOrThrow
+   */
+  export type CourseReviewsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseReviews to fetch.
+     */
+    where?: CourseReviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseReviews to fetch.
+     */
+    orderBy?: CourseReviewsOrderByWithRelationInput | CourseReviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseReviews.
+     */
+    cursor?: CourseReviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseReviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseReviews.
+     */
+    distinct?: CourseReviewsScalarFieldEnum | CourseReviewsScalarFieldEnum[]
+  }
+
+  /**
+   * CourseReviews findMany
+   */
+  export type CourseReviewsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseReviews to fetch.
+     */
+    where?: CourseReviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseReviews to fetch.
+     */
+    orderBy?: CourseReviewsOrderByWithRelationInput | CourseReviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CourseReviews.
+     */
+    cursor?: CourseReviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseReviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseReviews.
+     */
+    skip?: number
+    distinct?: CourseReviewsScalarFieldEnum | CourseReviewsScalarFieldEnum[]
+  }
+
+  /**
+   * CourseReviews create
+   */
+  export type CourseReviewsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CourseReviews.
+     */
+    data: XOR<CourseReviewsCreateInput, CourseReviewsUncheckedCreateInput>
+  }
+
+  /**
+   * CourseReviews createMany
+   */
+  export type CourseReviewsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CourseReviews.
+     */
+    data: CourseReviewsCreateManyInput | CourseReviewsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CourseReviews createManyAndReturn
+   */
+  export type CourseReviewsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CourseReviews.
+     */
+    data: CourseReviewsCreateManyInput | CourseReviewsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CourseReviews update
+   */
+  export type CourseReviewsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CourseReviews.
+     */
+    data: XOR<CourseReviewsUpdateInput, CourseReviewsUncheckedUpdateInput>
+    /**
+     * Choose, which CourseReviews to update.
+     */
+    where: CourseReviewsWhereUniqueInput
+  }
+
+  /**
+   * CourseReviews updateMany
+   */
+  export type CourseReviewsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CourseReviews.
+     */
+    data: XOR<CourseReviewsUpdateManyMutationInput, CourseReviewsUncheckedUpdateManyInput>
+    /**
+     * Filter which CourseReviews to update
+     */
+    where?: CourseReviewsWhereInput
+  }
+
+  /**
+   * CourseReviews upsert
+   */
+  export type CourseReviewsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CourseReviews to update in case it exists.
+     */
+    where: CourseReviewsWhereUniqueInput
+    /**
+     * In case the CourseReviews found by the `where` argument doesn't exist, create a new CourseReviews with this data.
+     */
+    create: XOR<CourseReviewsCreateInput, CourseReviewsUncheckedCreateInput>
+    /**
+     * In case the CourseReviews was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CourseReviewsUpdateInput, CourseReviewsUncheckedUpdateInput>
+  }
+
+  /**
+   * CourseReviews delete
+   */
+  export type CourseReviewsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
+    /**
+     * Filter which CourseReviews to delete.
+     */
+    where: CourseReviewsWhereUniqueInput
+  }
+
+  /**
+   * CourseReviews deleteMany
+   */
+  export type CourseReviewsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseReviews to delete
+     */
+    where?: CourseReviewsWhereInput
+  }
+
+  /**
+   * CourseReviews without action
+   */
+  export type CourseReviewsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseReviews
+     */
+    select?: CourseReviewsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseReviewsInclude<ExtArgs> | null
   }
 
 
@@ -45489,6 +48175,51 @@ export namespace Prisma {
   export type InstitutionCoursesScalarFieldEnum = (typeof InstitutionCoursesScalarFieldEnum)[keyof typeof InstitutionCoursesScalarFieldEnum]
 
 
+  export const CourseAssetsScalarFieldEnum: {
+    id: 'id',
+    tutor_id: 'tutor_id',
+    subject_id: 'subject_id',
+    institution_course_id: 'institution_course_id',
+    status: 'status',
+    grade_value: 'grade_value',
+    grade_scale: 'grade_scale',
+    grade_proof_url: 'grade_proof_url',
+    verification_method: 'verification_method',
+    verified_at: 'verified_at',
+    rejected_reason: 'rejected_reason',
+    rating: 'rating',
+    rating_count: 'rating_count',
+    xp: 'xp',
+    tier: 'tier',
+    sessions_count: 'sessions_count',
+    total_earnings: 'total_earnings',
+    price_1: 'price_1',
+    price_2: 'price_2',
+    price_3: 'price_3',
+    duration_1: 'duration_1',
+    duration_2: 'duration_2',
+    duration_3: 'duration_3',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type CourseAssetsScalarFieldEnum = (typeof CourseAssetsScalarFieldEnum)[keyof typeof CourseAssetsScalarFieldEnum]
+
+
+  export const CourseReviewsScalarFieldEnum: {
+    id: 'id',
+    course_asset_id: 'course_asset_id',
+    tutor_id: 'tutor_id',
+    student_id: 'student_id',
+    session_id: 'session_id',
+    rating: 'rating',
+    comment: 'comment',
+    created_at: 'created_at'
+  };
+
+  export type CourseReviewsScalarFieldEnum = (typeof CourseReviewsScalarFieldEnum)[keyof typeof CourseReviewsScalarFieldEnum]
+
+
   export const TutorAvailabilityScalarFieldEnum: {
     id: 'id',
     tutor_id: 'tutor_id',
@@ -47702,6 +50433,9 @@ export namespace Prisma {
     Feedback?: FeedbackListRelationFilter
     ProfileInstitutions?: ProfileInstitutionsListRelationFilter
     SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
+    CourseAssets?: CourseAssetsListRelationFilter
+    CourseReviews_as_tutor?: CourseReviewsListRelationFilter
+    CourseReviews_as_student?: CourseReviewsListRelationFilter
   }
 
   export type ProfilesOrderByWithRelationInput = {
@@ -47736,6 +50470,9 @@ export namespace Prisma {
     Feedback?: FeedbackOrderByRelationAggregateInput
     ProfileInstitutions?: ProfileInstitutionsOrderByRelationAggregateInput
     SchoolEmailVerifications?: SchoolEmailVerificationsOrderByRelationAggregateInput
+    CourseAssets?: CourseAssetsOrderByRelationAggregateInput
+    CourseReviews_as_tutor?: CourseReviewsOrderByRelationAggregateInput
+    CourseReviews_as_student?: CourseReviewsOrderByRelationAggregateInput
   }
 
   export type ProfilesWhereUniqueInput = Prisma.AtLeast<{
@@ -47773,6 +50510,9 @@ export namespace Prisma {
     Feedback?: FeedbackListRelationFilter
     ProfileInstitutions?: ProfileInstitutionsListRelationFilter
     SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
+    CourseAssets?: CourseAssetsListRelationFilter
+    CourseReviews_as_tutor?: CourseReviewsListRelationFilter
+    CourseReviews_as_student?: CourseReviewsListRelationFilter
   }, "id" | "email">
 
   export type ProfilesOrderByWithAggregationInput = {
@@ -48043,6 +50783,7 @@ export namespace Prisma {
     updated_at?: DateTimeNullableFilter<"Subjects"> | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsListRelationFilter
     InstitutionCourses?: InstitutionCoursesListRelationFilter
+    CourseAssets?: CourseAssetsListRelationFilter
     Curricula?: XOR<CurriculaNullableRelationFilter, CurriculaWhereInput> | null
   }
 
@@ -48057,6 +50798,7 @@ export namespace Prisma {
     updated_at?: SortOrderInput | SortOrder
     ProfilesOnSubjects?: ProfilesOnSubjectsOrderByRelationAggregateInput
     InstitutionCourses?: InstitutionCoursesOrderByRelationAggregateInput
+    CourseAssets?: CourseAssetsOrderByRelationAggregateInput
     Curricula?: CurriculaOrderByWithRelationInput
   }
 
@@ -48074,6 +50816,7 @@ export namespace Prisma {
     updated_at?: DateTimeNullableFilter<"Subjects"> | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsListRelationFilter
     InstitutionCourses?: InstitutionCoursesListRelationFilter
+    CourseAssets?: CourseAssetsListRelationFilter
     Curricula?: XOR<CurriculaNullableRelationFilter, CurriculaWhereInput> | null
   }, "id">
 
@@ -48530,6 +51273,7 @@ export namespace Prisma {
     Institutions?: XOR<InstitutionsRelationFilter, InstitutionsWhereInput>
     Subjects?: XOR<SubjectsRelationFilter, SubjectsWhereInput>
     ProfilesOnSubjects?: ProfilesOnSubjectsListRelationFilter
+    CourseAssets?: CourseAssetsListRelationFilter
   }
 
   export type InstitutionCoursesOrderByWithRelationInput = {
@@ -48544,6 +51288,7 @@ export namespace Prisma {
     Institutions?: InstitutionsOrderByWithRelationInput
     Subjects?: SubjectsOrderByWithRelationInput
     ProfilesOnSubjects?: ProfilesOnSubjectsOrderByRelationAggregateInput
+    CourseAssets?: CourseAssetsOrderByRelationAggregateInput
   }
 
   export type InstitutionCoursesWhereUniqueInput = Prisma.AtLeast<{
@@ -48562,6 +51307,7 @@ export namespace Prisma {
     Institutions?: XOR<InstitutionsRelationFilter, InstitutionsWhereInput>
     Subjects?: XOR<SubjectsRelationFilter, SubjectsWhereInput>
     ProfilesOnSubjects?: ProfilesOnSubjectsListRelationFilter
+    CourseAssets?: CourseAssetsListRelationFilter
   }, "id" | "institution_id_code">
 
   export type InstitutionCoursesOrderByWithAggregationInput = {
@@ -48590,6 +51336,251 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"InstitutionCourses"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"InstitutionCourses"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"InstitutionCourses"> | Date | string
+  }
+
+  export type CourseAssetsWhereInput = {
+    AND?: CourseAssetsWhereInput | CourseAssetsWhereInput[]
+    OR?: CourseAssetsWhereInput[]
+    NOT?: CourseAssetsWhereInput | CourseAssetsWhereInput[]
+    id?: UuidFilter<"CourseAssets"> | string
+    tutor_id?: UuidFilter<"CourseAssets"> | string
+    subject_id?: UuidFilter<"CourseAssets"> | string
+    institution_course_id?: UuidNullableFilter<"CourseAssets"> | string | null
+    status?: StringFilter<"CourseAssets"> | string
+    grade_value?: StringNullableFilter<"CourseAssets"> | string | null
+    grade_scale?: StringNullableFilter<"CourseAssets"> | string | null
+    grade_proof_url?: StringNullableFilter<"CourseAssets"> | string | null
+    verification_method?: StringNullableFilter<"CourseAssets"> | string | null
+    verified_at?: DateTimeNullableFilter<"CourseAssets"> | Date | string | null
+    rejected_reason?: StringNullableFilter<"CourseAssets"> | string | null
+    rating?: FloatFilter<"CourseAssets"> | number
+    rating_count?: IntFilter<"CourseAssets"> | number
+    xp?: IntFilter<"CourseAssets"> | number
+    tier?: StringFilter<"CourseAssets"> | string
+    sessions_count?: IntFilter<"CourseAssets"> | number
+    total_earnings?: FloatFilter<"CourseAssets"> | number
+    price_1?: FloatNullableFilter<"CourseAssets"> | number | null
+    price_2?: FloatNullableFilter<"CourseAssets"> | number | null
+    price_3?: FloatNullableFilter<"CourseAssets"> | number | null
+    duration_1?: FloatNullableFilter<"CourseAssets"> | number | null
+    duration_2?: FloatNullableFilter<"CourseAssets"> | number | null
+    duration_3?: FloatNullableFilter<"CourseAssets"> | number | null
+    created_at?: DateTimeFilter<"CourseAssets"> | Date | string
+    updated_at?: DateTimeFilter<"CourseAssets"> | Date | string
+    Profiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+    Subjects?: XOR<SubjectsRelationFilter, SubjectsWhereInput>
+    InstitutionCourses?: XOR<InstitutionCoursesNullableRelationFilter, InstitutionCoursesWhereInput> | null
+    CourseReviews?: CourseReviewsListRelationFilter
+  }
+
+  export type CourseAssetsOrderByWithRelationInput = {
+    id?: SortOrder
+    tutor_id?: SortOrder
+    subject_id?: SortOrder
+    institution_course_id?: SortOrderInput | SortOrder
+    status?: SortOrder
+    grade_value?: SortOrderInput | SortOrder
+    grade_scale?: SortOrderInput | SortOrder
+    grade_proof_url?: SortOrderInput | SortOrder
+    verification_method?: SortOrderInput | SortOrder
+    verified_at?: SortOrderInput | SortOrder
+    rejected_reason?: SortOrderInput | SortOrder
+    rating?: SortOrder
+    rating_count?: SortOrder
+    xp?: SortOrder
+    tier?: SortOrder
+    sessions_count?: SortOrder
+    total_earnings?: SortOrder
+    price_1?: SortOrderInput | SortOrder
+    price_2?: SortOrderInput | SortOrder
+    price_3?: SortOrderInput | SortOrder
+    duration_1?: SortOrderInput | SortOrder
+    duration_2?: SortOrderInput | SortOrder
+    duration_3?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    Profiles?: ProfilesOrderByWithRelationInput
+    Subjects?: SubjectsOrderByWithRelationInput
+    InstitutionCourses?: InstitutionCoursesOrderByWithRelationInput
+    CourseReviews?: CourseReviewsOrderByRelationAggregateInput
+  }
+
+  export type CourseAssetsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tutor_id_subject_id?: CourseAssetsTutor_idSubject_idCompoundUniqueInput
+    AND?: CourseAssetsWhereInput | CourseAssetsWhereInput[]
+    OR?: CourseAssetsWhereInput[]
+    NOT?: CourseAssetsWhereInput | CourseAssetsWhereInput[]
+    tutor_id?: UuidFilter<"CourseAssets"> | string
+    subject_id?: UuidFilter<"CourseAssets"> | string
+    institution_course_id?: UuidNullableFilter<"CourseAssets"> | string | null
+    status?: StringFilter<"CourseAssets"> | string
+    grade_value?: StringNullableFilter<"CourseAssets"> | string | null
+    grade_scale?: StringNullableFilter<"CourseAssets"> | string | null
+    grade_proof_url?: StringNullableFilter<"CourseAssets"> | string | null
+    verification_method?: StringNullableFilter<"CourseAssets"> | string | null
+    verified_at?: DateTimeNullableFilter<"CourseAssets"> | Date | string | null
+    rejected_reason?: StringNullableFilter<"CourseAssets"> | string | null
+    rating?: FloatFilter<"CourseAssets"> | number
+    rating_count?: IntFilter<"CourseAssets"> | number
+    xp?: IntFilter<"CourseAssets"> | number
+    tier?: StringFilter<"CourseAssets"> | string
+    sessions_count?: IntFilter<"CourseAssets"> | number
+    total_earnings?: FloatFilter<"CourseAssets"> | number
+    price_1?: FloatNullableFilter<"CourseAssets"> | number | null
+    price_2?: FloatNullableFilter<"CourseAssets"> | number | null
+    price_3?: FloatNullableFilter<"CourseAssets"> | number | null
+    duration_1?: FloatNullableFilter<"CourseAssets"> | number | null
+    duration_2?: FloatNullableFilter<"CourseAssets"> | number | null
+    duration_3?: FloatNullableFilter<"CourseAssets"> | number | null
+    created_at?: DateTimeFilter<"CourseAssets"> | Date | string
+    updated_at?: DateTimeFilter<"CourseAssets"> | Date | string
+    Profiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+    Subjects?: XOR<SubjectsRelationFilter, SubjectsWhereInput>
+    InstitutionCourses?: XOR<InstitutionCoursesNullableRelationFilter, InstitutionCoursesWhereInput> | null
+    CourseReviews?: CourseReviewsListRelationFilter
+  }, "id" | "tutor_id_subject_id">
+
+  export type CourseAssetsOrderByWithAggregationInput = {
+    id?: SortOrder
+    tutor_id?: SortOrder
+    subject_id?: SortOrder
+    institution_course_id?: SortOrderInput | SortOrder
+    status?: SortOrder
+    grade_value?: SortOrderInput | SortOrder
+    grade_scale?: SortOrderInput | SortOrder
+    grade_proof_url?: SortOrderInput | SortOrder
+    verification_method?: SortOrderInput | SortOrder
+    verified_at?: SortOrderInput | SortOrder
+    rejected_reason?: SortOrderInput | SortOrder
+    rating?: SortOrder
+    rating_count?: SortOrder
+    xp?: SortOrder
+    tier?: SortOrder
+    sessions_count?: SortOrder
+    total_earnings?: SortOrder
+    price_1?: SortOrderInput | SortOrder
+    price_2?: SortOrderInput | SortOrder
+    price_3?: SortOrderInput | SortOrder
+    duration_1?: SortOrderInput | SortOrder
+    duration_2?: SortOrderInput | SortOrder
+    duration_3?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: CourseAssetsCountOrderByAggregateInput
+    _avg?: CourseAssetsAvgOrderByAggregateInput
+    _max?: CourseAssetsMaxOrderByAggregateInput
+    _min?: CourseAssetsMinOrderByAggregateInput
+    _sum?: CourseAssetsSumOrderByAggregateInput
+  }
+
+  export type CourseAssetsScalarWhereWithAggregatesInput = {
+    AND?: CourseAssetsScalarWhereWithAggregatesInput | CourseAssetsScalarWhereWithAggregatesInput[]
+    OR?: CourseAssetsScalarWhereWithAggregatesInput[]
+    NOT?: CourseAssetsScalarWhereWithAggregatesInput | CourseAssetsScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CourseAssets"> | string
+    tutor_id?: UuidWithAggregatesFilter<"CourseAssets"> | string
+    subject_id?: UuidWithAggregatesFilter<"CourseAssets"> | string
+    institution_course_id?: UuidNullableWithAggregatesFilter<"CourseAssets"> | string | null
+    status?: StringWithAggregatesFilter<"CourseAssets"> | string
+    grade_value?: StringNullableWithAggregatesFilter<"CourseAssets"> | string | null
+    grade_scale?: StringNullableWithAggregatesFilter<"CourseAssets"> | string | null
+    grade_proof_url?: StringNullableWithAggregatesFilter<"CourseAssets"> | string | null
+    verification_method?: StringNullableWithAggregatesFilter<"CourseAssets"> | string | null
+    verified_at?: DateTimeNullableWithAggregatesFilter<"CourseAssets"> | Date | string | null
+    rejected_reason?: StringNullableWithAggregatesFilter<"CourseAssets"> | string | null
+    rating?: FloatWithAggregatesFilter<"CourseAssets"> | number
+    rating_count?: IntWithAggregatesFilter<"CourseAssets"> | number
+    xp?: IntWithAggregatesFilter<"CourseAssets"> | number
+    tier?: StringWithAggregatesFilter<"CourseAssets"> | string
+    sessions_count?: IntWithAggregatesFilter<"CourseAssets"> | number
+    total_earnings?: FloatWithAggregatesFilter<"CourseAssets"> | number
+    price_1?: FloatNullableWithAggregatesFilter<"CourseAssets"> | number | null
+    price_2?: FloatNullableWithAggregatesFilter<"CourseAssets"> | number | null
+    price_3?: FloatNullableWithAggregatesFilter<"CourseAssets"> | number | null
+    duration_1?: FloatNullableWithAggregatesFilter<"CourseAssets"> | number | null
+    duration_2?: FloatNullableWithAggregatesFilter<"CourseAssets"> | number | null
+    duration_3?: FloatNullableWithAggregatesFilter<"CourseAssets"> | number | null
+    created_at?: DateTimeWithAggregatesFilter<"CourseAssets"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"CourseAssets"> | Date | string
+  }
+
+  export type CourseReviewsWhereInput = {
+    AND?: CourseReviewsWhereInput | CourseReviewsWhereInput[]
+    OR?: CourseReviewsWhereInput[]
+    NOT?: CourseReviewsWhereInput | CourseReviewsWhereInput[]
+    id?: UuidFilter<"CourseReviews"> | string
+    course_asset_id?: UuidFilter<"CourseReviews"> | string
+    tutor_id?: UuidFilter<"CourseReviews"> | string
+    student_id?: UuidFilter<"CourseReviews"> | string
+    session_id?: UuidNullableFilter<"CourseReviews"> | string | null
+    rating?: IntFilter<"CourseReviews"> | number
+    comment?: StringNullableFilter<"CourseReviews"> | string | null
+    created_at?: DateTimeFilter<"CourseReviews"> | Date | string
+    CourseAssets?: XOR<CourseAssetsRelationFilter, CourseAssetsWhereInput>
+    Profiles_tutor?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+    Profiles_student?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+  }
+
+  export type CourseReviewsOrderByWithRelationInput = {
+    id?: SortOrder
+    course_asset_id?: SortOrder
+    tutor_id?: SortOrder
+    student_id?: SortOrder
+    session_id?: SortOrderInput | SortOrder
+    rating?: SortOrder
+    comment?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    CourseAssets?: CourseAssetsOrderByWithRelationInput
+    Profiles_tutor?: ProfilesOrderByWithRelationInput
+    Profiles_student?: ProfilesOrderByWithRelationInput
+  }
+
+  export type CourseReviewsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CourseReviewsWhereInput | CourseReviewsWhereInput[]
+    OR?: CourseReviewsWhereInput[]
+    NOT?: CourseReviewsWhereInput | CourseReviewsWhereInput[]
+    course_asset_id?: UuidFilter<"CourseReviews"> | string
+    tutor_id?: UuidFilter<"CourseReviews"> | string
+    student_id?: UuidFilter<"CourseReviews"> | string
+    session_id?: UuidNullableFilter<"CourseReviews"> | string | null
+    rating?: IntFilter<"CourseReviews"> | number
+    comment?: StringNullableFilter<"CourseReviews"> | string | null
+    created_at?: DateTimeFilter<"CourseReviews"> | Date | string
+    CourseAssets?: XOR<CourseAssetsRelationFilter, CourseAssetsWhereInput>
+    Profiles_tutor?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+    Profiles_student?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
+  }, "id">
+
+  export type CourseReviewsOrderByWithAggregationInput = {
+    id?: SortOrder
+    course_asset_id?: SortOrder
+    tutor_id?: SortOrder
+    student_id?: SortOrder
+    session_id?: SortOrderInput | SortOrder
+    rating?: SortOrder
+    comment?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    _count?: CourseReviewsCountOrderByAggregateInput
+    _avg?: CourseReviewsAvgOrderByAggregateInput
+    _max?: CourseReviewsMaxOrderByAggregateInput
+    _min?: CourseReviewsMinOrderByAggregateInput
+    _sum?: CourseReviewsSumOrderByAggregateInput
+  }
+
+  export type CourseReviewsScalarWhereWithAggregatesInput = {
+    AND?: CourseReviewsScalarWhereWithAggregatesInput | CourseReviewsScalarWhereWithAggregatesInput[]
+    OR?: CourseReviewsScalarWhereWithAggregatesInput[]
+    NOT?: CourseReviewsScalarWhereWithAggregatesInput | CourseReviewsScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CourseReviews"> | string
+    course_asset_id?: UuidWithAggregatesFilter<"CourseReviews"> | string
+    tutor_id?: UuidWithAggregatesFilter<"CourseReviews"> | string
+    student_id?: UuidWithAggregatesFilter<"CourseReviews"> | string
+    session_id?: UuidNullableWithAggregatesFilter<"CourseReviews"> | string | null
+    rating?: IntWithAggregatesFilter<"CourseReviews"> | number
+    comment?: StringNullableWithAggregatesFilter<"CourseReviews"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"CourseReviews"> | Date | string
   }
 
   export type TutorAvailabilityWhereInput = {
@@ -51240,6 +54231,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateInput = {
@@ -51272,6 +54266,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUpdateInput = {
@@ -51304,6 +54301,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateInput = {
@@ -51336,6 +54336,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesCreateManyInput = {
@@ -51628,6 +54631,7 @@ export namespace Prisma {
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutSubjectsInput
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutSubjectsInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutSubjectsInput
     Curricula?: CurriculaCreateNestedOneWithoutSubjectsInput
   }
 
@@ -51642,6 +54646,7 @@ export namespace Prisma {
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutSubjectsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutSubjectsInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutSubjectsInput
   }
 
   export type SubjectsUpdateInput = {
@@ -51654,6 +54659,7 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutSubjectsNestedInput
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutSubjectsNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutSubjectsNestedInput
     Curricula?: CurriculaUpdateOneWithoutSubjectsNestedInput
   }
 
@@ -51668,6 +54674,7 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutSubjectsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutSubjectsNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutSubjectsNestedInput
   }
 
   export type SubjectsCreateManyInput = {
@@ -52157,6 +55164,7 @@ export namespace Prisma {
     Institutions: InstitutionsCreateNestedOneWithoutInstitutionCoursesInput
     Subjects: SubjectsCreateNestedOneWithoutInstitutionCoursesInput
     ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutInstitutionCoursesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutInstitutionCoursesInput
   }
 
   export type InstitutionCoursesUncheckedCreateInput = {
@@ -52169,6 +55177,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutInstitutionCoursesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutInstitutionCoursesInput
   }
 
   export type InstitutionCoursesUpdateInput = {
@@ -52181,6 +55190,7 @@ export namespace Prisma {
     Institutions?: InstitutionsUpdateOneRequiredWithoutInstitutionCoursesNestedInput
     Subjects?: SubjectsUpdateOneRequiredWithoutInstitutionCoursesNestedInput
     ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutInstitutionCoursesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutInstitutionCoursesNestedInput
   }
 
   export type InstitutionCoursesUncheckedUpdateInput = {
@@ -52193,6 +55203,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput
   }
 
   export type InstitutionCoursesCreateManyInput = {
@@ -52224,6 +55235,277 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseAssetsCreateInput = {
+    id?: string
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles: ProfilesCreateNestedOneWithoutCourseAssetsInput
+    Subjects: SubjectsCreateNestedOneWithoutCourseAssetsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedOneWithoutCourseAssetsInput
+    CourseReviews?: CourseReviewsCreateNestedManyWithoutCourseAssetsInput
+  }
+
+  export type CourseAssetsUncheckedCreateInput = {
+    id?: string
+    tutor_id: string
+    subject_id: string
+    institution_course_id?: string | null
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    CourseReviews?: CourseReviewsUncheckedCreateNestedManyWithoutCourseAssetsInput
+  }
+
+  export type CourseAssetsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateOneRequiredWithoutCourseAssetsNestedInput
+    Subjects?: SubjectsUpdateOneRequiredWithoutCourseAssetsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateOneWithoutCourseAssetsNestedInput
+    CourseReviews?: CourseReviewsUpdateManyWithoutCourseAssetsNestedInput
+  }
+
+  export type CourseAssetsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    subject_id?: StringFieldUpdateOperationsInput | string
+    institution_course_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    CourseReviews?: CourseReviewsUncheckedUpdateManyWithoutCourseAssetsNestedInput
+  }
+
+  export type CourseAssetsCreateManyInput = {
+    id?: string
+    tutor_id: string
+    subject_id: string
+    institution_course_id?: string | null
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CourseAssetsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseAssetsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    subject_id?: StringFieldUpdateOperationsInput | string
+    institution_course_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseReviewsCreateInput = {
+    id?: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+    CourseAssets: CourseAssetsCreateNestedOneWithoutCourseReviewsInput
+    Profiles_tutor: ProfilesCreateNestedOneWithoutCourseReviews_as_tutorInput
+    Profiles_student: ProfilesCreateNestedOneWithoutCourseReviews_as_studentInput
+  }
+
+  export type CourseReviewsUncheckedCreateInput = {
+    id?: string
+    course_asset_id: string
+    tutor_id: string
+    student_id: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+  }
+
+  export type CourseReviewsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    CourseAssets?: CourseAssetsUpdateOneRequiredWithoutCourseReviewsNestedInput
+    Profiles_tutor?: ProfilesUpdateOneRequiredWithoutCourseReviews_as_tutorNestedInput
+    Profiles_student?: ProfilesUpdateOneRequiredWithoutCourseReviews_as_studentNestedInput
+  }
+
+  export type CourseReviewsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_asset_id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseReviewsCreateManyInput = {
+    id?: string
+    course_asset_id: string
+    tutor_id: string
+    student_id: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+  }
+
+  export type CourseReviewsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseReviewsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_asset_id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TutorAvailabilityCreateInput = {
@@ -54623,6 +57905,18 @@ export namespace Prisma {
     none?: SchoolEmailVerificationsWhereInput
   }
 
+  export type CourseAssetsListRelationFilter = {
+    every?: CourseAssetsWhereInput
+    some?: CourseAssetsWhereInput
+    none?: CourseAssetsWhereInput
+  }
+
+  export type CourseReviewsListRelationFilter = {
+    every?: CourseReviewsWhereInput
+    some?: CourseReviewsWhereInput
+    none?: CourseReviewsWhereInput
+  }
+
   export type ConversationsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -54648,6 +57942,14 @@ export namespace Prisma {
   }
 
   export type SchoolEmailVerificationsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CourseAssetsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CourseReviewsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -55243,6 +58545,196 @@ export namespace Prisma {
     description?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type CourseAssetsTutor_idSubject_idCompoundUniqueInput = {
+    tutor_id: string
+    subject_id: string
+  }
+
+  export type CourseAssetsCountOrderByAggregateInput = {
+    id?: SortOrder
+    tutor_id?: SortOrder
+    subject_id?: SortOrder
+    institution_course_id?: SortOrder
+    status?: SortOrder
+    grade_value?: SortOrder
+    grade_scale?: SortOrder
+    grade_proof_url?: SortOrder
+    verification_method?: SortOrder
+    verified_at?: SortOrder
+    rejected_reason?: SortOrder
+    rating?: SortOrder
+    rating_count?: SortOrder
+    xp?: SortOrder
+    tier?: SortOrder
+    sessions_count?: SortOrder
+    total_earnings?: SortOrder
+    price_1?: SortOrder
+    price_2?: SortOrder
+    price_3?: SortOrder
+    duration_1?: SortOrder
+    duration_2?: SortOrder
+    duration_3?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CourseAssetsAvgOrderByAggregateInput = {
+    rating?: SortOrder
+    rating_count?: SortOrder
+    xp?: SortOrder
+    sessions_count?: SortOrder
+    total_earnings?: SortOrder
+    price_1?: SortOrder
+    price_2?: SortOrder
+    price_3?: SortOrder
+    duration_1?: SortOrder
+    duration_2?: SortOrder
+    duration_3?: SortOrder
+  }
+
+  export type CourseAssetsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tutor_id?: SortOrder
+    subject_id?: SortOrder
+    institution_course_id?: SortOrder
+    status?: SortOrder
+    grade_value?: SortOrder
+    grade_scale?: SortOrder
+    grade_proof_url?: SortOrder
+    verification_method?: SortOrder
+    verified_at?: SortOrder
+    rejected_reason?: SortOrder
+    rating?: SortOrder
+    rating_count?: SortOrder
+    xp?: SortOrder
+    tier?: SortOrder
+    sessions_count?: SortOrder
+    total_earnings?: SortOrder
+    price_1?: SortOrder
+    price_2?: SortOrder
+    price_3?: SortOrder
+    duration_1?: SortOrder
+    duration_2?: SortOrder
+    duration_3?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CourseAssetsMinOrderByAggregateInput = {
+    id?: SortOrder
+    tutor_id?: SortOrder
+    subject_id?: SortOrder
+    institution_course_id?: SortOrder
+    status?: SortOrder
+    grade_value?: SortOrder
+    grade_scale?: SortOrder
+    grade_proof_url?: SortOrder
+    verification_method?: SortOrder
+    verified_at?: SortOrder
+    rejected_reason?: SortOrder
+    rating?: SortOrder
+    rating_count?: SortOrder
+    xp?: SortOrder
+    tier?: SortOrder
+    sessions_count?: SortOrder
+    total_earnings?: SortOrder
+    price_1?: SortOrder
+    price_2?: SortOrder
+    price_3?: SortOrder
+    duration_1?: SortOrder
+    duration_2?: SortOrder
+    duration_3?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CourseAssetsSumOrderByAggregateInput = {
+    rating?: SortOrder
+    rating_count?: SortOrder
+    xp?: SortOrder
+    sessions_count?: SortOrder
+    total_earnings?: SortOrder
+    price_1?: SortOrder
+    price_2?: SortOrder
+    price_3?: SortOrder
+    duration_1?: SortOrder
+    duration_2?: SortOrder
+    duration_3?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type CourseAssetsRelationFilter = {
+    is?: CourseAssetsWhereInput
+    isNot?: CourseAssetsWhereInput
+  }
+
+  export type CourseReviewsCountOrderByAggregateInput = {
+    id?: SortOrder
+    course_asset_id?: SortOrder
+    tutor_id?: SortOrder
+    student_id?: SortOrder
+    session_id?: SortOrder
+    rating?: SortOrder
+    comment?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type CourseReviewsAvgOrderByAggregateInput = {
+    rating?: SortOrder
+  }
+
+  export type CourseReviewsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    course_asset_id?: SortOrder
+    tutor_id?: SortOrder
+    student_id?: SortOrder
+    session_id?: SortOrder
+    rating?: SortOrder
+    comment?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type CourseReviewsMinOrderByAggregateInput = {
+    id?: SortOrder
+    course_asset_id?: SortOrder
+    tutor_id?: SortOrder
+    student_id?: SortOrder
+    session_id?: SortOrder
+    rating?: SortOrder
+    comment?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type CourseReviewsSumOrderByAggregateInput = {
+    rating?: SortOrder
   }
 
   export type ProfilesOnSubjectsNullableRelationFilter = {
@@ -56877,6 +60369,27 @@ export namespace Prisma {
     connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
   }
 
+  export type CourseAssetsCreateNestedManyWithoutProfilesInput = {
+    create?: XOR<CourseAssetsCreateWithoutProfilesInput, CourseAssetsUncheckedCreateWithoutProfilesInput> | CourseAssetsCreateWithoutProfilesInput[] | CourseAssetsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutProfilesInput | CourseAssetsCreateOrConnectWithoutProfilesInput[]
+    createMany?: CourseAssetsCreateManyProfilesInputEnvelope
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+  }
+
+  export type CourseReviewsCreateNestedManyWithoutProfiles_tutorInput = {
+    create?: XOR<CourseReviewsCreateWithoutProfiles_tutorInput, CourseReviewsUncheckedCreateWithoutProfiles_tutorInput> | CourseReviewsCreateWithoutProfiles_tutorInput[] | CourseReviewsUncheckedCreateWithoutProfiles_tutorInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutProfiles_tutorInput | CourseReviewsCreateOrConnectWithoutProfiles_tutorInput[]
+    createMany?: CourseReviewsCreateManyProfiles_tutorInputEnvelope
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+  }
+
+  export type CourseReviewsCreateNestedManyWithoutProfiles_studentInput = {
+    create?: XOR<CourseReviewsCreateWithoutProfiles_studentInput, CourseReviewsUncheckedCreateWithoutProfiles_studentInput> | CourseReviewsCreateWithoutProfiles_studentInput[] | CourseReviewsUncheckedCreateWithoutProfiles_studentInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutProfiles_studentInput | CourseReviewsCreateOrConnectWithoutProfiles_studentInput[]
+    createMany?: CourseReviewsCreateManyProfiles_studentInputEnvelope
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+  }
+
   export type ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput = {
     create?: XOR<ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput, ConversationsUncheckedCreateWithoutProfiles_Conversations_student_idToProfilesInput> | ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput[] | ConversationsUncheckedCreateWithoutProfiles_Conversations_student_idToProfilesInput[]
     connectOrCreate?: ConversationsCreateOrConnectWithoutProfiles_Conversations_student_idToProfilesInput | ConversationsCreateOrConnectWithoutProfiles_Conversations_student_idToProfilesInput[]
@@ -56945,6 +60458,27 @@ export namespace Prisma {
     connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput | SchoolEmailVerificationsCreateOrConnectWithoutProfilesInput[]
     createMany?: SchoolEmailVerificationsCreateManyProfilesInputEnvelope
     connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+  }
+
+  export type CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput = {
+    create?: XOR<CourseAssetsCreateWithoutProfilesInput, CourseAssetsUncheckedCreateWithoutProfilesInput> | CourseAssetsCreateWithoutProfilesInput[] | CourseAssetsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutProfilesInput | CourseAssetsCreateOrConnectWithoutProfilesInput[]
+    createMany?: CourseAssetsCreateManyProfilesInputEnvelope
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+  }
+
+  export type CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput = {
+    create?: XOR<CourseReviewsCreateWithoutProfiles_tutorInput, CourseReviewsUncheckedCreateWithoutProfiles_tutorInput> | CourseReviewsCreateWithoutProfiles_tutorInput[] | CourseReviewsUncheckedCreateWithoutProfiles_tutorInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutProfiles_tutorInput | CourseReviewsCreateOrConnectWithoutProfiles_tutorInput[]
+    createMany?: CourseReviewsCreateManyProfiles_tutorInputEnvelope
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+  }
+
+  export type CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput = {
+    create?: XOR<CourseReviewsCreateWithoutProfiles_studentInput, CourseReviewsUncheckedCreateWithoutProfiles_studentInput> | CourseReviewsCreateWithoutProfiles_studentInput[] | CourseReviewsUncheckedCreateWithoutProfiles_studentInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutProfiles_studentInput | CourseReviewsCreateOrConnectWithoutProfiles_studentInput[]
+    createMany?: CourseReviewsCreateManyProfiles_studentInputEnvelope
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -57113,6 +60647,48 @@ export namespace Prisma {
     deleteMany?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
   }
 
+  export type CourseAssetsUpdateManyWithoutProfilesNestedInput = {
+    create?: XOR<CourseAssetsCreateWithoutProfilesInput, CourseAssetsUncheckedCreateWithoutProfilesInput> | CourseAssetsCreateWithoutProfilesInput[] | CourseAssetsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutProfilesInput | CourseAssetsCreateOrConnectWithoutProfilesInput[]
+    upsert?: CourseAssetsUpsertWithWhereUniqueWithoutProfilesInput | CourseAssetsUpsertWithWhereUniqueWithoutProfilesInput[]
+    createMany?: CourseAssetsCreateManyProfilesInputEnvelope
+    set?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    disconnect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    delete?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    update?: CourseAssetsUpdateWithWhereUniqueWithoutProfilesInput | CourseAssetsUpdateWithWhereUniqueWithoutProfilesInput[]
+    updateMany?: CourseAssetsUpdateManyWithWhereWithoutProfilesInput | CourseAssetsUpdateManyWithWhereWithoutProfilesInput[]
+    deleteMany?: CourseAssetsScalarWhereInput | CourseAssetsScalarWhereInput[]
+  }
+
+  export type CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput = {
+    create?: XOR<CourseReviewsCreateWithoutProfiles_tutorInput, CourseReviewsUncheckedCreateWithoutProfiles_tutorInput> | CourseReviewsCreateWithoutProfiles_tutorInput[] | CourseReviewsUncheckedCreateWithoutProfiles_tutorInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutProfiles_tutorInput | CourseReviewsCreateOrConnectWithoutProfiles_tutorInput[]
+    upsert?: CourseReviewsUpsertWithWhereUniqueWithoutProfiles_tutorInput | CourseReviewsUpsertWithWhereUniqueWithoutProfiles_tutorInput[]
+    createMany?: CourseReviewsCreateManyProfiles_tutorInputEnvelope
+    set?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    disconnect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    delete?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    update?: CourseReviewsUpdateWithWhereUniqueWithoutProfiles_tutorInput | CourseReviewsUpdateWithWhereUniqueWithoutProfiles_tutorInput[]
+    updateMany?: CourseReviewsUpdateManyWithWhereWithoutProfiles_tutorInput | CourseReviewsUpdateManyWithWhereWithoutProfiles_tutorInput[]
+    deleteMany?: CourseReviewsScalarWhereInput | CourseReviewsScalarWhereInput[]
+  }
+
+  export type CourseReviewsUpdateManyWithoutProfiles_studentNestedInput = {
+    create?: XOR<CourseReviewsCreateWithoutProfiles_studentInput, CourseReviewsUncheckedCreateWithoutProfiles_studentInput> | CourseReviewsCreateWithoutProfiles_studentInput[] | CourseReviewsUncheckedCreateWithoutProfiles_studentInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutProfiles_studentInput | CourseReviewsCreateOrConnectWithoutProfiles_studentInput[]
+    upsert?: CourseReviewsUpsertWithWhereUniqueWithoutProfiles_studentInput | CourseReviewsUpsertWithWhereUniqueWithoutProfiles_studentInput[]
+    createMany?: CourseReviewsCreateManyProfiles_studentInputEnvelope
+    set?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    disconnect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    delete?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    update?: CourseReviewsUpdateWithWhereUniqueWithoutProfiles_studentInput | CourseReviewsUpdateWithWhereUniqueWithoutProfiles_studentInput[]
+    updateMany?: CourseReviewsUpdateManyWithWhereWithoutProfiles_studentInput | CourseReviewsUpdateManyWithWhereWithoutProfiles_studentInput[]
+    deleteMany?: CourseReviewsScalarWhereInput | CourseReviewsScalarWhereInput[]
+  }
+
   export type ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput = {
     create?: XOR<ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput, ConversationsUncheckedCreateWithoutProfiles_Conversations_student_idToProfilesInput> | ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput[] | ConversationsUncheckedCreateWithoutProfiles_Conversations_student_idToProfilesInput[]
     connectOrCreate?: ConversationsCreateOrConnectWithoutProfiles_Conversations_student_idToProfilesInput | ConversationsCreateOrConnectWithoutProfiles_Conversations_student_idToProfilesInput[]
@@ -57253,6 +60829,48 @@ export namespace Prisma {
     deleteMany?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
   }
 
+  export type CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput = {
+    create?: XOR<CourseAssetsCreateWithoutProfilesInput, CourseAssetsUncheckedCreateWithoutProfilesInput> | CourseAssetsCreateWithoutProfilesInput[] | CourseAssetsUncheckedCreateWithoutProfilesInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutProfilesInput | CourseAssetsCreateOrConnectWithoutProfilesInput[]
+    upsert?: CourseAssetsUpsertWithWhereUniqueWithoutProfilesInput | CourseAssetsUpsertWithWhereUniqueWithoutProfilesInput[]
+    createMany?: CourseAssetsCreateManyProfilesInputEnvelope
+    set?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    disconnect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    delete?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    update?: CourseAssetsUpdateWithWhereUniqueWithoutProfilesInput | CourseAssetsUpdateWithWhereUniqueWithoutProfilesInput[]
+    updateMany?: CourseAssetsUpdateManyWithWhereWithoutProfilesInput | CourseAssetsUpdateManyWithWhereWithoutProfilesInput[]
+    deleteMany?: CourseAssetsScalarWhereInput | CourseAssetsScalarWhereInput[]
+  }
+
+  export type CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput = {
+    create?: XOR<CourseReviewsCreateWithoutProfiles_tutorInput, CourseReviewsUncheckedCreateWithoutProfiles_tutorInput> | CourseReviewsCreateWithoutProfiles_tutorInput[] | CourseReviewsUncheckedCreateWithoutProfiles_tutorInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutProfiles_tutorInput | CourseReviewsCreateOrConnectWithoutProfiles_tutorInput[]
+    upsert?: CourseReviewsUpsertWithWhereUniqueWithoutProfiles_tutorInput | CourseReviewsUpsertWithWhereUniqueWithoutProfiles_tutorInput[]
+    createMany?: CourseReviewsCreateManyProfiles_tutorInputEnvelope
+    set?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    disconnect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    delete?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    update?: CourseReviewsUpdateWithWhereUniqueWithoutProfiles_tutorInput | CourseReviewsUpdateWithWhereUniqueWithoutProfiles_tutorInput[]
+    updateMany?: CourseReviewsUpdateManyWithWhereWithoutProfiles_tutorInput | CourseReviewsUpdateManyWithWhereWithoutProfiles_tutorInput[]
+    deleteMany?: CourseReviewsScalarWhereInput | CourseReviewsScalarWhereInput[]
+  }
+
+  export type CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput = {
+    create?: XOR<CourseReviewsCreateWithoutProfiles_studentInput, CourseReviewsUncheckedCreateWithoutProfiles_studentInput> | CourseReviewsCreateWithoutProfiles_studentInput[] | CourseReviewsUncheckedCreateWithoutProfiles_studentInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutProfiles_studentInput | CourseReviewsCreateOrConnectWithoutProfiles_studentInput[]
+    upsert?: CourseReviewsUpsertWithWhereUniqueWithoutProfiles_studentInput | CourseReviewsUpsertWithWhereUniqueWithoutProfiles_studentInput[]
+    createMany?: CourseReviewsCreateManyProfiles_studentInputEnvelope
+    set?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    disconnect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    delete?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    update?: CourseReviewsUpdateWithWhereUniqueWithoutProfiles_studentInput | CourseReviewsUpdateWithWhereUniqueWithoutProfiles_studentInput[]
+    updateMany?: CourseReviewsUpdateManyWithWhereWithoutProfiles_studentInput | CourseReviewsUpdateManyWithWhereWithoutProfiles_studentInput[]
+    deleteMany?: CourseReviewsScalarWhereInput | CourseReviewsScalarWhereInput[]
+  }
+
   export type ProfilesCreateNestedOneWithoutSubjectsInput = {
     create?: XOR<ProfilesCreateWithoutSubjectsInput, ProfilesUncheckedCreateWithoutSubjectsInput>
     connectOrCreate?: ProfilesCreateOrConnectWithoutSubjectsInput
@@ -57381,6 +60999,13 @@ export namespace Prisma {
     connect?: InstitutionCoursesWhereUniqueInput | InstitutionCoursesWhereUniqueInput[]
   }
 
+  export type CourseAssetsCreateNestedManyWithoutSubjectsInput = {
+    create?: XOR<CourseAssetsCreateWithoutSubjectsInput, CourseAssetsUncheckedCreateWithoutSubjectsInput> | CourseAssetsCreateWithoutSubjectsInput[] | CourseAssetsUncheckedCreateWithoutSubjectsInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutSubjectsInput | CourseAssetsCreateOrConnectWithoutSubjectsInput[]
+    createMany?: CourseAssetsCreateManySubjectsInputEnvelope
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+  }
+
   export type CurriculaCreateNestedOneWithoutSubjectsInput = {
     create?: XOR<CurriculaCreateWithoutSubjectsInput, CurriculaUncheckedCreateWithoutSubjectsInput>
     connectOrCreate?: CurriculaCreateOrConnectWithoutSubjectsInput
@@ -57399,6 +61024,13 @@ export namespace Prisma {
     connectOrCreate?: InstitutionCoursesCreateOrConnectWithoutSubjectsInput | InstitutionCoursesCreateOrConnectWithoutSubjectsInput[]
     createMany?: InstitutionCoursesCreateManySubjectsInputEnvelope
     connect?: InstitutionCoursesWhereUniqueInput | InstitutionCoursesWhereUniqueInput[]
+  }
+
+  export type CourseAssetsUncheckedCreateNestedManyWithoutSubjectsInput = {
+    create?: XOR<CourseAssetsCreateWithoutSubjectsInput, CourseAssetsUncheckedCreateWithoutSubjectsInput> | CourseAssetsCreateWithoutSubjectsInput[] | CourseAssetsUncheckedCreateWithoutSubjectsInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutSubjectsInput | CourseAssetsCreateOrConnectWithoutSubjectsInput[]
+    createMany?: CourseAssetsCreateManySubjectsInputEnvelope
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
   }
 
   export type ProfilesOnSubjectsUpdateManyWithoutSubjectsNestedInput = {
@@ -57427,6 +61059,20 @@ export namespace Prisma {
     update?: InstitutionCoursesUpdateWithWhereUniqueWithoutSubjectsInput | InstitutionCoursesUpdateWithWhereUniqueWithoutSubjectsInput[]
     updateMany?: InstitutionCoursesUpdateManyWithWhereWithoutSubjectsInput | InstitutionCoursesUpdateManyWithWhereWithoutSubjectsInput[]
     deleteMany?: InstitutionCoursesScalarWhereInput | InstitutionCoursesScalarWhereInput[]
+  }
+
+  export type CourseAssetsUpdateManyWithoutSubjectsNestedInput = {
+    create?: XOR<CourseAssetsCreateWithoutSubjectsInput, CourseAssetsUncheckedCreateWithoutSubjectsInput> | CourseAssetsCreateWithoutSubjectsInput[] | CourseAssetsUncheckedCreateWithoutSubjectsInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutSubjectsInput | CourseAssetsCreateOrConnectWithoutSubjectsInput[]
+    upsert?: CourseAssetsUpsertWithWhereUniqueWithoutSubjectsInput | CourseAssetsUpsertWithWhereUniqueWithoutSubjectsInput[]
+    createMany?: CourseAssetsCreateManySubjectsInputEnvelope
+    set?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    disconnect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    delete?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    update?: CourseAssetsUpdateWithWhereUniqueWithoutSubjectsInput | CourseAssetsUpdateWithWhereUniqueWithoutSubjectsInput[]
+    updateMany?: CourseAssetsUpdateManyWithWhereWithoutSubjectsInput | CourseAssetsUpdateManyWithWhereWithoutSubjectsInput[]
+    deleteMany?: CourseAssetsScalarWhereInput | CourseAssetsScalarWhereInput[]
   }
 
   export type CurriculaUpdateOneWithoutSubjectsNestedInput = {
@@ -57465,6 +61111,20 @@ export namespace Prisma {
     update?: InstitutionCoursesUpdateWithWhereUniqueWithoutSubjectsInput | InstitutionCoursesUpdateWithWhereUniqueWithoutSubjectsInput[]
     updateMany?: InstitutionCoursesUpdateManyWithWhereWithoutSubjectsInput | InstitutionCoursesUpdateManyWithWhereWithoutSubjectsInput[]
     deleteMany?: InstitutionCoursesScalarWhereInput | InstitutionCoursesScalarWhereInput[]
+  }
+
+  export type CourseAssetsUncheckedUpdateManyWithoutSubjectsNestedInput = {
+    create?: XOR<CourseAssetsCreateWithoutSubjectsInput, CourseAssetsUncheckedCreateWithoutSubjectsInput> | CourseAssetsCreateWithoutSubjectsInput[] | CourseAssetsUncheckedCreateWithoutSubjectsInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutSubjectsInput | CourseAssetsCreateOrConnectWithoutSubjectsInput[]
+    upsert?: CourseAssetsUpsertWithWhereUniqueWithoutSubjectsInput | CourseAssetsUpsertWithWhereUniqueWithoutSubjectsInput[]
+    createMany?: CourseAssetsCreateManySubjectsInputEnvelope
+    set?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    disconnect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    delete?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    update?: CourseAssetsUpdateWithWhereUniqueWithoutSubjectsInput | CourseAssetsUpdateWithWhereUniqueWithoutSubjectsInput[]
+    updateMany?: CourseAssetsUpdateManyWithWhereWithoutSubjectsInput | CourseAssetsUpdateManyWithWhereWithoutSubjectsInput[]
+    deleteMany?: CourseAssetsScalarWhereInput | CourseAssetsScalarWhereInput[]
   }
 
   export type InstitutionsCreateemail_domainsInput = {
@@ -57945,11 +61605,25 @@ export namespace Prisma {
     connect?: ProfilesOnSubjectsWhereUniqueInput | ProfilesOnSubjectsWhereUniqueInput[]
   }
 
+  export type CourseAssetsCreateNestedManyWithoutInstitutionCoursesInput = {
+    create?: XOR<CourseAssetsCreateWithoutInstitutionCoursesInput, CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput> | CourseAssetsCreateWithoutInstitutionCoursesInput[] | CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutInstitutionCoursesInput | CourseAssetsCreateOrConnectWithoutInstitutionCoursesInput[]
+    createMany?: CourseAssetsCreateManyInstitutionCoursesInputEnvelope
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+  }
+
   export type ProfilesOnSubjectsUncheckedCreateNestedManyWithoutInstitutionCoursesInput = {
     create?: XOR<ProfilesOnSubjectsCreateWithoutInstitutionCoursesInput, ProfilesOnSubjectsUncheckedCreateWithoutInstitutionCoursesInput> | ProfilesOnSubjectsCreateWithoutInstitutionCoursesInput[] | ProfilesOnSubjectsUncheckedCreateWithoutInstitutionCoursesInput[]
     connectOrCreate?: ProfilesOnSubjectsCreateOrConnectWithoutInstitutionCoursesInput | ProfilesOnSubjectsCreateOrConnectWithoutInstitutionCoursesInput[]
     createMany?: ProfilesOnSubjectsCreateManyInstitutionCoursesInputEnvelope
     connect?: ProfilesOnSubjectsWhereUniqueInput | ProfilesOnSubjectsWhereUniqueInput[]
+  }
+
+  export type CourseAssetsUncheckedCreateNestedManyWithoutInstitutionCoursesInput = {
+    create?: XOR<CourseAssetsCreateWithoutInstitutionCoursesInput, CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput> | CourseAssetsCreateWithoutInstitutionCoursesInput[] | CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutInstitutionCoursesInput | CourseAssetsCreateOrConnectWithoutInstitutionCoursesInput[]
+    createMany?: CourseAssetsCreateManyInstitutionCoursesInputEnvelope
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
   }
 
   export type InstitutionsUpdateOneRequiredWithoutInstitutionCoursesNestedInput = {
@@ -57982,6 +61656,20 @@ export namespace Prisma {
     deleteMany?: ProfilesOnSubjectsScalarWhereInput | ProfilesOnSubjectsScalarWhereInput[]
   }
 
+  export type CourseAssetsUpdateManyWithoutInstitutionCoursesNestedInput = {
+    create?: XOR<CourseAssetsCreateWithoutInstitutionCoursesInput, CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput> | CourseAssetsCreateWithoutInstitutionCoursesInput[] | CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutInstitutionCoursesInput | CourseAssetsCreateOrConnectWithoutInstitutionCoursesInput[]
+    upsert?: CourseAssetsUpsertWithWhereUniqueWithoutInstitutionCoursesInput | CourseAssetsUpsertWithWhereUniqueWithoutInstitutionCoursesInput[]
+    createMany?: CourseAssetsCreateManyInstitutionCoursesInputEnvelope
+    set?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    disconnect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    delete?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    update?: CourseAssetsUpdateWithWhereUniqueWithoutInstitutionCoursesInput | CourseAssetsUpdateWithWhereUniqueWithoutInstitutionCoursesInput[]
+    updateMany?: CourseAssetsUpdateManyWithWhereWithoutInstitutionCoursesInput | CourseAssetsUpdateManyWithWhereWithoutInstitutionCoursesInput[]
+    deleteMany?: CourseAssetsScalarWhereInput | CourseAssetsScalarWhereInput[]
+  }
+
   export type ProfilesOnSubjectsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput = {
     create?: XOR<ProfilesOnSubjectsCreateWithoutInstitutionCoursesInput, ProfilesOnSubjectsUncheckedCreateWithoutInstitutionCoursesInput> | ProfilesOnSubjectsCreateWithoutInstitutionCoursesInput[] | ProfilesOnSubjectsUncheckedCreateWithoutInstitutionCoursesInput[]
     connectOrCreate?: ProfilesOnSubjectsCreateOrConnectWithoutInstitutionCoursesInput | ProfilesOnSubjectsCreateOrConnectWithoutInstitutionCoursesInput[]
@@ -57994,6 +61682,156 @@ export namespace Prisma {
     update?: ProfilesOnSubjectsUpdateWithWhereUniqueWithoutInstitutionCoursesInput | ProfilesOnSubjectsUpdateWithWhereUniqueWithoutInstitutionCoursesInput[]
     updateMany?: ProfilesOnSubjectsUpdateManyWithWhereWithoutInstitutionCoursesInput | ProfilesOnSubjectsUpdateManyWithWhereWithoutInstitutionCoursesInput[]
     deleteMany?: ProfilesOnSubjectsScalarWhereInput | ProfilesOnSubjectsScalarWhereInput[]
+  }
+
+  export type CourseAssetsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput = {
+    create?: XOR<CourseAssetsCreateWithoutInstitutionCoursesInput, CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput> | CourseAssetsCreateWithoutInstitutionCoursesInput[] | CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput[]
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutInstitutionCoursesInput | CourseAssetsCreateOrConnectWithoutInstitutionCoursesInput[]
+    upsert?: CourseAssetsUpsertWithWhereUniqueWithoutInstitutionCoursesInput | CourseAssetsUpsertWithWhereUniqueWithoutInstitutionCoursesInput[]
+    createMany?: CourseAssetsCreateManyInstitutionCoursesInputEnvelope
+    set?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    disconnect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    delete?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    connect?: CourseAssetsWhereUniqueInput | CourseAssetsWhereUniqueInput[]
+    update?: CourseAssetsUpdateWithWhereUniqueWithoutInstitutionCoursesInput | CourseAssetsUpdateWithWhereUniqueWithoutInstitutionCoursesInput[]
+    updateMany?: CourseAssetsUpdateManyWithWhereWithoutInstitutionCoursesInput | CourseAssetsUpdateManyWithWhereWithoutInstitutionCoursesInput[]
+    deleteMany?: CourseAssetsScalarWhereInput | CourseAssetsScalarWhereInput[]
+  }
+
+  export type ProfilesCreateNestedOneWithoutCourseAssetsInput = {
+    create?: XOR<ProfilesCreateWithoutCourseAssetsInput, ProfilesUncheckedCreateWithoutCourseAssetsInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutCourseAssetsInput
+    connect?: ProfilesWhereUniqueInput
+  }
+
+  export type SubjectsCreateNestedOneWithoutCourseAssetsInput = {
+    create?: XOR<SubjectsCreateWithoutCourseAssetsInput, SubjectsUncheckedCreateWithoutCourseAssetsInput>
+    connectOrCreate?: SubjectsCreateOrConnectWithoutCourseAssetsInput
+    connect?: SubjectsWhereUniqueInput
+  }
+
+  export type InstitutionCoursesCreateNestedOneWithoutCourseAssetsInput = {
+    create?: XOR<InstitutionCoursesCreateWithoutCourseAssetsInput, InstitutionCoursesUncheckedCreateWithoutCourseAssetsInput>
+    connectOrCreate?: InstitutionCoursesCreateOrConnectWithoutCourseAssetsInput
+    connect?: InstitutionCoursesWhereUniqueInput
+  }
+
+  export type CourseReviewsCreateNestedManyWithoutCourseAssetsInput = {
+    create?: XOR<CourseReviewsCreateWithoutCourseAssetsInput, CourseReviewsUncheckedCreateWithoutCourseAssetsInput> | CourseReviewsCreateWithoutCourseAssetsInput[] | CourseReviewsUncheckedCreateWithoutCourseAssetsInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutCourseAssetsInput | CourseReviewsCreateOrConnectWithoutCourseAssetsInput[]
+    createMany?: CourseReviewsCreateManyCourseAssetsInputEnvelope
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+  }
+
+  export type CourseReviewsUncheckedCreateNestedManyWithoutCourseAssetsInput = {
+    create?: XOR<CourseReviewsCreateWithoutCourseAssetsInput, CourseReviewsUncheckedCreateWithoutCourseAssetsInput> | CourseReviewsCreateWithoutCourseAssetsInput[] | CourseReviewsUncheckedCreateWithoutCourseAssetsInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutCourseAssetsInput | CourseReviewsCreateOrConnectWithoutCourseAssetsInput[]
+    createMany?: CourseReviewsCreateManyCourseAssetsInputEnvelope
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type ProfilesUpdateOneRequiredWithoutCourseAssetsNestedInput = {
+    create?: XOR<ProfilesCreateWithoutCourseAssetsInput, ProfilesUncheckedCreateWithoutCourseAssetsInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutCourseAssetsInput
+    upsert?: ProfilesUpsertWithoutCourseAssetsInput
+    connect?: ProfilesWhereUniqueInput
+    update?: XOR<XOR<ProfilesUpdateToOneWithWhereWithoutCourseAssetsInput, ProfilesUpdateWithoutCourseAssetsInput>, ProfilesUncheckedUpdateWithoutCourseAssetsInput>
+  }
+
+  export type SubjectsUpdateOneRequiredWithoutCourseAssetsNestedInput = {
+    create?: XOR<SubjectsCreateWithoutCourseAssetsInput, SubjectsUncheckedCreateWithoutCourseAssetsInput>
+    connectOrCreate?: SubjectsCreateOrConnectWithoutCourseAssetsInput
+    upsert?: SubjectsUpsertWithoutCourseAssetsInput
+    connect?: SubjectsWhereUniqueInput
+    update?: XOR<XOR<SubjectsUpdateToOneWithWhereWithoutCourseAssetsInput, SubjectsUpdateWithoutCourseAssetsInput>, SubjectsUncheckedUpdateWithoutCourseAssetsInput>
+  }
+
+  export type InstitutionCoursesUpdateOneWithoutCourseAssetsNestedInput = {
+    create?: XOR<InstitutionCoursesCreateWithoutCourseAssetsInput, InstitutionCoursesUncheckedCreateWithoutCourseAssetsInput>
+    connectOrCreate?: InstitutionCoursesCreateOrConnectWithoutCourseAssetsInput
+    upsert?: InstitutionCoursesUpsertWithoutCourseAssetsInput
+    disconnect?: InstitutionCoursesWhereInput | boolean
+    delete?: InstitutionCoursesWhereInput | boolean
+    connect?: InstitutionCoursesWhereUniqueInput
+    update?: XOR<XOR<InstitutionCoursesUpdateToOneWithWhereWithoutCourseAssetsInput, InstitutionCoursesUpdateWithoutCourseAssetsInput>, InstitutionCoursesUncheckedUpdateWithoutCourseAssetsInput>
+  }
+
+  export type CourseReviewsUpdateManyWithoutCourseAssetsNestedInput = {
+    create?: XOR<CourseReviewsCreateWithoutCourseAssetsInput, CourseReviewsUncheckedCreateWithoutCourseAssetsInput> | CourseReviewsCreateWithoutCourseAssetsInput[] | CourseReviewsUncheckedCreateWithoutCourseAssetsInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutCourseAssetsInput | CourseReviewsCreateOrConnectWithoutCourseAssetsInput[]
+    upsert?: CourseReviewsUpsertWithWhereUniqueWithoutCourseAssetsInput | CourseReviewsUpsertWithWhereUniqueWithoutCourseAssetsInput[]
+    createMany?: CourseReviewsCreateManyCourseAssetsInputEnvelope
+    set?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    disconnect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    delete?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    update?: CourseReviewsUpdateWithWhereUniqueWithoutCourseAssetsInput | CourseReviewsUpdateWithWhereUniqueWithoutCourseAssetsInput[]
+    updateMany?: CourseReviewsUpdateManyWithWhereWithoutCourseAssetsInput | CourseReviewsUpdateManyWithWhereWithoutCourseAssetsInput[]
+    deleteMany?: CourseReviewsScalarWhereInput | CourseReviewsScalarWhereInput[]
+  }
+
+  export type CourseReviewsUncheckedUpdateManyWithoutCourseAssetsNestedInput = {
+    create?: XOR<CourseReviewsCreateWithoutCourseAssetsInput, CourseReviewsUncheckedCreateWithoutCourseAssetsInput> | CourseReviewsCreateWithoutCourseAssetsInput[] | CourseReviewsUncheckedCreateWithoutCourseAssetsInput[]
+    connectOrCreate?: CourseReviewsCreateOrConnectWithoutCourseAssetsInput | CourseReviewsCreateOrConnectWithoutCourseAssetsInput[]
+    upsert?: CourseReviewsUpsertWithWhereUniqueWithoutCourseAssetsInput | CourseReviewsUpsertWithWhereUniqueWithoutCourseAssetsInput[]
+    createMany?: CourseReviewsCreateManyCourseAssetsInputEnvelope
+    set?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    disconnect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    delete?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    connect?: CourseReviewsWhereUniqueInput | CourseReviewsWhereUniqueInput[]
+    update?: CourseReviewsUpdateWithWhereUniqueWithoutCourseAssetsInput | CourseReviewsUpdateWithWhereUniqueWithoutCourseAssetsInput[]
+    updateMany?: CourseReviewsUpdateManyWithWhereWithoutCourseAssetsInput | CourseReviewsUpdateManyWithWhereWithoutCourseAssetsInput[]
+    deleteMany?: CourseReviewsScalarWhereInput | CourseReviewsScalarWhereInput[]
+  }
+
+  export type CourseAssetsCreateNestedOneWithoutCourseReviewsInput = {
+    create?: XOR<CourseAssetsCreateWithoutCourseReviewsInput, CourseAssetsUncheckedCreateWithoutCourseReviewsInput>
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutCourseReviewsInput
+    connect?: CourseAssetsWhereUniqueInput
+  }
+
+  export type ProfilesCreateNestedOneWithoutCourseReviews_as_tutorInput = {
+    create?: XOR<ProfilesCreateWithoutCourseReviews_as_tutorInput, ProfilesUncheckedCreateWithoutCourseReviews_as_tutorInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutCourseReviews_as_tutorInput
+    connect?: ProfilesWhereUniqueInput
+  }
+
+  export type ProfilesCreateNestedOneWithoutCourseReviews_as_studentInput = {
+    create?: XOR<ProfilesCreateWithoutCourseReviews_as_studentInput, ProfilesUncheckedCreateWithoutCourseReviews_as_studentInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutCourseReviews_as_studentInput
+    connect?: ProfilesWhereUniqueInput
+  }
+
+  export type CourseAssetsUpdateOneRequiredWithoutCourseReviewsNestedInput = {
+    create?: XOR<CourseAssetsCreateWithoutCourseReviewsInput, CourseAssetsUncheckedCreateWithoutCourseReviewsInput>
+    connectOrCreate?: CourseAssetsCreateOrConnectWithoutCourseReviewsInput
+    upsert?: CourseAssetsUpsertWithoutCourseReviewsInput
+    connect?: CourseAssetsWhereUniqueInput
+    update?: XOR<XOR<CourseAssetsUpdateToOneWithWhereWithoutCourseReviewsInput, CourseAssetsUpdateWithoutCourseReviewsInput>, CourseAssetsUncheckedUpdateWithoutCourseReviewsInput>
+  }
+
+  export type ProfilesUpdateOneRequiredWithoutCourseReviews_as_tutorNestedInput = {
+    create?: XOR<ProfilesCreateWithoutCourseReviews_as_tutorInput, ProfilesUncheckedCreateWithoutCourseReviews_as_tutorInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutCourseReviews_as_tutorInput
+    upsert?: ProfilesUpsertWithoutCourseReviews_as_tutorInput
+    connect?: ProfilesWhereUniqueInput
+    update?: XOR<XOR<ProfilesUpdateToOneWithWhereWithoutCourseReviews_as_tutorInput, ProfilesUpdateWithoutCourseReviews_as_tutorInput>, ProfilesUncheckedUpdateWithoutCourseReviews_as_tutorInput>
+  }
+
+  export type ProfilesUpdateOneRequiredWithoutCourseReviews_as_studentNestedInput = {
+    create?: XOR<ProfilesCreateWithoutCourseReviews_as_studentInput, ProfilesUncheckedCreateWithoutCourseReviews_as_studentInput>
+    connectOrCreate?: ProfilesCreateOrConnectWithoutCourseReviews_as_studentInput
+    upsert?: ProfilesUpsertWithoutCourseReviews_as_studentInput
+    connect?: ProfilesWhereUniqueInput
+    update?: XOR<XOR<ProfilesUpdateToOneWithWhereWithoutCourseReviews_as_studentInput, ProfilesUpdateWithoutCourseReviews_as_studentInput>, ProfilesUncheckedUpdateWithoutCourseReviews_as_studentInput>
   }
 
   export type ProfilesCreateNestedOneWithoutTutorAvailabilityInput = {
@@ -58623,6 +62461,22 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type NestedBytesFilter<$PrismaModel = never> = {
@@ -61572,6 +65426,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutUsersInput = {
@@ -61603,6 +65460,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutUsersInput = {
@@ -61857,6 +65717,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutUsersInput = {
@@ -61888,6 +65751,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesCreateWithoutConversations_Conversations_student_idToProfilesInput = {
@@ -61919,6 +65785,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutConversations_Conversations_student_idToProfilesInput = {
@@ -61950,6 +65819,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutConversations_Conversations_student_idToProfilesInput = {
@@ -61986,6 +65858,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutConversations_Conversations_tutor_idToProfilesInput = {
@@ -62017,6 +65892,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutConversations_Conversations_tutor_idToProfilesInput = {
@@ -62092,6 +65970,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutConversations_Conversations_student_idToProfilesInput = {
@@ -62123,6 +66004,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUpsertWithoutConversations_Conversations_tutor_idToProfilesInput = {
@@ -62165,6 +66049,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutConversations_Conversations_tutor_idToProfilesInput = {
@@ -62196,6 +66083,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type MessagesUpsertWithWhereUniqueWithoutConversationsInput = {
@@ -62281,6 +66171,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutMessagesInput = {
@@ -62312,6 +66205,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutMessagesInput = {
@@ -62390,6 +66286,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutMessagesInput = {
@@ -62421,6 +66320,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ConversationsCreateWithoutProfiles_Conversations_student_idToProfilesInput = {
@@ -62919,6 +66821,132 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CourseAssetsCreateWithoutProfilesInput = {
+    id?: string
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Subjects: SubjectsCreateNestedOneWithoutCourseAssetsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedOneWithoutCourseAssetsInput
+    CourseReviews?: CourseReviewsCreateNestedManyWithoutCourseAssetsInput
+  }
+
+  export type CourseAssetsUncheckedCreateWithoutProfilesInput = {
+    id?: string
+    subject_id: string
+    institution_course_id?: string | null
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    CourseReviews?: CourseReviewsUncheckedCreateNestedManyWithoutCourseAssetsInput
+  }
+
+  export type CourseAssetsCreateOrConnectWithoutProfilesInput = {
+    where: CourseAssetsWhereUniqueInput
+    create: XOR<CourseAssetsCreateWithoutProfilesInput, CourseAssetsUncheckedCreateWithoutProfilesInput>
+  }
+
+  export type CourseAssetsCreateManyProfilesInputEnvelope = {
+    data: CourseAssetsCreateManyProfilesInput | CourseAssetsCreateManyProfilesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CourseReviewsCreateWithoutProfiles_tutorInput = {
+    id?: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+    CourseAssets: CourseAssetsCreateNestedOneWithoutCourseReviewsInput
+    Profiles_student: ProfilesCreateNestedOneWithoutCourseReviews_as_studentInput
+  }
+
+  export type CourseReviewsUncheckedCreateWithoutProfiles_tutorInput = {
+    id?: string
+    course_asset_id: string
+    student_id: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+  }
+
+  export type CourseReviewsCreateOrConnectWithoutProfiles_tutorInput = {
+    where: CourseReviewsWhereUniqueInput
+    create: XOR<CourseReviewsCreateWithoutProfiles_tutorInput, CourseReviewsUncheckedCreateWithoutProfiles_tutorInput>
+  }
+
+  export type CourseReviewsCreateManyProfiles_tutorInputEnvelope = {
+    data: CourseReviewsCreateManyProfiles_tutorInput | CourseReviewsCreateManyProfiles_tutorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CourseReviewsCreateWithoutProfiles_studentInput = {
+    id?: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+    CourseAssets: CourseAssetsCreateNestedOneWithoutCourseReviewsInput
+    Profiles_tutor: ProfilesCreateNestedOneWithoutCourseReviews_as_tutorInput
+  }
+
+  export type CourseReviewsUncheckedCreateWithoutProfiles_studentInput = {
+    id?: string
+    course_asset_id: string
+    tutor_id: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+  }
+
+  export type CourseReviewsCreateOrConnectWithoutProfiles_studentInput = {
+    where: CourseReviewsWhereUniqueInput
+    create: XOR<CourseReviewsCreateWithoutProfiles_studentInput, CourseReviewsUncheckedCreateWithoutProfiles_studentInput>
+  }
+
+  export type CourseReviewsCreateManyProfiles_studentInputEnvelope = {
+    data: CourseReviewsCreateManyProfiles_studentInput | CourseReviewsCreateManyProfiles_studentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ConversationsUpsertWithWhereUniqueWithoutProfiles_Conversations_student_idToProfilesInput = {
     where: ConversationsWhereUniqueInput
     update: XOR<ConversationsUpdateWithoutProfiles_Conversations_student_idToProfilesInput, ConversationsUncheckedUpdateWithoutProfiles_Conversations_student_idToProfilesInput>
@@ -63350,6 +67378,99 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"SchoolEmailVerifications"> | Date | string
   }
 
+  export type CourseAssetsUpsertWithWhereUniqueWithoutProfilesInput = {
+    where: CourseAssetsWhereUniqueInput
+    update: XOR<CourseAssetsUpdateWithoutProfilesInput, CourseAssetsUncheckedUpdateWithoutProfilesInput>
+    create: XOR<CourseAssetsCreateWithoutProfilesInput, CourseAssetsUncheckedCreateWithoutProfilesInput>
+  }
+
+  export type CourseAssetsUpdateWithWhereUniqueWithoutProfilesInput = {
+    where: CourseAssetsWhereUniqueInput
+    data: XOR<CourseAssetsUpdateWithoutProfilesInput, CourseAssetsUncheckedUpdateWithoutProfilesInput>
+  }
+
+  export type CourseAssetsUpdateManyWithWhereWithoutProfilesInput = {
+    where: CourseAssetsScalarWhereInput
+    data: XOR<CourseAssetsUpdateManyMutationInput, CourseAssetsUncheckedUpdateManyWithoutProfilesInput>
+  }
+
+  export type CourseAssetsScalarWhereInput = {
+    AND?: CourseAssetsScalarWhereInput | CourseAssetsScalarWhereInput[]
+    OR?: CourseAssetsScalarWhereInput[]
+    NOT?: CourseAssetsScalarWhereInput | CourseAssetsScalarWhereInput[]
+    id?: UuidFilter<"CourseAssets"> | string
+    tutor_id?: UuidFilter<"CourseAssets"> | string
+    subject_id?: UuidFilter<"CourseAssets"> | string
+    institution_course_id?: UuidNullableFilter<"CourseAssets"> | string | null
+    status?: StringFilter<"CourseAssets"> | string
+    grade_value?: StringNullableFilter<"CourseAssets"> | string | null
+    grade_scale?: StringNullableFilter<"CourseAssets"> | string | null
+    grade_proof_url?: StringNullableFilter<"CourseAssets"> | string | null
+    verification_method?: StringNullableFilter<"CourseAssets"> | string | null
+    verified_at?: DateTimeNullableFilter<"CourseAssets"> | Date | string | null
+    rejected_reason?: StringNullableFilter<"CourseAssets"> | string | null
+    rating?: FloatFilter<"CourseAssets"> | number
+    rating_count?: IntFilter<"CourseAssets"> | number
+    xp?: IntFilter<"CourseAssets"> | number
+    tier?: StringFilter<"CourseAssets"> | string
+    sessions_count?: IntFilter<"CourseAssets"> | number
+    total_earnings?: FloatFilter<"CourseAssets"> | number
+    price_1?: FloatNullableFilter<"CourseAssets"> | number | null
+    price_2?: FloatNullableFilter<"CourseAssets"> | number | null
+    price_3?: FloatNullableFilter<"CourseAssets"> | number | null
+    duration_1?: FloatNullableFilter<"CourseAssets"> | number | null
+    duration_2?: FloatNullableFilter<"CourseAssets"> | number | null
+    duration_3?: FloatNullableFilter<"CourseAssets"> | number | null
+    created_at?: DateTimeFilter<"CourseAssets"> | Date | string
+    updated_at?: DateTimeFilter<"CourseAssets"> | Date | string
+  }
+
+  export type CourseReviewsUpsertWithWhereUniqueWithoutProfiles_tutorInput = {
+    where: CourseReviewsWhereUniqueInput
+    update: XOR<CourseReviewsUpdateWithoutProfiles_tutorInput, CourseReviewsUncheckedUpdateWithoutProfiles_tutorInput>
+    create: XOR<CourseReviewsCreateWithoutProfiles_tutorInput, CourseReviewsUncheckedCreateWithoutProfiles_tutorInput>
+  }
+
+  export type CourseReviewsUpdateWithWhereUniqueWithoutProfiles_tutorInput = {
+    where: CourseReviewsWhereUniqueInput
+    data: XOR<CourseReviewsUpdateWithoutProfiles_tutorInput, CourseReviewsUncheckedUpdateWithoutProfiles_tutorInput>
+  }
+
+  export type CourseReviewsUpdateManyWithWhereWithoutProfiles_tutorInput = {
+    where: CourseReviewsScalarWhereInput
+    data: XOR<CourseReviewsUpdateManyMutationInput, CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorInput>
+  }
+
+  export type CourseReviewsScalarWhereInput = {
+    AND?: CourseReviewsScalarWhereInput | CourseReviewsScalarWhereInput[]
+    OR?: CourseReviewsScalarWhereInput[]
+    NOT?: CourseReviewsScalarWhereInput | CourseReviewsScalarWhereInput[]
+    id?: UuidFilter<"CourseReviews"> | string
+    course_asset_id?: UuidFilter<"CourseReviews"> | string
+    tutor_id?: UuidFilter<"CourseReviews"> | string
+    student_id?: UuidFilter<"CourseReviews"> | string
+    session_id?: UuidNullableFilter<"CourseReviews"> | string | null
+    rating?: IntFilter<"CourseReviews"> | number
+    comment?: StringNullableFilter<"CourseReviews"> | string | null
+    created_at?: DateTimeFilter<"CourseReviews"> | Date | string
+  }
+
+  export type CourseReviewsUpsertWithWhereUniqueWithoutProfiles_studentInput = {
+    where: CourseReviewsWhereUniqueInput
+    update: XOR<CourseReviewsUpdateWithoutProfiles_studentInput, CourseReviewsUncheckedUpdateWithoutProfiles_studentInput>
+    create: XOR<CourseReviewsCreateWithoutProfiles_studentInput, CourseReviewsUncheckedCreateWithoutProfiles_studentInput>
+  }
+
+  export type CourseReviewsUpdateWithWhereUniqueWithoutProfiles_studentInput = {
+    where: CourseReviewsWhereUniqueInput
+    data: XOR<CourseReviewsUpdateWithoutProfiles_studentInput, CourseReviewsUncheckedUpdateWithoutProfiles_studentInput>
+  }
+
+  export type CourseReviewsUpdateManyWithWhereWithoutProfiles_studentInput = {
+    where: CourseReviewsScalarWhereInput
+    data: XOR<CourseReviewsUpdateManyMutationInput, CourseReviewsUncheckedUpdateManyWithoutProfiles_studentInput>
+  }
+
   export type ProfilesCreateWithoutSubjectsInput = {
     email: string
     name?: string | null
@@ -63379,6 +67500,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutSubjectsInput = {
@@ -63410,6 +67534,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutSubjectsInput = {
@@ -63426,6 +67553,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutSubjectsInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutSubjectsInput
     Curricula?: CurriculaCreateNestedOneWithoutSubjectsInput
   }
 
@@ -63439,6 +67567,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutSubjectsInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutSubjectsInput
   }
 
   export type SubjectsCreateOrConnectWithoutProfilesOnSubjectsInput = {
@@ -63455,6 +67584,7 @@ export namespace Prisma {
     updated_at?: Date | string
     Institutions: InstitutionsCreateNestedOneWithoutInstitutionCoursesInput
     Subjects: SubjectsCreateNestedOneWithoutInstitutionCoursesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutInstitutionCoursesInput
   }
 
   export type InstitutionCoursesUncheckedCreateWithoutProfilesOnSubjectsInput = {
@@ -63466,6 +67596,7 @@ export namespace Prisma {
     description?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutInstitutionCoursesInput
   }
 
   export type InstitutionCoursesCreateOrConnectWithoutProfilesOnSubjectsInput = {
@@ -63558,6 +67689,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutSubjectsInput = {
@@ -63589,6 +67723,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type SubjectsUpsertWithoutProfilesOnSubjectsInput = {
@@ -63611,6 +67748,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutSubjectsNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutSubjectsNestedInput
     Curricula?: CurriculaUpdateOneWithoutSubjectsNestedInput
   }
 
@@ -63624,6 +67762,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutSubjectsNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutSubjectsNestedInput
   }
 
   export type InstitutionCoursesUpsertWithoutProfilesOnSubjectsInput = {
@@ -63646,6 +67785,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Institutions?: InstitutionsUpdateOneRequiredWithoutInstitutionCoursesNestedInput
     Subjects?: SubjectsUpdateOneRequiredWithoutInstitutionCoursesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutInstitutionCoursesNestedInput
   }
 
   export type InstitutionCoursesUncheckedUpdateWithoutProfilesOnSubjectsInput = {
@@ -63657,6 +67797,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput
   }
 
   export type TutorAvailabilityUpsertWithWhereUniqueWithoutProfileSubjectInput = {
@@ -63704,6 +67845,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutSessions_Sessions_student_idToProfilesInput = {
@@ -63735,6 +67879,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutSessions_Sessions_student_idToProfilesInput = {
@@ -63771,6 +67918,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutSessions_Sessions_tutor_idToProfilesInput = {
@@ -63802,6 +67952,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutSessions_Sessions_tutor_idToProfilesInput = {
@@ -63849,6 +68002,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutSessions_Sessions_student_idToProfilesInput = {
@@ -63880,6 +68036,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUpsertWithoutSessions_Sessions_tutor_idToProfilesInput = {
@@ -63922,6 +68081,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutSessions_Sessions_tutor_idToProfilesInput = {
@@ -63953,6 +68115,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesOnSubjectsCreateWithoutSubjectsInput = {
@@ -64002,6 +68167,7 @@ export namespace Prisma {
     updated_at?: Date | string
     Institutions: InstitutionsCreateNestedOneWithoutInstitutionCoursesInput
     ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutInstitutionCoursesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutInstitutionCoursesInput
   }
 
   export type InstitutionCoursesUncheckedCreateWithoutSubjectsInput = {
@@ -64013,6 +68179,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutInstitutionCoursesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutInstitutionCoursesInput
   }
 
   export type InstitutionCoursesCreateOrConnectWithoutSubjectsInput = {
@@ -64022,6 +68189,72 @@ export namespace Prisma {
 
   export type InstitutionCoursesCreateManySubjectsInputEnvelope = {
     data: InstitutionCoursesCreateManySubjectsInput | InstitutionCoursesCreateManySubjectsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CourseAssetsCreateWithoutSubjectsInput = {
+    id?: string
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles: ProfilesCreateNestedOneWithoutCourseAssetsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedOneWithoutCourseAssetsInput
+    CourseReviews?: CourseReviewsCreateNestedManyWithoutCourseAssetsInput
+  }
+
+  export type CourseAssetsUncheckedCreateWithoutSubjectsInput = {
+    id?: string
+    tutor_id: string
+    institution_course_id?: string | null
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    CourseReviews?: CourseReviewsUncheckedCreateNestedManyWithoutCourseAssetsInput
+  }
+
+  export type CourseAssetsCreateOrConnectWithoutSubjectsInput = {
+    where: CourseAssetsWhereUniqueInput
+    create: XOR<CourseAssetsCreateWithoutSubjectsInput, CourseAssetsUncheckedCreateWithoutSubjectsInput>
+  }
+
+  export type CourseAssetsCreateManySubjectsInputEnvelope = {
+    data: CourseAssetsCreateManySubjectsInput | CourseAssetsCreateManySubjectsInput[]
     skipDuplicates?: boolean
   }
 
@@ -64096,6 +68329,22 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"InstitutionCourses"> | Date | string
   }
 
+  export type CourseAssetsUpsertWithWhereUniqueWithoutSubjectsInput = {
+    where: CourseAssetsWhereUniqueInput
+    update: XOR<CourseAssetsUpdateWithoutSubjectsInput, CourseAssetsUncheckedUpdateWithoutSubjectsInput>
+    create: XOR<CourseAssetsCreateWithoutSubjectsInput, CourseAssetsUncheckedCreateWithoutSubjectsInput>
+  }
+
+  export type CourseAssetsUpdateWithWhereUniqueWithoutSubjectsInput = {
+    where: CourseAssetsWhereUniqueInput
+    data: XOR<CourseAssetsUpdateWithoutSubjectsInput, CourseAssetsUncheckedUpdateWithoutSubjectsInput>
+  }
+
+  export type CourseAssetsUpdateManyWithWhereWithoutSubjectsInput = {
+    where: CourseAssetsScalarWhereInput
+    data: XOR<CourseAssetsUpdateManyMutationInput, CourseAssetsUncheckedUpdateManyWithoutSubjectsInput>
+  }
+
   export type CurriculaUpsertWithoutSubjectsInput = {
     update: XOR<CurriculaUpdateWithoutSubjectsInput, CurriculaUncheckedUpdateWithoutSubjectsInput>
     create: XOR<CurriculaCreateWithoutSubjectsInput, CurriculaUncheckedCreateWithoutSubjectsInput>
@@ -64156,6 +68405,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutInstitutionsInput = {
@@ -64187,6 +68439,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutInstitutionsInput = {
@@ -64208,6 +68463,7 @@ export namespace Prisma {
     updated_at?: Date | string
     Subjects: SubjectsCreateNestedOneWithoutInstitutionCoursesInput
     ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutInstitutionCoursesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutInstitutionCoursesInput
   }
 
   export type InstitutionCoursesUncheckedCreateWithoutInstitutionsInput = {
@@ -64219,6 +68475,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutInstitutionCoursesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutInstitutionCoursesInput
   }
 
   export type InstitutionCoursesCreateOrConnectWithoutInstitutionsInput = {
@@ -64709,6 +68966,7 @@ export namespace Prisma {
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutSubjectsInput
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutSubjectsInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutSubjectsInput
   }
 
   export type SubjectsUncheckedCreateWithoutCurriculaInput = {
@@ -64721,6 +68979,7 @@ export namespace Prisma {
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutSubjectsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutSubjectsInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutSubjectsInput
   }
 
   export type SubjectsCreateOrConnectWithoutCurriculaInput = {
@@ -64872,6 +69131,9 @@ export namespace Prisma {
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutProfileInstitutionsInput = {
@@ -64903,6 +69165,9 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutProfileInstitutionsInput = {
@@ -64993,6 +69258,9 @@ export namespace Prisma {
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutProfileInstitutionsInput = {
@@ -65024,6 +69292,9 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type InstitutionsUpsertWithoutProfileInstitutionsInput = {
@@ -65104,6 +69375,9 @@ export namespace Prisma {
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutSchoolEmailVerificationsInput = {
@@ -65135,6 +69409,9 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutSchoolEmailVerificationsInput = {
@@ -65225,6 +69502,9 @@ export namespace Prisma {
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutSchoolEmailVerificationsInput = {
@@ -65256,6 +69536,9 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type InstitutionsUpsertWithoutSchoolEmailVerificationsInput = {
@@ -65359,6 +69642,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutSubjectsInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutSubjectsInput
     Curricula?: CurriculaCreateNestedOneWithoutSubjectsInput
   }
 
@@ -65372,6 +69656,7 @@ export namespace Prisma {
     created_at?: Date | string | null
     updated_at?: Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutSubjectsInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutSubjectsInput
   }
 
   export type SubjectsCreateOrConnectWithoutInstitutionCoursesInput = {
@@ -65414,6 +69699,72 @@ export namespace Prisma {
 
   export type ProfilesOnSubjectsCreateManyInstitutionCoursesInputEnvelope = {
     data: ProfilesOnSubjectsCreateManyInstitutionCoursesInput | ProfilesOnSubjectsCreateManyInstitutionCoursesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CourseAssetsCreateWithoutInstitutionCoursesInput = {
+    id?: string
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles: ProfilesCreateNestedOneWithoutCourseAssetsInput
+    Subjects: SubjectsCreateNestedOneWithoutCourseAssetsInput
+    CourseReviews?: CourseReviewsCreateNestedManyWithoutCourseAssetsInput
+  }
+
+  export type CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput = {
+    id?: string
+    tutor_id: string
+    subject_id: string
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    CourseReviews?: CourseReviewsUncheckedCreateNestedManyWithoutCourseAssetsInput
+  }
+
+  export type CourseAssetsCreateOrConnectWithoutInstitutionCoursesInput = {
+    where: CourseAssetsWhereUniqueInput
+    create: XOR<CourseAssetsCreateWithoutInstitutionCoursesInput, CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput>
+  }
+
+  export type CourseAssetsCreateManyInstitutionCoursesInputEnvelope = {
+    data: CourseAssetsCreateManyInstitutionCoursesInput | CourseAssetsCreateManyInstitutionCoursesInput[]
     skipDuplicates?: boolean
   }
 
@@ -65486,6 +69837,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutSubjectsNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutSubjectsNestedInput
     Curricula?: CurriculaUpdateOneWithoutSubjectsNestedInput
   }
 
@@ -65499,6 +69851,7 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutSubjectsNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutSubjectsNestedInput
   }
 
   export type ProfilesOnSubjectsUpsertWithWhereUniqueWithoutInstitutionCoursesInput = {
@@ -65515,6 +69868,784 @@ export namespace Prisma {
   export type ProfilesOnSubjectsUpdateManyWithWhereWithoutInstitutionCoursesInput = {
     where: ProfilesOnSubjectsScalarWhereInput
     data: XOR<ProfilesOnSubjectsUpdateManyMutationInput, ProfilesOnSubjectsUncheckedUpdateManyWithoutInstitutionCoursesInput>
+  }
+
+  export type CourseAssetsUpsertWithWhereUniqueWithoutInstitutionCoursesInput = {
+    where: CourseAssetsWhereUniqueInput
+    update: XOR<CourseAssetsUpdateWithoutInstitutionCoursesInput, CourseAssetsUncheckedUpdateWithoutInstitutionCoursesInput>
+    create: XOR<CourseAssetsCreateWithoutInstitutionCoursesInput, CourseAssetsUncheckedCreateWithoutInstitutionCoursesInput>
+  }
+
+  export type CourseAssetsUpdateWithWhereUniqueWithoutInstitutionCoursesInput = {
+    where: CourseAssetsWhereUniqueInput
+    data: XOR<CourseAssetsUpdateWithoutInstitutionCoursesInput, CourseAssetsUncheckedUpdateWithoutInstitutionCoursesInput>
+  }
+
+  export type CourseAssetsUpdateManyWithWhereWithoutInstitutionCoursesInput = {
+    where: CourseAssetsScalarWhereInput
+    data: XOR<CourseAssetsUpdateManyMutationInput, CourseAssetsUncheckedUpdateManyWithoutInstitutionCoursesInput>
+  }
+
+  export type ProfilesCreateWithoutCourseAssetsInput = {
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesCreateNestedManyWithoutProfilesInput
+    users: usersCreateNestedOneWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
+    Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
+    Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
+  }
+
+  export type ProfilesUncheckedCreateWithoutCourseAssetsInput = {
+    id: string
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    institution_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesUncheckedCreateNestedManyWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
+    Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
+  }
+
+  export type ProfilesCreateOrConnectWithoutCourseAssetsInput = {
+    where: ProfilesWhereUniqueInput
+    create: XOR<ProfilesCreateWithoutCourseAssetsInput, ProfilesUncheckedCreateWithoutCourseAssetsInput>
+  }
+
+  export type SubjectsCreateWithoutCourseAssetsInput = {
+    id?: string
+    name: string
+    code?: string | null
+    grade?: number | null
+    category?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutSubjectsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutSubjectsInput
+    Curricula?: CurriculaCreateNestedOneWithoutSubjectsInput
+  }
+
+  export type SubjectsUncheckedCreateWithoutCourseAssetsInput = {
+    id?: string
+    name: string
+    code?: string | null
+    grade?: number | null
+    category?: string | null
+    curriculum_id?: string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutSubjectsInput
+    InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutSubjectsInput
+  }
+
+  export type SubjectsCreateOrConnectWithoutCourseAssetsInput = {
+    where: SubjectsWhereUniqueInput
+    create: XOR<SubjectsCreateWithoutCourseAssetsInput, SubjectsUncheckedCreateWithoutCourseAssetsInput>
+  }
+
+  export type InstitutionCoursesCreateWithoutCourseAssetsInput = {
+    id?: string
+    code: string
+    name?: string | null
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Institutions: InstitutionsCreateNestedOneWithoutInstitutionCoursesInput
+    Subjects: SubjectsCreateNestedOneWithoutInstitutionCoursesInput
+    ProfilesOnSubjects?: ProfilesOnSubjectsCreateNestedManyWithoutInstitutionCoursesInput
+  }
+
+  export type InstitutionCoursesUncheckedCreateWithoutCourseAssetsInput = {
+    id?: string
+    institution_id: string
+    subject_id: string
+    code: string
+    name?: string | null
+    description?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutInstitutionCoursesInput
+  }
+
+  export type InstitutionCoursesCreateOrConnectWithoutCourseAssetsInput = {
+    where: InstitutionCoursesWhereUniqueInput
+    create: XOR<InstitutionCoursesCreateWithoutCourseAssetsInput, InstitutionCoursesUncheckedCreateWithoutCourseAssetsInput>
+  }
+
+  export type CourseReviewsCreateWithoutCourseAssetsInput = {
+    id?: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+    Profiles_tutor: ProfilesCreateNestedOneWithoutCourseReviews_as_tutorInput
+    Profiles_student: ProfilesCreateNestedOneWithoutCourseReviews_as_studentInput
+  }
+
+  export type CourseReviewsUncheckedCreateWithoutCourseAssetsInput = {
+    id?: string
+    tutor_id: string
+    student_id: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+  }
+
+  export type CourseReviewsCreateOrConnectWithoutCourseAssetsInput = {
+    where: CourseReviewsWhereUniqueInput
+    create: XOR<CourseReviewsCreateWithoutCourseAssetsInput, CourseReviewsUncheckedCreateWithoutCourseAssetsInput>
+  }
+
+  export type CourseReviewsCreateManyCourseAssetsInputEnvelope = {
+    data: CourseReviewsCreateManyCourseAssetsInput | CourseReviewsCreateManyCourseAssetsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProfilesUpsertWithoutCourseAssetsInput = {
+    update: XOR<ProfilesUpdateWithoutCourseAssetsInput, ProfilesUncheckedUpdateWithoutCourseAssetsInput>
+    create: XOR<ProfilesCreateWithoutCourseAssetsInput, ProfilesUncheckedCreateWithoutCourseAssetsInput>
+    where?: ProfilesWhereInput
+  }
+
+  export type ProfilesUpdateToOneWithWhereWithoutCourseAssetsInput = {
+    where?: ProfilesWhereInput
+    data: XOR<ProfilesUpdateWithoutCourseAssetsInput, ProfilesUncheckedUpdateWithoutCourseAssetsInput>
+  }
+
+  export type ProfilesUpdateWithoutCourseAssetsInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUpdateManyWithoutProfilesNestedInput
+    users?: usersUpdateOneRequiredWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
+    Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
+    Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
+  }
+
+  export type ProfilesUncheckedUpdateWithoutCourseAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUncheckedUpdateManyWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
+    Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
+  }
+
+  export type SubjectsUpsertWithoutCourseAssetsInput = {
+    update: XOR<SubjectsUpdateWithoutCourseAssetsInput, SubjectsUncheckedUpdateWithoutCourseAssetsInput>
+    create: XOR<SubjectsCreateWithoutCourseAssetsInput, SubjectsUncheckedCreateWithoutCourseAssetsInput>
+    where?: SubjectsWhereInput
+  }
+
+  export type SubjectsUpdateToOneWithWhereWithoutCourseAssetsInput = {
+    where?: SubjectsWhereInput
+    data: XOR<SubjectsUpdateWithoutCourseAssetsInput, SubjectsUncheckedUpdateWithoutCourseAssetsInput>
+  }
+
+  export type SubjectsUpdateWithoutCourseAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    grade?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutSubjectsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateManyWithoutSubjectsNestedInput
+    Curricula?: CurriculaUpdateOneWithoutSubjectsNestedInput
+  }
+
+  export type SubjectsUncheckedUpdateWithoutCourseAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    grade?: NullableIntFieldUpdateOperationsInput | number | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    curriculum_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutSubjectsNestedInput
+    InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutSubjectsNestedInput
+  }
+
+  export type InstitutionCoursesUpsertWithoutCourseAssetsInput = {
+    update: XOR<InstitutionCoursesUpdateWithoutCourseAssetsInput, InstitutionCoursesUncheckedUpdateWithoutCourseAssetsInput>
+    create: XOR<InstitutionCoursesCreateWithoutCourseAssetsInput, InstitutionCoursesUncheckedCreateWithoutCourseAssetsInput>
+    where?: InstitutionCoursesWhereInput
+  }
+
+  export type InstitutionCoursesUpdateToOneWithWhereWithoutCourseAssetsInput = {
+    where?: InstitutionCoursesWhereInput
+    data: XOR<InstitutionCoursesUpdateWithoutCourseAssetsInput, InstitutionCoursesUncheckedUpdateWithoutCourseAssetsInput>
+  }
+
+  export type InstitutionCoursesUpdateWithoutCourseAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Institutions?: InstitutionsUpdateOneRequiredWithoutInstitutionCoursesNestedInput
+    Subjects?: SubjectsUpdateOneRequiredWithoutInstitutionCoursesNestedInput
+    ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutInstitutionCoursesNestedInput
+  }
+
+  export type InstitutionCoursesUncheckedUpdateWithoutCourseAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    institution_id?: StringFieldUpdateOperationsInput | string
+    subject_id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput
+  }
+
+  export type CourseReviewsUpsertWithWhereUniqueWithoutCourseAssetsInput = {
+    where: CourseReviewsWhereUniqueInput
+    update: XOR<CourseReviewsUpdateWithoutCourseAssetsInput, CourseReviewsUncheckedUpdateWithoutCourseAssetsInput>
+    create: XOR<CourseReviewsCreateWithoutCourseAssetsInput, CourseReviewsUncheckedCreateWithoutCourseAssetsInput>
+  }
+
+  export type CourseReviewsUpdateWithWhereUniqueWithoutCourseAssetsInput = {
+    where: CourseReviewsWhereUniqueInput
+    data: XOR<CourseReviewsUpdateWithoutCourseAssetsInput, CourseReviewsUncheckedUpdateWithoutCourseAssetsInput>
+  }
+
+  export type CourseReviewsUpdateManyWithWhereWithoutCourseAssetsInput = {
+    where: CourseReviewsScalarWhereInput
+    data: XOR<CourseReviewsUpdateManyMutationInput, CourseReviewsUncheckedUpdateManyWithoutCourseAssetsInput>
+  }
+
+  export type CourseAssetsCreateWithoutCourseReviewsInput = {
+    id?: string
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles: ProfilesCreateNestedOneWithoutCourseAssetsInput
+    Subjects: SubjectsCreateNestedOneWithoutCourseAssetsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedOneWithoutCourseAssetsInput
+  }
+
+  export type CourseAssetsUncheckedCreateWithoutCourseReviewsInput = {
+    id?: string
+    tutor_id: string
+    subject_id: string
+    institution_course_id?: string | null
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CourseAssetsCreateOrConnectWithoutCourseReviewsInput = {
+    where: CourseAssetsWhereUniqueInput
+    create: XOR<CourseAssetsCreateWithoutCourseReviewsInput, CourseAssetsUncheckedCreateWithoutCourseReviewsInput>
+  }
+
+  export type ProfilesCreateWithoutCourseReviews_as_tutorInput = {
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesCreateNestedManyWithoutProfilesInput
+    users: usersCreateNestedOneWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
+    Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
+    Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
+  }
+
+  export type ProfilesUncheckedCreateWithoutCourseReviews_as_tutorInput = {
+    id: string
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    institution_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesUncheckedCreateNestedManyWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
+    Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
+  }
+
+  export type ProfilesCreateOrConnectWithoutCourseReviews_as_tutorInput = {
+    where: ProfilesWhereUniqueInput
+    create: XOR<ProfilesCreateWithoutCourseReviews_as_tutorInput, ProfilesUncheckedCreateWithoutCourseReviews_as_tutorInput>
+  }
+
+  export type ProfilesCreateWithoutCourseReviews_as_studentInput = {
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesCreateNestedManyWithoutProfilesInput
+    users: usersCreateNestedOneWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityCreateNestedManyWithoutTutorInput
+    Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
+    Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+  }
+
+  export type ProfilesUncheckedCreateWithoutCourseReviews_as_studentInput = {
+    id: string
+    email: string
+    name?: string | null
+    role?: string | null
+    bio?: string | null
+    avatar?: string | null
+    phone?: string | null
+    hourlyRate?: number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: boolean | null
+    rating?: number | null
+    education?: string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    profile_setup?: boolean | null
+    is_tutor?: boolean | null
+    stripe_account_id?: string | null
+    institution_id?: string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_student_idToProfilesInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedCreateNestedManyWithoutProfiles_Conversations_tutor_idToProfilesInput
+    Messages?: MessagesUncheckedCreateNestedManyWithoutProfilesInput
+    subjects?: ProfilesOnSubjectsUncheckedCreateNestedManyWithoutProfilesInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_student_idToProfilesInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedCreateNestedManyWithoutProfiles_Sessions_tutor_idToProfilesInput
+    TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
+    Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+  }
+
+  export type ProfilesCreateOrConnectWithoutCourseReviews_as_studentInput = {
+    where: ProfilesWhereUniqueInput
+    create: XOR<ProfilesCreateWithoutCourseReviews_as_studentInput, ProfilesUncheckedCreateWithoutCourseReviews_as_studentInput>
+  }
+
+  export type CourseAssetsUpsertWithoutCourseReviewsInput = {
+    update: XOR<CourseAssetsUpdateWithoutCourseReviewsInput, CourseAssetsUncheckedUpdateWithoutCourseReviewsInput>
+    create: XOR<CourseAssetsCreateWithoutCourseReviewsInput, CourseAssetsUncheckedCreateWithoutCourseReviewsInput>
+    where?: CourseAssetsWhereInput
+  }
+
+  export type CourseAssetsUpdateToOneWithWhereWithoutCourseReviewsInput = {
+    where?: CourseAssetsWhereInput
+    data: XOR<CourseAssetsUpdateWithoutCourseReviewsInput, CourseAssetsUncheckedUpdateWithoutCourseReviewsInput>
+  }
+
+  export type CourseAssetsUpdateWithoutCourseReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateOneRequiredWithoutCourseAssetsNestedInput
+    Subjects?: SubjectsUpdateOneRequiredWithoutCourseAssetsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateOneWithoutCourseAssetsNestedInput
+  }
+
+  export type CourseAssetsUncheckedUpdateWithoutCourseReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    subject_id?: StringFieldUpdateOperationsInput | string
+    institution_course_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfilesUpsertWithoutCourseReviews_as_tutorInput = {
+    update: XOR<ProfilesUpdateWithoutCourseReviews_as_tutorInput, ProfilesUncheckedUpdateWithoutCourseReviews_as_tutorInput>
+    create: XOR<ProfilesCreateWithoutCourseReviews_as_tutorInput, ProfilesUncheckedCreateWithoutCourseReviews_as_tutorInput>
+    where?: ProfilesWhereInput
+  }
+
+  export type ProfilesUpdateToOneWithWhereWithoutCourseReviews_as_tutorInput = {
+    where?: ProfilesWhereInput
+    data: XOR<ProfilesUpdateWithoutCourseReviews_as_tutorInput, ProfilesUncheckedUpdateWithoutCourseReviews_as_tutorInput>
+  }
+
+  export type ProfilesUpdateWithoutCourseReviews_as_tutorInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUpdateManyWithoutProfilesNestedInput
+    users?: usersUpdateOneRequiredWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
+    Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
+    Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
+  }
+
+  export type ProfilesUncheckedUpdateWithoutCourseReviews_as_tutorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUncheckedUpdateManyWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
+    Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
+  }
+
+  export type ProfilesUpsertWithoutCourseReviews_as_studentInput = {
+    update: XOR<ProfilesUpdateWithoutCourseReviews_as_studentInput, ProfilesUncheckedUpdateWithoutCourseReviews_as_studentInput>
+    create: XOR<ProfilesCreateWithoutCourseReviews_as_studentInput, ProfilesUncheckedCreateWithoutCourseReviews_as_studentInput>
+    where?: ProfilesWhereInput
+  }
+
+  export type ProfilesUpdateToOneWithWhereWithoutCourseReviews_as_studentInput = {
+    where?: ProfilesWhereInput
+    data: XOR<ProfilesUpdateWithoutCourseReviews_as_studentInput, ProfilesUncheckedUpdateWithoutCourseReviews_as_studentInput>
+  }
+
+  export type ProfilesUpdateWithoutCourseReviews_as_studentInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUpdateManyWithoutProfilesNestedInput
+    users?: usersUpdateOneRequiredWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUpdateManyWithoutTutorNestedInput
+    Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
+    Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+  }
+
+  export type ProfilesUncheckedUpdateWithoutCourseReviews_as_studentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
+    availability?: NullableJsonNullValueInput | InputJsonValue
+    isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    education?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableJsonNullValueInput | InputJsonValue
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    profile_setup?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    is_tutor?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    stripe_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    institution_id?: NullableStringFieldUpdateOperationsInput | string | null
+    Conversations_Conversations_student_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_student_idToProfilesNestedInput
+    Conversations_Conversations_tutor_idToProfiles?: ConversationsUncheckedUpdateManyWithoutProfiles_Conversations_tutor_idToProfilesNestedInput
+    Messages?: MessagesUncheckedUpdateManyWithoutProfilesNestedInput
+    subjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutProfilesNestedInput
+    Sessions_Sessions_student_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_student_idToProfilesNestedInput
+    Sessions_Sessions_tutor_idToProfiles?: SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesNestedInput
+    TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
+    Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
   }
 
   export type ProfilesCreateWithoutTutorAvailabilityInput = {
@@ -65546,6 +70677,9 @@ export namespace Prisma {
     Feedback?: FeedbackCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutTutorAvailabilityInput = {
@@ -65577,6 +70711,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedCreateNestedManyWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutTutorAvailabilityInput = {
@@ -65657,6 +70794,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutTutorAvailabilityInput = {
@@ -65688,6 +70828,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesOnSubjectsUpsertWithoutTutorAvailabilityInput = {
@@ -65758,6 +70901,9 @@ export namespace Prisma {
     Institutions?: InstitutionsCreateNestedOneWithoutProfilesInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesUncheckedCreateWithoutFeedbackInput = {
@@ -65789,6 +70935,9 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUncheckedCreateNestedManyWithoutTutorInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutProfilesInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseAssets?: CourseAssetsUncheckedCreateNestedManyWithoutProfilesInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_tutorInput
+    CourseReviews_as_student?: CourseReviewsUncheckedCreateNestedManyWithoutProfiles_studentInput
   }
 
   export type ProfilesCreateOrConnectWithoutFeedbackInput = {
@@ -65836,6 +70985,9 @@ export namespace Prisma {
     Institutions?: InstitutionsUpdateOneWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutFeedbackInput = {
@@ -65867,6 +71019,9 @@ export namespace Prisma {
     TutorAvailability?: TutorAvailabilityUncheckedUpdateManyWithoutTutorNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type usersCreateWithoutWebauthn_challengesInput = {
@@ -67288,6 +72443,53 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type CourseAssetsCreateManyProfilesInput = {
+    id?: string
+    subject_id: string
+    institution_course_id?: string | null
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CourseReviewsCreateManyProfiles_tutorInput = {
+    id?: string
+    course_asset_id: string
+    student_id: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+  }
+
+  export type CourseReviewsCreateManyProfiles_studentInput = {
+    id?: string
+    course_asset_id: string
+    tutor_id: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+  }
+
   export type ConversationsUpdateWithoutProfiles_Conversations_student_idToProfilesInput = {
     id?: StringFieldUpdateOperationsInput | string
     subject?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67669,6 +72871,149 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CourseAssetsUpdateWithoutProfilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Subjects?: SubjectsUpdateOneRequiredWithoutCourseAssetsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateOneWithoutCourseAssetsNestedInput
+    CourseReviews?: CourseReviewsUpdateManyWithoutCourseAssetsNestedInput
+  }
+
+  export type CourseAssetsUncheckedUpdateWithoutProfilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject_id?: StringFieldUpdateOperationsInput | string
+    institution_course_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    CourseReviews?: CourseReviewsUncheckedUpdateManyWithoutCourseAssetsNestedInput
+  }
+
+  export type CourseAssetsUncheckedUpdateManyWithoutProfilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject_id?: StringFieldUpdateOperationsInput | string
+    institution_course_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseReviewsUpdateWithoutProfiles_tutorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    CourseAssets?: CourseAssetsUpdateOneRequiredWithoutCourseReviewsNestedInput
+    Profiles_student?: ProfilesUpdateOneRequiredWithoutCourseReviews_as_studentNestedInput
+  }
+
+  export type CourseReviewsUncheckedUpdateWithoutProfiles_tutorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_asset_id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_asset_id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseReviewsUpdateWithoutProfiles_studentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    CourseAssets?: CourseAssetsUpdateOneRequiredWithoutCourseReviewsNestedInput
+    Profiles_tutor?: ProfilesUpdateOneRequiredWithoutCourseReviews_as_tutorNestedInput
+  }
+
+  export type CourseReviewsUncheckedUpdateWithoutProfiles_studentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_asset_id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseReviewsUncheckedUpdateManyWithoutProfiles_studentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_asset_id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TutorAvailabilityCreateManyProfileSubjectInput = {
     id?: string
     day_of_week?: number | null
@@ -67761,6 +73106,33 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type CourseAssetsCreateManySubjectsInput = {
+    id?: string
+    tutor_id: string
+    institution_course_id?: string | null
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type ProfilesOnSubjectsUpdateWithoutSubjectsInput = {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -67811,6 +73183,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Institutions?: InstitutionsUpdateOneRequiredWithoutInstitutionCoursesNestedInput
     ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutInstitutionCoursesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutInstitutionCoursesNestedInput
   }
 
   export type InstitutionCoursesUncheckedUpdateWithoutSubjectsInput = {
@@ -67822,6 +73195,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput
   }
 
   export type InstitutionCoursesUncheckedUpdateManyWithoutSubjectsInput = {
@@ -67830,6 +73204,89 @@ export namespace Prisma {
     code?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseAssetsUpdateWithoutSubjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateOneRequiredWithoutCourseAssetsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateOneWithoutCourseAssetsNestedInput
+    CourseReviews?: CourseReviewsUpdateManyWithoutCourseAssetsNestedInput
+  }
+
+  export type CourseAssetsUncheckedUpdateWithoutSubjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    institution_course_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    CourseReviews?: CourseReviewsUncheckedUpdateManyWithoutCourseAssetsNestedInput
+  }
+
+  export type CourseAssetsUncheckedUpdateManyWithoutSubjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    institution_course_id?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -67927,6 +73384,9 @@ export namespace Prisma {
     Feedback?: FeedbackUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateWithoutInstitutionsInput = {
@@ -67958,6 +73418,9 @@ export namespace Prisma {
     Feedback?: FeedbackUncheckedUpdateManyWithoutProfilesNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutProfilesNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutProfilesNestedInput
+    CourseReviews_as_tutor?: CourseReviewsUncheckedUpdateManyWithoutProfiles_tutorNestedInput
+    CourseReviews_as_student?: CourseReviewsUncheckedUpdateManyWithoutProfiles_studentNestedInput
   }
 
   export type ProfilesUncheckedUpdateManyWithoutInstitutionsInput = {
@@ -67990,6 +73453,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Subjects?: SubjectsUpdateOneRequiredWithoutInstitutionCoursesNestedInput
     ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutInstitutionCoursesNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutInstitutionCoursesNestedInput
   }
 
   export type InstitutionCoursesUncheckedUpdateWithoutInstitutionsInput = {
@@ -68001,6 +73465,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutInstitutionCoursesNestedInput
   }
 
   export type InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsInput = {
@@ -68238,6 +73703,7 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUpdateManyWithoutSubjectsNestedInput
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutSubjectsNestedInput
+    CourseAssets?: CourseAssetsUpdateManyWithoutSubjectsNestedInput
   }
 
   export type SubjectsUncheckedUpdateWithoutCurriculaInput = {
@@ -68250,6 +73716,7 @@ export namespace Prisma {
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     ProfilesOnSubjects?: ProfilesOnSubjectsUncheckedUpdateManyWithoutSubjectsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutSubjectsNestedInput
+    CourseAssets?: CourseAssetsUncheckedUpdateManyWithoutSubjectsNestedInput
   }
 
   export type SubjectsUncheckedUpdateManyWithoutCurriculaInput = {
@@ -68273,6 +73740,33 @@ export namespace Prisma {
     duration_3?: number | null
     duration_2?: number | null
     duration_1?: number | null
+  }
+
+  export type CourseAssetsCreateManyInstitutionCoursesInput = {
+    id?: string
+    tutor_id: string
+    subject_id: string
+    status?: string
+    grade_value?: string | null
+    grade_scale?: string | null
+    grade_proof_url?: string | null
+    verification_method?: string | null
+    verified_at?: Date | string | null
+    rejected_reason?: string | null
+    rating?: number
+    rating_count?: number
+    xp?: number
+    tier?: string
+    sessions_count?: number
+    total_earnings?: number
+    price_1?: number | null
+    price_2?: number | null
+    price_3?: number | null
+    duration_1?: number | null
+    duration_2?: number | null
+    duration_3?: number | null
+    created_at?: Date | string
+    updated_at?: Date | string
   }
 
   export type ProfilesOnSubjectsUpdateWithoutInstitutionCoursesInput = {
@@ -68314,6 +73808,129 @@ export namespace Prisma {
     duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
     duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
     duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+  }
+
+  export type CourseAssetsUpdateWithoutInstitutionCoursesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateOneRequiredWithoutCourseAssetsNestedInput
+    Subjects?: SubjectsUpdateOneRequiredWithoutCourseAssetsNestedInput
+    CourseReviews?: CourseReviewsUpdateManyWithoutCourseAssetsNestedInput
+  }
+
+  export type CourseAssetsUncheckedUpdateWithoutInstitutionCoursesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    subject_id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    CourseReviews?: CourseReviewsUncheckedUpdateManyWithoutCourseAssetsNestedInput
+  }
+
+  export type CourseAssetsUncheckedUpdateManyWithoutInstitutionCoursesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    subject_id?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    grade_value?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_scale?: NullableStringFieldUpdateOperationsInput | string | null
+    grade_proof_url?: NullableStringFieldUpdateOperationsInput | string | null
+    verification_method?: NullableStringFieldUpdateOperationsInput | string | null
+    verified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejected_reason?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: FloatFieldUpdateOperationsInput | number
+    rating_count?: IntFieldUpdateOperationsInput | number
+    xp?: IntFieldUpdateOperationsInput | number
+    tier?: StringFieldUpdateOperationsInput | string
+    sessions_count?: IntFieldUpdateOperationsInput | number
+    total_earnings?: FloatFieldUpdateOperationsInput | number
+    price_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    price_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_1?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_2?: NullableFloatFieldUpdateOperationsInput | number | null
+    duration_3?: NullableFloatFieldUpdateOperationsInput | number | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseReviewsCreateManyCourseAssetsInput = {
+    id?: string
+    tutor_id: string
+    student_id: string
+    session_id?: string | null
+    rating: number
+    comment?: string | null
+    created_at?: Date | string
+  }
+
+  export type CourseReviewsUpdateWithoutCourseAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles_tutor?: ProfilesUpdateOneRequiredWithoutCourseReviews_as_tutorNestedInput
+    Profiles_student?: ProfilesUpdateOneRequiredWithoutCourseReviews_as_studentNestedInput
+  }
+
+  export type CourseReviewsUncheckedUpdateWithoutCourseAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseReviewsUncheckedUpdateManyWithoutCourseAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tutor_id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    session_id?: NullableStringFieldUpdateOperationsInput | string | null
+    rating?: IntFieldUpdateOperationsInput | number
+    comment?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
@@ -68377,6 +73994,10 @@ export namespace Prisma {
      * @deprecated Use InstitutionCoursesCountOutputTypeDefaultArgs instead
      */
     export type InstitutionCoursesCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InstitutionCoursesCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CourseAssetsCountOutputTypeDefaultArgs instead
+     */
+    export type CourseAssetsCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CourseAssetsCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use audit_log_entriesDefaultArgs instead
      */
@@ -68505,6 +74126,14 @@ export namespace Prisma {
      * @deprecated Use InstitutionCoursesDefaultArgs instead
      */
     export type InstitutionCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InstitutionCoursesDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CourseAssetsDefaultArgs instead
+     */
+    export type CourseAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CourseAssetsDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CourseReviewsDefaultArgs instead
+     */
+    export type CourseReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CourseReviewsDefaultArgs<ExtArgs>
     /**
      * @deprecated Use TutorAvailabilityDefaultArgs instead
      */
