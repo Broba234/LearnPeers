@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build",
+    "vercel-build": "prisma generate && next build",
     "start": "NODE_ENV=production node server.ts",
     "lint": "next lint",
     "test": "jest",

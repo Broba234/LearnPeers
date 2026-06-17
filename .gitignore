@@ -7,3 +7,5 @@ node_modules
 eclero2.0.zip
 .env.local
 .env*.local
+
+.vercel
