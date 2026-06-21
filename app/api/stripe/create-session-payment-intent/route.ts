@@ -2,6 +2,7 @@ import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { getAuthedUser } from "@/lib/api-auth";
 import { createClient } from "@supabase/supabase-js";
+import { notifySessionCreated } from "@/lib/notifications";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -23,13 +24,6 @@ function priceForDuration(
 
 export async function POST(request: NextRequest) {
   try {
-    if (!stripe) {
-      return NextResponse.json(
-        { error: "Stripe is not configured" },
-        { status: 500 }
-      );
-    }
-
     // Identity comes from the session cookie, never the request body.
     const user = await getAuthedUser();
     if (!user) {
@@ -76,34 +70,8 @@ export async function POST(request: NextRequest) {
       select: { stripe_account_id: true, name: true },
     });
 
-    if (!tutorProfile?.stripe_account_id) {
-      return NextResponse.json(
-        {
-          error:
-            "This tutor has not connected their Stripe account yet. They cannot accept payments.",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Verify tutor's Stripe account can receive transfers (transfers capability must be active)
-    const account = await stripe.accounts.retrieve(tutorProfile.stripe_account_id);
-    const transfersCap = account.capabilities?.transfers;
-    if (transfersCap !== "active") {
-      return NextResponse.json(
-        {
-          error:
-            "This tutor's Stripe account is not fully set up to receive payments. They need to complete their Stripe Connect onboarding.",
-          details:
-            transfersCap === "pending"
-              ? "Stripe is still reviewing their account."
-              : "The transfers capability is not enabled.",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Create session in Supabase (status: pending)
+    // Create the booking up front so it always exists regardless of whether
+    // payment can be collected right now.
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -134,18 +102,58 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Always let the tutor know a request came in.
+    const { data: studentProfile } = await supabase
+      .from("Profiles")
+      .select("name")
+      .eq("id", studentId)
+      .single();
+    await notifySessionCreated(supabase, {
+      tutorId,
+      studentId,
+      studentName: studentProfile?.name || "A student",
+      topic: topic || undefined,
+      sessionId: session.id,
+    });
+
+    // Can we actually charge right now? Requires Stripe configured AND the tutor
+    // onboarded with an active transfers capability. If not, we gracefully fall
+    // back to a no-payment booking (payments aren't wired up yet) so the whole
+    // flow is usable end-to-end. The real charge path below stays intact for
+    // when keys + Connect onboarding are live.
+    let canCharge = false;
+    if (stripe && tutorProfile?.stripe_account_id) {
+      try {
+        const account = await stripe.accounts.retrieve(tutorProfile.stripe_account_id);
+        canCharge = account.capabilities?.transfers === "active";
+      } catch (e) {
+        canCharge = false;
+      }
+    }
+
+    if (!canCharge) {
+      return NextResponse.json({
+        skipPayment: true,
+        sessionId: session.id,
+        amount: Number(amount),
+        reason: !stripe
+          ? "payments_not_configured"
+          : "tutor_not_onboarded",
+      });
+    }
+
     // Student pays session price + 5% fee on top; tutor nets 95% of base price
     const baseCents = Math.round(Number(amount) * 100);
     const amountCents = Math.round(baseCents * (1 + STUDENT_FEE_PERCENT));
     const applicationFeeCents = Math.round(baseCents * PLATFORM_FEE_PERCENT);
 
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await stripe!.paymentIntents.create({
       amount: amountCents,
       currency: "usd",
       automatic_payment_methods: { enabled: true },
       application_fee_amount: applicationFeeCents,
       transfer_data: {
-        destination: tutorProfile.stripe_account_id,
+        destination: tutorProfile!.stripe_account_id!,
       },
       metadata: {
         session_id: session.id,

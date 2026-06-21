@@ -1,60 +1,48 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthedUser } from "@/lib/api-auth";
 
+/**
+ * Toggle the tutor's live "Available Now" presence.
+ *
+ * This is a pure manual switch, fully independent of the tutor's schedule:
+ * turning it ON makes them connectable right now; turning it OFF takes them
+ * offline immediately. The calendar/schedule is only used for booking ahead.
+ *
+ * Identity is derived from the session cookie — never trusted from the body.
+ */
 export async function PATCH(req: Request) {
   try {
-    const { isAvailableNow, userEmail } = await req.json();
-
-    if (typeof isAvailableNow !== 'boolean') {
-      return NextResponse.json({ error: 'isAvailableNow must be a boolean' }, { status: 400 });
+    const user = await getAuthedUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    if (!userEmail) {
-      return NextResponse.json({ error: 'userEmail is required' }, { status: 400 });
+    const { isAvailableNow } = await req.json();
+    if (typeof isAvailableNow !== "boolean") {
+      return NextResponse.json(
+        { error: "isAvailableNow must be a boolean" },
+        { status: 400 }
+      );
     }
 
-
-    // If turning OFF, but schedule says they're active now, block and instruct to use calendar
-    if (isAvailableNow === false) {
-      // Resolve tutor id
-      const profile = await prisma.profiles.findUnique({ where: { email: userEmail }, select: { id: true } });
-      if (!profile) return NextResponse.json({ error: 'User not found' }, { status: 404 });
-
-      const activeSlots = await prisma.tutorAvailability.findMany({
-        where: { tutor_id: profile.id, is_active: true },
-        select: { day_of_week: true, start_time: true, end_time: true, timezone: true },
-      });
-      if (activeSlots.length) {
-        const tz = activeSlots[0].timezone || 'UTC';
-        const dtf = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour12: false, weekday: 'short', hour: '2-digit', minute: '2-digit' });
-        const parts = Object.fromEntries(dtf.formatToParts(new Date()).map(p => [p.type, p.value]));
-        const weekdayMap: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
-        const day = weekdayMap[(parts.weekday || 'Sun').slice(0,3)] ?? 0;
-        const hm = `${parts.hour || '00'}:${parts.minute || '00'}`;
-        const hhmm = (d: Date) => `${String(d.getUTCHours()).padStart(2,'0')}:${String(d.getUTCMinutes()).padStart(2,'0')}`;
-        const inSlot = activeSlots.some(s => s.day_of_week === day && s.start_time && s.end_time && hhmm(s.start_time) <= hm && hm < hhmm(s.end_time));
-        if (inSlot) {
-          return NextResponse.json({
-            error: 'You are currently scheduled to be active. To go offline now, adjust your calendar availability.',
-            code: 'SCHEDULE_OVERRIDE'
-          }, { status: 409 });
-        }
-      }
-    }
-
-    const updatedProfile = await prisma.profiles.update({
-      where: { email: userEmail },
-      data: { isAvailableNow },
-      select: { id: true, email: true, isAvailableNow: true }
+    const updated = await prisma.profiles.update({
+      where: { id: user.id },
+      data: {
+        isAvailableNow,
+        // Stamp a fresh heartbeat when going online so the tutor shows up as
+        // live immediately; clear it when going offline.
+        last_active_at: isAvailableNow ? new Date() : null,
+      },
+      select: { id: true, email: true, isAvailableNow: true, last_active_at: true },
     });
 
-
-    return NextResponse.json(updatedProfile);
+    return NextResponse.json(updated);
   } catch (error: any) {
-    console.error('[AVAILABILITY_UPDATE] Error:', error);
-    return NextResponse.json({
-      error: 'Internal Server Error',
-      details: error?.message || error
-    }, { status: 500 });
+    console.error("[AVAILABILITY_UPDATE] Error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error", details: error?.message || String(error) },
+      { status: 500 }
+    );
   }
 }

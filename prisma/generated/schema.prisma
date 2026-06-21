@@ -469,6 +469,7 @@ model Profiles {
   hourlyRate                                       Float?
   availability                                     Json?                      @db.Json
   isAvailableNow                                   Boolean?
+  last_active_at                                   DateTime?                  @db.Timestamptz(6)
   rating                                           Float?
   education                                        String?
   experience                                       Json?                      @db.Json
@@ -535,6 +536,7 @@ model Sessions {
   amount                                 Float?
   date                                   DateTime? @db.Date
   subject_id                             String?   @db.Uuid
+  is_instant                             Boolean   @default(false)
   Profiles_Sessions_student_idToProfiles Profiles  @relation("Sessions_student_idToProfiles", fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_student_id_fkey")
   Profiles_Sessions_tutor_idToProfiles   Profiles  @relation("Sessions_tutor_idToProfiles", fields: [tutor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_tutor_id_fkey")
 
@@ -573,6 +575,8 @@ model Institutions {
   email_domains            String[]                   @default([])
   city                     String?
   website                  String?
+  external_id              String?                    @unique // Ministry Board Number / School Number (BSID)
+  board_id                 String?                    @db.Uuid // for high schools: the parent school board
   created_at               DateTime                   @default(now()) @db.Timestamptz(6)
   updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
   Profiles                 Profiles[]
@@ -580,10 +584,13 @@ model Institutions {
   ProfileInstitutions      ProfileInstitutions[]
   SchoolEmailVerifications SchoolEmailVerifications[]
   Provinces                Provinces?                 @relation(fields: [province_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  Board                    Institutions?              @relation("BoardSchools", fields: [board_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  Schools                  Institutions[]             @relation("BoardSchools")
   Curricula                Curricula[]
 
   @@index([province_id], map: "Institutions_province_idx")
   @@index([type], map: "Institutions_type_idx")
+  @@index([board_id], map: "Institutions_board_idx")
   @@schema("public")
 }
 

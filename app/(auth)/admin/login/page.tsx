@@ -3,6 +3,7 @@ import { useState, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabaseClient";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 function LoginContent() {
     const router = useRouter();
@@ -117,7 +118,7 @@ function LoginContent() {
 
 export default function Login() {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<LearnPeersLoader fullScreen />}>
             <LoginContent />
         </Suspense>
     );

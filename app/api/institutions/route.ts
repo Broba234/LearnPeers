@@ -5,10 +5,12 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const type = searchParams.get('type');
     const province_id = searchParams.get('province_id');
+    const board_id = searchParams.get('board_id');
     const institutions = await prisma.institutions.findMany({
       where: {
         ...(type ? { type } : {}),
         ...(province_id ? { province_id } : {}),
+        ...(board_id ? { board_id } : {}),
       },
       orderBy: [{ country: 'asc' }, { name: 'asc' }],
       include: { Provinces: { select: { id: true, code: true, name: true } } },

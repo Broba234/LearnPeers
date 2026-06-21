@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 import {
   BookOpen,
   Calculator,
@@ -263,19 +264,22 @@ export default function SubjectSelectProfile({
       <div className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-brand-300 group-focus-within:border-brand-400 group-focus-within:shadow-lg group-focus-within:shadow-brand-100">
         <div className="flex items-center">
           <div className="flex-1 px-4">
-            <select
-              value={gradeFilter || ""}
-              onChange={(e: any) => setGradeFilter(e.target.value || null)}
-              className="w-full py-2 px-0 border-0 focus:ring-0 focus:outline-none text-sm text-gray-900 placeholder:text-gray-400 bg-transparent"
-            >
-              <option value="">All Levels</option>
-              <optgroup label="High School">
-                {[9, 10, 11, 12].map(g => <option key={g} value={g}>Grade {g}</option>)}
-              </optgroup>
-              <optgroup label="Post-Secondary">
-                {[1, 2, 3, 4].map(g => <option key={g} value={g}>Year {g}</option>)}
-              </optgroup>
-            </select>
+            <SearchableSelect
+              value={gradeFilter !== null ? String(gradeFilter) : ""}
+              onChange={(val) => setGradeFilter(val ? Number(val) : null)}
+              placeholder="All Levels"
+              options={[
+                { value: "9", label: "Grade 9", group: "High School" },
+                { value: "10", label: "Grade 10", group: "High School" },
+                { value: "11", label: "Grade 11", group: "High School" },
+                { value: "12", label: "Grade 12", group: "High School" },
+                { value: "1", label: "Year 1", group: "Post-Secondary" },
+                { value: "2", label: "Year 2", group: "Post-Secondary" },
+                { value: "3", label: "Year 3", group: "Post-Secondary" },
+                { value: "4", label: "Year 4", group: "Post-Secondary" },
+              ]}
+              className="w-full py-2 px-0 border-0 focus:ring-0 focus:outline-none text-sm text-gray-900 bg-transparent"
+            />
           </div>
         </div>
       </div>

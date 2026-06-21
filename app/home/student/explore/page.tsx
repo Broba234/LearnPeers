@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState, useContext, useMemo } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabaseClient";
 import { TutorProfileModalContext } from "@/components/ui/components/common/TutorProfileModalContext";
 import { FilterModal } from "@/components/FilterModal";
-import DOMPurify from "dompurify";
+import Avatar from "@/components/ui/Avatar";
 import { toast } from "sonner";
 import {
   SlidersHorizontal,
@@ -15,6 +16,12 @@ import {
   Users,
   Globe,
   Zap,
+  Search,
+  BadgeCheck,
+  ShieldCheck,
+  ChevronDown,
+  Sparkles,
+  Heart,
 } from "lucide-react";
 
 export type Subjects = {
@@ -29,6 +36,14 @@ export type Subjects = {
   price_1?: number | string | null;
   price_2?: number | string | null;
   price_3?: number | string | null;
+  // trust layer (present on tutor.subjects from available-tutors)
+  verified?: boolean;
+  grade_label?: string | null;
+  mastery?: number | null;
+  sessions_count?: number | null;
+  course_rating?: number | null;
+  course_rating_count?: number | null;
+  tier?: string | null;
 };
 
 type CategoryGroup = {
@@ -44,6 +59,9 @@ type AvailableSlot = {
   end_date?: string | Date | null;
 };
 
+type VerifiedSchool = { name: string | null; abbreviation: string | null; kind: string };
+type TopCourse = { code: string | null; name: string | null; grade_label: string | null; mastery: number | null };
+
 type Tutor = {
   id: string;
   name: string;
@@ -56,6 +74,14 @@ type Tutor = {
   timezone?: string | null;
   subjects: Subjects[];
   availableSlots?: AvailableSlot[];
+  // trust layer (tutor level)
+  verifiedSchool?: VerifiedSchool | null;
+  schoolName?: string | null;
+  schoolAbbr?: string | null;
+  totalSessions?: number;
+  totalReviews?: number;
+  verifiedCount?: number;
+  topCourse?: TopCourse | null;
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -114,6 +140,50 @@ function getStartingPrice(subjects: Subjects[]): number | null {
   return min;
 }
 
+// ─── Search + sort ────────────────────────────────────────────────────────────
+type SortKey = "recommended" | "rating" | "sessions" | "price";
+const SORT_LABELS: Record<SortKey, string> = {
+  recommended: "Recommended",
+  rating: "Top rated",
+  sessions: "Most sessions",
+  price: "Price: low to high",
+};
+
+function tutorMatchesQuery(tutor: Tutor, q: string): boolean {
+  if (!q) return true;
+  const needle = q.toLowerCase();
+  if (tutor.name?.toLowerCase().includes(needle)) return true;
+  if (tutor.schoolName?.toLowerCase().includes(needle)) return true;
+  if (tutor.schoolAbbr?.toLowerCase().includes(needle)) return true;
+  if (tutor.verifiedSchool?.name?.toLowerCase().includes(needle)) return true;
+  return (tutor.subjects ?? []).some(
+    (s) =>
+      s.code?.toLowerCase().includes(needle) ||
+      s.name?.toLowerCase().includes(needle)
+  );
+}
+
+function filterAndSortTutors(list: Tutor[], q: string, sortBy: SortKey): Tutor[] {
+  const filtered = q ? list.filter((t) => tutorMatchesQuery(t, q)) : list.slice();
+  switch (sortBy) {
+    case "rating":
+      filtered.sort((a, b) => (b.rating ?? -1) - (a.rating ?? -1));
+      break;
+    case "sessions":
+      filtered.sort((a, b) => (b.totalSessions ?? 0) - (a.totalSessions ?? 0));
+      break;
+    case "price":
+      filtered.sort((a, b) => {
+        const pa = getStartingPrice(a.subjects ?? []) ?? Infinity;
+        const pb = getStartingPrice(b.subjects ?? []) ?? Infinity;
+        return pa - pb;
+      });
+      break;
+    // "recommended" keeps the server ordering (live first, then credibility)
+  }
+  return filtered;
+}
+
 // ─── Available Now Rail ───────────────────────────────────────────────────────
 const AvailableNowRail = ({
   tutors,
@@ -153,40 +223,67 @@ const AvailableNowRail = ({
   );
 };
 
+// ─── Verified school pill ─────────────────────────────────────────────────────
+const SchoolBadge = ({ tutor }: { tutor: Tutor }) => {
+  const verified = tutor.verifiedSchool;
+  const label = verified?.abbreviation || verified?.name || tutor.schoolAbbr || tutor.schoolName;
+  if (!label) return null;
+  if (verified) {
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-100">
+        <BadgeCheck className="h-3 w-3" />
+        Verified {label} student
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+      <GraduationCap className="h-3 w-3" />
+      {label}
+    </span>
+  );
+};
+
 // ─── Tutor Card ───────────────────────────────────────────────────────────────
 const TutorCard = ({
   tutor,
   onBook,
   onConnectNow,
+  saved,
+  onToggleSave,
 }: {
   tutor: Tutor;
   onBook: (tutor: Tutor) => void;
   onConnectNow?: (tutor: Tutor) => void;
+  saved?: boolean;
+  onToggleSave?: (id: string) => void;
 }) => {
   const slotsToday = useMemo(
     () => countTimeSlots(Array.isArray(tutor.availableSlots) ? tutor.availableSlots : []),
     [tutor.availableSlots]
   );
 
-  const educationHtml = tutor.education
-    ? DOMPurify.sanitize(tutor.education.replace(/^"|"$/g, ""))
-    : "";
-
   const startingPrice = useMemo(() => getStartingPrice(tutor.subjects ?? []), [tutor.subjects]);
-  const tzLabel = tutor.timezone ? formatTimezone(tutor.timezone) : null;
   const tzTime = tutor.timezone ? currentTimeInTz(tutor.timezone) : null;
 
+  // Verified courses, headlined by mastery — the peer-proof that beats Wyzant.
+  const verifiedSubjects = useMemo(
+    () =>
+      (tutor.subjects ?? [])
+        .filter((s) => s.verified && s.grade_label)
+        .sort((a, b) => (b.mastery ?? 0) - (a.mastery ?? 0)),
+    [tutor.subjects]
+  );
+  const sessions = tutor.totalSessions ?? 0;
+  const reviews = tutor.totalReviews ?? 0;
+
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 transition-all duration-200 overflow-hidden">
+    <div className="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-brand-200 transition-all duration-200 overflow-hidden">
       <div className="p-5">
         {/* Top row: avatar + name + price */}
         <div className="flex items-start gap-4">
           <div className="relative flex-shrink-0">
-            <img
-              src={tutor.avatar || "/default-avatar.png"}
-              alt={tutor.name}
-              className="w-14 h-14 rounded-full object-cover bg-slate-100"
-            />
+            <Avatar src={tutor.avatar} name={tutor.name} className="w-14 h-14 ring-1 ring-slate-100" />
             {tutor.derivedActiveNow && (
               <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white" />
             )}
@@ -204,85 +301,123 @@ const TutorCard = ({
                     </span>
                   )}
                 </div>
-                {educationHtml && (
-                  <div
-                    className="text-xs text-slate-500 mt-0.5 line-clamp-1"
-                    dangerouslySetInnerHTML={{ __html: educationHtml }}
-                  />
-                )}
+                <div className="mt-1">
+                  <SchoolBadge tutor={tutor} />
+                </div>
               </div>
               {startingPrice !== null && (
                 <div className="flex-shrink-0 text-right">
-                  <span className="text-sm font-semibold text-slate-900">${startingPrice.toFixed(0)}</span>
-                  <span className="text-xs text-slate-400">/hr</span>
+                  <span className="text-[11px] text-slate-400">from</span>
+                  <div>
+                    <span className="text-sm font-semibold text-slate-900">${startingPrice.toFixed(0)}</span>
+                    <span className="text-xs text-slate-400">/hr</span>
+                  </div>
                 </div>
               )}
             </div>
 
-            {/* Rating row */}
-            <div className="flex items-center gap-3 mt-2">
+            {/* Proof row: rating · reviews · sessions */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
               {typeof tutor.rating === "number" ? (
                 <div className="flex items-center gap-1">
                   <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                  <span className="text-xs font-semibold text-slate-700">{tutor.rating.toFixed(1)}</span>
+                  <span className="text-xs font-semibold text-slate-700">{tutor.rating.toFixed(2)}</span>
+                  {reviews > 0 && <span className="text-xs text-slate-400">({reviews})</span>}
                 </div>
               ) : (
-                <div className="flex items-center gap-1 text-slate-300">
-                  <Star className="w-3 h-3" />
-                  <span className="text-xs">—</span>
-                </div>
+                <span className="text-xs text-slate-300">New tutor</span>
               )}
-              {tzLabel && (
-                <div className="flex items-center gap-1 text-slate-400">
-                  <Globe className="w-3 h-3" />
-                  <span className="text-xs">{tzLabel}{tzTime ? ` · ${tzTime}` : ""}</span>
-                </div>
+              {sessions > 0 && (
+                <span className="text-xs text-slate-500">
+                  <span className="font-semibold text-slate-700">{sessions}</span> sessions
+                </span>
               )}
               {slotsToday > 0 && (
-                <div className="flex items-center gap-1 text-green-600">
+                <span className="flex items-center gap-1 text-green-600">
                   <Clock className="w-3 h-3" />
-                  <span className="text-xs font-medium">{slotsToday} today</span>
-                </div>
+                  <span className="text-xs font-medium">{slotsToday} slots today</span>
+                </span>
               )}
             </div>
           </div>
         </div>
 
-        {/* Subjects */}
-        <div className="flex flex-wrap gap-1.5 mt-3">
-          {tutor.subjects?.slice(0, 3).map((subject: any, idx: number) => (
-            <span
-              key={idx}
-              className="px-2.5 py-0.5 bg-slate-100 text-slate-600 text-[11px] font-medium rounded-full"
-            >
-              {subject.InstitutionCourses?.code
-                ? <><span className="font-mono text-brand-700">{subject.InstitutionCourses.code}</span> · {subject.Subjects?.name || subject.name}</>
-                : subject.name}
-            </span>
-          ))}
-          {tutor.subjects && tutor.subjects.length > 3 && (
-            <span className="px-2.5 py-0.5 bg-slate-100 text-slate-400 text-[11px] font-medium rounded-full">
-              +{tutor.subjects.length - 3}
-            </span>
-          )}
-        </div>
+        {/* Headline proof — the single best course, front and center */}
+        {tutor.topCourse?.grade_label && (
+          <div className="mt-3 flex items-center gap-2 rounded-xl bg-emerald-50 px-3 py-2 ring-1 ring-emerald-100">
+            <ShieldCheck className="h-4 w-4 flex-shrink-0 text-emerald-600" />
+            <p className="text-xs text-emerald-900">
+              Aced{" "}
+              <span className="font-mono font-semibold">{tutor.topCourse.code}</span>
+              {" — "}
+              <span className="font-bold">{tutor.topCourse.grade_label}</span>
+              <span className="text-emerald-700/70"> · grade verified</span>
+            </p>
+          </div>
+        )}
+
+        {/* Verified course chips (code + grade) */}
+        {verifiedSubjects.length > 0 ? (
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {verifiedSubjects.slice(0, 4).map((s, idx) => (
+              <span
+                key={idx}
+                title={s.name}
+                className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600 ring-1 ring-slate-100"
+              >
+                <span className="font-mono font-semibold text-slate-800">{s.code}</span>
+                <span className="inline-flex items-center gap-0.5 text-emerald-600">
+                  <BadgeCheck className="h-3 w-3" />
+                  {s.grade_label}
+                </span>
+              </span>
+            ))}
+            {verifiedSubjects.length > 4 && (
+              <span className="rounded-full bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-400 ring-1 ring-slate-100">
+                +{verifiedSubjects.length - 4}
+              </span>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {(tutor.subjects ?? []).slice(0, 3).map((s, idx) => (
+              <span key={idx} className="px-2.5 py-0.5 bg-slate-100 text-slate-600 text-[11px] font-medium rounded-full">
+                {s.code ? <span className="font-mono text-brand-700">{s.code}</span> : s.name}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* CTA */}
-        <div className="mt-4">
-          {tutor.derivedActiveNow && onConnectNow ? (
+        <div className="mt-4 flex items-center gap-2">
+          {onToggleSave && (
+            <button
+              onClick={() => onToggleSave(tutor.id)}
+              aria-label={saved ? "Remove from saved" : "Save tutor"}
+              aria-pressed={saved}
+              className={`flex items-center justify-center w-10 py-2.5 rounded-xl border transition-colors ${
+                saved
+                  ? "border-rose-200 bg-rose-50 text-rose-500"
+                  : "border-slate-200 text-slate-400 hover:border-slate-300 hover:text-rose-400"
+              }`}
+            >
+              <Heart className={`w-4 h-4 ${saved ? "fill-rose-500" : ""}`} />
+            </button>
+          )}
+          <Link
+            href={`/tutor/${tutor.id}`}
+            className="flex-1 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors text-center"
+          >
+            View profile
+          </Link>
+          {tutor.derivedActiveNow && onConnectNow && (
             <button
               onClick={() => onConnectNow(tutor)}
-              className="w-full flex items-center justify-center gap-2 py-2.5 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-colors"
+              title="Start a live session now"
+              className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-green-600 text-white text-sm font-semibold rounded-xl hover:bg-green-700 transition-colors"
             >
               <Zap className="w-3.5 h-3.5" />
-              Connect Now
-            </button>
-          ) : (
-            <button
-              onClick={() => onBook(tutor)}
-              className="w-full py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors"
-            >
-              Book Session
+              Now
             </button>
           )}
         </div>
@@ -322,6 +457,8 @@ const TutorSection = ({
   loading,
   onBook,
   onConnectNow,
+  savedIds,
+  onToggleSave,
 }: {
   title: string;
   icon?: React.ReactNode;
@@ -329,6 +466,8 @@ const TutorSection = ({
   loading: boolean;
   onBook: (tutor: Tutor) => void;
   onConnectNow?: (tutor: Tutor) => void;
+  savedIds?: Set<string>;
+  onToggleSave?: (id: string) => void;
 }) => {
   if (!loading && tutors.length === 0) return null;
 
@@ -348,7 +487,14 @@ const TutorSection = ({
         {loading
           ? Array.from({ length: 4 }, (_, i) => <SkeletonCard key={i} />)
           : tutors.map((tutor) => (
-              <TutorCard key={tutor.id} tutor={tutor} onBook={onBook} onConnectNow={onConnectNow} />
+              <TutorCard
+                key={tutor.id}
+                tutor={tutor}
+                onBook={onBook}
+                onConnectNow={onConnectNow}
+                saved={savedIds?.has(tutor.id)}
+                onToggleSave={onToggleSave}
+              />
             ))}
       </div>
     </div>
@@ -372,8 +518,11 @@ export default function ExploreTutors() {
   const [subjectsError, setSubjectsError] = useState<string | null>(null);
   const [onlyActiveNow, setOnlyActiveNow] = useState(false);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [sortBy, setSortBy] = useState<SortKey>("recommended");
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
 
-  const { openTutorProfileModal } = useContext(TutorProfileModalContext)!;
+  const { openTutorProfileModal, openConnectNow } = useContext(TutorProfileModalContext)!;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -417,6 +566,52 @@ export default function ExploreTutors() {
     };
     fetchTutors();
   }, [onlyActiveNow]);
+
+  // Saved tutors (favorites)
+  useEffect(() => {
+    fetch("/api/saved-tutors")
+      .then((r) => (r.ok ? r.json() : { ids: [] }))
+      .then((d) => setSavedIds(new Set(d.ids || [])))
+      .catch(() => {});
+  }, []);
+
+  const toggleSave = async (tutorId: string) => {
+    setSavedIds((prev) => {
+      const n = new Set(prev);
+      n.has(tutorId) ? n.delete(tutorId) : n.add(tutorId);
+      return n;
+    });
+    try {
+      const res = await fetch("/api/saved-tutors", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tutorId }),
+      });
+      if (res.ok) {
+        const d = await res.json();
+        setSavedIds((prev) => {
+          const n = new Set(prev);
+          d.saved ? n.add(tutorId) : n.delete(tutorId);
+          return n;
+        });
+      }
+    } catch {
+      /* a later fetch reconciles */
+    }
+  };
+
+  // Deep link from a shared tutor profile (/tutor/[id] → "Book a session"):
+  // auto-open that tutor's booking once the list has loaded.
+  useEffect(() => {
+    if (loading || tutors.length === 0) return;
+    const tid = new URLSearchParams(window.location.search).get("tutor");
+    if (!tid) return;
+    const t = tutors.find((x) => x.id === tid);
+    if (t) {
+      openTutorProfileModal(t);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, [loading, tutors, openTutorProfileModal]);
 
   useEffect(() => {
     setSubjectsLoading(true);
@@ -541,10 +736,11 @@ export default function ExploreTutors() {
 
   const activeFilterCount = validStudentSubjectIds.length + (gradeFilter ? 1 : 0) + (onlyActiveNow ? 1 : 0);
   const activeNowTutors = tutors.filter((t) => t.derivedActiveNow);
+  const displayedTutors = filterAndSortTutors(tutors, query, sortBy);
 
   return (
     <div className="min-h-screen bg-[#FAFAF9]">
-      <div className="max-w-5xl mx-auto py-8 px-4 sm:px-6">
+      <div className="max-w-5xl mx-auto py-8 lg:pt-16 px-4 sm:px-6">
 
         {/* Header */}
         <div className="mb-8">
@@ -562,6 +758,42 @@ export default function ExploreTutors() {
                 </span>
               )}
             </button>
+          </div>
+
+          {/* Search + sort */}
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search by course code (e.g. MCV4U), subject, school, or name"
+                className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-9 text-sm text-slate-900 placeholder-slate-400 shadow-sm transition-all focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  aria-label="Clear search"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+            <div className="relative">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortKey)}
+                className="w-full cursor-pointer appearance-none rounded-xl border border-slate-200 bg-white py-2.5 pl-4 pr-9 text-sm font-medium text-slate-600 shadow-sm transition-all hover:border-slate-300 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100 sm:w-52"
+              >
+                {(Object.keys(SORT_LABELS) as SortKey[]).map((k) => (
+                  <option key={k} value={k}>
+                    Sort: {SORT_LABELS[k]}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            </div>
           </div>
 
           {/* Institution scope toggle — only shown when student has institution + has subject filters */}
@@ -636,27 +868,55 @@ export default function ExploreTutors() {
 
         {/* Available Now rail */}
         {!loading && activeNowTutors.length > 0 && validStudentSubjectIds.length === 0 && (
-          <AvailableNowRail tutors={activeNowTutors} onConnect={openTutorProfileModal} />
+          <AvailableNowRail tutors={activeNowTutors} onConnect={openConnectNow} />
         )}
 
         {/* All Tutors */}
-        {validStudentSubjectIds.length === 0 && (
+        {validStudentSubjectIds.length === 0 && (displayedTutors.length > 0 || loading) && (
           <TutorSection
-            title="All Tutors"
+            title={query ? `Results for "${query}"` : "All Tutors"}
             icon={<Users className="w-4 h-4 text-brand-500" />}
-            tutors={tutors}
+            tutors={displayedTutors}
             loading={loading}
             onBook={openTutorProfileModal}
-            onConnectNow={openTutorProfileModal}
+            onConnectNow={openConnectNow}
+            savedIds={savedIds}
+            onToggleSave={toggleSave}
           />
         )}
-        {validStudentSubjectIds.length === 0 && !loading && tutors.length === 0 && (
+        {/* No results for an active search */}
+        {validStudentSubjectIds.length === 0 && !loading && displayedTutors.length === 0 && query && (
           <div className="text-center py-20">
             <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
-              <GraduationCap className="w-6 h-6 text-slate-300" />
+              <Search className="w-6 h-6 text-slate-300" />
             </div>
-            <h3 className="text-base font-semibold text-slate-900 mb-1">No tutors available yet</h3>
-            <p className="text-slate-400 text-sm">Check back soon — tutors are joining the platform.</p>
+            <h3 className="text-base font-semibold text-slate-900 mb-1">No tutors match &ldquo;{query}&rdquo;</h3>
+            <p className="text-slate-400 text-sm">Try a course code like MCV4U, a subject, or a school name.</p>
+            <button
+              onClick={() => setQuery("")}
+              className="mt-4 inline-block px-4 py-2 bg-brand-600 text-white text-xs font-medium rounded-xl hover:bg-brand-700 transition-colors"
+            >
+              Clear search
+            </button>
+          </div>
+        )}
+        {/* Cold start — no tutors at all */}
+        {validStudentSubjectIds.length === 0 && !loading && tutors.length === 0 && !query && (
+          <div className="text-center py-20 max-w-sm mx-auto">
+            <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-brand-50 flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-brand-500" />
+            </div>
+            <h3 className="text-base font-semibold text-slate-900 mb-1">Be first in line</h3>
+            <p className="text-slate-400 text-sm">
+              We&rsquo;re onboarding verified student tutors from across Ontario universities. Tell us
+              the course you need and we&rsquo;ll notify you the moment a tutor goes live.
+            </p>
+            <a
+              href="/#contact"
+              className="mt-5 inline-flex items-center gap-1.5 px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors"
+            >
+              Request a tutor
+            </a>
           </div>
         )}
 
@@ -668,7 +928,7 @@ export default function ExploreTutors() {
             .map((subjectId) => {
               const subject = subjects.find((s) => typeof s.id === "string" && s.id === subjectId);
               if (!subject) return null;
-              const tutorsForSubject = getSubjectTutors(subjectId);
+              const tutorsForSubject = filterAndSortTutors(getSubjectTutors(subjectId), query, sortBy);
               if (!loading && tutorsForSubject.length === 0) return null;
               return (
                 <TutorSection
@@ -678,7 +938,7 @@ export default function ExploreTutors() {
                   tutors={tutorsForSubject}
                   loading={loading}
                   onBook={openTutorProfileModal}
-                  onConnectNow={openTutorProfileModal}
+                  onConnectNow={openConnectNow}
                 />
               );
             })}
@@ -687,10 +947,12 @@ export default function ExploreTutors() {
           <TutorSection
             title="All Matching Tutors"
             icon={<Users className="w-4 h-4 text-brand-500" />}
-            tutors={allTutorsForSelectedSubjects}
+            tutors={filterAndSortTutors(allTutorsForSelectedSubjects, query, sortBy)}
             loading={loading}
             onBook={openTutorProfileModal}
-            onConnectNow={openTutorProfileModal}
+            onConnectNow={openConnectNow}
+            savedIds={savedIds}
+            onToggleSave={toggleSave}
           />
         )}
 

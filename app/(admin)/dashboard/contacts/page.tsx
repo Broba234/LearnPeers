@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface Contact {
   id: string;
@@ -152,19 +153,17 @@ export default function ContactsPage() {
             <label htmlFor="read-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Status
             </label>
-            <select
+            <SearchableSelect
               id="read-filter"
               value={readFilter}
-              onChange={(e) => {
-                setReadFilter(e.target.value);
-                setCurrentPage(1);
-              }}
+              onChange={(val) => { setReadFilter(val); setCurrentPage(1); }}
+              options={[
+                { value: "all", label: "All" },
+                { value: "unread", label: "Unread" },
+                { value: "read", label: "Read" },
+              ]}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
-            >
-              <option value="all">All</option>
-              <option value="unread">Unread</option>
-              <option value="read">Read</option>
-            </select>
+            />
           </div>
 
           <div className="flex items-end">

@@ -21,7 +21,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-eval' 'unsafe-inline' blob: https://js.stripe.com https://connect-js.stripe.com https://*.stripe.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' data: https://fonts.gstatic.com https://unpkg.com",
-              "img-src 'self' blob: data: https://*.supabase.co https://unpkg.com https://*.stripe.com",
+              "img-src 'self' blob: data: https://*.supabase.co https://unpkg.com https://*.stripe.com https://api.dicebear.com",
               "connect-src 'self' blob: data: https://*.supabase.co wss://*.supabase.co wss://*.livekit.cloud https://*.livekit.cloud https://unpkg.com https://api.stripe.com https://connect-js.stripe.com https://*.stripe.com https://*.stripe.network",
               "worker-src 'self' blob:",
               "frame-src 'self' blob: https://*.supabase.co https://js.stripe.com https://connect-js.stripe.com https://*.stripe.com https://*.stripe.network",

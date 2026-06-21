@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 export type Subjects = {
   id: string;
   name: string;
@@ -44,26 +45,22 @@ export const WizardSubjectSelector = ({
   <label className="block text-sm font-medium text-white mb-2">
     Filter by level
   </label>
-  <select
-    name="grade"
-    value={grade}
-    onChange={(e) => onChange(e)}
-    className="w-full px-4 py-3 text-white bg-gradient-to-r from-gray-800 to-gray-900 border border-white/30 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all appearance-none hover:from-gray-700 hover:to-gray-800"
-  >
-    <option value="" className="text-gray-300 bg-gray-800">All levels</option>
-    <optgroup label="High School" className="bg-gray-800">
-      <option value="9" className="text-white bg-gray-800">Grade 9</option>
-      <option value="10" className="text-white bg-gray-800">Grade 10</option>
-      <option value="11" className="text-white bg-gray-800">Grade 11</option>
-      <option value="12" className="text-white bg-gray-800">Grade 12</option>
-    </optgroup>
-    <optgroup label="Post-Secondary" className="bg-gray-800">
-      <option value="1" className="text-white bg-gray-800">Year 1</option>
-      <option value="2" className="text-white bg-gray-800">Year 2</option>
-      <option value="3" className="text-white bg-gray-800">Year 3</option>
-      <option value="4" className="text-white bg-gray-800">Year 4</option>
-    </optgroup>
-  </select>
+  <SearchableSelect
+    value={grade ?? ""}
+    onChange={(val) => onChange({ target: { value: val, name: "grade" } } as any)}
+    placeholder="All levels"
+    options={[
+      { value: "9", label: "Grade 9", group: "High School" },
+      { value: "10", label: "Grade 10", group: "High School" },
+      { value: "11", label: "Grade 11", group: "High School" },
+      { value: "12", label: "Grade 12", group: "High School" },
+      { value: "1", label: "Year 1", group: "Post-Secondary" },
+      { value: "2", label: "Year 2", group: "Post-Secondary" },
+      { value: "3", label: "Year 3", group: "Post-Secondary" },
+      { value: "4", label: "Year 4", group: "Post-Secondary" },
+    ]}
+    className="w-full px-4 py-3 text-white bg-gradient-to-r from-gray-800 to-gray-900 border border-white/30 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+  />
 </div>
       <div className="relative">
         <label className="block text-sm font-medium text-white mb-2">

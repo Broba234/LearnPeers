@@ -4979,6 +4979,7 @@ export namespace Prisma {
     InstitutionCourses: number
     ProfileInstitutions: number
     SchoolEmailVerifications: number
+    Schools: number
     Curricula: number
   }
 
@@ -4987,6 +4988,7 @@ export namespace Prisma {
     InstitutionCourses?: boolean | InstitutionsCountOutputTypeCountInstitutionCoursesArgs
     ProfileInstitutions?: boolean | InstitutionsCountOutputTypeCountProfileInstitutionsArgs
     SchoolEmailVerifications?: boolean | InstitutionsCountOutputTypeCountSchoolEmailVerificationsArgs
+    Schools?: boolean | InstitutionsCountOutputTypeCountSchoolsArgs
     Curricula?: boolean | InstitutionsCountOutputTypeCountCurriculaArgs
   }
 
@@ -5027,6 +5029,13 @@ export namespace Prisma {
    */
   export type InstitutionsCountOutputTypeCountSchoolEmailVerificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SchoolEmailVerificationsWhereInput
+  }
+
+  /**
+   * InstitutionsCountOutputType without action
+   */
+  export type InstitutionsCountOutputTypeCountSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InstitutionsWhereInput
   }
 
   /**
@@ -27320,6 +27329,7 @@ export namespace Prisma {
     phone: string | null
     hourlyRate: number | null
     isAvailableNow: boolean | null
+    last_active_at: Date | null
     rating: number | null
     education: string | null
     created_at: Date | null
@@ -27340,6 +27350,7 @@ export namespace Prisma {
     phone: string | null
     hourlyRate: number | null
     isAvailableNow: boolean | null
+    last_active_at: Date | null
     rating: number | null
     education: string | null
     created_at: Date | null
@@ -27361,6 +27372,7 @@ export namespace Prisma {
     hourlyRate: number
     availability: number
     isAvailableNow: number
+    last_active_at: number
     rating: number
     education: number
     experience: number
@@ -27394,6 +27406,7 @@ export namespace Prisma {
     phone?: true
     hourlyRate?: true
     isAvailableNow?: true
+    last_active_at?: true
     rating?: true
     education?: true
     created_at?: true
@@ -27414,6 +27427,7 @@ export namespace Prisma {
     phone?: true
     hourlyRate?: true
     isAvailableNow?: true
+    last_active_at?: true
     rating?: true
     education?: true
     created_at?: true
@@ -27435,6 +27449,7 @@ export namespace Prisma {
     hourlyRate?: true
     availability?: true
     isAvailableNow?: true
+    last_active_at?: true
     rating?: true
     education?: true
     experience?: true
@@ -27544,6 +27559,7 @@ export namespace Prisma {
     hourlyRate: number | null
     availability: JsonValue | null
     isAvailableNow: boolean | null
+    last_active_at: Date | null
     rating: number | null
     education: string | null
     experience: JsonValue | null
@@ -27585,6 +27601,7 @@ export namespace Prisma {
     hourlyRate?: boolean
     availability?: boolean
     isAvailableNow?: boolean
+    last_active_at?: boolean
     rating?: boolean
     education?: boolean
     experience?: boolean
@@ -27623,6 +27640,7 @@ export namespace Prisma {
     hourlyRate?: boolean
     availability?: boolean
     isAvailableNow?: boolean
+    last_active_at?: boolean
     rating?: boolean
     education?: boolean
     experience?: boolean
@@ -27647,6 +27665,7 @@ export namespace Prisma {
     hourlyRate?: boolean
     availability?: boolean
     isAvailableNow?: boolean
+    last_active_at?: boolean
     rating?: boolean
     education?: boolean
     experience?: boolean
@@ -27711,6 +27730,7 @@ export namespace Prisma {
       hourlyRate: number | null
       availability: Prisma.JsonValue | null
       isAvailableNow: boolean | null
+      last_active_at: Date | null
       rating: number | null
       education: string | null
       experience: Prisma.JsonValue | null
@@ -28138,6 +28158,7 @@ export namespace Prisma {
     readonly hourlyRate: FieldRef<"Profiles", 'Float'>
     readonly availability: FieldRef<"Profiles", 'Json'>
     readonly isAvailableNow: FieldRef<"Profiles", 'Boolean'>
+    readonly last_active_at: FieldRef<"Profiles", 'DateTime'>
     readonly rating: FieldRef<"Profiles", 'Float'>
     readonly education: FieldRef<"Profiles", 'String'>
     readonly experience: FieldRef<"Profiles", 'Json'>
@@ -30143,6 +30164,7 @@ export namespace Prisma {
     amount?: boolean
     date?: boolean
     subject_id?: boolean
+    is_instant?: boolean
     Profiles_Sessions_student_idToProfiles?: boolean | ProfilesDefaultArgs<ExtArgs>
     Profiles_Sessions_tutor_idToProfiles?: boolean | ProfilesDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sessions"]>
@@ -30162,6 +30184,7 @@ export namespace Prisma {
     amount?: boolean
     date?: boolean
     subject_id?: boolean
+    is_instant?: boolean
     Profiles_Sessions_student_idToProfiles?: boolean | ProfilesDefaultArgs<ExtArgs>
     Profiles_Sessions_tutor_idToProfiles?: boolean | ProfilesDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["sessions"]>
@@ -30181,6 +30204,7 @@ export namespace Prisma {
     amount?: boolean
     date?: boolean
     subject_id?: boolean
+    is_instant?: boolean
   }
 
   export type SessionsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -30213,6 +30237,7 @@ export namespace Prisma {
       amount: number | null
       date: Date | null
       subject_id: string | null
+      is_instant: boolean
     }, ExtArgs["result"]["sessions"]>
     composites: {}
   }
@@ -30622,6 +30647,7 @@ export namespace Prisma {
     readonly amount: FieldRef<"Sessions", 'Float'>
     readonly date: FieldRef<"Sessions", 'DateTime'>
     readonly subject_id: FieldRef<"Sessions", 'String'>
+    readonly is_instant: FieldRef<"Sessions", 'Boolean'>
   }
     
 
@@ -32066,6 +32092,8 @@ export namespace Prisma {
     type: string | null
     city: string | null
     website: string | null
+    external_id: string | null
+    board_id: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -32080,6 +32108,8 @@ export namespace Prisma {
     type: string | null
     city: string | null
     website: string | null
+    external_id: string | null
+    board_id: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -32095,6 +32125,8 @@ export namespace Prisma {
     email_domains: number
     city: number
     website: number
+    external_id: number
+    board_id: number
     created_at: number
     updated_at: number
     _all: number
@@ -32111,6 +32143,8 @@ export namespace Prisma {
     type?: true
     city?: true
     website?: true
+    external_id?: true
+    board_id?: true
     created_at?: true
     updated_at?: true
   }
@@ -32125,6 +32159,8 @@ export namespace Prisma {
     type?: true
     city?: true
     website?: true
+    external_id?: true
+    board_id?: true
     created_at?: true
     updated_at?: true
   }
@@ -32140,6 +32176,8 @@ export namespace Prisma {
     email_domains?: true
     city?: true
     website?: true
+    external_id?: true
+    board_id?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -32228,6 +32266,8 @@ export namespace Prisma {
     email_domains: string[]
     city: string | null
     website: string | null
+    external_id: string | null
+    board_id: string | null
     created_at: Date
     updated_at: Date
     _count: InstitutionsCountAggregateOutputType | null
@@ -32260,6 +32300,8 @@ export namespace Prisma {
     email_domains?: boolean
     city?: boolean
     website?: boolean
+    external_id?: boolean
+    board_id?: boolean
     created_at?: boolean
     updated_at?: boolean
     Profiles?: boolean | Institutions$ProfilesArgs<ExtArgs>
@@ -32267,6 +32309,8 @@ export namespace Prisma {
     ProfileInstitutions?: boolean | Institutions$ProfileInstitutionsArgs<ExtArgs>
     SchoolEmailVerifications?: boolean | Institutions$SchoolEmailVerificationsArgs<ExtArgs>
     Provinces?: boolean | Institutions$ProvincesArgs<ExtArgs>
+    Board?: boolean | Institutions$BoardArgs<ExtArgs>
+    Schools?: boolean | Institutions$SchoolsArgs<ExtArgs>
     Curricula?: boolean | Institutions$CurriculaArgs<ExtArgs>
     _count?: boolean | InstitutionsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["institutions"]>
@@ -32282,9 +32326,12 @@ export namespace Prisma {
     email_domains?: boolean
     city?: boolean
     website?: boolean
+    external_id?: boolean
+    board_id?: boolean
     created_at?: boolean
     updated_at?: boolean
     Provinces?: boolean | Institutions$ProvincesArgs<ExtArgs>
+    Board?: boolean | Institutions$BoardArgs<ExtArgs>
   }, ExtArgs["result"]["institutions"]>
 
   export type InstitutionsSelectScalar = {
@@ -32298,6 +32345,8 @@ export namespace Prisma {
     email_domains?: boolean
     city?: boolean
     website?: boolean
+    external_id?: boolean
+    board_id?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -32308,11 +32357,14 @@ export namespace Prisma {
     ProfileInstitutions?: boolean | Institutions$ProfileInstitutionsArgs<ExtArgs>
     SchoolEmailVerifications?: boolean | Institutions$SchoolEmailVerificationsArgs<ExtArgs>
     Provinces?: boolean | Institutions$ProvincesArgs<ExtArgs>
+    Board?: boolean | Institutions$BoardArgs<ExtArgs>
+    Schools?: boolean | Institutions$SchoolsArgs<ExtArgs>
     Curricula?: boolean | Institutions$CurriculaArgs<ExtArgs>
     _count?: boolean | InstitutionsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type InstitutionsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Provinces?: boolean | Institutions$ProvincesArgs<ExtArgs>
+    Board?: boolean | Institutions$BoardArgs<ExtArgs>
   }
 
   export type $InstitutionsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -32323,6 +32375,8 @@ export namespace Prisma {
       ProfileInstitutions: Prisma.$ProfileInstitutionsPayload<ExtArgs>[]
       SchoolEmailVerifications: Prisma.$SchoolEmailVerificationsPayload<ExtArgs>[]
       Provinces: Prisma.$ProvincesPayload<ExtArgs> | null
+      Board: Prisma.$InstitutionsPayload<ExtArgs> | null
+      Schools: Prisma.$InstitutionsPayload<ExtArgs>[]
       Curricula: Prisma.$CurriculaPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -32336,6 +32390,8 @@ export namespace Prisma {
       email_domains: string[]
       city: string | null
       website: string | null
+      external_id: string | null
+      board_id: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["institutions"]>
@@ -32707,6 +32763,8 @@ export namespace Prisma {
     ProfileInstitutions<T extends Institutions$ProfileInstitutionsArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$ProfileInstitutionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfileInstitutionsPayload<ExtArgs>, T, "findMany"> | Null>
     SchoolEmailVerifications<T extends Institutions$SchoolEmailVerificationsArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$SchoolEmailVerificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SchoolEmailVerificationsPayload<ExtArgs>, T, "findMany"> | Null>
     Provinces<T extends Institutions$ProvincesArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$ProvincesArgs<ExtArgs>>): Prisma__ProvincesClient<$Result.GetResult<Prisma.$ProvincesPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    Board<T extends Institutions$BoardArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$BoardArgs<ExtArgs>>): Prisma__InstitutionsClient<$Result.GetResult<Prisma.$InstitutionsPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    Schools<T extends Institutions$SchoolsArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$SchoolsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstitutionsPayload<ExtArgs>, T, "findMany"> | Null>
     Curricula<T extends Institutions$CurriculaArgs<ExtArgs> = {}>(args?: Subset<T, Institutions$CurriculaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurriculaPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -32747,6 +32805,8 @@ export namespace Prisma {
     readonly email_domains: FieldRef<"Institutions", 'String[]'>
     readonly city: FieldRef<"Institutions", 'String'>
     readonly website: FieldRef<"Institutions", 'String'>
+    readonly external_id: FieldRef<"Institutions", 'String'>
+    readonly board_id: FieldRef<"Institutions", 'String'>
     readonly created_at: FieldRef<"Institutions", 'DateTime'>
     readonly updated_at: FieldRef<"Institutions", 'DateTime'>
   }
@@ -33159,6 +33219,41 @@ export namespace Prisma {
      */
     include?: ProvincesInclude<ExtArgs> | null
     where?: ProvincesWhereInput
+  }
+
+  /**
+   * Institutions.Board
+   */
+  export type Institutions$BoardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Institutions
+     */
+    select?: InstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InstitutionsInclude<ExtArgs> | null
+    where?: InstitutionsWhereInput
+  }
+
+  /**
+   * Institutions.Schools
+   */
+  export type Institutions$SchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Institutions
+     */
+    select?: InstitutionsSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InstitutionsInclude<ExtArgs> | null
+    where?: InstitutionsWhereInput
+    orderBy?: InstitutionsOrderByWithRelationInput | InstitutionsOrderByWithRelationInput[]
+    cursor?: InstitutionsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InstitutionsScalarFieldEnum | InstitutionsScalarFieldEnum[]
   }
 
   /**
@@ -48021,6 +48116,7 @@ export namespace Prisma {
     hourlyRate: 'hourlyRate',
     availability: 'availability',
     isAvailableNow: 'isAvailableNow',
+    last_active_at: 'last_active_at',
     rating: 'rating',
     education: 'education',
     experience: 'experience',
@@ -48066,7 +48162,8 @@ export namespace Prisma {
     duration: 'duration',
     amount: 'amount',
     date: 'date',
-    subject_id: 'subject_id'
+    subject_id: 'subject_id',
+    is_instant: 'is_instant'
   };
 
   export type SessionsScalarFieldEnum = (typeof SessionsScalarFieldEnum)[keyof typeof SessionsScalarFieldEnum]
@@ -48097,6 +48194,8 @@ export namespace Prisma {
     email_domains: 'email_domains',
     city: 'city',
     website: 'website',
+    external_id: 'external_id',
+    board_id: 'board_id',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -50412,6 +50511,7 @@ export namespace Prisma {
     hourlyRate?: FloatNullableFilter<"Profiles"> | number | null
     availability?: JsonNullableFilter<"Profiles">
     isAvailableNow?: BoolNullableFilter<"Profiles"> | boolean | null
+    last_active_at?: DateTimeNullableFilter<"Profiles"> | Date | string | null
     rating?: FloatNullableFilter<"Profiles"> | number | null
     education?: StringNullableFilter<"Profiles"> | string | null
     experience?: JsonNullableFilter<"Profiles">
@@ -50449,6 +50549,7 @@ export namespace Prisma {
     hourlyRate?: SortOrderInput | SortOrder
     availability?: SortOrderInput | SortOrder
     isAvailableNow?: SortOrderInput | SortOrder
+    last_active_at?: SortOrderInput | SortOrder
     rating?: SortOrderInput | SortOrder
     education?: SortOrderInput | SortOrder
     experience?: SortOrderInput | SortOrder
@@ -50489,6 +50590,7 @@ export namespace Prisma {
     hourlyRate?: FloatNullableFilter<"Profiles"> | number | null
     availability?: JsonNullableFilter<"Profiles">
     isAvailableNow?: BoolNullableFilter<"Profiles"> | boolean | null
+    last_active_at?: DateTimeNullableFilter<"Profiles"> | Date | string | null
     rating?: FloatNullableFilter<"Profiles"> | number | null
     education?: StringNullableFilter<"Profiles"> | string | null
     experience?: JsonNullableFilter<"Profiles">
@@ -50526,6 +50628,7 @@ export namespace Prisma {
     hourlyRate?: SortOrderInput | SortOrder
     availability?: SortOrderInput | SortOrder
     isAvailableNow?: SortOrderInput | SortOrder
+    last_active_at?: SortOrderInput | SortOrder
     rating?: SortOrderInput | SortOrder
     education?: SortOrderInput | SortOrder
     experience?: SortOrderInput | SortOrder
@@ -50556,6 +50659,7 @@ export namespace Prisma {
     hourlyRate?: FloatNullableWithAggregatesFilter<"Profiles"> | number | null
     availability?: JsonNullableWithAggregatesFilter<"Profiles">
     isAvailableNow?: BoolNullableWithAggregatesFilter<"Profiles"> | boolean | null
+    last_active_at?: DateTimeNullableWithAggregatesFilter<"Profiles"> | Date | string | null
     rating?: FloatNullableWithAggregatesFilter<"Profiles"> | number | null
     education?: StringNullableWithAggregatesFilter<"Profiles"> | string | null
     experience?: JsonNullableWithAggregatesFilter<"Profiles">
@@ -50682,6 +50786,7 @@ export namespace Prisma {
     amount?: FloatNullableFilter<"Sessions"> | number | null
     date?: DateTimeNullableFilter<"Sessions"> | Date | string | null
     subject_id?: UuidNullableFilter<"Sessions"> | string | null
+    is_instant?: BoolFilter<"Sessions"> | boolean
     Profiles_Sessions_student_idToProfiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
     Profiles_Sessions_tutor_idToProfiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
   }
@@ -50701,6 +50806,7 @@ export namespace Prisma {
     amount?: SortOrderInput | SortOrder
     date?: SortOrderInput | SortOrder
     subject_id?: SortOrderInput | SortOrder
+    is_instant?: SortOrder
     Profiles_Sessions_student_idToProfiles?: ProfilesOrderByWithRelationInput
     Profiles_Sessions_tutor_idToProfiles?: ProfilesOrderByWithRelationInput
   }
@@ -50723,6 +50829,7 @@ export namespace Prisma {
     amount?: FloatNullableFilter<"Sessions"> | number | null
     date?: DateTimeNullableFilter<"Sessions"> | Date | string | null
     subject_id?: UuidNullableFilter<"Sessions"> | string | null
+    is_instant?: BoolFilter<"Sessions"> | boolean
     Profiles_Sessions_student_idToProfiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
     Profiles_Sessions_tutor_idToProfiles?: XOR<ProfilesRelationFilter, ProfilesWhereInput>
   }, "id">
@@ -50742,6 +50849,7 @@ export namespace Prisma {
     amount?: SortOrderInput | SortOrder
     date?: SortOrderInput | SortOrder
     subject_id?: SortOrderInput | SortOrder
+    is_instant?: SortOrder
     _count?: SessionsCountOrderByAggregateInput
     _avg?: SessionsAvgOrderByAggregateInput
     _max?: SessionsMaxOrderByAggregateInput
@@ -50767,6 +50875,7 @@ export namespace Prisma {
     amount?: FloatNullableWithAggregatesFilter<"Sessions"> | number | null
     date?: DateTimeNullableWithAggregatesFilter<"Sessions"> | Date | string | null
     subject_id?: UuidNullableWithAggregatesFilter<"Sessions"> | string | null
+    is_instant?: BoolWithAggregatesFilter<"Sessions"> | boolean
   }
 
   export type SubjectsWhereInput = {
@@ -50864,6 +50973,8 @@ export namespace Prisma {
     email_domains?: StringNullableListFilter<"Institutions">
     city?: StringNullableFilter<"Institutions"> | string | null
     website?: StringNullableFilter<"Institutions"> | string | null
+    external_id?: StringNullableFilter<"Institutions"> | string | null
+    board_id?: UuidNullableFilter<"Institutions"> | string | null
     created_at?: DateTimeFilter<"Institutions"> | Date | string
     updated_at?: DateTimeFilter<"Institutions"> | Date | string
     Profiles?: ProfilesListRelationFilter
@@ -50871,6 +50982,8 @@ export namespace Prisma {
     ProfileInstitutions?: ProfileInstitutionsListRelationFilter
     SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
     Provinces?: XOR<ProvincesNullableRelationFilter, ProvincesWhereInput> | null
+    Board?: XOR<InstitutionsNullableRelationFilter, InstitutionsWhereInput> | null
+    Schools?: InstitutionsListRelationFilter
     Curricula?: CurriculaListRelationFilter
   }
 
@@ -50885,6 +50998,8 @@ export namespace Prisma {
     email_domains?: SortOrder
     city?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
+    external_id?: SortOrderInput | SortOrder
+    board_id?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     Profiles?: ProfilesOrderByRelationAggregateInput
@@ -50892,11 +51007,14 @@ export namespace Prisma {
     ProfileInstitutions?: ProfileInstitutionsOrderByRelationAggregateInput
     SchoolEmailVerifications?: SchoolEmailVerificationsOrderByRelationAggregateInput
     Provinces?: ProvincesOrderByWithRelationInput
+    Board?: InstitutionsOrderByWithRelationInput
+    Schools?: InstitutionsOrderByRelationAggregateInput
     Curricula?: CurriculaOrderByRelationAggregateInput
   }
 
   export type InstitutionsWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    external_id?: string
     AND?: InstitutionsWhereInput | InstitutionsWhereInput[]
     OR?: InstitutionsWhereInput[]
     NOT?: InstitutionsWhereInput | InstitutionsWhereInput[]
@@ -50909,6 +51027,7 @@ export namespace Prisma {
     email_domains?: StringNullableListFilter<"Institutions">
     city?: StringNullableFilter<"Institutions"> | string | null
     website?: StringNullableFilter<"Institutions"> | string | null
+    board_id?: UuidNullableFilter<"Institutions"> | string | null
     created_at?: DateTimeFilter<"Institutions"> | Date | string
     updated_at?: DateTimeFilter<"Institutions"> | Date | string
     Profiles?: ProfilesListRelationFilter
@@ -50916,8 +51035,10 @@ export namespace Prisma {
     ProfileInstitutions?: ProfileInstitutionsListRelationFilter
     SchoolEmailVerifications?: SchoolEmailVerificationsListRelationFilter
     Provinces?: XOR<ProvincesNullableRelationFilter, ProvincesWhereInput> | null
+    Board?: XOR<InstitutionsNullableRelationFilter, InstitutionsWhereInput> | null
+    Schools?: InstitutionsListRelationFilter
     Curricula?: CurriculaListRelationFilter
-  }, "id">
+  }, "id" | "external_id">
 
   export type InstitutionsOrderByWithAggregationInput = {
     id?: SortOrder
@@ -50930,6 +51051,8 @@ export namespace Prisma {
     email_domains?: SortOrder
     city?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
+    external_id?: SortOrderInput | SortOrder
+    board_id?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: InstitutionsCountOrderByAggregateInput
@@ -50951,6 +51074,8 @@ export namespace Prisma {
     email_domains?: StringNullableListFilter<"Institutions">
     city?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
     website?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
+    external_id?: StringNullableWithAggregatesFilter<"Institutions"> | string | null
+    board_id?: UuidNullableWithAggregatesFilter<"Institutions"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Institutions"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Institutions"> | Date | string
   }
@@ -54211,6 +54336,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -54247,6 +54373,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -54281,6 +54408,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -54317,6 +54445,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -54352,6 +54481,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -54373,6 +54503,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -54394,6 +54525,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -54517,6 +54649,7 @@ export namespace Prisma {
     amount?: number | null
     date?: Date | string | null
     subject_id?: string | null
+    is_instant?: boolean
     Profiles_Sessions_student_idToProfiles: ProfilesCreateNestedOneWithoutSessions_Sessions_student_idToProfilesInput
     Profiles_Sessions_tutor_idToProfiles: ProfilesCreateNestedOneWithoutSessions_Sessions_tutor_idToProfilesInput
   }
@@ -54536,6 +54669,7 @@ export namespace Prisma {
     amount?: number | null
     date?: Date | string | null
     subject_id?: string | null
+    is_instant?: boolean
   }
 
   export type SessionsUpdateInput = {
@@ -54551,6 +54685,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
     Profiles_Sessions_student_idToProfiles?: ProfilesUpdateOneRequiredWithoutSessions_Sessions_student_idToProfilesNestedInput
     Profiles_Sessions_tutor_idToProfiles?: ProfilesUpdateOneRequiredWithoutSessions_Sessions_tutor_idToProfilesNestedInput
   }
@@ -54570,6 +54705,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SessionsCreateManyInput = {
@@ -54587,6 +54723,7 @@ export namespace Prisma {
     amount?: number | null
     date?: Date | string | null
     subject_id?: string | null
+    is_instant?: boolean
   }
 
   export type SessionsUpdateManyMutationInput = {
@@ -54602,6 +54739,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SessionsUncheckedUpdateManyInput = {
@@ -54619,6 +54757,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SubjectsCreateInput = {
@@ -54719,6 +54858,7 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
@@ -54726,6 +54866,8 @@ export namespace Prisma {
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
     Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Board?: InstitutionsCreateNestedOneWithoutSchoolsInput
+    Schools?: InstitutionsCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -54740,12 +54882,15 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
+    board_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Schools?: InstitutionsUncheckedCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -54759,6 +54904,7 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
@@ -54766,6 +54912,8 @@ export namespace Prisma {
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
     Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Board?: InstitutionsUpdateOneWithoutSchoolsNestedInput
+    Schools?: InstitutionsUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -54780,12 +54928,15 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Schools?: InstitutionsUncheckedUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -54800,6 +54951,8 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
+    board_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -54814,6 +54967,7 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -54829,6 +54983,8 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -57964,6 +58120,7 @@ export namespace Prisma {
     hourlyRate?: SortOrder
     availability?: SortOrder
     isAvailableNow?: SortOrder
+    last_active_at?: SortOrder
     rating?: SortOrder
     education?: SortOrder
     experience?: SortOrder
@@ -57990,6 +58147,7 @@ export namespace Prisma {
     phone?: SortOrder
     hourlyRate?: SortOrder
     isAvailableNow?: SortOrder
+    last_active_at?: SortOrder
     rating?: SortOrder
     education?: SortOrder
     created_at?: SortOrder
@@ -58010,6 +58168,7 @@ export namespace Prisma {
     phone?: SortOrder
     hourlyRate?: SortOrder
     isAvailableNow?: SortOrder
+    last_active_at?: SortOrder
     rating?: SortOrder
     education?: SortOrder
     created_at?: SortOrder
@@ -58131,6 +58290,7 @@ export namespace Prisma {
     amount?: SortOrder
     date?: SortOrder
     subject_id?: SortOrder
+    is_instant?: SortOrder
   }
 
   export type SessionsAvgOrderByAggregateInput = {
@@ -58153,6 +58313,7 @@ export namespace Prisma {
     amount?: SortOrder
     date?: SortOrder
     subject_id?: SortOrder
+    is_instant?: SortOrder
   }
 
   export type SessionsMinOrderByAggregateInput = {
@@ -58170,6 +58331,7 @@ export namespace Prisma {
     amount?: SortOrder
     date?: SortOrder
     subject_id?: SortOrder
+    is_instant?: SortOrder
   }
 
   export type SessionsSumOrderByAggregateInput = {
@@ -58252,6 +58414,12 @@ export namespace Prisma {
     isNot?: ProvincesWhereInput | null
   }
 
+  export type InstitutionsListRelationFilter = {
+    every?: InstitutionsWhereInput
+    some?: InstitutionsWhereInput
+    none?: InstitutionsWhereInput
+  }
+
   export type CurriculaListRelationFilter = {
     every?: CurriculaWhereInput
     some?: CurriculaWhereInput
@@ -58259,6 +58427,10 @@ export namespace Prisma {
   }
 
   export type ProfilesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InstitutionsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -58277,6 +58449,8 @@ export namespace Prisma {
     email_domains?: SortOrder
     city?: SortOrder
     website?: SortOrder
+    external_id?: SortOrder
+    board_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -58291,6 +58465,8 @@ export namespace Prisma {
     type?: SortOrder
     city?: SortOrder
     website?: SortOrder
+    external_id?: SortOrder
+    board_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -58305,18 +58481,10 @@ export namespace Prisma {
     type?: SortOrder
     city?: SortOrder
     website?: SortOrder
+    external_id?: SortOrder
+    board_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
-  }
-
-  export type InstitutionsListRelationFilter = {
-    every?: InstitutionsWhereInput
-    some?: InstitutionsWhereInput
-    none?: InstitutionsWhereInput
-  }
-
-  export type InstitutionsOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type ProvincesCountOrderByAggregateInput = {
@@ -61165,6 +61333,19 @@ export namespace Prisma {
     connect?: ProvincesWhereUniqueInput
   }
 
+  export type InstitutionsCreateNestedOneWithoutSchoolsInput = {
+    create?: XOR<InstitutionsCreateWithoutSchoolsInput, InstitutionsUncheckedCreateWithoutSchoolsInput>
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutSchoolsInput
+    connect?: InstitutionsWhereUniqueInput
+  }
+
+  export type InstitutionsCreateNestedManyWithoutBoardInput = {
+    create?: XOR<InstitutionsCreateWithoutBoardInput, InstitutionsUncheckedCreateWithoutBoardInput> | InstitutionsCreateWithoutBoardInput[] | InstitutionsUncheckedCreateWithoutBoardInput[]
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutBoardInput | InstitutionsCreateOrConnectWithoutBoardInput[]
+    createMany?: InstitutionsCreateManyBoardInputEnvelope
+    connect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+  }
+
   export type CurriculaCreateNestedManyWithoutInstitutionsInput = {
     create?: XOR<CurriculaCreateWithoutInstitutionsInput, CurriculaUncheckedCreateWithoutInstitutionsInput> | CurriculaCreateWithoutInstitutionsInput[] | CurriculaUncheckedCreateWithoutInstitutionsInput[]
     connectOrCreate?: CurriculaCreateOrConnectWithoutInstitutionsInput | CurriculaCreateOrConnectWithoutInstitutionsInput[]
@@ -61198,6 +61379,13 @@ export namespace Prisma {
     connectOrCreate?: SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput | SchoolEmailVerificationsCreateOrConnectWithoutInstitutionsInput[]
     createMany?: SchoolEmailVerificationsCreateManyInstitutionsInputEnvelope
     connect?: SchoolEmailVerificationsWhereUniqueInput | SchoolEmailVerificationsWhereUniqueInput[]
+  }
+
+  export type InstitutionsUncheckedCreateNestedManyWithoutBoardInput = {
+    create?: XOR<InstitutionsCreateWithoutBoardInput, InstitutionsUncheckedCreateWithoutBoardInput> | InstitutionsCreateWithoutBoardInput[] | InstitutionsUncheckedCreateWithoutBoardInput[]
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutBoardInput | InstitutionsCreateOrConnectWithoutBoardInput[]
+    createMany?: InstitutionsCreateManyBoardInputEnvelope
+    connect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
   }
 
   export type CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput = {
@@ -61278,6 +61466,30 @@ export namespace Prisma {
     update?: XOR<XOR<ProvincesUpdateToOneWithWhereWithoutInstitutionsInput, ProvincesUpdateWithoutInstitutionsInput>, ProvincesUncheckedUpdateWithoutInstitutionsInput>
   }
 
+  export type InstitutionsUpdateOneWithoutSchoolsNestedInput = {
+    create?: XOR<InstitutionsCreateWithoutSchoolsInput, InstitutionsUncheckedCreateWithoutSchoolsInput>
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutSchoolsInput
+    upsert?: InstitutionsUpsertWithoutSchoolsInput
+    disconnect?: InstitutionsWhereInput | boolean
+    delete?: InstitutionsWhereInput | boolean
+    connect?: InstitutionsWhereUniqueInput
+    update?: XOR<XOR<InstitutionsUpdateToOneWithWhereWithoutSchoolsInput, InstitutionsUpdateWithoutSchoolsInput>, InstitutionsUncheckedUpdateWithoutSchoolsInput>
+  }
+
+  export type InstitutionsUpdateManyWithoutBoardNestedInput = {
+    create?: XOR<InstitutionsCreateWithoutBoardInput, InstitutionsUncheckedCreateWithoutBoardInput> | InstitutionsCreateWithoutBoardInput[] | InstitutionsUncheckedCreateWithoutBoardInput[]
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutBoardInput | InstitutionsCreateOrConnectWithoutBoardInput[]
+    upsert?: InstitutionsUpsertWithWhereUniqueWithoutBoardInput | InstitutionsUpsertWithWhereUniqueWithoutBoardInput[]
+    createMany?: InstitutionsCreateManyBoardInputEnvelope
+    set?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    disconnect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    delete?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    connect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    update?: InstitutionsUpdateWithWhereUniqueWithoutBoardInput | InstitutionsUpdateWithWhereUniqueWithoutBoardInput[]
+    updateMany?: InstitutionsUpdateManyWithWhereWithoutBoardInput | InstitutionsUpdateManyWithWhereWithoutBoardInput[]
+    deleteMany?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
+  }
+
   export type CurriculaUpdateManyWithoutInstitutionsNestedInput = {
     create?: XOR<CurriculaCreateWithoutInstitutionsInput, CurriculaUncheckedCreateWithoutInstitutionsInput> | CurriculaCreateWithoutInstitutionsInput[] | CurriculaUncheckedCreateWithoutInstitutionsInput[]
     connectOrCreate?: CurriculaCreateOrConnectWithoutInstitutionsInput | CurriculaCreateOrConnectWithoutInstitutionsInput[]
@@ -61346,6 +61558,20 @@ export namespace Prisma {
     update?: SchoolEmailVerificationsUpdateWithWhereUniqueWithoutInstitutionsInput | SchoolEmailVerificationsUpdateWithWhereUniqueWithoutInstitutionsInput[]
     updateMany?: SchoolEmailVerificationsUpdateManyWithWhereWithoutInstitutionsInput | SchoolEmailVerificationsUpdateManyWithWhereWithoutInstitutionsInput[]
     deleteMany?: SchoolEmailVerificationsScalarWhereInput | SchoolEmailVerificationsScalarWhereInput[]
+  }
+
+  export type InstitutionsUncheckedUpdateManyWithoutBoardNestedInput = {
+    create?: XOR<InstitutionsCreateWithoutBoardInput, InstitutionsUncheckedCreateWithoutBoardInput> | InstitutionsCreateWithoutBoardInput[] | InstitutionsUncheckedCreateWithoutBoardInput[]
+    connectOrCreate?: InstitutionsCreateOrConnectWithoutBoardInput | InstitutionsCreateOrConnectWithoutBoardInput[]
+    upsert?: InstitutionsUpsertWithWhereUniqueWithoutBoardInput | InstitutionsUpsertWithWhereUniqueWithoutBoardInput[]
+    createMany?: InstitutionsCreateManyBoardInputEnvelope
+    set?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    disconnect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    delete?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    connect?: InstitutionsWhereUniqueInput | InstitutionsWhereUniqueInput[]
+    update?: InstitutionsUpdateWithWhereUniqueWithoutBoardInput | InstitutionsUpdateWithWhereUniqueWithoutBoardInput[]
+    updateMany?: InstitutionsUpdateManyWithWhereWithoutBoardInput | InstitutionsUpdateManyWithWhereWithoutBoardInput[]
+    deleteMany?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
   }
 
   export type CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput = {
@@ -65407,6 +65633,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -65441,6 +65668,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -65698,6 +65926,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -65732,6 +65961,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -65766,6 +65996,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -65801,6 +66032,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -65839,6 +66071,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -65874,6 +66107,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -65951,6 +66185,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -65986,6 +66221,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -66030,6 +66266,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -66065,6 +66302,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -66152,6 +66390,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -66187,6 +66426,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -66267,6 +66507,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -66302,6 +66543,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -66561,6 +66803,7 @@ export namespace Prisma {
     amount?: number | null
     date?: Date | string | null
     subject_id?: string | null
+    is_instant?: boolean
     Profiles_Sessions_tutor_idToProfiles: ProfilesCreateNestedOneWithoutSessions_Sessions_tutor_idToProfilesInput
   }
 
@@ -66578,6 +66821,7 @@ export namespace Prisma {
     amount?: number | null
     date?: Date | string | null
     subject_id?: string | null
+    is_instant?: boolean
   }
 
   export type SessionsCreateOrConnectWithoutProfiles_Sessions_student_idToProfilesInput = {
@@ -66603,6 +66847,7 @@ export namespace Prisma {
     amount?: number | null
     date?: Date | string | null
     subject_id?: string | null
+    is_instant?: boolean
     Profiles_Sessions_student_idToProfiles: ProfilesCreateNestedOneWithoutSessions_Sessions_student_idToProfilesInput
   }
 
@@ -66620,6 +66865,7 @@ export namespace Prisma {
     amount?: number | null
     date?: Date | string | null
     subject_id?: string | null
+    is_instant?: boolean
   }
 
   export type SessionsCreateOrConnectWithoutProfiles_Sessions_tutor_idToProfilesInput = {
@@ -66688,12 +66934,15 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
     Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Board?: InstitutionsCreateNestedOneWithoutSchoolsInput
+    Schools?: InstitutionsCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -66708,11 +66957,14 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
+    board_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Schools?: InstitutionsUncheckedCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -67178,6 +67430,7 @@ export namespace Prisma {
     amount?: FloatNullableFilter<"Sessions"> | number | null
     date?: DateTimeNullableFilter<"Sessions"> | Date | string | null
     subject_id?: UuidNullableFilter<"Sessions"> | string | null
+    is_instant?: BoolFilter<"Sessions"> | boolean
   }
 
   export type SessionsUpsertWithWhereUniqueWithoutProfiles_Sessions_tutor_idToProfilesInput = {
@@ -67255,12 +67508,15 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
     Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Board?: InstitutionsUpdateOneWithoutSchoolsNestedInput
+    Schools?: InstitutionsUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -67275,11 +67531,14 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Schools?: InstitutionsUncheckedUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -67481,6 +67740,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -67516,6 +67776,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -67670,6 +67931,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -67705,6 +67967,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -67826,6 +68089,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -67861,6 +68125,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -67899,6 +68164,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -67934,6 +68200,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -67983,6 +68250,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -68018,6 +68286,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -68062,6 +68331,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -68097,6 +68367,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -68386,6 +68657,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -68421,6 +68693,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -68581,6 +68854,109 @@ export namespace Prisma {
     create: XOR<ProvincesCreateWithoutInstitutionsInput, ProvincesUncheckedCreateWithoutInstitutionsInput>
   }
 
+  export type InstitutionsCreateWithoutSchoolsInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    external_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+    Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Board?: InstitutionsCreateNestedOneWithoutSchoolsInput
+    Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsUncheckedCreateWithoutSchoolsInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    province_id?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    external_id?: string | null
+    board_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsCreateOrConnectWithoutSchoolsInput = {
+    where: InstitutionsWhereUniqueInput
+    create: XOR<InstitutionsCreateWithoutSchoolsInput, InstitutionsUncheckedCreateWithoutSchoolsInput>
+  }
+
+  export type InstitutionsCreateWithoutBoardInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    external_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+    Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Schools?: InstitutionsCreateNestedManyWithoutBoardInput
+    Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsUncheckedCreateWithoutBoardInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    province_id?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    external_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
+    InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Schools?: InstitutionsUncheckedCreateNestedManyWithoutBoardInput
+    Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
+  }
+
+  export type InstitutionsCreateOrConnectWithoutBoardInput = {
+    where: InstitutionsWhereUniqueInput
+    create: XOR<InstitutionsCreateWithoutBoardInput, InstitutionsUncheckedCreateWithoutBoardInput>
+  }
+
+  export type InstitutionsCreateManyBoardInputEnvelope = {
+    data: InstitutionsCreateManyBoardInput | InstitutionsCreateManyBoardInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CurriculaCreateWithoutInstitutionsInput = {
     id?: string
     name: string
@@ -68641,6 +69017,7 @@ export namespace Prisma {
     hourlyRate?: FloatNullableFilter<"Profiles"> | number | null
     availability?: JsonNullableFilter<"Profiles">
     isAvailableNow?: BoolNullableFilter<"Profiles"> | boolean | null
+    last_active_at?: DateTimeNullableFilter<"Profiles"> | Date | string | null
     rating?: FloatNullableFilter<"Profiles"> | number | null
     education?: StringNullableFilter<"Profiles"> | string | null
     experience?: JsonNullableFilter<"Profiles">
@@ -68731,6 +69108,97 @@ export namespace Prisma {
     Curricula?: CurriculaUncheckedUpdateManyWithoutProvincesNestedInput
   }
 
+  export type InstitutionsUpsertWithoutSchoolsInput = {
+    update: XOR<InstitutionsUpdateWithoutSchoolsInput, InstitutionsUncheckedUpdateWithoutSchoolsInput>
+    create: XOR<InstitutionsCreateWithoutSchoolsInput, InstitutionsUncheckedCreateWithoutSchoolsInput>
+    where?: InstitutionsWhereInput
+  }
+
+  export type InstitutionsUpdateToOneWithWhereWithoutSchoolsInput = {
+    where?: InstitutionsWhereInput
+    data: XOR<InstitutionsUpdateWithoutSchoolsInput, InstitutionsUncheckedUpdateWithoutSchoolsInput>
+  }
+
+  export type InstitutionsUpdateWithoutSchoolsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+    Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Board?: InstitutionsUpdateOneWithoutSchoolsNestedInput
+    Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type InstitutionsUncheckedUpdateWithoutSchoolsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type InstitutionsUpsertWithWhereUniqueWithoutBoardInput = {
+    where: InstitutionsWhereUniqueInput
+    update: XOR<InstitutionsUpdateWithoutBoardInput, InstitutionsUncheckedUpdateWithoutBoardInput>
+    create: XOR<InstitutionsCreateWithoutBoardInput, InstitutionsUncheckedCreateWithoutBoardInput>
+  }
+
+  export type InstitutionsUpdateWithWhereUniqueWithoutBoardInput = {
+    where: InstitutionsWhereUniqueInput
+    data: XOR<InstitutionsUpdateWithoutBoardInput, InstitutionsUncheckedUpdateWithoutBoardInput>
+  }
+
+  export type InstitutionsUpdateManyWithWhereWithoutBoardInput = {
+    where: InstitutionsScalarWhereInput
+    data: XOR<InstitutionsUpdateManyMutationInput, InstitutionsUncheckedUpdateManyWithoutBoardInput>
+  }
+
+  export type InstitutionsScalarWhereInput = {
+    AND?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
+    OR?: InstitutionsScalarWhereInput[]
+    NOT?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
+    id?: UuidFilter<"Institutions"> | string
+    name?: StringFilter<"Institutions"> | string
+    abbreviation?: StringNullableFilter<"Institutions"> | string | null
+    country?: StringFilter<"Institutions"> | string
+    province?: StringNullableFilter<"Institutions"> | string | null
+    province_id?: UuidNullableFilter<"Institutions"> | string | null
+    type?: StringFilter<"Institutions"> | string
+    email_domains?: StringNullableListFilter<"Institutions">
+    city?: StringNullableFilter<"Institutions"> | string | null
+    website?: StringNullableFilter<"Institutions"> | string | null
+    external_id?: StringNullableFilter<"Institutions"> | string | null
+    board_id?: UuidNullableFilter<"Institutions"> | string | null
+    created_at?: DateTimeFilter<"Institutions"> | Date | string
+    updated_at?: DateTimeFilter<"Institutions"> | Date | string
+  }
+
   export type CurriculaUpsertWithWhereUniqueWithoutInstitutionsInput = {
     where: CurriculaWhereUniqueInput
     update: XOR<CurriculaUpdateWithoutInstitutionsInput, CurriculaUncheckedUpdateWithoutInstitutionsInput>
@@ -68770,12 +69238,15 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
+    Board?: InstitutionsCreateNestedOneWithoutSchoolsInput
+    Schools?: InstitutionsCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -68789,12 +69260,15 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
+    board_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Schools?: InstitutionsUncheckedCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -68854,24 +69328,6 @@ export namespace Prisma {
     data: XOR<InstitutionsUpdateManyMutationInput, InstitutionsUncheckedUpdateManyWithoutProvincesInput>
   }
 
-  export type InstitutionsScalarWhereInput = {
-    AND?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
-    OR?: InstitutionsScalarWhereInput[]
-    NOT?: InstitutionsScalarWhereInput | InstitutionsScalarWhereInput[]
-    id?: UuidFilter<"Institutions"> | string
-    name?: StringFilter<"Institutions"> | string
-    abbreviation?: StringNullableFilter<"Institutions"> | string | null
-    country?: StringFilter<"Institutions"> | string
-    province?: StringNullableFilter<"Institutions"> | string | null
-    province_id?: UuidNullableFilter<"Institutions"> | string | null
-    type?: StringFilter<"Institutions"> | string
-    email_domains?: StringNullableListFilter<"Institutions">
-    city?: StringNullableFilter<"Institutions"> | string | null
-    website?: StringNullableFilter<"Institutions"> | string | null
-    created_at?: DateTimeFilter<"Institutions"> | Date | string
-    updated_at?: DateTimeFilter<"Institutions"> | Date | string
-  }
-
   export type CurriculaUpsertWithWhereUniqueWithoutProvincesInput = {
     where: CurriculaWhereUniqueInput
     update: XOR<CurriculaUpdateWithoutProvincesInput, CurriculaUncheckedUpdateWithoutProvincesInput>
@@ -68923,6 +69379,7 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
@@ -68930,6 +69387,8 @@ export namespace Prisma {
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
     Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Board?: InstitutionsCreateNestedOneWithoutSchoolsInput
+    Schools?: InstitutionsCreateNestedManyWithoutBoardInput
   }
 
   export type InstitutionsUncheckedCreateWithoutCurriculaInput = {
@@ -68943,12 +69402,15 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
+    board_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Schools?: InstitutionsUncheckedCreateNestedManyWithoutBoardInput
   }
 
   export type InstitutionsCreateOrConnectWithoutCurriculaInput = {
@@ -69044,6 +69506,7 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
@@ -69051,6 +69514,8 @@ export namespace Prisma {
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
     Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Board?: InstitutionsUpdateOneWithoutSchoolsNestedInput
+    Schools?: InstitutionsUpdateManyWithoutBoardNestedInput
   }
 
   export type InstitutionsUncheckedUpdateWithoutCurriculaInput = {
@@ -69064,12 +69529,15 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Schools?: InstitutionsUncheckedUpdateManyWithoutBoardNestedInput
   }
 
   export type SubjectsUpsertWithWhereUniqueWithoutCurriculaInput = {
@@ -69112,6 +69580,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -69147,6 +69616,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -69185,12 +69655,15 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
     Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Board?: InstitutionsCreateNestedOneWithoutSchoolsInput
+    Schools?: InstitutionsCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -69205,11 +69678,14 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
+    board_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Schools?: InstitutionsUncheckedCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -69239,6 +69715,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -69274,6 +69751,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -69318,12 +69796,15 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
     Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Board?: InstitutionsUpdateOneWithoutSchoolsNestedInput
+    Schools?: InstitutionsUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -69338,11 +69819,14 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Schools?: InstitutionsUncheckedUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -69356,6 +69840,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -69391,6 +69876,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -69429,12 +69915,15 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
     Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Board?: InstitutionsCreateNestedOneWithoutSchoolsInput
+    Schools?: InstitutionsCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -69449,11 +69938,14 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
+    board_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     InstitutionCourses?: InstitutionCoursesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Schools?: InstitutionsUncheckedCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -69483,6 +69975,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -69518,6 +70011,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -69562,12 +70056,15 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
     Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Board?: InstitutionsUpdateOneWithoutSchoolsNestedInput
+    Schools?: InstitutionsUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -69582,11 +70079,14 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Schools?: InstitutionsUncheckedUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -69600,12 +70100,15 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsCreateNestedManyWithoutInstitutionsInput
     Provinces?: ProvincesCreateNestedOneWithoutInstitutionsInput
+    Board?: InstitutionsCreateNestedOneWithoutSchoolsInput
+    Schools?: InstitutionsCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -69620,11 +70123,14 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
+    board_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     Profiles?: ProfilesUncheckedCreateNestedManyWithoutInstitutionsInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedCreateNestedManyWithoutInstitutionsInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedCreateNestedManyWithoutInstitutionsInput
+    Schools?: InstitutionsUncheckedCreateNestedManyWithoutBoardInput
     Curricula?: CurriculaUncheckedCreateNestedManyWithoutInstitutionsInput
   }
 
@@ -69789,12 +70295,15 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
     Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Board?: InstitutionsUpdateOneWithoutSchoolsNestedInput
+    Schools?: InstitutionsUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -69809,11 +70318,14 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Schools?: InstitutionsUncheckedUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -69896,6 +70408,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -69931,6 +70444,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70070,6 +70584,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70105,6 +70620,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70287,6 +70803,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70322,6 +70839,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70360,6 +70878,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70395,6 +70914,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70511,6 +71031,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70546,6 +71067,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70590,6 +71112,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70625,6 +71148,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70658,6 +71182,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70693,6 +71218,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70775,6 +71301,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70810,6 +71337,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70882,6 +71410,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70917,6 +71446,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -70966,6 +71496,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -71001,6 +71532,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -72372,6 +72904,7 @@ export namespace Prisma {
     amount?: number | null
     date?: Date | string | null
     subject_id?: string | null
+    is_instant?: boolean
   }
 
   export type SessionsCreateManyProfiles_Sessions_tutor_idToProfilesInput = {
@@ -72388,6 +72921,7 @@ export namespace Prisma {
     amount?: number | null
     date?: Date | string | null
     subject_id?: string | null
+    is_instant?: boolean
   }
 
   export type TutorAvailabilityCreateManyTutorInput = {
@@ -72629,6 +73163,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
     Profiles_Sessions_tutor_idToProfiles?: ProfilesUpdateOneRequiredWithoutSessions_Sessions_tutor_idToProfilesNestedInput
   }
 
@@ -72646,6 +73181,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SessionsUncheckedUpdateManyWithoutProfiles_Sessions_student_idToProfilesInput = {
@@ -72662,6 +73198,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SessionsUpdateWithoutProfiles_Sessions_tutor_idToProfilesInput = {
@@ -72677,6 +73214,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
     Profiles_Sessions_student_idToProfiles?: ProfilesUpdateOneRequiredWithoutSessions_Sessions_student_idToProfilesNestedInput
   }
 
@@ -72694,6 +73232,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SessionsUncheckedUpdateManyWithoutProfiles_Sessions_tutor_idToProfilesInput = {
@@ -72710,6 +73249,7 @@ export namespace Prisma {
     amount?: NullableFloatFieldUpdateOperationsInput | number | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     subject_id?: NullableStringFieldUpdateOperationsInput | string | null
+    is_instant?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type TutorAvailabilityUpdateWithoutTutorInput = {
@@ -73302,6 +73842,7 @@ export namespace Prisma {
     hourlyRate?: number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: boolean | null
+    last_active_at?: Date | string | null
     rating?: number | null
     education?: string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -73346,6 +73887,22 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type InstitutionsCreateManyBoardInput = {
+    id?: string
+    name: string
+    abbreviation?: string | null
+    country?: string
+    province?: string | null
+    province_id?: string | null
+    type?: string
+    email_domains?: InstitutionsCreateemail_domainsInput | string[]
+    city?: string | null
+    website?: string | null
+    external_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type CurriculaCreateManyInstitutionsInput = {
     id?: string
     name: string
@@ -73365,6 +73922,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -73400,6 +73958,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -73434,6 +73993,7 @@ export namespace Prisma {
     hourlyRate?: NullableFloatFieldUpdateOperationsInput | number | null
     availability?: NullableJsonNullValueInput | InputJsonValue
     isAvailableNow?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    last_active_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     rating?: NullableFloatFieldUpdateOperationsInput | number | null
     education?: NullableStringFieldUpdateOperationsInput | string | null
     experience?: NullableJsonNullValueInput | InputJsonValue
@@ -73550,6 +74110,66 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InstitutionsUpdateWithoutBoardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+    Provinces?: ProvincesUpdateOneWithoutInstitutionsNestedInput
+    Schools?: InstitutionsUpdateManyWithoutBoardNestedInput
+    Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type InstitutionsUncheckedUpdateWithoutBoardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
+    ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Schools?: InstitutionsUncheckedUpdateManyWithoutBoardNestedInput
+    Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
+  }
+
+  export type InstitutionsUncheckedUpdateManyWithoutBoardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    abbreviation?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: StringFieldUpdateOperationsInput | string
+    province?: NullableStringFieldUpdateOperationsInput | string | null
+    province_id?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    email_domains?: InstitutionsUpdateemail_domainsInput | string[]
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CurriculaUpdateWithoutInstitutionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -73589,6 +74209,8 @@ export namespace Prisma {
     email_domains?: InstitutionsCreateemail_domainsInput | string[]
     city?: string | null
     website?: string | null
+    external_id?: string | null
+    board_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -73612,12 +74234,15 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUpdateManyWithoutInstitutionsNestedInput
+    Board?: InstitutionsUpdateOneWithoutSchoolsNestedInput
+    Schools?: InstitutionsUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -73631,12 +74256,15 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     Profiles?: ProfilesUncheckedUpdateManyWithoutInstitutionsNestedInput
     InstitutionCourses?: InstitutionCoursesUncheckedUpdateManyWithoutInstitutionsNestedInput
     ProfileInstitutions?: ProfileInstitutionsUncheckedUpdateManyWithoutInstitutionsNestedInput
     SchoolEmailVerifications?: SchoolEmailVerificationsUncheckedUpdateManyWithoutInstitutionsNestedInput
+    Schools?: InstitutionsUncheckedUpdateManyWithoutBoardNestedInput
     Curricula?: CurriculaUncheckedUpdateManyWithoutInstitutionsNestedInput
   }
 
@@ -73650,6 +74278,8 @@ export namespace Prisma {
     email_domains?: InstitutionsUpdateemail_domainsInput | string[]
     city?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    external_id?: NullableStringFieldUpdateOperationsInput | string | null
+    board_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

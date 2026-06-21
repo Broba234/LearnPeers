@@ -6,7 +6,18 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import SignUpWizard from "@/components/student/SignUpWizard";
 import Modal from "@/components/Modal/Modal";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
+import Avatar from "@/components/ui/Avatar";
 import { AnimatePresence } from "framer-motion";
+import { Flame, Gift, Copy, Check, Heart, BadgeCheck, Star, ChevronRight } from "lucide-react";
+
+type Growth = {
+  referralCode: string | null;
+  referredCount: number;
+  streakWeeks: number;
+  savedCount: number;
+  saved: { id: string; name: string | null; avatar: string | null; rating: number | null; school: string | null; topCode: string | null; topGrade: string | null }[];
+};
 
 type Stats = {
     totalSessions: number;
@@ -56,7 +67,31 @@ export default function StudentHome() {
     const [sessions, setSessions] = useState<Session[]>([]);
     const [sessionsLoading, setSessionsLoading] = useState<boolean>(false);
     const [loading, setLoading] = useState(true);
+    const [growth, setGrowth] = useState<Growth | null>(null);
+    const [copied, setCopied] = useState(false);
     const router = useRouter();
+
+    useEffect(() => {
+      fetch("/api/student/growth")
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => d && setGrowth(d))
+        .catch(() => {});
+    }, []);
+
+    const referralUrl =
+      growth?.referralCode && typeof window !== "undefined"
+        ? `${window.location.origin}/auth/register?ref=${growth.referralCode}`
+        : "";
+    const copyReferral = async () => {
+      if (!referralUrl) return;
+      try {
+        await navigator.clipboard.writeText(referralUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1800);
+      } catch {
+        /* clipboard blocked — no-op */
+      }
+    };
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -129,11 +164,7 @@ export default function StudentHome() {
       }, [router]);
 
       if (loading) {
-        return (
-          <div className="flex h-screen items-center justify-center bg-[#FAFAF9]">
-            <div className="text-sm text-slate-400">Loading...</div>
-          </div>
-        );
+        return <LearnPeersLoader fullScreen />;
       }
       if (!profile) {
         return (
@@ -186,9 +217,14 @@ export default function StudentHome() {
           {/* Stats row */}
           <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6">
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-5">
-              <p className="text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-widest">Total</p>
-              <p className="text-2xl sm:text-3xl font-bold text-slate-900 mt-2">{stats.totalSessions}</p>
-              <p className="text-xs text-slate-400 mt-1">sessions booked</p>
+              <p className="text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-widest">Streak</p>
+              <p className="text-2xl sm:text-3xl font-bold text-orange-500 mt-2 flex items-center gap-1.5">
+                <Flame className="w-5 h-5 sm:w-6 sm:h-6 fill-orange-400 text-orange-500" />
+                {growth?.streakWeeks ?? 0}
+              </p>
+              <p className="text-xs text-slate-400 mt-1">
+                week{(growth?.streakWeeks ?? 0) === 1 ? "" : "s"} learning
+              </p>
             </div>
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-5">
               <p className="text-[11px] sm:text-xs font-medium text-slate-400 uppercase tracking-widest">Completed</p>
@@ -212,7 +248,7 @@ export default function StudentHome() {
             </div>
             <div className="px-5 py-4">
               {sessionsLoading ? (
-                <p className="text-sm text-slate-400 text-center py-6">Loading...</p>
+                <div className="flex justify-center py-6"><LearnPeersLoader size={72} /></div>
               ) : sessions.length === 0 ? (
                 <div className="text-center py-10">
                   <svg className="w-10 h-10 text-slate-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,6 +294,85 @@ export default function StudentHome() {
               )}
             </div>
           </div>
+
+          {/* Saved tutors */}
+          {growth && growth.saved.length > 0 && (
+            <div className="mt-6">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-1.5">
+                  <Heart className="w-4 h-4 text-rose-400 fill-rose-400" /> Saved tutors
+                </h3>
+                <Link href="/home/student/explore" className="text-xs text-brand-600 hover:text-brand-700 font-medium transition-colors">
+                  Find more
+                </Link>
+              </div>
+              <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
+                {growth.saved.map((t) => (
+                  <Link
+                    key={t.id}
+                    href={`/tutor/${t.id}`}
+                    className="flex-shrink-0 w-48 bg-white rounded-2xl border border-slate-100 shadow-sm p-3.5 hover:shadow-md hover:border-brand-200 transition-all"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Avatar src={t.avatar} name={t.name} className="w-10 h-10" />
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-slate-900 truncate">{t.name}</p>
+                        {t.school && (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
+                            <BadgeCheck className="w-3 h-3" />
+                            {t.school}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    {t.topCode && t.topGrade && (
+                      <div className="mt-2.5 inline-flex items-center gap-1 rounded-lg bg-emerald-50 px-2 py-1 text-[11px] font-medium text-emerald-800 ring-1 ring-emerald-100">
+                        Aced <span className="font-mono font-semibold">{t.topCode}</span> · {t.topGrade}
+                      </div>
+                    )}
+                    {t.rating != null && (
+                      <div className="mt-2 flex items-center gap-1 text-xs text-slate-500">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" /> {t.rating.toFixed(2)}
+                        <ChevronRight className="w-3 h-3 ml-auto text-slate-300" />
+                      </div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Invite friends — campus growth loop */}
+          {growth?.referralCode && (
+            <div className="mt-6 relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 to-brand-700 p-5 text-white shadow-sm">
+              <div className="pointer-events-none absolute -top-10 -right-8 w-40 h-40 rounded-full bg-white/10 blur-2xl" />
+              <div className="relative flex items-start gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 flex-shrink-0">
+                  <Gift className="w-5 h-5" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-semibold">Invite friends, learn together</h3>
+                  <p className="text-xs text-white/70 mt-0.5">
+                    {growth.referredCount > 0
+                      ? `${growth.referredCount} friend${growth.referredCount === 1 ? "" : "s"} joined through you. `
+                      : ""}
+                    Share your link — your whole group studies better together.
+                  </p>
+                  <div className="mt-3 flex items-center gap-2">
+                    <div className="flex-1 truncate rounded-lg bg-white/15 px-3 py-2 text-xs font-medium">
+                      {referralUrl || "Loading your link…"}
+                    </div>
+                    <button
+                      onClick={copyReferral}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-2 text-xs font-semibold text-brand-700 transition hover:bg-brand-50 active:scale-[0.98]"
+                    >
+                      {copied ? <><Check className="w-3.5 h-3.5" /> Copied</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
         </div>
       </div>

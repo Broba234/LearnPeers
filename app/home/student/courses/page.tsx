@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import SubjectSelector from "@/components/SubjectSelector";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 export default function StudentCourses() {
   const [profile, setProfile] = useState<any>(null);
@@ -50,11 +51,7 @@ export default function StudentCourses() {
   };
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[#FAFAF9]">
-        <div className="text-sm text-slate-400">Loading...</div>
-      </div>
-    );
+    return <LearnPeersLoader fullScreen />;
   }
 
   return (

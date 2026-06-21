@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import SearchableSelect from "@/components/ui/SearchableSelect";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 interface Institution {
   id: string;
@@ -195,13 +197,19 @@ export default function InstitutionsPage() {
               <form onSubmit={handleAddInstitution} className="space-y-3">
                 <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Name (e.g. McGill University)" value={instName} onChange={e => setInstName(e.target.value)} required />
                 <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Abbreviation (e.g. McGill)" value={instAbbr} onChange={e => setInstAbbr(e.target.value)} />
-                <select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" value={instType} onChange={e => setInstType(e.target.value)}>
-                  {Object.entries(TYPE_LABEL).map(([k, label]) => <option key={k} value={k}>{label}</option>)}
-                </select>
-                <select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" value={instProvinceId} onChange={e => setInstProvinceId(e.target.value)}>
-                  <option value="">Select province…</option>
-                  {provinces.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                </select>
+                <SearchableSelect
+                  value={instType}
+                  onChange={setInstType}
+                  options={Object.entries(TYPE_LABEL).map(([k, label]) => ({ value: k, label }))}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                />
+                <SearchableSelect
+                  value={instProvinceId}
+                  onChange={setInstProvinceId}
+                  placeholder="Select province…"
+                  options={provinces.map(p => ({ value: p.id, label: p.name }))}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                />
                 {instType === "university" && (
                   <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Email domains for verification (comma-separated, e.g. mail.mcgill.ca)" value={instDomains} onChange={e => setInstDomains(e.target.value)} />
                 )}
@@ -225,7 +233,7 @@ export default function InstitutionsPage() {
                 <span className="text-sm font-semibold text-gray-700">{institutions.length} institutions</span>
               </div>
               {loading ? (
-                <div className="p-6 text-sm text-gray-400">Loading...</div>
+                <div className="flex justify-center p-6"><LearnPeersLoader size={72} /></div>
               ) : institutions.length === 0 ? (
                 <div className="p-6 text-sm text-gray-400">No institutions yet.</div>
               ) : (
@@ -278,12 +286,15 @@ export default function InstitutionsPage() {
                         <input className="border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Code (e.g. MATH 140)" value={courseCode} onChange={e => setCourseCode(e.target.value)} required />
                         <input className="border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Course title (optional)" value={courseName} onChange={e => setCourseName(e.target.value)} />
                       </div>
-                      <select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" value={courseSubjectId} onChange={e => setCourseSubjectId(e.target.value)} required>
-                        <option value="">Select canonical subject →</option>
-                        {subjects.map(s => (
-                          <option key={s.id} value={s.id}>{s.name}{s.category ? ` (${s.category})` : ""}</option>
-                        ))}
-                      </select>
+                      <SearchableSelect
+                        value={courseSubjectId}
+                        onChange={setCourseSubjectId}
+                        placeholder="Select canonical subject →"
+                        options={subjects.map(s => ({ value: s.id, label: s.name + (s.category ? ` (${s.category})` : "") }))}
+                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                        name="courseSubjectId"
+                        required
+                      />
                       <div className="flex gap-2">
                         <button type="button" onClick={() => setShowCourseForm(false)} className="flex-1 border border-gray-200 rounded-lg py-2 text-xs">Cancel</button>
                         <button type="submit" disabled={courseSubmitting} className="flex-1 bg-brand-600 text-white rounded-lg py-2 text-xs font-medium disabled:opacity-50">

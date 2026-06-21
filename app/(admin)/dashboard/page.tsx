@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 export default function CreateSubjectPage() {
   const router = useRouter();
@@ -163,22 +164,16 @@ const uniqueRoles = Array.from(new Set(users.map((user: any) => user.role)));
             <label htmlFor="role-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Filter by Role
             </label>
-            <select
+            <SearchableSelect
               id="role-filter"
               value={selectedRole}
-              onChange={(e) => {
-                setSelectedRole(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
-            >
-              <option value="all">All Roles</option>
-              {uniqueRoles.map(role => (
-                <option key={role} value={role}>
-                  {role.charAt(0).toUpperCase() + role.slice(1)}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => { setSelectedRole(val); setCurrentPage(1); }}
+              options={[
+                { value: "all", label: "All Roles" },
+                ...uniqueRoles.map((role: string) => ({ value: role, label: role.charAt(0).toUpperCase() + role.slice(1) })),
+              ]}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
+            />
           </div>
           
           <div className="flex items-end">

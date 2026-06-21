@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 
 interface Notification {
@@ -16,6 +17,7 @@ interface Notification {
 }
 
 const TYPE_ICONS: Record<string, { bg: string; color: string }> = {
+  instant_request: { bg: "bg-emerald-100", color: "text-emerald-600" },
   session_requested: { bg: "bg-amber-100", color: "text-amber-600" },
   session_accepted: { bg: "bg-green-100", color: "text-green-600" },
   session_declined: { bg: "bg-red-100", color: "text-red-600" },
@@ -34,7 +36,28 @@ function formatTimeAgo(timestamp: string): string {
   return `${Math.floor(diff / 1440)}d ago`;
 }
 
+function hrefForNotification(notif: Notification): string | null {
+  switch (notif.type) {
+    case "instant_request":
+    case "session_requested":
+      // Tutor: jump to the requests inbox to accept/decline.
+      return "/home/tutor/sessions";
+    case "session_started":
+      // Either party: join the live room.
+      return notif.session_id ? `/home/session/${notif.session_id}` : null;
+    case "session_accepted":
+    case "session_completed":
+    case "session_declined":
+    case "session_cancelled":
+      // Student: review their sessions.
+      return "/home/student/sessions";
+    default:
+      return null;
+  }
+}
+
 export default function NotificationDropdown() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -134,19 +157,25 @@ export default function NotificationDropdown() {
   };
 
   const handleNotificationClick = async (notif: Notification) => {
-    if (!userId || notif.is_read) return;
-    try {
-      await fetch("/api/notifications/mark-read", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, notificationId: notif.id }),
-      });
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === notif.id ? { ...n, is_read: true } : n))
-      );
-      setUnreadCount((prev) => Math.max(0, prev - 1));
-    } catch (e) {
-      console.error("Error marking notification read:", e);
+    if (userId && !notif.is_read) {
+      try {
+        await fetch("/api/notifications/mark-read", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, notificationId: notif.id }),
+        });
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === notif.id ? { ...n, is_read: true } : n))
+        );
+        setUnreadCount((prev) => Math.max(0, prev - 1));
+      } catch (e) {
+        console.error("Error marking notification read:", e);
+      }
+    }
+    const href = hrefForNotification(notif);
+    if (href) {
+      setIsOpen(false);
+      router.push(href);
     }
   };
 
@@ -287,6 +316,12 @@ function NotificationIcon({
   className?: string;
 }) {
   switch (type) {
+    case "instant_request":
+      return (
+        <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+          <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+        </svg>
+      );
     case "session_requested":
       return (
         <svg

@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { id, email, name, role, profile_setup } = body;
+    const { id, email, name, role, profile_setup, ref } = body;
 
     if (!id || !email || !name || !role) {
       return NextResponse.json(
@@ -42,6 +42,28 @@ export async function POST(req: Request) {
         profile_setup: profile_setup ?? false
       }
     });
+
+    // Growth loop: assign a referral code, and credit the referrer when the
+    // sign-up came from a shared invite link (?ref=CODE). Non-fatal — referral
+    // bookkeeping must never break account creation. (These columns live
+    // outside the Prisma client, so they're written via raw SQL.)
+    try {
+      const base = String(name).replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 6) || "PEER";
+      const code = `${base}${Math.floor(1000 + Math.random() * 9000)}`;
+      let referrerId: string | null = null;
+      if (ref && typeof ref === "string") {
+        const rows = await prisma.$queryRaw<{ id: string }[]>`
+          SELECT id FROM public."Profiles" WHERE referral_code = ${ref} LIMIT 1`;
+        if (rows[0]?.id && rows[0].id !== id) referrerId = rows[0].id;
+      }
+      await prisma.$executeRaw`
+        UPDATE public."Profiles"
+           SET referral_code = COALESCE(referral_code, ${code}),
+               referred_by = COALESCE(referred_by, ${referrerId}::uuid)
+         WHERE id = ${id}::uuid`;
+    } catch (e) {
+      console.warn("[API] referral assignment skipped:", e);
+    }
 
     return NextResponse.json(profile);
 

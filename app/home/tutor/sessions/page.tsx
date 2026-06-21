@@ -16,6 +16,7 @@ interface SessionRequest {
   amount: number | null;
   status: 'pending' | 'accepted' | 'declined' | 'in_progress' | 'completed' | 'cancelled';
   message?: string;
+  isInstant: boolean;
 }
 
 export default function InboxPage() {
@@ -80,6 +81,7 @@ export default function InboxPage() {
             amount: session.amount ?? null,
             status: session.status,
             message: session.notes || undefined,
+            isInstant: !!session.is_instant,
           }));
           setRequests(formattedRequests);
         }
@@ -98,19 +100,56 @@ export default function InboxPage() {
     return () => clearInterval(interval);
   }, [userId]);
 
+  const [acting, setActing] = useState<string | null>(null);
+
+  const patchStatus = async (sessionId: string, status: string) => {
+    const res = await fetch('/api/sessions/update-status', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId, status }),
+    });
+    return res.ok;
+  };
+
   const handleStartSession = async (request: SessionRequest) => {
     if (!userInfo) return;
     try {
-      const statusResponse = await fetch('/api/sessions/update-status', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId: request.id, status: 'in_progress', userId }),
-      });
-      if (!statusResponse.ok) return;
+      if (!(await patchStatus(request.id, 'in_progress'))) return;
       router.push(`/home/session/${request.id}`);
       setRequests(prev => prev.map(req => req.id === request.id ? { ...req, status: 'in_progress' } : req));
     } catch (error) {
       console.error('Error starting session:', error);
+    }
+  };
+
+  // Accept a request. Instant requests jump straight into the room; scheduled
+  // ones move to "accepted" and start when their time arrives.
+  const handleAccept = async (request: SessionRequest) => {
+    setActing(request.id);
+    try {
+      if (request.isInstant) {
+        if (await patchStatus(request.id, 'in_progress')) {
+          router.push(`/home/session/${request.id}`);
+        }
+      } else {
+        if (await patchStatus(request.id, 'accepted')) {
+          setRequests(prev => prev.map(req => req.id === request.id ? { ...req, status: 'accepted' } : req));
+          setFilter('upcoming');
+        }
+      }
+    } finally {
+      setActing(null);
+    }
+  };
+
+  const handleDecline = async (request: SessionRequest) => {
+    setActing(request.id);
+    try {
+      if (await patchStatus(request.id, 'declined')) {
+        setRequests(prev => prev.map(req => req.id === request.id ? { ...req, status: 'declined' } : req));
+      }
+    } finally {
+      setActing(null);
     }
   };
 
@@ -171,7 +210,7 @@ export default function InboxPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 lg:pt-16">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -209,7 +248,7 @@ export default function InboxPage() {
         <div className="flex border-b border-slate-100 mb-6">
           {(['pending', 'upcoming', 'completed'] as const).map(opt => {
             const count = opt === 'upcoming' ? upcomingCount : opt === 'pending' ? pendingCount : completedCount;
-            const labels: Record<string, string> = { pending: 'Pending', upcoming: 'Upcoming', completed: 'Completed' };
+            const labels: Record<string, string> = { pending: 'Requests', upcoming: 'Upcoming', completed: 'Completed' };
             return (
               <button
                 key={opt}
@@ -299,16 +338,35 @@ export default function InboxPage() {
                     )}
 
                     {/* Action */}
-                    {ready && request.status !== 'completed' && request.status !== 'cancelled' && request.status !== 'declined' ? (
+                    {request.status === 'pending' ? (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleDecline(request)}
+                          disabled={acting === request.id}
+                          className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-sm font-medium transition-colors disabled:opacity-50"
+                        >
+                          Decline
+                        </button>
+                        <button
+                          onClick={() => handleAccept(request)}
+                          disabled={acting === request.id}
+                          className={`flex-[1.6] py-2.5 text-white rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 ${
+                            request.isInstant ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-brand-600 hover:bg-brand-700'
+                          }`}
+                        >
+                          {acting === request.id ? '…' : request.isInstant ? 'Accept & Start →' : 'Accept request'}
+                        </button>
+                      </div>
+                    ) : (request.status === 'accepted' || request.status === 'in_progress') && ready ? (
                       <button
                         onClick={() => handleStartSession(request)}
                         disabled={!userInfo}
                         className="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50"
                       >
-                        Start Session
+                        {request.status === 'in_progress' ? 'Rejoin Session' : 'Start Session'}
                       </button>
-                    ) : request.status !== 'completed' && request.status !== 'cancelled' && request.status !== 'declined' ? (
-                      <p className="text-center text-xs text-slate-400 py-1">Starts at {request.start_time}</p>
+                    ) : request.status === 'accepted' ? (
+                      <p className="text-center text-xs text-slate-400 py-1">Starts at {request.start_time?.slice(0, 5)}</p>
                     ) : null}
                   </div>
                 </div>

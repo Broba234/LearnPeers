@@ -4,7 +4,14 @@ import { useEffect, useState, createContext, useContext, ReactNode } from "react
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import HomeSidebar from "@/components/ui/components/DashboardSidebar";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import TutorProfileBubble from "@/components/ui/components/UserProfile/TutorProfileBubble";
+import { PresenceProvider } from "@/components/presence/PresenceProvider";
+import PresencePill from "@/components/presence/PresencePill";
+import IncomingRequestOverlay from "@/components/session/IncomingRequestOverlay";
+import ConnectNowModal from "@/components/session/ConnectNowModal";
+import NotificationDropdown from "@/components/ui/components/header/NotificationDropdown";
+import BottomNav from "@/components/ui/BottomNav";
 
 
 import { TutorProfileModalContext } from "@/components/ui/components/common/TutorProfileModalContext";
@@ -34,6 +41,15 @@ export default function HomeLayout({
   const [bookingNotes, setBookingNotes] = useState("");
   const [bookingLoading, setBookingLoading] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Connect-now (instant live session) modal state
+  const [connectNowOpen, setConnectNowOpen] = useState(false);
+  const [connectTutor, setConnectTutor] = useState<any>(null);
+
+  const openConnectNow = (tutor: any) => {
+    setConnectTutor(tutor);
+    setConnectNowOpen(true);
+  };
 
   const openTutorProfileModal = async (tutor: any) => {
     setProfileModalOpen(true);
@@ -150,11 +166,7 @@ export default function HomeLayout({
   }, [router]);
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-slate-50">
-        <div className="text-sm text-slate-400">Loading...</div>
-      </div>
-    );
+    return <LearnPeersLoader fullScreen />;
   }
   if (!userRole || !userName) {
     return (
@@ -165,7 +177,8 @@ export default function HomeLayout({
   }
 
   return (
-    <TutorProfileModalContext.Provider value={{ openTutorProfileModal }}>
+    <PresenceProvider role={userRole}>
+    <TutorProfileModalContext.Provider value={{ openTutorProfileModal, openConnectNow }}>
       <>
         {/* Mobile top bar */}
         <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white/10 backdrop-blur-md border-b border-white/20 px-4 py-3 flex items-center justify-between" style={{
@@ -177,16 +190,26 @@ export default function HomeLayout({
             </div>
             <div className="text-white font-semibold tracking-tight">LearnPeers</div>
           </div>
-          <button
-            aria-label="Open sidebar menu"
-            aria-expanded={mobileMenuOpen}
-            onClick={() => setMobileMenuOpen(v => !v)}
-            className="inline-flex flex-col items-center justify-center w-9 h-9 rounded-full bg-white/80 border border-white/40 shadow hover:bg-white"
-          >
-            <span className="block w-5 h-0.5 bg-gray-800" />
-            <span className="block w-5 h-0.5 bg-gray-800 mt-1.5" />
-            <span className="block w-5 h-0.5 bg-gray-800 mt-1.5" />
-          </button>
+          <div className="flex items-center gap-2">
+            <PresencePill />
+            <NotificationDropdown />
+            <button
+              aria-label="Open sidebar menu"
+              aria-expanded={mobileMenuOpen}
+              onClick={() => setMobileMenuOpen(v => !v)}
+              className="inline-flex flex-col items-center justify-center w-9 h-9 rounded-full bg-white/80 border border-white/40 shadow hover:bg-white"
+            >
+              <span className="block w-5 h-0.5 bg-gray-800" />
+              <span className="block w-5 h-0.5 bg-gray-800 mt-1.5" />
+              <span className="block w-5 h-0.5 bg-gray-800 mt-1.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Desktop global cluster: presence toggle + notifications, fixed top-right */}
+        <div className="hidden lg:flex items-center gap-3 fixed top-4 right-5 z-40">
+          <PresencePill />
+          <NotificationDropdown />
         </div>
 
         <div className="flex h-screen pt-14 lg:pt-0 bg-slate-50">
@@ -195,9 +218,12 @@ export default function HomeLayout({
             <HomeSidebar userRole={userRole} userName={userName} />
           </div>
           <main className="flex-1 overflow-y-auto relative">
-            <div className="">{children}</div>
+            <div className="pb-20 lg:pb-0">{children}</div>
           </main>
         </div>
+
+        {/* Mobile bottom tab bar */}
+        <BottomNav role={userRole} />
 
         {/* Sidebar drawer: mobile */}
         {mobileMenuOpen && (
@@ -221,10 +247,22 @@ export default function HomeLayout({
               isOpen={profileModalOpen}
               onClose={() => setProfileModalOpen(false)}
               onBookSession={handleBookSession}
+              onConnectNow={(t: any) => { setProfileModalOpen(false); openConnectNow(t); }}
             />
           )
         )}
+
+        {/* Global tutor incoming-call ring */}
+        <IncomingRequestOverlay enabled={userRole?.toLowerCase() === "tutor"} />
+
+        {/* Student connect-now (instant live session) */}
+        <ConnectNowModal
+          tutor={connectTutor}
+          isOpen={connectNowOpen}
+          onClose={() => { setConnectNowOpen(false); setConnectTutor(null); }}
+        />
       </>
     </TutorProfileModalContext.Provider>
+    </PresenceProvider>
   );
 }

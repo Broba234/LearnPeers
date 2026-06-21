@@ -3,6 +3,7 @@ import { createContext, useContext } from "react";
 
 export const TutorProfileModalContext = createContext<{
   openTutorProfileModal: (tutor: any) => void;
+  openConnectNow: (tutor: any) => void;
 } | undefined>(undefined);
 
 export function useTutorProfileModal() {

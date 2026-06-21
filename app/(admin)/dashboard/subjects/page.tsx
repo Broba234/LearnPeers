@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AddSubject from "@/components/admin/AddSubject";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface Subject {
   id: string;
@@ -349,44 +350,35 @@ export default function SubjectsPage() {
             <label htmlFor="grade-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Filter by Grade
             </label>
-            <select
+            <SearchableSelect
               id="grade-filter"
               value={selectedGradeFilter}
-              onChange={(e) => {
-                setSelectedGradeFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
-            >
-              <option value="all">All Levels</option>
-              {uniqueGrades.sort((a, b) => parseInt(a) - parseInt(b)).map(grade => (
-                <option key={grade} value={grade}>
-                  {parseInt(grade) >= 1 && parseInt(grade) <= 4 ? `Year ${grade}` : `Grade ${grade}`}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => { setSelectedGradeFilter(val); setCurrentPage(1); }}
+              options={[
+                { value: "all", label: "All Levels" },
+                ...uniqueGrades.sort((a: string, b: string) => parseInt(a) - parseInt(b)).map((grade: string) => ({
+                  value: grade,
+                  label: parseInt(grade) >= 1 && parseInt(grade) <= 4 ? `Year ${grade}` : `Grade ${grade}`,
+                })),
+              ]}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
+            />
           </div>
           
           <div>
             <label htmlFor="category-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Filter by Category
             </label>
-            <select
+            <SearchableSelect
               id="category-filter"
               value={selectedCategoryFilter}
-              onChange={(e) => {
-                setSelectedCategoryFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
-            >
-              <option value="all">All Categories</option>
-              {uniqueCategories.sort().map(category => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => { setSelectedCategoryFilter(val); setCurrentPage(1); }}
+              options={[
+                { value: "all", label: "All Categories" },
+                ...uniqueCategories.sort().map((category: string) => ({ value: category, label: category })),
+              ]}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
+            />
           </div>
           
           <div className="flex items-end">
@@ -630,40 +622,32 @@ export default function SubjectsPage() {
                 <label htmlFor="grade" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Grade *
                 </label>
-                <select
+                <SearchableSelect
                   id="grade"
-                  value={selectedGrade}
-                  onChange={(e) => setSelectedGrade(e.target.value ? parseInt(e.target.value) : "")}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
+                  value={selectedGrade !== "" ? String(selectedGrade) : ""}
+                  onChange={(val) => setSelectedGrade(val ? parseInt(val) : "")}
+                  placeholder="Select Grade"
+                  options={grades.map((grade: any) => ({ value: String(grade.id), label: grade.name }))}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
+                  name="grade"
                   required
-                >
-                  <option value="">Select Grade</option>
-                  {grades.map(grade => (
-                    <option key={grade.id} value={grade.id}>
-                      {grade.name}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
               
               <div>
                 <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Category *
                 </label>
-                <select
+                <SearchableSelect
                   id="category"
                   value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
+                  onChange={setSelectedCategory}
+                  placeholder="Select Category"
+                  options={categories.map((category: any) => ({ value: String(category.id), label: category.name }))}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
+                  name="category"
                   required
-                >
-                  <option value="">Select Category</option>
-                  {categories.map(category => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
             </div>
             

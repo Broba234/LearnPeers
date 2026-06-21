@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { CourseAsset } from "./types";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface Row { duration: number; price: string }
 
@@ -84,15 +85,12 @@ export default function PricingModal({
         <div className="mt-5 space-y-2.5">
           {rows.map((row, i) => (
             <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 px-3 py-2.5">
-              <select
-                value={row.duration}
-                onChange={(e) => setDur(i, Number(e.target.value))}
-                className="text-sm font-medium text-slate-700 bg-transparent focus:outline-none"
-              >
-                {durOptions.map((d) => (
-                  <option key={d} value={d}>{d}h</option>
-                ))}
-              </select>
+              <SearchableSelect
+                value={String(row.duration)}
+                onChange={(val) => setDur(i, Number(val))}
+                options={durOptions.map((d: number) => ({ value: String(d), label: `${d}h` }))}
+                className="text-sm font-medium text-slate-700 bg-transparent focus:outline-none w-16"
+              />
               <div className="flex-1 flex items-center gap-1 justify-end">
                 <span className="text-slate-400 text-sm">$</span>
                 <input

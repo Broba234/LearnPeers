@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 import {
   BookOpen,
   Calculator,
@@ -334,21 +335,13 @@ export default function SelectSubject({
           <div className="relative bg-white rounded-2xl border-2 border-gray-200 p-[2px] transition-all duration-300 hover:border-brand-300 group-focus-within:border-brand-400 group-focus-within:shadow-lg group-focus-within:shadow-brand-100">
             <div className="flex items-center">
               <div className="flex-1 px-4">
-                <select
-              value={gradeFilter || ""} // Bind to state
-              onChange={(e:any) => setGradeFilter(e.target.value || null)} // Handle change
-              className="w-full py-2 px-0 border-0 focus:ring-0 focus:outline-none text-sm placeholder:text-gray-400 bg-transparent"
-            >
-              <option value="">All Grades</option>
-              {GRADES.map((grade) => (
-                <option
-                  key={grade}
-                  value={grade} // Set actual value
-                >
-                  {grade}
-                </option>
-              ))}
-            </select>
+                <SearchableSelect
+                  value={gradeFilter !== null ? String(gradeFilter) : ""}
+                  onChange={(val) => setGradeFilter(val ? Number(val) : null)}
+                  placeholder="All Grades"
+                  options={GRADES.map((grade) => ({ value: String(grade), label: `Grade ${grade}` }))}
+                  className="w-full py-2 px-0 border-0 focus:ring-0 focus:outline-none text-sm bg-transparent text-gray-700"
+                />
               </div>
             </div>
           </div>

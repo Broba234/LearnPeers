@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface Subject {
   id: string;
@@ -212,22 +213,26 @@ export default function AddSubject({ subjects, setSubjects, grades, categories, 
                 <label htmlFor="grade" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Grade *
                 </label>
-                <select
+                <SearchableSelect
                   id="grade"
-                  value={selectedGrade}
-                  onChange={(e) => setSelectedGrade(e.target.value ? Number(e.target.value) : "")}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors"
+                  value={selectedGrade !== "" ? String(selectedGrade) : ""}
+                  onChange={(val) => setSelectedGrade(val ? Number(val) : "")}
+                  placeholder="Select Level"
                   disabled={submitting || loading}
+                  options={[
+                    { value: "9", label: "Grade 9", group: "High School" },
+                    { value: "10", label: "Grade 10", group: "High School" },
+                    { value: "11", label: "Grade 11", group: "High School" },
+                    { value: "12", label: "Grade 12", group: "High School" },
+                    { value: "1", label: "Year 1", group: "Post-Secondary" },
+                    { value: "2", label: "Year 2", group: "Post-Secondary" },
+                    { value: "3", label: "Year 3", group: "Post-Secondary" },
+                    { value: "4", label: "Year 4", group: "Post-Secondary" },
+                  ]}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors"
+                  name="grade"
                   required
-                >
-                  <option value="">Select Level</option>
-                  <optgroup label="High School">
-                    {[9, 10, 11, 12].map(g => <option key={g} value={g}>Grade {g}</option>)}
-                  </optgroup>
-                  <optgroup label="Post-Secondary">
-                    {[1, 2, 3, 4].map(g => <option key={g} value={g}>Year {g}</option>)}
-                  </optgroup>
-                </select>
+                />
                 {!loading && grades.length > 0 && (
                   <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     {grades.length} grade{grades.length !== 1 ? 's' : ''} available from existing subjects
@@ -240,29 +245,20 @@ export default function AddSubject({ subjects, setSubjects, grades, categories, 
                 <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Category *
                 </label>
-                <select
+                <SearchableSelect
                   id="category"
                   value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors"
+                  onChange={setSelectedCategory}
+                  placeholder={loading ? "Loading categories…" : "Select Category"}
                   disabled={submitting || loading}
+                  options={[
+                    ...categories.map((category: any) => ({ value: String(category.id), label: category.name })),
+                    { value: "__new__", label: "+ Add New Category" },
+                  ]}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-colors"
+                  name="category"
                   required
-                >
-                  <option value="">Select Category</option>
-                  {loading ? (
-                    <option value="" disabled>Loading categories...</option>
-                  ) : categories.length === 0 ? (
-                    <option value="" disabled>No categories available in existing subjects</option>
-                  ) : (
-                    categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    ))
-                  )}
-                  {/* Option to add new category */}
-                  <option value="__new__">+ Add New Category</option>
-                </select>
+                />
                 {!loading && categories.length > 0 && (
                   <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     {categories.length} categor{categories.length !== 1 ? 'ies' : 'y'} available from existing subjects

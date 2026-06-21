@@ -3,6 +3,7 @@
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import React, { useEffect, useMemo, useState, useCallback } from "react";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
@@ -47,11 +48,12 @@ interface TutorProfile {
 }
 
 interface TutorProfileBubbleProps {
-  tutor: TutorProfile;
+  tutor: TutorProfile & { derivedActiveNow?: boolean };
   userId: string;
   isOpen: boolean;
   onClose: () => void;
   onBookSession?: (tutor: TutorProfile) => void;
+  onConnectNow?: (tutor: TutorProfile) => void;
 }
 
 interface CalendarDay {
@@ -203,8 +205,11 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
   isOpen,
   onClose,
   onBookSession,
+  onConnectNow,
 }) => {
   if (!isOpen) return null;
+
+  const isLiveNow = !!(tutor.derivedActiveNow || tutor.isAvailableNow);
 
   const [step, setStep] = useState<1 | 2>(1);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -456,8 +461,19 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Failed to create payment");
+        toast.error(data.error || "Failed to create booking");
         setPaymentLoading(false);
+        return;
+      }
+
+      // Payments aren't collectable right now (Stripe not wired / tutor not
+      // onboarded) — the booking was still created. Confirm it and close.
+      if (data.skipPayment) {
+        toast.success(
+          `Session requested with ${tutor.name}! They'll confirm shortly. Payment is settled later.`
+        );
+        onBookSession?.(tutor);
+        onClose();
         return;
       }
 
@@ -583,6 +599,37 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
             </div>
           ) : (
             <div className="space-y-6">
+              {/* Connect now — only when the tutor is live */}
+              {isLiveNow && onConnectNow && (
+                <div className="flex items-center justify-between gap-3 p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                      </span>
+                      <p className="text-sm font-semibold text-emerald-800">Online now</p>
+                    </div>
+                    <p className="text-xs text-emerald-700/80 mt-0.5">Skip the wait — start a live session right now.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onConnectNow(tutor)}
+                    className="flex-shrink-0 px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 transition-colors"
+                  >
+                    Connect now
+                  </button>
+                </div>
+              )}
+
+              {isLiveNow && onConnectNow && (
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-px bg-gray-100" />
+                  <span className="text-xs font-medium text-gray-400">or book ahead</span>
+                  <div className="flex-1 h-px bg-gray-100" />
+                </div>
+              )}
+
               {/* Date Selection */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -718,21 +765,12 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                     <label className="block text-xs font-medium text-gray-600 mb-1">
                       Subject
                     </label>
-                    <select
+                    <SearchableSelect
                       value={selectedSubjectId ?? ""}
-                      onChange={(e) =>
-                        setSelectedSubjectId(
-                          e.target.value || selectedSubjectId
-                        )
-                      }
+                      onChange={(val) => setSelectedSubjectId(val || selectedSubjectId)}
+                      options={studentSubjectsForTutor.map((subject: any) => ({ value: subject.id, label: `${subject.name} (${subject.code})` }))}
                       className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-100 transition-all"
-                    >
-                      {studentSubjectsForTutor.map((subject) => (
-                        <option key={subject.id} value={subject.id}>
-                          {subject.name} ({subject.code})
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
                 )}
                 <div>

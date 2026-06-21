@@ -3,11 +3,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState, FormEvent, Suspense } from "react";
 import Link from "next/link";
 import { supabase } from '@/lib/supabaseClient' // correct
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 function RegisterContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const role = searchParams.get("role") || "student";
+    const ref = searchParams.get("ref") || undefined;
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -61,6 +63,7 @@ function RegisterContent() {
                     email,
                     name: fullName,
                     role: normalizedRole,
+                    ref,
                 }),
             });
 
@@ -192,7 +195,7 @@ function RegisterContent() {
 
 export default function Register() {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<LearnPeersLoader fullScreen />}>
             <RegisterContent />
         </Suspense>
     );

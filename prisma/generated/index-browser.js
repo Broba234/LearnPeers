@@ -408,6 +408,7 @@ exports.Prisma.ProfilesScalarFieldEnum = {
   hourlyRate: 'hourlyRate',
   availability: 'availability',
   isAvailableNow: 'isAvailableNow',
+  last_active_at: 'last_active_at',
   rating: 'rating',
   education: 'education',
   experience: 'experience',
@@ -447,7 +448,8 @@ exports.Prisma.SessionsScalarFieldEnum = {
   duration: 'duration',
   amount: 'amount',
   date: 'date',
-  subject_id: 'subject_id'
+  subject_id: 'subject_id',
+  is_instant: 'is_instant'
 };
 
 exports.Prisma.SubjectsScalarFieldEnum = {
@@ -472,6 +474,8 @@ exports.Prisma.InstitutionsScalarFieldEnum = {
   email_domains: 'email_domains',
   city: 'city',
   website: 'website',
+  external_id: 'external_id',
+  board_id: 'board_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

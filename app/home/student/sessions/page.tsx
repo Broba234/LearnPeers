@@ -171,7 +171,7 @@ export default function StudentSessions() {
 
   return (
     <div className="min-h-screen bg-[#FAFAF9]">
-      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6">
+      <div className="max-w-4xl mx-auto py-8 lg:pt-16 px-4 sm:px-6">
 
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">

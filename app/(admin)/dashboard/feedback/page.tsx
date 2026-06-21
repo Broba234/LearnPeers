@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface Feedback {
   id: string;
@@ -98,15 +99,16 @@ export default function FeedbackPage() {
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
             />
           </div>
-          <select
+          <SearchableSelect
             value={filter}
-            onChange={(e) => setFilter(e.target.value as typeof filter)}
+            onChange={(val) => setFilter(val as typeof filter)}
+            options={[
+              { value: "all", label: "All" },
+              { value: "signed-in", label: "Signed-in users" },
+              { value: "anonymous", label: "Anonymous" },
+            ]}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none"
-          >
-            <option value="all">All</option>
-            <option value="signed-in">Signed-in users</option>
-            <option value="anonymous">Anonymous</option>
-          </select>
+          />
         </div>
 
         <div className="space-y-3">

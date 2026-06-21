@@ -110,13 +110,13 @@ export default function Hero() {
             className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-400 lg:justify-start"
           >
             <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Grade-verified tutors
+            </span>
+            <span className="flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Live 1-on-1 video
             </span>
             <span className="flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Shared whiteboard
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Secure payments
             </span>
           </motion.div>
         </motion.div>

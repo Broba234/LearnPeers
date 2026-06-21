@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import SearchableSelect from "@/components/ui/SearchableSelect";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 interface Province { id: string; code: string; name: string; }
 interface Institution { id: string; name: string; abbreviation: string | null; type: string; }
@@ -160,20 +162,33 @@ export default function CurriculaPage() {
               {curError && <p className="text-red-600 text-sm mb-3">{curError}</p>}
               <form onSubmit={addCurriculum} className="space-y-3">
                 <input className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" placeholder="Name (e.g. BC Secondary Curriculum)" value={curName} onChange={(e) => setCurName(e.target.value)} required />
-                <select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" value={curKind} onChange={(e) => setCurKind(e.target.value)}>
-                  {Object.entries(KIND_LABEL).map(([k, label]) => <option key={k} value={k}>{label}</option>)}
-                </select>
+                <SearchableSelect
+                  value={curKind}
+                  onChange={setCurKind}
+                  options={Object.entries(KIND_LABEL).map(([k, label]) => ({ value: k, label }))}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                />
                 {curKind === "provincial_secondary" && (
-                  <select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" value={curProvince} onChange={(e) => setCurProvince(e.target.value)} required>
-                    <option value="">Select province…</option>
-                    {provinces.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-                  </select>
+                  <SearchableSelect
+                    value={curProvince}
+                    onChange={setCurProvince}
+                    placeholder="Select province…"
+                    options={provinces.map((p) => ({ value: p.id, label: p.name }))}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                    name="curProvince"
+                    required
+                  />
                 )}
                 {curKind === "university" && (
-                  <select className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" value={curInstitution} onChange={(e) => setCurInstitution(e.target.value)} required>
-                    <option value="">Select university…</option>
-                    {institutions.map((i) => <option key={i.id} value={i.id}>{i.name}</option>)}
-                  </select>
+                  <SearchableSelect
+                    value={curInstitution}
+                    onChange={setCurInstitution}
+                    placeholder="Select university…"
+                    options={institutions.map((i) => ({ value: i.id, label: i.name }))}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                    name="curInstitution"
+                    required
+                  />
                 )}
                 <div className="flex gap-2 pt-2">
                   <button type="button" onClick={() => setShowCurForm(false)} className="flex-1 border border-gray-200 rounded-lg py-2 text-sm">Cancel</button>
@@ -192,7 +207,7 @@ export default function CurriculaPage() {
                 <span className="text-sm font-semibold text-gray-700">{curricula.length} curricula</span>
               </div>
               {loading ? (
-                <div className="p-6 text-sm text-gray-400">Loading…</div>
+                <div className="flex justify-center p-6"><LearnPeersLoader size={72} /></div>
               ) : (
                 <ul className="divide-y divide-gray-100 max-h-[70vh] overflow-y-auto">
                   {curricula.map((c) => (
