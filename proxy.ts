@@ -41,6 +41,7 @@ export async function proxy(request: NextRequest) {
   // only gate).
   const PUBLIC_API = [
     "/api/stripe/webhook", // Stripe server-to-server (no cookie); signature-verified
+    "/api/livekit/egress-webhook", // LiveKit egress events (no cookie); signature-verified
     "/api/stripe/connect/return", // browser redirect back from Stripe onboarding
     "/api/stripe/connect/refresh",
     "/api/profiles/create", // sign-up

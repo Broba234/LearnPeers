@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import LiveKitRoom from '@/components/LiveKitRoom';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -303,6 +304,20 @@ export default function StudentSessions() {
                     >
                       Cancel
                     </button>
+                  </div>
+                )}
+                {session.status === 'completed' && (
+                  <div className="px-5 pb-5">
+                    <Link
+                      href={`/home/session/${session.id}/recording`}
+                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-medium rounded-xl hover:border-brand-300 hover:text-brand-700 transition-colors"
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="23 7 16 12 23 17 23 7" />
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                      </svg>
+                      Watch recording &amp; transcript
+                    </Link>
                   </div>
                 )}
               </div>

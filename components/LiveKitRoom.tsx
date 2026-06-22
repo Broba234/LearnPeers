@@ -56,7 +56,7 @@ const LiveKitRoom: React.FC<LiveKitRoomProps> = ({
         const response = await fetch('/api/livekit/token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ room: roomName, user: userIdentity }),
+          body: JSON.stringify({ room: roomName, user: userIdentity, name: userName }),
         });
         if (!response.ok) {
           const errorText = await response.text();

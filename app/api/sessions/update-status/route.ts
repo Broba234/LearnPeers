@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { notifySessionStatusChanged } from '@/lib/notifications';
 import { getAuthedUser } from '@/lib/api-auth';
+import { startSessionRecording, stopSessionRecording } from '@/lib/recording';
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -69,6 +70,20 @@ export async function PATCH(request: NextRequest) {
     if (updateError) {
       console.error('Session update error:', updateError);
       return NextResponse.json({ error: 'Failed to update session' }, { status: 500 });
+    }
+
+    // Recording lifecycle (non-fatal, no-ops unless recording storage is set).
+    // Only the tutor side drives egress so we don't double-start.
+    if (session.tutor_id === userId) {
+      if (status === 'in_progress') {
+        startSessionRecording(sessionId).catch((e) =>
+          console.error('[recording] start error:', e)
+        );
+      } else if (status === 'completed' || status === 'cancelled') {
+        stopSessionRecording(sessionId).catch((e) =>
+          console.error('[recording] stop error:', e)
+        );
+      }
     }
 
     // Send notification for the status change

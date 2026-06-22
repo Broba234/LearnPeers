@@ -3,7 +3,7 @@ import { AccessToken } from "livekit-server-sdk";
 
 export async function POST(req: NextRequest) {
   try {
-    const { room, user } = await req.json();
+    const { room, user, name } = await req.json();
 
 
     if (!room || !user) {
@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
 
     const at = new AccessToken(apiKey, apiSecret, {
       identity: user,
+      name: typeof name === "string" && name.trim() ? name.trim() : undefined,
     });
     
     at.addGrant({ 
