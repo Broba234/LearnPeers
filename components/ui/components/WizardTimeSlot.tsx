@@ -27,33 +27,30 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
       try {
         const {
           data: { user },
-          error: sessionError,
         } = await supabase.auth.getUser();
-        const profileRes = await fetch(
-          `/api/profiles/get-full?email=${encodeURIComponent(user.email!)}`
-        );
+        if (user?.email) setEmail(user.email);
 
-        if (profileRes.ok) {
-          const profileData = await profileRes.json();
-          console.log(profileData);
-          setEmail(profileData.email);
-          let normalizedSubjects: any[] = [];
-          if (profileData.subjects && Array.isArray(profileData.subjects)) {
-            normalizedSubjects = profileData.subjects
-              .map((s: any) => {
-                  // Return the subject object with added duration and price fields
-                  return {
-                    ...s,
-                    duration_1: "0.5",
-                    price_1: '',
-                    duration_2: "1",
-                    price_2: '',
-                    duration_3: "1.5",
-                    price_3: '',
-
-                  };
-                });
-          }
+        // The subjects picked in step 3 are stored as *claimed* CourseAssets
+        // (the gamified portfolio), NOT in the bookable ProfilesOnSubjects
+        // relation that /profiles/get-full returns — so read them from the
+        // portfolio, otherwise this pricing step renders empty.
+        const res = await fetch("/api/courses/portfolio");
+        if (res.ok) {
+          const data = await res.json();
+          const assets = Array.isArray(data?.assets) ? data.assets : [];
+          const normalizedSubjects = assets
+            .filter((a: any) => a?.subject?.id)
+            .map((a: any) => ({
+              // Spread the subject so each row carries the subject id used by
+              // the price-save route (upsert by tutor_id + subject_id).
+              ...a.subject,
+              duration_1: "0.5",
+              price_1: a.price_1 ? String(a.price_1) : "",
+              duration_2: "1",
+              price_2: a.price_2 ? String(a.price_2) : "",
+              duration_3: "1.5",
+              price_3: a.price_3 ? String(a.price_3) : "",
+            }));
           setSelectedSubjects(normalizedSubjects);
         }
       } catch (error) {}
