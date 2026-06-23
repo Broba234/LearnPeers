@@ -19,11 +19,18 @@ type Props = {
   // Students just declare; verification documents come later via profile.
   requireVerification: boolean;
   allowSkip?: boolean;
+  // Tutors are university students by definition, so skip the high-school vs
+  // university chooser and go straight to the university picker.
+  universityOnly?: boolean;
   onComplete: (complete: boolean) => void;
 };
 
 const inputClass =
   "w-full bg-white border border-ink-200 px-4 py-3 rounded-xl text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all";
+
+// DEMO MODE (temporary): lets tutors skip the emailed school-email code.
+// Remove NEXT_PUBLIC_DEMO_MODE from .env.local to roll back.
+const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 /**
  * Cascading school picker: pick a school board (required), then pick the
@@ -191,8 +198,10 @@ function SchoolByBoardPicker({
   );
 }
 
-export default function EducationStep({ requireVerification, allowSkip, onComplete }: Props) {
-  const [level, setLevel] = useState<"high_school" | "university" | null>(null);
+export default function EducationStep({ requireVerification, allowSkip, universityOnly, onComplete }: Props) {
+  const [level, setLevel] = useState<"high_school" | "university" | null>(
+    universityOnly ? "university" : null
+  );
   const [universities, setUniversities] = useState<Institution[]>([]);
   const [boards, setBoards] = useState<Institution[]>([]);
 
@@ -273,6 +282,26 @@ export default function EducationStep({ requireVerification, allowSkip, onComple
     }
   };
 
+  // DEMO MODE: declare the chosen university and mark it verified locally so
+  // the wizard can advance without the emailed code.
+  const demoSkipVerification = async () => {
+    if (!universityId) return;
+    setBusy(true);
+    setError("");
+    try {
+      await fetch("/api/education/declare", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: "current_university", institutionId: universityId }),
+      });
+    } catch {
+      // best-effort in demo mode
+    } finally {
+      setVerified(true);
+      setBusy(false);
+    }
+  };
+
   const confirmCode = async () => {
     setBusy(true);
     setError("");
@@ -294,42 +323,44 @@ export default function EducationStep({ requireVerification, allowSkip, onComple
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Step 1 — level selection */}
-      <div>
-        <p className="text-sm font-medium text-ink-700 mb-3">Where are you studying?</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {[
-            { key: "high_school" as const, label: "I'm in high school", sub: "Grades 9–12", icon: <School className="w-6 h-6" /> },
-            { key: "university" as const, label: "I'm in university", sub: "Post-secondary student", icon: <GraduationCap className="w-6 h-6" /> },
-          ].map((opt) => (
-            <button
-              key={opt.key}
-              type="button"
-              onClick={() => {
-                setLevel(opt.key);
-                setError("");
-              }}
-              className={`flex items-center gap-4 p-5 rounded-2xl border-2 text-left transition-all ${
-                level === opt.key
-                  ? "border-brand-600 bg-brand-50 shadow-sm"
-                  : "border-ink-100 bg-white hover:border-brand-300"
-              }`}
-            >
-              <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                  level === opt.key ? "bg-brand-600 text-white" : "bg-ink-50 text-ink-500"
+      {/* Step 1 — level selection (hidden for tutors: they're university students) */}
+      {!universityOnly && (
+        <div>
+          <p className="text-sm font-medium text-ink-700 mb-3">Where are you studying?</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              { key: "high_school" as const, label: "I'm in high school", sub: "Grades 9–12", icon: <School className="w-6 h-6" /> },
+              { key: "university" as const, label: "I'm in university", sub: "Post-secondary student", icon: <GraduationCap className="w-6 h-6" /> },
+            ].map((opt) => (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => {
+                  setLevel(opt.key);
+                  setError("");
+                }}
+                className={`flex items-center gap-4 p-5 rounded-2xl border-2 text-left transition-all ${
+                  level === opt.key
+                    ? "border-brand-600 bg-brand-50 shadow-sm"
+                    : "border-ink-100 bg-white hover:border-brand-300"
                 }`}
               >
-                {opt.icon}
-              </div>
-              <div>
-                <p className="font-semibold text-ink-900">{opt.label}</p>
-                <p className="text-sm text-ink-400">{opt.sub}</p>
-              </div>
-            </button>
-          ))}
+                <div
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                    level === opt.key ? "bg-brand-600 text-white" : "bg-ink-50 text-ink-500"
+                  }`}
+                >
+                  {opt.icon}
+                </div>
+                <div>
+                  <p className="font-semibold text-ink-900">{opt.label}</p>
+                  <p className="text-sm text-ink-400">{opt.sub}</p>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Step 2a — high school details (board → school) */}
       {level === "high_school" && (
@@ -438,6 +469,16 @@ export default function EducationStep({ requireVerification, allowSkip, onComple
                     Use a different email
                   </button>
                 </div>
+              )}
+              {DEMO_MODE && (
+                <button
+                  type="button"
+                  onClick={demoSkipVerification}
+                  disabled={busy}
+                  className="w-full mt-1 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 hover:bg-amber-100 transition-colors disabled:opacity-60"
+                >
+                  Demo mode — skip verification and continue
+                </button>
               )}
             </div>
           )}

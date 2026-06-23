@@ -96,11 +96,15 @@ export default function StudentHome() {
     useEffect(() => {
         const fetchProfile = async () => {
           try {
-            const {
-              data: { user },
-              error: sessionError,
-            } = await supabase.auth.getUser();
-            if (sessionError || !user) {
+            // Tolerate the just-registered race: confirm a local session before
+            // bouncing to login so a fresh sign-up lands in onboarding.
+            let user = null;
+            for (let attempt = 0; attempt < 5; attempt++) {
+              const { data: { session } } = await supabase.auth.getSession();
+              if (session?.user) { user = session.user; break; }
+              await new Promise(resolve => setTimeout(resolve, 300));
+            }
+            if (!user) {
               router.push("/auth/login");
               return;
             }

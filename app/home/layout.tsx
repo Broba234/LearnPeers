@@ -130,17 +130,24 @@ export default function HomeLayout({
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const {
-          data: { user },
-          error: sessionError,
-        } = await supabase.auth.getUser();
-        if (sessionError || !user) {
+        // A just-registered user can land here a beat before the auth session is
+        // readable. Poll the local session (no network round-trip) briefly so a
+        // fresh sign-up flows into onboarding instead of bouncing to /auth/login.
+        let user = null;
+        for (let attempt = 0; attempt < 5; attempt++) {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user) { user = session.user; break; }
+          await new Promise(resolve => setTimeout(resolve, 300));
+        }
+        if (!user) {
           router.push("/auth/login");
           return;
         }
+        // The profile row is created during registration; under connection-pool
+        // read-after-write lag the first read can 404, so retry before bouncing.
         let profileRes = await fetch(`/api/profiles/get?email=${encodeURIComponent(user.email!)}`);
-        if (!profileRes.ok && profileRes.status === 404) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+        for (let attempt = 0; attempt < 3 && profileRes.status === 404; attempt++) {
+          await new Promise(resolve => setTimeout(resolve, 800));
           profileRes = await fetch(`/api/profiles/get?email=${encodeURIComponent(user.email!)}`);
         }
         if (!profileRes.ok) {

@@ -82,6 +82,9 @@ type CategoryGroup = {
   name: string;
   subjects: Subjects[];
 };
+// DEMO MODE (temporary): lets tutors finish onboarding without a connected
+// Stripe account. Remove NEXT_PUBLIC_DEMO_MODE from .env.local to roll back.
+const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 const SetupWizard = () => {
   const [formData, setFormData] = useState({
     bio: "",
@@ -387,7 +390,8 @@ const SetupWizard = () => {
       }
     }
     if (activeStep === 5) {
-      if (formData.is_tutor && !stripeConnected) return;
+      // DEMO MODE: allow finishing without a connected Stripe account.
+      if (formData.is_tutor && !stripeConnected && !DEMO_MODE) return;
       HandleChangeSetUpStatus();
     }
   };
@@ -554,6 +558,7 @@ const SetupWizard = () => {
                       >
                         <EducationStep
                           requireVerification={true}
+                          universityOnly={true}
                           onComplete={setEducationComplete}
                         />
                       </motion.div>
@@ -848,6 +853,12 @@ const SetupWizard = () => {
                                 }}
                               />
                             </motion.button>
+                            {DEMO_MODE && (
+                              <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-center max-w-md">
+                                Demo mode — you can press <strong>Continue</strong> to finish
+                                setup without connecting Stripe.
+                              </p>
+                            )}
                           </>
                         )}
                       </motion.div>
@@ -871,7 +882,7 @@ const SetupWizard = () => {
                       loading ||
                       (activeStep == 1 && !educationComplete) ||
                       (activeStep == 4 && !is_all_selected) ||
-                      (activeStep == 5 && formData.is_tutor && !stripeConnected)
+                      (activeStep == 5 && formData.is_tutor && !stripeConnected && !DEMO_MODE)
                     }
                     onClick={() => HandleNextButton()}
                     className={`
@@ -882,7 +893,7 @@ const SetupWizard = () => {
       loading ||
       (activeStep == 1 && !educationComplete) ||
       (activeStep == 4 && !is_all_selected) ||
-      (activeStep == 5 && formData.is_tutor && !stripeConnected)
+      (activeStep == 5 && formData.is_tutor && !stripeConnected && !DEMO_MODE)
         ? "bg-brand-600/60 cursor-not-allowed"
         : "bg-brand-600 hover:bg-brand-700 cursor-pointer"
     }

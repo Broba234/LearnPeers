@@ -86,7 +86,14 @@ export default function TutorHome() {
     const fetchProfile = async () => {
       try {
         setIsLoading(true);
-        const { data: { user } } = await supabase.auth.getUser();
+        // Tolerate the just-registered race: confirm a local session before
+        // giving up so a fresh sign-up lands in onboarding.
+        let user = null;
+        for (let attempt = 0; attempt < 5; attempt++) {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user) { user = session.user; break; }
+          await new Promise(resolve => setTimeout(resolve, 300));
+        }
         if (!user) return;
         const profileRes = await fetch(
           `/api/profiles/get-full?email=${encodeURIComponent(user.email!)}`

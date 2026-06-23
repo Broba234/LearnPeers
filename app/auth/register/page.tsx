@@ -92,9 +92,18 @@ function RegisterContent() {
                 session = signInData.session;
             }
 
-            // 4. Straight to onboarding — the role home renders the setup wizard until
-            //    profile_setup flips true.
-            router.push(`/home/${normalizedRole}`);
+            // 4. Straight to onboarding — the role home renders the setup wizard
+            //    until profile_setup flips true. Before leaving, wait until the
+            //    auth session is actually persisted to storage, then do a HARD
+            //    navigation (full page load) so the destination boots with the
+            //    cookie already in place. This makes it impossible to land back
+            //    on the "Welcome back" login screen due to a session-handoff race.
+            for (let i = 0; i < 15; i++) {
+                const { data: { session: persisted } } = await supabase.auth.getSession();
+                if (persisted) break;
+                await new Promise((r) => setTimeout(r, 200));
+            }
+            window.location.assign(`/home/${normalizedRole}`);
         } catch (err: any) {
             console.error('[REGISTER] Registration failed:', err);
             const message = /already registered|already exists|duplicate/i.test(err?.message || "")
@@ -129,24 +138,36 @@ function RegisterContent() {
               <input
                 type="text"
                 required
+                id="firstName"
+                name="firstName"
+                autoComplete="given-name"
+                aria-label="First name"
                 value={firstName}
                 onChange={e => setFirstName(e.target.value)}
                 placeholder="First Name"
-                className="flex-1 bg-white border border-ink-200 px-4 py-3 rounded-xl mt-1 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
+                className="flex-1 min-w-0 bg-white border border-ink-200 px-4 py-3 rounded-xl mt-1 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
               />
               <input
                 type="text"
                 required
+                id="lastName"
+                name="lastName"
+                autoComplete="family-name"
+                aria-label="Last name"
                 value={lastName}
                 onChange={e => setLastName(e.target.value)}
                 placeholder="Last Name"
-                className="flex-1 bg-white border border-ink-200 px-4 py-3 rounded-xl mt-1 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
+                className="flex-1 min-w-0 bg-white border border-ink-200 px-4 py-3 rounded-xl mt-1 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
               />
             </div>
 
             <input
               type="email"
               required
+              id="email"
+              name="email"
+              autoComplete="email"
+              aria-label="Email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="E-mail"
@@ -156,9 +177,14 @@ function RegisterContent() {
             <input
               type="password"
               required
+              id="password"
+              name="password"
+              autoComplete="new-password"
+              aria-label="Password"
+              minLength={6}
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder="Password"
+              placeholder="Password (min. 6 characters)"
               className="w-full bg-white border border-ink-200 px-4 py-3 rounded-xl mt-4 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
             />
 
