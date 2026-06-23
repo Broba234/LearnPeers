@@ -1,7 +1,7 @@
 # Manual Test Instructions for LiveKit Screen Sharing
 
 ## Overview
-This document outlines manual testing procedures for the LiveKit screen sharing functionality in the Eclero tutoring platform.
+This document outlines manual testing procedures for the LiveKit screen sharing functionality in the LearnPeers tutoring platform.
 
 ## Prerequisites
 1. Two browsers/devices for testing (one for tutor, one for student)

@@ -1,4 +1,4 @@
-# Eclero 2.0 - Key Artifacts Inventory
+# LearnPeers - Key Artifacts Inventory
 
 ## 1. PRISMA SCHEMA (Database Models, Relations, Enums)
 
@@ -369,4 +369,4 @@
 ---
 
 *Generated: $(date)*
-*Repository: Eclero 2.0 - Peer-to-Peer Tutoring Platform*
+*Repository: LearnPeers - Peer-to-Peer Tutoring Platform*
