@@ -10,6 +10,367 @@ datasource db {
   schemas  = ["auth", "public"]
 }
 
+// ==========================================================================
+// APPLICATION MODELS  —  public schema (edit these)
+// ==========================================================================
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Profiles {
+  id                                     String                     @id @db.Uuid
+  email                                  String                     @unique
+  name                                   String?
+  role                                   String?
+  bio                                    String?
+  avatar                                 String?
+  phone                                  String?
+  hourlyRate                             Float?
+  availability                           Json?                      @db.Json
+  isAvailableNow                         Boolean?
+  last_active_at                         DateTime?                  @db.Timestamptz(6)
+  rating                                 Float?
+  education                              String?
+  experience                             Json?                      @db.Json
+  created_at                             DateTime?                  @default(now()) @db.Timestamptz(6)
+  updated_at                             DateTime?                  @default(now()) @db.Timestamptz(6)
+  profile_setup                          Boolean?                   @default(false)
+  is_tutor                               Boolean?                   @default(false)
+  stripe_account_id                      String?                    @db.VarChar(255)
+  institution_id                         String?                    @db.Uuid
+  users                                  users                      @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subjects                               ProfilesOnSubjects[]
+  Sessions_Sessions_student_idToProfiles Sessions[]                 @relation("Sessions_student_idToProfiles")
+  Sessions_Sessions_tutor_idToProfiles   Sessions[]                 @relation("Sessions_tutor_idToProfiles")
+  TutorAvailability                      TutorAvailability[]
+  Institutions                           Institutions?              @relation(fields: [institution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  Feedback                               Feedback[]
+  ProfileInstitutions                    ProfileInstitutions[]
+  SchoolEmailVerifications               SchoolEmailVerifications[]
+  CourseAssets                           CourseAssets[]
+  CourseReviews_as_tutor                 CourseReviews[]            @relation("CourseReviews_tutor")
+  CourseReviews_as_student               CourseReviews[]            @relation("CourseReviews_student")
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model ProfilesOnSubjects {
+  profile_id            String              @db.Uuid
+  subject_id            String              @db.Uuid
+  created_at            DateTime?           @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?           @default(now()) @db.Timestamptz(6)
+  price_1               Float?
+  price_2               Float?
+  price_3               Float?              @default(1)
+  duration_3            Float?              @default(1.5)
+  duration_2            Float?              @default(1)
+  duration_1            Float?              @default(0.5)
+  institution_course_id String?             @db.Uuid
+  Profiles              Profiles            @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Subjects              Subjects            @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  InstitutionCourses    InstitutionCourses? @relation(fields: [institution_course_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  TutorAvailability     TutorAvailability[]
+
+  @@id([profile_id, subject_id])
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Sessions {
+  id                                     String    @id(map: "sessions_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tutor_id                               String    @db.Uuid
+  student_id                             String    @db.Uuid
+  status                                 String    @default("pending")
+  created_at                             DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  started_at                             DateTime? @db.Timestamptz(6)
+  ended_at                               DateTime? @db.Timestamptz(6)
+  topic                                  String?
+  notes                                  String?
+  start_time                             DateTime? @db.Time(6)
+  duration                               Float?
+  amount                                 Float?
+  date                                   DateTime? @db.Date
+  subject_id                             String?   @db.Uuid
+  is_instant                             Boolean   @default(false)
+  Profiles_Sessions_student_idToProfiles Profiles  @relation("Sessions_student_idToProfiles", fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_student_id_fkey")
+  Profiles_Sessions_tutor_idToProfiles   Profiles  @relation("Sessions_tutor_idToProfiles", fields: [tutor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_tutor_id_fkey")
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Subjects {
+  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name               String
+  code               String?
+  grade              Int?
+  category           String?
+  curriculum_id      String?              @db.Uuid
+  created_at         DateTime?            @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime?            @default(now()) @db.Timestamptz(6)
+  ProfilesOnSubjects ProfilesOnSubjects[]
+  InstitutionCourses InstitutionCourses[]
+  CourseAssets       CourseAssets[]
+  Curricula          Curricula?           @relation(fields: [curriculum_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([curriculum_id], map: "Subjects_curriculum_idx")
+  @@index([code], map: "Subjects_code_idx")
+  @@index([category, grade], map: "Subjects_category_grade_idx")
+  @@schema("public")
+}
+
+model Institutions {
+  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                     String
+  abbreviation             String?
+  country                  String                     @default("Canada")
+  province                 String?
+  province_id              String?                    @db.Uuid
+  type                     String                     @default("university")
+  email_domains            String[]                   @default([])
+  city                     String?
+  website                  String?
+  external_id              String?                    @unique // Ministry Board Number / School Number (BSID)
+  board_id                 String?                    @db.Uuid // for high schools: the parent school board
+  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
+  Profiles                 Profiles[]
+  InstitutionCourses       InstitutionCourses[]
+  ProfileInstitutions      ProfileInstitutions[]
+  SchoolEmailVerifications SchoolEmailVerifications[]
+  Provinces                Provinces?                 @relation(fields: [province_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  Board                    Institutions?              @relation("BoardSchools", fields: [board_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  Schools                  Institutions[]             @relation("BoardSchools")
+  Curricula                Curricula[]
+
+  @@index([province_id], map: "Institutions_province_idx")
+  @@index([type], map: "Institutions_type_idx")
+  @@index([board_id], map: "Institutions_board_idx")
+  @@schema("public")
+}
+
+model Provinces {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code         String         @unique
+  name         String
+  country      String         @default("Canada")
+  is_territory Boolean        @default(false)
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  Institutions Institutions[]
+  Curricula    Curricula[]
+
+  @@schema("public")
+}
+
+model Curricula {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  kind           String
+  province_id    String?       @db.Uuid
+  institution_id String?       @db.Uuid
+  created_at     DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime      @default(now()) @db.Timestamptz(6)
+  Provinces      Provinces?    @relation(fields: [province_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Institutions   Institutions? @relation(fields: [institution_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Subjects       Subjects[]
+
+  @@index([kind], map: "Curricula_kind_idx")
+  @@schema("public")
+}
+
+model ProfileInstitutions {
+  id                   String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id           String        @db.Uuid
+  institution_id       String?       @db.Uuid
+  institution_name_raw String?
+  kind                 String
+  status               String        @default("declared")
+  verification_method  String?
+  verified_email       String?
+  document_url         String?
+  created_at           DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at           DateTime      @default(now()) @db.Timestamptz(6)
+  Profiles             Profiles      @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Institutions         Institutions? @relation(fields: [institution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@unique([profile_id, kind], map: "ProfileInstitutions_profile_kind_unique")
+  @@index([profile_id], map: "ProfileInstitutions_profile_idx")
+  @@index([institution_id], map: "ProfileInstitutions_institution_idx")
+  @@schema("public")
+}
+
+model SchoolEmailVerifications {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id     String       @db.Uuid
+  institution_id String       @db.Uuid
+  email          String
+  code_hash      String
+  expires_at     DateTime     @db.Timestamptz(6)
+  consumed_at    DateTime?    @db.Timestamptz(6)
+  attempts       Int          @default(0)
+  created_at     DateTime     @default(now()) @db.Timestamptz(6)
+  Profiles       Profiles     @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Institutions   Institutions @relation(fields: [institution_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([profile_id], map: "SchoolEmailVerifications_profile_idx")
+  @@schema("public")
+}
+
+model InstitutionCourses {
+  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  institution_id     String               @db.Uuid
+  subject_id         String               @db.Uuid
+  code               String
+  name               String?
+  description        String?
+  created_at         DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime             @default(now()) @db.Timestamptz(6)
+  Institutions       Institutions         @relation(fields: [institution_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Subjects           Subjects             @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  ProfilesOnSubjects ProfilesOnSubjects[]
+  CourseAssets       CourseAssets[]
+
+  @@unique([institution_id, code])
+  @@schema("public")
+}
+
+/// The tutor's owned, income-producing course-asset. One per (tutor, subject).
+/// Holds verification/grade state plus per-course gamification (rating, XP, tier).
+/// A course becomes bookable (mirrored into ProfilesOnSubjects) only when it goes live.
+model CourseAssets {
+  id                    String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tutor_id              String              @db.Uuid
+  subject_id            String              @db.Uuid
+  institution_course_id String?             @db.Uuid
+  status                String              @default("claimed") // claimed | pending | verified | live | rejected
+  grade_value           String?
+  grade_scale           String? // percentage | letter | gpa | ib | ap
+  grade_proof_url       String?
+  verification_method   String? // self_attested | document | school_email | transcript
+  verified_at           DateTime?           @db.Timestamptz(6)
+  rejected_reason       String?
+  rating                Float               @default(0)
+  rating_count          Int                 @default(0)
+  xp                    Int                 @default(0)
+  tier                  String              @default("bronze") // bronze | silver | gold | platinum | diamond
+  sessions_count        Int                 @default(0)
+  total_earnings        Float               @default(0)
+  price_1               Float?
+  price_2               Float?
+  price_3               Float?
+  duration_1            Float?              @default(0.5)
+  duration_2            Float?              @default(1)
+  duration_3            Float?              @default(1.5)
+  created_at            DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime            @default(now()) @db.Timestamptz(6)
+  Profiles              Profiles            @relation(fields: [tutor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Subjects              Subjects            @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  InstitutionCourses    InstitutionCourses? @relation(fields: [institution_course_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  CourseReviews         CourseReviews[]
+
+  @@unique([tutor_id, subject_id])
+  @@index([tutor_id])
+  @@index([status])
+  @@schema("public")
+}
+
+/// A per-course review left by a student after a session. Reviews compound the
+/// tutor's per-course rating, XP and tier — and roll up into their overall rating.
+model CourseReviews {
+  id               String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_asset_id  String       @db.Uuid
+  tutor_id         String       @db.Uuid
+  student_id       String       @db.Uuid
+  session_id       String?      @db.Uuid
+  rating           Int
+  comment          String?
+  created_at       DateTime     @default(now()) @db.Timestamptz(6)
+  CourseAssets     CourseAssets @relation(fields: [course_asset_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Profiles_tutor   Profiles     @relation("CourseReviews_tutor", fields: [tutor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  Profiles_student Profiles     @relation("CourseReviews_student", fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([course_asset_id])
+  @@index([tutor_id])
+  @@schema("public")
+}
+
+model TutorAvailability {
+  id             String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tutor_id       String              @db.Uuid
+  day_of_week    Int?
+  start_time     DateTime?           @db.Time(6)
+  end_time       DateTime?           @db.Time(6)
+  timezone       String?             @default("UTC")
+  is_active      Boolean             @default(true)
+  created_at     DateTime            @default(now())
+  updated_at     DateTime            @default(now())
+  subject_id     String?             @db.Uuid
+  start_date     DateTime?           @db.Timestamptz(6)
+  end_date       DateTime?           @db.Timestamptz(6)
+  subject        String?
+  duration_3     Int?                @default(0) @db.SmallInt
+  duration_1     Int?                @default(0) @db.SmallInt
+  duration_2     Int?                @default(0) @db.SmallInt
+  tutor          Profiles            @relation(fields: [tutor_id], references: [id], onDelete: Cascade)
+  profileSubject ProfilesOnSubjects? @relation(fields: [tutor_id, subject_id], references: [profile_id, subject_id], onDelete: Cascade)
+
+  @@index([day_of_week, start_time, end_time], map: "TutorAvailability_day_time_idx")
+  @@index([tutor_id])
+  @@schema("public")
+}
+
+model Notifications {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  type       String
+  title      String
+  body       String
+  is_read    Boolean  @default(false)
+  session_id String?  @db.Uuid
+  actor_id   String?  @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([user_id, is_read])
+  @@index([user_id, created_at(sort: Desc)])
+  @@schema("public")
+}
+
+model Contacts {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String
+  email      String
+  subject    String
+  message    String
+  is_read    Boolean  @default(false)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([created_at(sort: Desc)])
+  @@index([is_read])
+  @@schema("public")
+}
+
+/// Beta feedback messages submitted from the persistent feedback widget. Stored only.
+model Feedback {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  message    String
+  user_id    String?   @db.Uuid
+  email      String?
+  name       String?
+  page       String?
+  user_agent String?
+  is_read    Boolean   @default(false)
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  Profiles   Profiles? @relation(fields: [user_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+
+  @@index([created_at(sort: Desc)])
+  @@index([is_read])
+  @@index([user_id])
+  @@schema("public")
+}
+
+// ==========================================================================
+// SUPABASE-MANAGED  —  auth schema. DO NOT EDIT (owned by Supabase Auth)
+// ==========================================================================
+
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model audit_log_entries {
@@ -421,398 +782,6 @@ model users {
   @@schema("auth")
 }
 
-model Conversations {
-  id                                          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  student_id                                  String     @db.Uuid
-  tutor_id                                    String     @db.Uuid
-  subject                                     String?
-  last_message_at                             DateTime?
-  created_at                                  DateTime   @default(now())
-  updated_at                                  DateTime   @default(now())
-  Profiles_Conversations_student_idToProfiles Profiles   @relation("Conversations_student_idToProfiles", fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Profiles_Conversations_tutor_idToProfiles   Profiles   @relation("Conversations_tutor_idToProfiles", fields: [tutor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Messages                                    Messages[]
-
-  @@unique([student_id, tutor_id])
-  @@index([last_message_at])
-  @@index([student_id])
-  @@index([tutor_id])
-  @@schema("public")
-}
-
-model Messages {
-  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  conversation_id String        @db.Uuid
-  sender_id       String        @db.Uuid
-  content         String
-  message_type    String        @default("text")
-  is_read         Boolean       @default(false)
-  created_at      DateTime      @default(now())
-  Conversations   Conversations @relation(fields: [conversation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Profiles        Profiles      @relation(fields: [sender_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([conversation_id])
-  @@index([created_at])
-  @@index([sender_id])
-  @@schema("public")
-}
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model Profiles {
-  id                                               String               @id @db.Uuid
-  email                                            String               @unique
-  name                                             String?
-  role                                             String?
-  bio                                              String?
-  avatar                                           String?
-  phone                                            String?
-  hourlyRate                                       Float?
-  availability                                     Json?                @db.Json
-  isAvailableNow                                   Boolean?
-  last_active_at                                   DateTime?            @db.Timestamptz(6)
-  rating                                           Float?
-  education                                        String?
-  experience                                       Json?                @db.Json
-  created_at                                       DateTime?            @default(now()) @db.Timestamptz(6)
-  updated_at                                       DateTime?            @default(now()) @db.Timestamptz(6)
-  profile_setup                                    Boolean?             @default(false)
-  is_tutor                                         Boolean?             @default(false)
-  stripe_account_id                                String?              @db.VarChar(255)
-  institution_id                                   String?              @db.Uuid
-  Conversations_Conversations_student_idToProfiles Conversations[]      @relation("Conversations_student_idToProfiles")
-  Conversations_Conversations_tutor_idToProfiles   Conversations[]      @relation("Conversations_tutor_idToProfiles")
-  Messages                                         Messages[]
-  users                                            users                @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  subjects                                         ProfilesOnSubjects[]
-  Sessions_Sessions_student_idToProfiles           Sessions[]           @relation("Sessions_student_idToProfiles")
-  Sessions_Sessions_tutor_idToProfiles             Sessions[]           @relation("Sessions_tutor_idToProfiles")
-  TutorAvailability                                TutorAvailability[]
-  Institutions                                     Institutions?        @relation(fields: [institution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
-  Feedback                                         Feedback[]
-  ProfileInstitutions                              ProfileInstitutions[]
-  SchoolEmailVerifications                         SchoolEmailVerifications[]
-  CourseAssets                                     CourseAssets[]
-  CourseReviews_as_tutor                           CourseReviews[]      @relation("CourseReviews_tutor")
-  CourseReviews_as_student                         CourseReviews[]      @relation("CourseReviews_student")
-
-  @@schema("public")
-}
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model ProfilesOnSubjects {
-  profile_id           String               @db.Uuid
-  subject_id           String               @db.Uuid
-  created_at           DateTime?            @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime?            @default(now()) @db.Timestamptz(6)
-  price_1              Float?
-  price_2              Float?
-  price_3              Float?               @default(1)
-  duration_3           Float?               @default(1.5)
-  duration_2           Float?               @default(1)
-  duration_1           Float?               @default(0.5)
-  institution_course_id String?             @db.Uuid
-  Profiles             Profiles             @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Subjects             Subjects             @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  InstitutionCourses   InstitutionCourses?  @relation(fields: [institution_course_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
-  TutorAvailability    TutorAvailability[]
-
-  @@id([profile_id, subject_id])
-  @@schema("public")
-}
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model Sessions {
-  id                                     String    @id(map: "sessions_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tutor_id                               String    @db.Uuid
-  student_id                             String    @db.Uuid
-  status                                 String    @default("pending")
-  created_at                             DateTime  @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
-  started_at                             DateTime? @db.Timestamptz(6)
-  ended_at                               DateTime? @db.Timestamptz(6)
-  topic                                  String?
-  notes                                  String?
-  start_time                             DateTime? @db.Time(6)
-  duration                               Float?
-  amount                                 Float?
-  date                                   DateTime? @db.Date
-  subject_id                             String?   @db.Uuid
-  is_instant                             Boolean   @default(false)
-  Profiles_Sessions_student_idToProfiles Profiles  @relation("Sessions_student_idToProfiles", fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_student_id_fkey")
-  Profiles_Sessions_tutor_idToProfiles   Profiles  @relation("Sessions_tutor_idToProfiles", fields: [tutor_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_tutor_id_fkey")
-
-  @@schema("public")
-}
-
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model Subjects {
-  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name               String
-  code               String?
-  grade              Int?
-  category           String?
-  curriculum_id      String?              @db.Uuid
-  created_at         DateTime?            @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime?            @default(now()) @db.Timestamptz(6)
-  ProfilesOnSubjects ProfilesOnSubjects[]
-  InstitutionCourses InstitutionCourses[]
-  CourseAssets       CourseAssets[]
-  Curricula          Curricula?           @relation(fields: [curriculum_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
-
-  @@index([curriculum_id], map: "Subjects_curriculum_idx")
-  @@index([code], map: "Subjects_code_idx")
-  @@index([category, grade], map: "Subjects_category_grade_idx")
-  @@schema("public")
-}
-
-model Institutions {
-  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name                     String
-  abbreviation             String?
-  country                  String                     @default("Canada")
-  province                 String?
-  province_id              String?                    @db.Uuid
-  type                     String                     @default("university")
-  email_domains            String[]                   @default([])
-  city                     String?
-  website                  String?
-  external_id              String?                    @unique // Ministry Board Number / School Number (BSID)
-  board_id                 String?                    @db.Uuid // for high schools: the parent school board
-  created_at               DateTime                   @default(now()) @db.Timestamptz(6)
-  updated_at               DateTime                   @default(now()) @db.Timestamptz(6)
-  Profiles                 Profiles[]
-  InstitutionCourses       InstitutionCourses[]
-  ProfileInstitutions      ProfileInstitutions[]
-  SchoolEmailVerifications SchoolEmailVerifications[]
-  Provinces                Provinces?                 @relation(fields: [province_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
-  Board                    Institutions?              @relation("BoardSchools", fields: [board_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
-  Schools                  Institutions[]             @relation("BoardSchools")
-  Curricula                Curricula[]
-
-  @@index([province_id], map: "Institutions_province_idx")
-  @@index([type], map: "Institutions_type_idx")
-  @@index([board_id], map: "Institutions_board_idx")
-  @@schema("public")
-}
-
-model Provinces {
-  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  code         String         @unique
-  name         String
-  country      String         @default("Canada")
-  is_territory Boolean        @default(false)
-  created_at   DateTime       @default(now()) @db.Timestamptz(6)
-  Institutions Institutions[]
-  Curricula    Curricula[]
-
-  @@schema("public")
-}
-
-model Curricula {
-  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name           String
-  kind           String
-  province_id    String?       @db.Uuid
-  institution_id String?       @db.Uuid
-  created_at     DateTime      @default(now()) @db.Timestamptz(6)
-  updated_at     DateTime      @default(now()) @db.Timestamptz(6)
-  Provinces      Provinces?    @relation(fields: [province_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Institutions   Institutions? @relation(fields: [institution_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Subjects       Subjects[]
-
-  @@index([kind], map: "Curricula_kind_idx")
-  @@schema("public")
-}
-
-model ProfileInstitutions {
-  id                   String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  profile_id           String        @db.Uuid
-  institution_id       String?       @db.Uuid
-  institution_name_raw String?
-  kind                 String
-  status               String        @default("declared")
-  verification_method  String?
-  verified_email       String?
-  document_url         String?
-  created_at           DateTime      @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime      @default(now()) @db.Timestamptz(6)
-  Profiles             Profiles      @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Institutions         Institutions? @relation(fields: [institution_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
-
-  @@unique([profile_id, kind], map: "ProfileInstitutions_profile_kind_unique")
-  @@index([profile_id], map: "ProfileInstitutions_profile_idx")
-  @@index([institution_id], map: "ProfileInstitutions_institution_idx")
-  @@schema("public")
-}
-
-model SchoolEmailVerifications {
-  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  profile_id     String       @db.Uuid
-  institution_id String       @db.Uuid
-  email          String
-  code_hash      String
-  expires_at     DateTime     @db.Timestamptz(6)
-  consumed_at    DateTime?    @db.Timestamptz(6)
-  attempts       Int          @default(0)
-  created_at     DateTime     @default(now()) @db.Timestamptz(6)
-  Profiles       Profiles     @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Institutions   Institutions @relation(fields: [institution_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([profile_id], map: "SchoolEmailVerifications_profile_idx")
-  @@schema("public")
-}
-
-model InstitutionCourses {
-  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  institution_id     String               @db.Uuid
-  subject_id         String               @db.Uuid
-  code               String
-  name               String?
-  description        String?
-  created_at         DateTime             @default(now()) @db.Timestamptz(6)
-  updated_at         DateTime             @default(now()) @db.Timestamptz(6)
-  Institutions       Institutions         @relation(fields: [institution_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Subjects           Subjects             @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  ProfilesOnSubjects ProfilesOnSubjects[]
-  CourseAssets       CourseAssets[]
-
-  @@unique([institution_id, code])
-  @@schema("public")
-}
-
-/// The tutor's owned, income-producing course-asset. One per (tutor, subject).
-/// Holds verification/grade state plus per-course gamification (rating, XP, tier).
-/// A course becomes bookable (mirrored into ProfilesOnSubjects) only when it goes live.
-model CourseAssets {
-  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tutor_id              String    @db.Uuid
-  subject_id            String    @db.Uuid
-  institution_course_id String?   @db.Uuid
-  status                String    @default("claimed") // claimed | pending | verified | live | rejected
-  grade_value           String?
-  grade_scale           String?   // percentage | letter | gpa | ib | ap
-  grade_proof_url       String?
-  verification_method   String?   // self_attested | document | school_email | transcript
-  verified_at           DateTime? @db.Timestamptz(6)
-  rejected_reason       String?
-  rating                Float     @default(0)
-  rating_count          Int       @default(0)
-  xp                    Int       @default(0)
-  tier                  String    @default("bronze") // bronze | silver | gold | platinum | diamond
-  sessions_count        Int       @default(0)
-  total_earnings        Float     @default(0)
-  price_1               Float?
-  price_2               Float?
-  price_3               Float?
-  duration_1            Float?    @default(0.5)
-  duration_2            Float?    @default(1)
-  duration_3            Float?    @default(1.5)
-  created_at            DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at            DateTime  @default(now()) @db.Timestamptz(6)
-  Profiles             Profiles            @relation(fields: [tutor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Subjects             Subjects            @relation(fields: [subject_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  InstitutionCourses   InstitutionCourses? @relation(fields: [institution_course_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
-  CourseReviews        CourseReviews[]
-
-  @@unique([tutor_id, subject_id])
-  @@index([tutor_id])
-  @@index([status])
-  @@schema("public")
-}
-
-/// A per-course review left by a student after a session. Reviews compound the
-/// tutor's per-course rating, XP and tier — and roll up into their overall rating.
-model CourseReviews {
-  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  course_asset_id String   @db.Uuid
-  tutor_id        String   @db.Uuid
-  student_id      String   @db.Uuid
-  session_id      String?  @db.Uuid
-  rating          Int
-  comment         String?
-  created_at      DateTime @default(now()) @db.Timestamptz(6)
-  CourseAssets     CourseAssets @relation(fields: [course_asset_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Profiles_tutor   Profiles     @relation("CourseReviews_tutor", fields: [tutor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  Profiles_student Profiles     @relation("CourseReviews_student", fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([course_asset_id])
-  @@index([tutor_id])
-  @@schema("public")
-}
-
-model TutorAvailability {
-  id             String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tutor_id       String              @db.Uuid
-  day_of_week    Int?
-  start_time     DateTime?           @db.Time(6)
-  end_time       DateTime?           @db.Time(6)
-  timezone       String?             @default("UTC")
-  is_active      Boolean             @default(true)
-  created_at     DateTime            @default(now())
-  updated_at     DateTime            @default(now())
-  subject_id     String?             @db.Uuid
-  start_date     DateTime?           @db.Timestamptz(6)
-  end_date       DateTime?           @db.Timestamptz(6)
-  subject        String?
-  duration_3     Int?                @default(0) @db.SmallInt
-  duration_1     Int?                @default(0) @db.SmallInt
-  duration_2     Int?                @default(0) @db.SmallInt
-  tutor          Profiles            @relation(fields: [tutor_id], references: [id], onDelete: Cascade)
-  profileSubject ProfilesOnSubjects? @relation(fields: [tutor_id, subject_id], references: [profile_id, subject_id], onDelete: Cascade)
-
-  @@index([day_of_week, start_time, end_time], map: "TutorAvailability_day_time_idx")
-  @@index([tutor_id])
-  @@schema("public")
-}
-
-model Notifications {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id    String   @db.Uuid
-  type       String
-  title      String
-  body       String
-  is_read    Boolean  @default(false)
-  session_id String?  @db.Uuid
-  actor_id   String?  @db.Uuid
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-
-  @@index([user_id, is_read])
-  @@index([user_id, created_at(sort: Desc)])
-  @@schema("public")
-}
-
-model Contacts {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name       String
-  email      String
-  subject    String
-  message    String
-  is_read    Boolean  @default(false)
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-
-  @@index([created_at(sort: Desc)])
-  @@index([is_read])
-  @@schema("public")
-}
-
-/// Beta feedback messages submitted from the persistent feedback widget. Stored only.
-model Feedback {
-  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  message    String
-  user_id    String?   @db.Uuid
-  email      String?
-  name       String?
-  page       String?
-  user_agent String?
-  is_read    Boolean   @default(false)
-  created_at DateTime  @default(now()) @db.Timestamptz(6)
-  Profiles   Profiles? @relation(fields: [user_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
-
-  @@index([created_at(sort: Desc)])
-  @@index([is_read])
-  @@index([user_id])
-  @@schema("public")
-}
-
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model custom_oauth_providers {
   id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -882,6 +851,10 @@ model webauthn_credentials {
   @@index([user_id])
   @@schema("auth")
 }
+
+// ==========================================================================
+// ENUMS  —  auth schema (Supabase-managed)
+// ==========================================================================
 
 enum aal_level {
   aal1
