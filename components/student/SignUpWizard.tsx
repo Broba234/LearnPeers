@@ -1,7 +1,6 @@
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { WizardSubjectSelector } from "../WizardSubjectSelector";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle,
@@ -183,7 +182,7 @@ const SignUpWizard = () => {
     } catch (e) { }
   };
   // Returns true if ALL subjects have valid price and duration
-  let is_all_selected = selectedSubjectsWithPrice.every(
+  const is_all_selected = selectedSubjectsWithPrice.every(
     (s: any, index) =>
       s.duration && s.duration !== "0.0" && s.price && s.price !== 0
   );

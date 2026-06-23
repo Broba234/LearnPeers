@@ -25,7 +25,7 @@ export async function GET(req: Request) {
       resolvedTutorId = profile.id;
     }
 
-  let slots = await prisma.tutorAvailability.findMany({
+  const slots = await prisma.tutorAvailability.findMany({
   where: { 
     tutor_id: resolvedTutorId, 
     is_active: true, 

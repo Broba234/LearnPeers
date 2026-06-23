@@ -43,7 +43,7 @@ export async function GET(req: Request) {
       const start = toHHMM(w.start_time);
       const end = toHHMM(w.end_time);
       const out: string[] = [];
-      let [sh, sm] = start.split(':').map(Number);
+      const [sh, sm] = start.split(':').map(Number);
       const [eh, em] = end.split(':').map(Number);
       for (let h=sh, m2=sm; (h<eh) || (h===eh && m2<em); ) {
         out.push(`${String(h).padStart(2,'0')}:${String(m2).padStart(2,'0')}`);

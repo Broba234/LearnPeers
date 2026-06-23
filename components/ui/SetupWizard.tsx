@@ -2,7 +2,6 @@ import { supabase } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { WizardSubjectSelector } from "../WizardSubjectSelector";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle,
@@ -254,7 +253,7 @@ const SetupWizard = () => {
     }
   };
   // Returns true if ALL subjects have valid price and duration
-  let is_all_selected = selectedSubjectsWithPrice.every(
+  const is_all_selected = selectedSubjectsWithPrice.every(
     (s: any) => s.duration_1 && s.duration_1 !== "0.0" && Number(s.price_1) > 0
     && s.duration_2 && s.duration_2 !== "0.0" && Number(s.price_2) > 0
     && s.duration_3 && s.duration_3 !== "0.0" && Number(s.price_3) > 0

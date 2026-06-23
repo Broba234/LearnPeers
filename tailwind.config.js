@@ -36,6 +36,16 @@ module.exports = {
           900: '#243036', // logo charcoal
           950: '#161e22',
         },
+        // Semantic surface tokens — consolidate the near-identical neutral greys
+        // that were hard-coded across screens (bg-[#FAFAF9], #F9F9F9, #F3F5F7).
+        // No palette change: these ARE the values already in use, just named.
+        canvas: '#fafaf9',  // warm page background
+        surface: '#ffffff', // elevated/card background
+        muted: '#f3f5f7',   // subtle fills (sidebar, chips, inputs)
+      },
+      boxShadow: {
+        // The brand-tinted elevation used ad hoc as `shadow-lg shadow-brand-600/25`.
+        brand: '0 10px 25px -5px rgb(0 119 190 / 0.25)',
       },
       animation: {
         'slide-in': 'slideIn 0.4s ease-out',

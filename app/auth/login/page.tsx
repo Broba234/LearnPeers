@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
+import { Button, Input } from "@/components/ui/primitives";
 
 function LoginContent() {
     const router = useRouter();
@@ -62,7 +63,7 @@ function LoginContent() {
                     homePath = "/home/tutor";
                     break;
                 case "admin":
-                    homePath = "/home/admin";
+                    homePath = "/dashboard";
                     break;
                 default:
                     homePath = "/home";
@@ -96,22 +97,24 @@ function LoginContent() {
 </div>
 
           <form onSubmit={handleSubmit} className="mt-6">
-            <input
+            <Input
               type="email"
               required
+              aria-label="Email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="E-mail"
-              className="w-full bg-white border border-ink-200 px-4 py-3 rounded-xl mt-4 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
+              className="mt-4"
             />
 
-            <input
+            <Input
               type="password"
               required
+              aria-label="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Password"
-              className="w-full bg-white border border-ink-200 px-4 py-3 rounded-xl mt-4 text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all"
+              className="mt-4"
             />
 
             <div className="mt-2 ml-1">
@@ -129,13 +132,15 @@ function LoginContent() {
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
-              disabled={loading}
-              className="w-full font-semibold text-white py-3.5 mt-5 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-600/25 ring-1 ring-white/20 transition hover:brightness-[1.04] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:brightness-100"
+              loading={loading}
+              fullWidth
+              size="lg"
+              className="mt-5"
             >
               {loading ? "Signing in..." : "Sign In"}
-            </button>
+            </Button>
           </form>
 
           <div className="mt-6 flex gap-x-2 gap-y-1 items-center justify-center flex-wrap text-sm">

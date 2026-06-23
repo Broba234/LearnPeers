@@ -1,0 +1,44 @@
+"use client";
+
+import React from "react";
+import { cn } from "@/lib/utils";
+
+export type SpinnerProps = {
+  className?: string;
+  /** Tailwind size classes, e.g. "h-5 w-5" (default). */
+  size?: string;
+  label?: string;
+};
+
+/**
+ * Small inline spinner for buttons, inputs, and tight loading states.
+ * For full-page branded loading, use `LearnPeersLoader` instead.
+ */
+export function Spinner({ className, size = "h-5 w-5", label }: SpinnerProps) {
+  return (
+    <span role="status" aria-label={label || "Loading"} className="inline-flex">
+      <svg
+        className={cn("animate-spin text-brand-600", size, className)}
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        />
+        <path
+          className="opacity-90"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+        />
+      </svg>
+    </span>
+  );
+}
+
+export default Spinner;

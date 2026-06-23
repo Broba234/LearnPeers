@@ -821,7 +821,8 @@ const Excalidraw = dynamic(
     } catch (e) {
       console.error('Excalidraw dynamic import failed:', e);
       // Return a fallback component
-      return () => (
+      return function ExcalidrawLoadFailed() {
+        return (
         <div className="w-full h-full flex items-center justify-center bg-white">
           <div className="text-center">
             <p className="text-gray-600 mb-4">Whiteboard failed to load</p>
@@ -833,10 +834,11 @@ const Excalidraw = dynamic(
             </button>
           </div>
         </div>
-      );
+        );
+      };
     }
   },
-  { 
+  {
     ssr: false,
     loading: () => <div className="w-full h-full flex items-center justify-center bg-white">Loading whiteboard...</div>
   }

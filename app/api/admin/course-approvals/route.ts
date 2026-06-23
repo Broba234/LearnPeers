@@ -92,7 +92,7 @@ export async function POST(req: Request) {
 
   // Approve: verified (+XP). Auto-go-live if the course already has pricing.
   const priced = (asset.price_1 ?? 0) > 0 && (asset.price_2 ?? 0) > 0 && (asset.price_3 ?? 0) > 0;
-  let xp = asset.xp + XP.verify + (priced ? XP.goLive : 0);
+  const xp = asset.xp + XP.verify + (priced ? XP.goLive : 0);
 
   const updated = await prisma.courseAssets.update({
     where: { id: asset.id },

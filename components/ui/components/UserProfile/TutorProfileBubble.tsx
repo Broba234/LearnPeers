@@ -66,8 +66,9 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
   onBookSession,
   onConnectNow,
 }) => {
-  if (!isOpen) return null;
-
+  // NOTE: do not early-return before the hooks below — that breaks the Rules of
+  // Hooks (the count would change when `isOpen` toggles). The `!isOpen` guard
+  // lives just before the render return instead.
   const isLiveNow = !!(tutor.derivedActiveNow || tutor.isAvailableNow);
 
   const [step, setStep] = useState<1 | 2>(1);
@@ -374,6 +375,8 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
       day: "numeric",
     });
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">

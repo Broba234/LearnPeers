@@ -4,7 +4,7 @@
 - `app/`: Next.js App Router pages, layouts, API routes.
 - `components/`: Reusable React components (prefer `PascalCase.tsx`).
 - `lib/`: Utilities, clients, and helpers (prefer `kebab-case.ts`).
-- `__tests__/`: Jest tests (see naming below).
+- `components/ui/primitives/`: Shared design-system primitives (Button, Input, Card, …); see `docs/DESIGN_SYSTEM.md`.
 - `prisma/`: Prisma schema and generated client.
 - `public/`: Static assets; `styles/`: Tailwind/PostCSS styles.
 - `types/`: Shared TypeScript types; `docs/`, `generated/`: project docs/artifacts.
@@ -14,9 +14,8 @@
 - `npm run dev`: Start local dev server (Next.js).
 - `npm run build`: Production build.
 - `npm start`: Run production server.
-- `npm run lint`: Lint with ESLint/Next rules.
-- `npm test`: Run Jest test suite.
-- `npm run test:watch`: Watch mode for tests.
+- `npm run lint`: Lint with ESLint 9 flat config (`eslint .`, Next presets). Runs clean (errors = 0); pre-existing stylistic issues are warnings.
+- `npm run typecheck`: Type-check with `tsc --noEmit`.
 - Post-install: `prisma generate` runs automatically. For schema changes, run `npx prisma migrate dev` (if applicable).
 
 ## Coding Style & Naming Conventions
@@ -26,10 +25,11 @@
 - Imports: prefer `@/components/...`, `@/lib/...` aliases.
 
 ## Testing Guidelines
-- Frameworks: Jest + Testing Library (`jest-environment-jsdom`, `ts-jest`).
-- Location: `__tests__/` with `*.test.ts` or `*.test.tsx`.
-- Run: `npm test` (use `test:watch` during development).
-- Use existing mocks in `jest.setup.js` for LiveKit, Supabase, and Tldraw.
+- No automated test framework is wired up yet (no Jest/Vitest/Playwright config exists).
+- Verification today is manual: `npm run typecheck` + `npm run lint` must pass, plus the
+  end-to-end walkthroughs in `docs/MANUAL_TESTS.md` (auth, onboarding, explore, booking,
+  payment, live session).
+- If adding automated tests, prefer Vitest + Testing Library; co-locate as `*.test.tsx`.
 
 ## Commit & Pull Request Guidelines
 - Commits: Use concise, action-oriented prefixes (seen in history): `feat:`, `fix:`, `improve:`, `refine:`. Example: `fix: prevent navbar hydration mismatch`.
@@ -39,4 +39,4 @@
 ## Security & Configuration Tips
 - Secrets in `.env.local` (never commit). Client-safe vars use `NEXT_PUBLIC_*`.
 - Database/config: Prisma uses `DATABASE_URL`. Keep schemas and migrations consistent.
-- Review `next.config.js` and `middleware.ts` when changing routing or headers.
+- Review `next.config.js` and `proxy.ts` (the Supabase SSR middleware) when changing routing or headers.

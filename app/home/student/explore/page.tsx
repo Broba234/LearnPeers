@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import { TutorProfileModalContext } from "@/components/ui/components/common/TutorProfileModalContext";
 import { FilterModal } from "@/components/FilterModal";
@@ -426,12 +427,12 @@ export default function ExploreTutors() {
               We&rsquo;re onboarding verified student tutors from across Ontario universities. Tell us
               the course you need and we&rsquo;ll notify you the moment a tutor goes live.
             </p>
-            <a
+            <Link
               href="/#contact"
               className="mt-5 inline-flex items-center gap-1.5 px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors"
             >
               Request a tutor
-            </a>
+            </Link>
           </div>
         )}
 
