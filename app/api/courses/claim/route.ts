@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 
 // Place a course on your tree. Creates a CourseAsset in the `claimed` state —
 // owned but locked (greyed) until the grade is verified. Idempotent: claiming a
 // course you already own returns the existing asset untouched.
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { subject_id, institution_course_id } = await req.json();

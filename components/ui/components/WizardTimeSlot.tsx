@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CheckCircle, XCircle, Clock, DollarSign } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 
 interface Subject {
   id: number;

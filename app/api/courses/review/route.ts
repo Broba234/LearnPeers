@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 import { tierForXp, XP, recomputeOverallRating } from "@/lib/courses";
 import { createNotification } from "@/lib/notifications";
 
@@ -11,7 +11,7 @@ import { createNotification } from "@/lib/notifications";
 // overall rating. One review per (session, student).
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await req.json();
@@ -96,7 +96,7 @@ export async function POST(req: Request) {
 
     // Notify the tutor that their standing moved.
     try {
-      const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+      const admin = createSupabaseAdminClient();
       const subj = await prisma.subjects.findUnique({ where: { id: asset.subject_id }, select: { code: true, name: true } });
       await createNotification(admin, {
         userId: asset.tutor_id,

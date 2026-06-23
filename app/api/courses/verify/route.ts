@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 import { normalizeGrade, type GradeScale } from "@/lib/courses";
 import { createNotification } from "@/lib/notifications";
 
@@ -18,7 +18,7 @@ const ALLOWED = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
 // - Meets the bar -> `pending`, proof stored privately, admins notified.
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     // DEMO MODE: skip the transcript upload + admin review and verify instantly.
@@ -105,7 +105,7 @@ export async function POST(req: Request) {
     if (proof.size > MAX_BYTES) return NextResponse.json({ error: "File too large (max 10MB)" }, { status: 400 });
     if (!ALLOWED.includes(proof.type)) return NextResponse.json({ error: "Use a PDF, JPG, PNG or WebP" }, { status: 400 });
 
-    const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+    const admin = createSupabaseAdminClient();
     const { data: buckets } = await admin.storage.listBuckets();
     if (!buckets?.some((b) => b.name === BUCKET)) {
       await admin.storage.createBucket(BUCKET, { public: false, fileSizeLimit: MAX_BYTES });

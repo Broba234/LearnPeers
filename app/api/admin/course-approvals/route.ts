@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 import { normalizeGrade, tierForXp, XP, publishListing, type GradeScale } from "@/lib/courses";
 import { createNotification } from "@/lib/notifications";
 
 const BUCKET = "grade-proofs";
 
 async function requireAdmin() {
-  const user = await getAuthUser();
+  const user = await getAuthedUser();
   if (!user) return { error: "Unauthorized" as const, status: 401 };
   const profile = await prisma.profiles.findUnique({ where: { id: user.id }, select: { role: true } });
   if (profile?.role !== "admin") return { error: "Forbidden" as const, status: 403 };
@@ -30,7 +30,7 @@ export async function GET() {
     },
   });
 
-  const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+  const admin = createSupabaseAdminClient();
 
   const requests = await Promise.all(
     rows.map(async (a) => {
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
   if (!asset) return NextResponse.json({ error: "Request not found" }, { status: 404 });
   if (asset.status !== "pending") return NextResponse.json({ error: "This request is no longer pending" }, { status: 409 });
 
-  const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+  const admin = createSupabaseAdminClient();
   const subj = await prisma.subjects.findUnique({ where: { id: asset.subject_id }, select: { code: true, name: true } });
   const label = subj?.code || subj?.name || "your course";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import EventCalender from "@/components/EventCalender";
 import Selectable from "@/components/EventCalender";
 import { momentLocalizer } from 'react-big-calendar'

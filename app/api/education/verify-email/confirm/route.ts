@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 
 const MAX_ATTEMPTS = 5;
 
 // Confirms a school-email verification code and marks the affiliation verified.
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { code } = await req.json();

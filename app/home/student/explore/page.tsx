@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useContext, useMemo } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import { TutorProfileModalContext } from "@/components/ui/components/common/TutorProfileModalContext";
 import { FilterModal } from "@/components/FilterModal";
 import Avatar from "@/components/ui/Avatar";

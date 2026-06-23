@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 import {
   normalizeGrade,
   tierForXp,
@@ -15,7 +15,7 @@ import {
 // portfolio value and the counts that drive the gamified header.
 export async function GET() {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const profile = await prisma.profiles.findUnique({

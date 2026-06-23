@@ -1,7 +1,7 @@
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { getAuthedUser } from "@/lib/api-auth";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { notifySessionCreated } from "@/lib/notifications";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -72,10 +72,7 @@ export async function POST(request: NextRequest) {
 
     // Create the booking up front so it always exists regardless of whether
     // payment can be collected right now.
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase = createSupabaseAdminClient();
 
     const { data: session, error: sessionError } = await supabase
       .from("Sessions")

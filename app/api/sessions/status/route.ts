@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { getAuthedUser } from "@/lib/api-auth";
 
 const UUID_RE =
@@ -23,10 +23,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Valid sessionId is required" }, { status: 400 });
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase = createSupabaseAdminClient();
 
     const { data: session } = await supabase
       .from("Sessions")

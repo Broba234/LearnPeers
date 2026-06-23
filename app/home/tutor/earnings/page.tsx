@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 type EarningsSession = {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
 import { WebhookReceiver, EgressStatus } from "livekit-server-sdk";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { publicUrlForKey } from "@/lib/recording";
 import { isTranscriptionConfigured, transcribeRecording } from "@/lib/transcription";
 
@@ -31,10 +31,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true });
   }
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const supabase = createSupabaseAdminClient();
 
   const info = event.egressInfo;
   const egressId = info.egressId;

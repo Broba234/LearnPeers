@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 export const runtime = 'nodejs';
-import { createClient } from '@supabase/supabase-js';
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { notifySessionCreated } from '@/lib/notifications';
 import { getAuthedUser } from '@/lib/api-auth';
 
@@ -14,10 +14,7 @@ export async function POST(request: NextRequest) {
     const studentId = user.id;
 
     // Create server-side Supabase client with service role key
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase = createSupabaseAdminClient();
 
     const { tutorId, topic, notes, start_time, duration, date, amount, subjectId } = await request.json();
 

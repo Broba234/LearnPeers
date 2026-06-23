@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 export const runtime = "nodejs";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { prisma } from "@/lib/prisma";
 import { getAuthedUser } from "@/lib/api-auth";
 import { isTutorLive } from "@/lib/presence";
@@ -43,10 +43,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase = createSupabaseAdminClient();
 
     // Reuse an existing live request between these two if one is already pending,
     // so a double-tap doesn't spam the tutor with duplicates.

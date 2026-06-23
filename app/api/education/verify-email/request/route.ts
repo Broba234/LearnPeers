@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 import { sendSchoolVerificationEmail } from "@/lib/email";
 
 const CODE_TTL_MS = 15 * 60 * 1000;
@@ -14,7 +14,7 @@ function hashCode(code: string) {
 // Sends a 6-digit code to a university email to verify enrollment.
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { institutionId, email } = await req.json();

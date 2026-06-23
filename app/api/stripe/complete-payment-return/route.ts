@@ -1,5 +1,5 @@
 import { stripe } from "@/lib/stripe";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -41,10 +41,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase = createSupabaseAdminClient();
 
     const { error } = await supabase
       .from("Sessions")

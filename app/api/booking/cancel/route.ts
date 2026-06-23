@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { stripe } from "@/lib/stripe";
 import { notifySessionStatusChanged } from "@/lib/notifications";
 import { getAuthedUser } from "@/lib/api-auth";
@@ -24,10 +24,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Valid sessionId required" }, { status: 400 });
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase = createSupabaseAdminClient();
 
     const { data: session, error: fetchError } = await supabase
       .from("Sessions")

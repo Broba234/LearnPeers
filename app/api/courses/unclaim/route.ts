@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 import { unpublishListing } from "@/lib/courses";
 
 // Remove a course-asset from your portfolio. Also pulls it from the bookable
 // listings (ProfilesOnSubjects) if it was live. Reviews cascade-delete with it.
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { course_asset_id } = await req.json();

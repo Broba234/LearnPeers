@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import StandingHeader from "@/components/courses/StandingHeader";
 import CourseAssetCard from "@/components/courses/CourseAssetCard";
 import CourseTree from "@/components/courses/CourseTree";

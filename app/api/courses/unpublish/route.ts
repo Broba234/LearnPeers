@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 import { unpublishListing } from "@/lib/courses";
 
 // Take a live course offline without giving up the asset: it drops out of the
 // bookable listings but keeps its grade, rating, XP and tier. Reverts to `verified`.
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { course_asset_id } = await req.json();

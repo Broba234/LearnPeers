@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 
 const BUCKET = "enrollment-proofs";
 const MAX_BYTES = 10 * 1024 * 1024;
@@ -12,7 +12,7 @@ const KINDS = ["current_university", "current_high_school", "former_high_school"
 // matching affiliation pending review.
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const form = await req.formData();
@@ -38,10 +38,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const admin = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const admin = createSupabaseAdminClient();
 
     // Private bucket — documents are sensitive; admin reviews via signed URLs
     const { data: buckets } = await admin.storage.listBuckets();

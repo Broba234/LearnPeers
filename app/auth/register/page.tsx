@@ -2,7 +2,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, FormEvent, Suspense } from "react";
 import Link from "next/link";
-import { supabase } from '@/lib/supabaseClient' // correct
+import { supabase } from '@/lib/supabase/client' // correct
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 function RegisterContent() {

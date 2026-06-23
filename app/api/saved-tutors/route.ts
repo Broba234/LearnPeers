@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 
 // Saved tutors (favorites). Stored in public."SavedTutors" — not on the Prisma
 // client, so accessed via raw SQL. Identity is derived from the session.
 export async function GET() {
-  const user = await getAuthUser();
+  const user = await getAuthedUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const rows = await prisma.$queryRaw<{ tutor_id: string }[]>`
     SELECT tutor_id FROM public."SavedTutors" WHERE student_id = ${user.id}::uuid`;
@@ -13,7 +13,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const user = await getAuthUser();
+  const user = await getAuthedUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = await req.json().catch(() => ({}));
   const tutorId = body?.tutorId;

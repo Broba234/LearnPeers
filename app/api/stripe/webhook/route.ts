@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createNotification } from "@/lib/notifications";
 
 export const runtime = "nodejs";
@@ -27,10 +27,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `Webhook error: ${err.message}` }, { status: 400 });
   }
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const supabase = createSupabaseAdminClient();
 
   try {
     switch (event.type) {

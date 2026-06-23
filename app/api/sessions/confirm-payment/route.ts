@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { stripe } from "@/lib/stripe";
 import { getAuthedUser } from "@/lib/api-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -32,10 +32,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Valid paymentIntentId is required" }, { status: 400 });
     }
 
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabase = createSupabaseAdminClient();
 
     const { data: session } = await supabase
       .from("Sessions")

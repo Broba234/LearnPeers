@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import TiptapEditor from "@/components/RichTextEditor";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";

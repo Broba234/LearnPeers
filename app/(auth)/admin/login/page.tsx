@@ -2,7 +2,7 @@
 import { useState, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 function LoginContent() {

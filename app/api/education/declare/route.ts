@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 
 const KINDS = ["current_university", "current_high_school", "former_high_school"];
 
@@ -8,7 +8,7 @@ const KINDS = ["current_university", "current_high_school", "former_high_school"
 // school email; everyone can later attach proof-of-enrollment documents.
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const { kind, institutionId, institutionName } = await req.json();
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const rows = await prisma.profileInstitutions.findMany({

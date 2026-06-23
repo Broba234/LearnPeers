@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, createContext, useContext, ReactNode } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import HomeSidebar from "@/components/ui/components/DashboardSidebar";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";

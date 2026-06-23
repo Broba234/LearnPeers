@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 import { normalizeGrade, type GradeScale } from "@/lib/courses";
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
@@ -8,7 +8,7 @@ const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 // Student growth-loop data: referral code + count, saved tutors (enriched), and
 // a weekly learning streak derived from completed sessions.
 export async function GET() {
-  const user = await getAuthUser();
+  const user = await getAuthedUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const id = user.id;
 

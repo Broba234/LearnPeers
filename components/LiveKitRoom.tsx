@@ -20,7 +20,7 @@ import '@livekit/components-styles';
 import dynamic from 'next/dynamic';
 // Using 'any' for imperative API type to avoid version export mismatches
 // Excalidraw CSS will be added after install
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase/client';
 import { startScreenShare, stopScreenShare, isScreenSharing, showSuccess, BrowserCompatibility } from '@/lib/screenShare';
 
 interface LiveKitRoomProps {

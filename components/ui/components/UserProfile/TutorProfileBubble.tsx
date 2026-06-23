@@ -1,6 +1,6 @@
 "use client";
 
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import SearchableSelect from "@/components/ui/SearchableSelect";

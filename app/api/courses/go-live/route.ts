@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getAuthUser } from "@/lib/serverAuth";
+import { getAuthedUser } from "@/lib/api-auth";
 import { tierForXp, XP, publishListing } from "@/lib/courses";
 
 // Set pricing and publish a course to the bookable listings.
@@ -10,7 +10,7 @@ import { tierForXp, XP, publishListing } from "@/lib/courses";
 //   grade is verified ("Verify your grade to go live").
 export async function POST(req: Request) {
   try {
-    const user = await getAuthUser();
+    const user = await getAuthedUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const body = await req.json();

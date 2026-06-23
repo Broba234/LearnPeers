@@ -12,7 +12,7 @@ import {
   Tag,
 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 
 interface EventDetailModalProps {
   isOpen: boolean;

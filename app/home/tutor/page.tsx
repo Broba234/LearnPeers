@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabase/client";
 import Modal from "@/components/Modal/Modal";
 import SetupWizard from "@/components/ui/SetupWizard";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
