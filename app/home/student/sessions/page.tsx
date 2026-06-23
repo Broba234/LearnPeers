@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import LiveKitRoom from '@/components/LiveKitRoom';
 import { supabase } from '@/lib/supabase/client';
 
 interface Session {

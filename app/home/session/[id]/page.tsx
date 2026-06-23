@@ -2,8 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
-import LiveKitRoom from "@/components/LiveKitRoom";
+import dynamic from "next/dynamic";
 import { toast } from "sonner";
+
+// The LiveKit room pulls in the RTC + Excalidraw bundles; load it client-side
+// only and code-split it so it isn't part of this route's initial JS.
+const LiveKitRoom = dynamic(() => import("@/components/LiveKitRoom"), { ssr: false });
 
 export default function SessionRoomPage() {
   const params = useParams<{ id: string }>();

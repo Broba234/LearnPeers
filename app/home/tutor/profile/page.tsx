@@ -2,8 +2,11 @@
 import { useState, useEffect, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
-import TiptapEditor from "@/components/RichTextEditor";
+import dynamic from "next/dynamic";
 import Swal from "sweetalert2";
+// Tiptap pulls in a sizeable editor bundle; only load it client-side when the
+// tutor actually edits their bio.
+const TiptapEditor = dynamic(() => import("@/components/RichTextEditor"), { ssr: false });
 import { motion } from "framer-motion";
 import SubjectSelectProfile from "@/components/ui/components/SubjectSelectProfile";
 import WizardTimeSlot from "@/components/ui/components/WizardTimeSlot";
