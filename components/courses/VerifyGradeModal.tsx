@@ -24,8 +24,11 @@ export default function VerifyGradeModal({
   const [value, setValue] = useState(asset.grade_value || "");
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [result, setResult] = useState<null | { qualifies: boolean; label?: string; reason?: string }>(null);
+  const [result, setResult] = useState<null | { qualifies: boolean; verified?: boolean; label?: string; reason?: string }>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  // DEMO MODE: verify instantly with no transcript upload. Remove
+  // NEXT_PUBLIC_DEMO_MODE to roll back.
+  const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
   const scaleMeta = GRADE_SCALES.find((g) => g.value === scale)!;
   const code = asset.subject.code || asset.institution_course?.code || "";
@@ -35,7 +38,7 @@ export default function VerifyGradeModal({
       toast.error("Enter your grade first");
       return;
     }
-    if (!file) {
+    if (!DEMO_MODE && !file) {
       toast.error("Upload your transcript or report card — verification is reviewed by an admin");
       return;
     }
@@ -45,7 +48,7 @@ export default function VerifyGradeModal({
       fd.append("course_asset_id", asset.id);
       fd.append("grade_value", value.trim());
       fd.append("grade_scale", scale);
-      fd.append("proof", file);
+      if (file) fd.append("proof", file);
       const res = await fetch("/api/courses/verify", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok) {
@@ -54,8 +57,8 @@ export default function VerifyGradeModal({
         return;
       }
       if (data.qualifies) {
-        // qualifying grade -> pending admin review
-        setResult({ qualifies: true, label: data.asset?.grade_label });
+        // qualifying grade -> pending admin review (or instantly verified in demo mode)
+        setResult({ qualifies: true, verified: !!data.verified, label: data.asset?.grade_label });
       } else {
         setResult({ qualifies: false, reason: data.asset?.rejected_reason || "Grade below the bar to tutor this course." });
       }
@@ -85,7 +88,9 @@ export default function VerifyGradeModal({
               <h2 className="text-lg font-semibold text-slate-900">Request verification</h2>
               <p className="text-sm text-slate-500 mt-0.5">{asset.subject.name}</p>
               <p className="text-xs text-slate-400 mt-2">
-                Enter your grade and upload your transcript or report card. An admin reviews it, and once approved you unlock the right to tutor this course.
+                {DEMO_MODE
+                  ? "Enter your grade — in demo mode it's verified instantly, no transcript needed."
+                  : "Enter your grade and upload your transcript or report card. An admin reviews it, and once approved you unlock the right to tutor this course."}
               </p>
 
               <div className="mt-5 space-y-4">
@@ -119,7 +124,7 @@ export default function VerifyGradeModal({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-500 mb-1.5">Transcript / report card <span className="text-rose-400">*</span></label>
+                  <label className="block text-xs font-medium text-slate-500 mb-1.5">Transcript / report card {DEMO_MODE ? <span className="text-slate-400">(optional in demo)</span> : <span className="text-rose-400">*</span>}</label>
                   <input ref={fileRef} type="file" accept="application/pdf,image/*" className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} />
                   <button
                     onClick={() => fileRef.current?.click()}
@@ -146,16 +151,22 @@ export default function VerifyGradeModal({
                 initial={{ scale: 0, rotate: -30 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={{ type: "spring", stiffness: 240, damping: 14 }}
-                className="mx-auto w-16 h-16 rounded-2xl bg-amber-100 flex items-center justify-center"
+                className={`mx-auto w-16 h-16 rounded-2xl flex items-center justify-center ${result.verified ? "bg-green-100" : "bg-amber-100"}`}
               >
-                <svg className="w-9 h-9 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                {result.verified ? (
+                  <svg className="w-9 h-9 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                ) : (
+                  <svg className="w-9 h-9 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                )}
               </motion.div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900">Submitted for review</h2>
+              <h2 className="mt-4 text-lg font-semibold text-slate-900">{result.verified ? "Verified" : "Submitted for review"}</h2>
               <p className="text-sm text-slate-500 mt-1">
-                {code} is in the admin review queue{result.label ? ` (grade ${result.label})` : ""}. You'll be notified once it's approved — then you can set a price and go live.
+                {result.verified
+                  ? <>{code} is verified{result.label ? ` (grade ${result.label})` : ""}. You can set a price and go live now.</>
+                  : <>{code} is in the admin review queue{result.label ? ` (grade ${result.label})` : ""}. You'll be notified once it's approved — then you can set a price and go live.</>}
               </p>
-              <span className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold bg-amber-50 text-amber-700">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" /> Pending approval
+              <span className={`mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold ${result.verified ? "bg-green-50 text-green-700" : "bg-amber-50 text-amber-700"}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${result.verified ? "bg-green-500" : "bg-amber-400 animate-pulse"}`} /> {result.verified ? "Verified" : "Pending approval"}
               </span>
               <button onClick={onDone} className="mt-6 w-full px-4 py-3 text-sm font-semibold rounded-xl bg-brand-600 text-white hover:bg-brand-700 transition-colors">
                 Got it

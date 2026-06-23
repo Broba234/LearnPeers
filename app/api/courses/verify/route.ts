@@ -21,6 +21,10 @@ export async function POST(req: Request) {
     const user = await getAuthUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    // DEMO MODE: skip the transcript upload + admin review and verify instantly.
+    // Remove NEXT_PUBLIC_DEMO_MODE to roll back.
+    const DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+
     const ct = req.headers.get("content-type") || "";
     if (!ct.includes("multipart/form-data")) {
       return NextResponse.json(
@@ -38,7 +42,7 @@ export async function POST(req: Request) {
     if (!course_asset_id || !grade_value || !grade_scale) {
       return NextResponse.json({ error: "course_asset_id, grade_value and grade_scale are required" }, { status: 400 });
     }
-    if (!proof || typeof proof !== "object" || proof.size === 0) {
+    if (!DEMO && (!proof || typeof proof !== "object" || proof.size === 0)) {
       return NextResponse.json(
         { error: "Upload your transcript or report card — verification is reviewed by an admin." },
         { status: 400 }
@@ -72,6 +76,29 @@ export async function POST(req: Request) {
         select: { id: true, status: true, rejected_reason: true },
       });
       return NextResponse.json({ asset: rejected, qualifies: false });
+    }
+
+    // DEMO MODE: instantly verify (no transcript, no admin queue) so the demo
+    // can reach "go live" in one tap.
+    if (DEMO) {
+      const verified = await prisma.courseAssets.update({
+        where: { id: asset.id },
+        data: {
+          status: "verified",
+          grade_value,
+          grade_scale,
+          verification_method: "demo",
+          verified_at: new Date(),
+          grade_proof_url: null,
+          rejected_reason: null,
+        },
+        select: { id: true, status: true },
+      });
+      return NextResponse.json({
+        asset: { id: verified.id, status: verified.status, grade_label: g.label },
+        qualifies: true,
+        verified: true,
+      });
     }
 
     // Validate + store the proof in the private bucket (admins review via signed URLs).

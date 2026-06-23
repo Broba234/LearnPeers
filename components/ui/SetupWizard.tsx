@@ -92,7 +92,8 @@ const SetupWizard = () => {
     email: "",
     phone: "",
     grade: "",
-    is_tutor: false,
+    // This is the tutor onboarding wizard, so the user is always a tutor.
+    is_tutor: true,
     subjects: [],
   });
   const [profile, setProfile] = useState<any>(null);
@@ -150,7 +151,8 @@ const SetupWizard = () => {
             email: profileData.email || "",
             phone: profileData.phone || "",
             grade: profileData.grade || "",
-            is_tutor: profileData.is_tutor || false,
+            // Tutor onboarding — always a tutor (the student/teacher choice was removed).
+            is_tutor: true,
             subjects: profileData.subjects || [],
           });
           let normalizedSubjects: any[] = [];
@@ -572,56 +574,6 @@ const SetupWizard = () => {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="max-w-2xl mx-auto space-y-6"
                       >
-                        {/* Bio Input */}
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.1 }}
-                          className="relative group"
-                        >
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Are you a student or a full time teacher?
-                          </label>
-
-                          <div className="relative">
-                            <motion.div className="flex items-center justify-start gap-3">
-                              <div className="flex cursor-pointer items-center flex-1 ps-4 rounded-2xl border-2 border-gray-200 bg-neutral-primary-soft rounded-base">
-                                <input
-                                  checked={formData.is_tutor === false}
-                                  id="bordered-radio-1"
-                                  type="radio"
-                                  value={0}
-                                  onChange={(e) => handleInputChange(e)}
-                                  name="is_tutor"
-                                  className="w-4 h-4 cursor-pointer"
-                                />
-                                <label
-                                  htmlFor="bordered-radio-1"
-                                  className="w-full cursor-pointer py-4 select-none ms-2 text-sm font-medium text-heading"
-                                >
-                                  Student
-                                </label>
-                              </div>
-                              <div className="flex cursor-pointer items-center rounded-2xl border-2 border-gray-200 flex-1 ps-4 border-default bg-neutral-primary-soft rounded-base">
-                                <input
-                                  checked={formData.is_tutor === true}
-                                  id="bordered-radio-2"
-                                  type="radio"
-                                  value={1}
-                                  onChange={(e) => handleInputChange(e)}
-                                  name="is_tutor"
-                                  className="w-4 h-4 cursor-pointer"
-                                />
-                                <label
-                                  htmlFor="bordered-radio-2"
-                                  className="w-full  cursor-pointer py-4 select-none ms-2 text-sm font-medium text-heading"
-                                >
-                                  Teacher
-                                </label>
-                              </div>
-                            </motion.div>
-                          </div>
-                        </motion.div>
                         {/* Bio Input */}
                         <motion.div
                           initial={{ opacity: 0, y: 10 }}
