@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@/prisma/generated";
 import { prisma } from "@/lib/prisma";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
   try {
@@ -63,6 +64,16 @@ export async function POST(req: Request) {
          WHERE id = ${id}::uuid`;
     } catch (e) {
       console.warn("[API] referral assignment skipped:", e);
+    }
+
+    // Onboarding welcome from hello@learnpeers.com. Only reached for genuinely
+    // new accounts (existing profiles return early above), so it fires once.
+    // Non-fatal: a mail hiccup must never fail account creation.
+    try {
+      const firstName = String(name).trim().split(/\s+/)[0] || undefined;
+      await sendWelcomeEmail(email, firstName);
+    } catch (e) {
+      console.warn("[API] welcome email skipped:", e);
     }
 
     return NextResponse.json(profile);
