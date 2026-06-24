@@ -227,9 +227,17 @@ export default function EducationStep({ requireVerification, allowSkip, universi
 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   const selectedUniversity = universities.find((u) => u.id === universityId);
   const uniEstablished = requireVerification ? verified : uniDeclared;
+
+  // Resend cooldown ticker
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const t = setTimeout(() => setResendCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [resendCooldown]);
 
   useEffect(() => {
     fetch("/api/institutions?type=university")
@@ -277,6 +285,7 @@ export default function EducationStep({ requireVerification, allowSkip, universi
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Could not send the code");
       setCodeSent(true);
+      setResendCooldown(30);
       if (data.devCode) setDevCode(data.devCode);
     } catch (e: any) {
       setError(e.message);
@@ -460,17 +469,27 @@ export default function EducationStep({ requireVerification, allowSkip, universi
                       Verify
                     </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCodeSent(false);
-                      setCode("");
-                      setDevCode(null);
-                    }}
-                    className="text-xs font-medium text-brand-600 hover:text-brand-700"
-                  >
-                    Use a different email
-                  </button>
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={sendCode}
+                      disabled={busy || resendCooldown > 0}
+                      className="text-xs font-medium text-brand-600 hover:text-brand-700 disabled:text-ink-300 disabled:cursor-not-allowed"
+                    >
+                      {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend code"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCodeSent(false);
+                        setCode("");
+                        setDevCode(null);
+                      }}
+                      className="text-xs font-medium text-ink-400 hover:text-ink-600"
+                    >
+                      Use a different email
+                    </button>
+                  </div>
                 </div>
               )}
               {DEMO_MODE && (
