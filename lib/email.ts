@@ -11,6 +11,8 @@
 // When RESEND_API_KEY is unset we log to the server console and, in
 // development, hand the code back to the caller so flows stay testable.
 
+import { welcomeEmailHtml, verificationEmailHtml } from "./email-templates";
+
 const NOREPLY_FROM =
   process.env.EMAIL_FROM_NOREPLY || "LearnPeers <noreply@learnpeers.com>";
 const HELLO_FROM =
@@ -60,9 +62,6 @@ async function sendEmail({ from, to, subject, html, replyTo }: EmailArgs): Promi
   return true;
 }
 
-const shell = (inner: string) =>
-  `<div style="font-family:Inter,Arial,sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;">${inner}</div>`;
-
 // System mail — verification code. Sent from noreply@.
 export async function sendSchoolVerificationEmail(
   to: string,
@@ -73,11 +72,7 @@ export async function sendSchoolVerificationEmail(
     from: NOREPLY_FROM,
     to,
     subject: `${code} is your LearnPeers verification code`,
-    html: shell(`
-      <h2 style="color:#243036;margin:0 0 8px;">Verify your school email</h2>
-      <p style="color:#4f636d;line-height:1.5;">Enter this code in LearnPeers to confirm you study at <strong>${institutionName}</strong>:</p>
-      <p style="font-size:32px;font-weight:700;letter-spacing:8px;color:#0077be;margin:24px 0;">${code}</p>
-      <p style="color:#a6b4bb;font-size:13px;">This code expires in 15 minutes. If you didn't request it, you can ignore this email.</p>`),
+    html: verificationEmailHtml(code, institutionName),
   });
 
   if (delivered) return { delivered: true };
@@ -87,18 +82,12 @@ export async function sendSchoolVerificationEmail(
 
 // Warm onboarding — welcome. Sent from hello@, replies route to your inbox.
 export async function sendWelcomeEmail(to: string, firstName?: string): Promise<SendResult> {
-  const hi = firstName ? `Hi ${firstName},` : "Hi,";
   const delivered = await sendEmail({
     from: HELLO_FROM,
     to,
     replyTo: REPLY_TO,
     subject: "Welcome to LearnPeers 👋",
-    html: shell(`
-      <h2 style="color:#243036;margin:0 0 8px;">Welcome to LearnPeers</h2>
-      <p style="color:#4f636d;line-height:1.5;">${hi}</p>
-      <p style="color:#4f636d;line-height:1.5;">You're in. LearnPeers connects you with peers who actually get what you're studying — book a session, or hop in as a tutor.</p>
-      <p style="color:#4f636d;line-height:1.5;">Just reply to this email if you ever need a hand. A real person reads it.</p>
-      <p style="color:#a6b4bb;font-size:13px;margin-top:24px;">— Edouard</p>`),
+    html: welcomeEmailHtml(firstName),
   });
 
   if (delivered || process.env.NODE_ENV !== "production") return { delivered };
