@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { BookOpen, Clock, X } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { BookOpen, Clock, Repeat, X, Check } from "lucide-react";
 import { toast } from "sonner";
 
 export interface EventFormData {
@@ -28,31 +28,54 @@ interface EventModalProps {
   subjects?: any[];
 }
 
+// Mon-first ordering: matches how students read a school timetable.
 const DAYS = [
-  { label: "M", name: "Mon", idx: 1 },
-  { label: "T", name: "Tue", idx: 2 },
-  { label: "W", name: "Wed", idx: 3 },
-  { label: "T", name: "Thu", idx: 4 },
-  { label: "F", name: "Fri", idx: 5 },
-  { label: "S", name: "Sat", idx: 6 },
-  { label: "S", name: "Sun", idx: 0 },
+  { label: "Mon", short: "M", idx: 1 },
+  { label: "Tue", short: "T", idx: 2 },
+  { label: "Wed", short: "W", idx: 3 },
+  { label: "Thu", short: "T", idx: 4 },
+  { label: "Fri", short: "F", idx: 5 },
+  { label: "Sat", short: "S", idx: 6 },
+  { label: "Sun", short: "S", idx: 0 },
 ];
 
-// slot 0 = 00:00, slot 48 = 24:00 (midnight end of day), step = 30 min
-function slotToHHmm(slot: number): string {
-  const h = Math.floor(slot / 2) % 24;
-  const m = slot % 2 === 1 ? 30 : 0;
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+const WEEKDAYS = [1, 2, 3, 4, 5];
+const WEEKEND = [6, 0];
+
+// Half-hour options from 6:00 AM to 11:00 PM — covers after-school and evening
+// tutoring without exposing odd overnight hours.
+function buildTimeOptions(startHour = 6, endHour = 23): { value: string; label: string }[] {
+  const out: { value: string; label: string }[] = [];
+  for (let h = startHour; h <= endHour; h++) {
+    for (const m of [0, 30]) {
+      if (h === endHour && m > 0) break;
+      const value = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+      const period = h < 12 ? "AM" : "PM";
+      const displayH = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      const label = `${displayH}:${String(m).padStart(2, "0")} ${period}`;
+      out.push({ value, label });
+    }
+  }
+  return out;
 }
 
-function slotToLabel(slot: number): string {
-  if (slot === 48) return "12:00 AM";
-  const h = Math.floor(slot / 2);
-  const m = slot % 2 === 1 ? 30 : 0;
-  const period = h < 12 ? "AM" : "PM";
-  const displayH = h === 0 ? 12 : h > 12 ? h - 12 : h;
-  return `${displayH}:${String(m).padStart(2, "0")} ${period}`;
+const TIME_OPTIONS = buildTimeOptions();
+
+function labelFor(value: string): string {
+  return TIME_OPTIONS.find((t) => t.value === value)?.label ?? value;
 }
+
+function toMinutes(value: string): number {
+  const [h, m] = value.split(":").map(Number);
+  return h * 60 + m;
+}
+
+// Common after-school / evening windows a student would actually pick.
+const TIME_PRESETS = [
+  { label: "After school", start: "16:00", end: "19:00" },
+  { label: "Evenings", start: "18:00", end: "21:00" },
+  { label: "Mornings", start: "09:00", end: "12:00" },
+];
 
 function nextDateForDay(dayIdx: number): string {
   const today = new Date();
@@ -63,61 +86,18 @@ function nextDateForDay(dayIdx: number): string {
   return next.toISOString().split("T")[0];
 }
 
-const TimeRangeSlider: React.FC<{
-  startSlot: number;
-  endSlot: number;
-  onStartChange: (v: number) => void;
-  onEndChange: (v: number) => void;
-}> = ({ startSlot, endSlot, onStartChange, onEndChange }) => {
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  const getSlot = (clientX: number): number => {
-    if (!trackRef.current) return 0;
-    const rect = trackRef.current.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    return Math.round(ratio * 48);
-  };
-
-  const makeHandlers = (which: "start" | "end") => ({
-    onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
-    },
-    onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!(e.currentTarget as HTMLDivElement).hasPointerCapture(e.pointerId)) return;
-      const slot = getSlot(e.clientX);
-      if (which === "start" && slot >= 0 && slot < endSlot) onStartChange(slot);
-      else if (which === "end" && slot > startSlot && slot <= 48) onEndChange(slot);
-    },
-    onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => {
-      (e.currentTarget as HTMLDivElement).releasePointerCapture(e.pointerId);
-    },
-  });
-
-  const startPct = (startSlot / 48) * 100;
-  const endPct = (endSlot / 48) * 100;
-
-  return (
-    <div ref={trackRef} className="relative h-8 select-none px-2.5">
-      <div className="absolute top-1/2 left-2.5 right-2.5 -translate-y-1/2 h-2 bg-gray-200 rounded-full">
-        <div
-          className="absolute h-full bg-gradient-to-r from-[#0077be] to-brand-400 rounded-full"
-          style={{ left: `${startPct}%`, width: `${endPct - startPct}%` }}
-        />
-      </div>
-      <div
-        {...makeHandlers("start")}
-        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#0077be] rounded-full shadow-md cursor-grab active:cursor-grabbing touch-none z-10"
-        style={{ left: `calc(${startPct}% + 10px)` }}
-      />
-      <div
-        {...makeHandlers("end")}
-        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-[#0077be] rounded-full shadow-md cursor-grab active:cursor-grabbing touch-none z-10"
-        style={{ left: `calc(${endPct}% + 10px)` }}
-      />
-    </div>
-  );
-};
+function daysSummary(days: number[]): string {
+  if (days.length === 0) return "";
+  const set = new Set(days);
+  const isWeekdays = WEEKDAYS.every((d) => set.has(d)) && days.length === 5;
+  const isWeekend = WEEKEND.every((d) => set.has(d)) && days.length === 2;
+  const isEveryDay = days.length === 7;
+  if (isEveryDay) return "every day";
+  if (isWeekdays) return "every weekday";
+  if (isWeekend) return "every weekend";
+  const ordered = DAYS.filter((d) => set.has(d.idx)).map((d) => d.label);
+  return ordered.join(", ");
+}
 
 export const EventModal: React.FC<EventModalProps> = ({
   isOpen,
@@ -128,37 +108,24 @@ export const EventModal: React.FC<EventModalProps> = ({
   const [subjectId, setSubjectId] = useState("");
   const [subjectName, setSubjectName] = useState("");
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
-  const [startSlot, setStartSlot] = useState(10); // 5:00 AM
-  const [endSlot, setEndSlot] = useState(38);     // 7:00 PM
-  const [duration1, setDuration1] = useState(false);
-  const [duration2, setDuration2] = useState(false);
-  const [duration3, setDuration3] = useState(false);
-  const [activeDurationSubjectId, setActiveDurationSubjectId] = useState<string | null>(null);
-  const durationRef = useRef<HTMLDivElement>(null);
+  const [startTime, setStartTime] = useState("16:00"); // 4:00 PM
+  const [endTime, setEndTime] = useState("19:00"); // 7:00 PM
+  const [durations, setDurations] = useState<Record<1 | 2 | 3, boolean>>({
+    1: false,
+    2: true, // default to a 1-hour session
+    3: false,
+  });
 
   useEffect(() => {
     if (!isOpen) {
       setSubjectId("");
       setSubjectName("");
       setSelectedDays([]);
-      setStartSlot(10);
-      setEndSlot(38);
-      setDuration1(false);
-      setDuration2(false);
-      setDuration3(false);
-      setActiveDurationSubjectId(null);
+      setStartTime("16:00");
+      setEndTime("19:00");
+      setDurations({ 1: false, 2: true, 3: false });
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (durationRef.current && !durationRef.current.contains(e.target as Node)) {
-        setActiveDurationSubjectId(null);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
 
   if (!isOpen) return null;
 
@@ -167,14 +134,48 @@ export const EventModal: React.FC<EventModalProps> = ({
       prev.includes(idx) ? prev.filter((d) => d !== idx) : [...prev, idx]
     );
 
+  const setPresetDays = (preset: number[]) => {
+    const set = new Set(selectedDays);
+    const allSelected = preset.every((d) => set.has(d));
+    setSelectedDays((prev) =>
+      allSelected
+        ? prev.filter((d) => !preset.includes(d))
+        : Array.from(new Set([...prev, ...preset]))
+    );
+  };
+
+  const applyTimePreset = (start: string, end: string) => {
+    setStartTime(start);
+    setEndTime(end);
+  };
+
+  const toggleDuration = (key: 1 | 2 | 3) =>
+    setDurations((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  const startMin = toMinutes(startTime);
+  // Keep the End dropdown valid: only times after the chosen start.
+  const endOptions = TIME_OPTIONS.filter((t) => toMinutes(t.value) > startMin);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!subjectId) { toast.error("Please select a subject"); return; }
-    if (selectedDays.length === 0) { toast.error("Please select at least one day"); return; }
+    if (!subjectId) {
+      toast.error("Pick a subject first");
+      return;
+    }
+    if (selectedDays.length === 0) {
+      toast.error("Choose at least one day you're free");
+      return;
+    }
+    if (toMinutes(endTime) <= startMin) {
+      toast.error("End time must be after the start time");
+      return;
+    }
+    if (!durations[1] && !durations[2] && !durations[3]) {
+      toast.error("Pick at least one session length");
+      return;
+    }
 
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-    const startTime = slotToHHmm(startSlot);
-    const endTime = slotToHHmm(endSlot);
 
     for (const dayIdx of selectedDays) {
       const dateStr = nextDateForDay(dayIdx);
@@ -187,32 +188,50 @@ export const EventModal: React.FC<EventModalProps> = ({
         subject: subjectName,
         subject_id: subjectId,
         timezone,
-        duration_1: duration1 ? 1 : 0,
-        duration_2: duration2 ? 1 : 0,
-        duration_3: duration3 ? 1 : 0,
+        duration_1: durations[1] ? 1 : 0,
+        duration_2: durations[2] ? 1 : 0,
+        duration_3: durations[3] ? 1 : 0,
         day_of_week: dayIdx,
       });
     }
 
+    toast.success("Weekly availability added");
     onClose();
   };
 
+  const summary =
+    selectedDays.length > 0
+      ? `${daysSummary(selectedDays)}, ${labelFor(startTime)}–${labelFor(endTime)}`
+      : null;
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-slate-100 rounded-xl shadow-2xl max-w-lg w-full overflow-hidden">
-        <div className="flex items-center justify-between bg-slate-800 px-6 py-4 rounded-t-xl">
-          <h3 className="text-lg font-semibold text-white">Set Availability</h3>
-          <button onClick={onClose} className="text-gray-300 hover:text-white transition-colors">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden max-h-[92vh] flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between bg-slate-800 px-6 py-4">
+          <div>
+            <h3 className="text-lg font-semibold text-white">Add weekly availability</h3>
+            <p className="flex items-center gap-1.5 text-xs text-slate-300 mt-0.5">
+              <Repeat className="w-3.5 h-3.5" />
+              Set it once — these hours repeat every week
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-slate-300 hover:text-white transition-colors"
+            aria-label="Close"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Subject */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto">
+          {/* Step 1 — Subject */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-800 mb-2">
+              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-slate-100 text-[11px] font-bold text-slate-600">1</span>
               <BookOpen className="w-4 h-4" />
-              Subject *
+              Which subject?
             </label>
             <div className="flex flex-wrap gap-2">
               {(subjects || []).map((obj: any) => {
@@ -224,18 +243,14 @@ export const EventModal: React.FC<EventModalProps> = ({
                     onClick={() => {
                       setSubjectId(obj?.subject_id ?? "");
                       setSubjectName(obj?.Subjects?.name ?? "");
-                      setActiveDurationSubjectId(obj?.subject_id ?? null);
                     }}
                     className={`inline-flex items-center gap-1 border rounded-lg text-xs px-3 py-1.5 transition-all ${
                       isSelected
-                        ? "bg-gradient-to-r from-brand-500 to-brand-500 text-white border-brand-700 ring-2 ring-brand-200"
+                        ? "bg-[#0077be] text-white border-[#0077be] ring-2 ring-brand-200"
                         : "bg-white border-gray-200 hover:border-brand-300 hover:bg-brand-50"
                     }`}
                   >
                     <span className="font-semibold">{obj?.Subjects?.name}</span>
-                    {obj?.Subjects?.code && (
-                      <span className="text-[10px] opacity-80">{obj.Subjects.code}</span>
-                    )}
                     {obj?.Subjects?.grade && (
                       <span className="text-[10px] opacity-70">· Grade {obj.Subjects.grade}</span>
                     )}
@@ -243,96 +258,157 @@ export const EventModal: React.FC<EventModalProps> = ({
                 );
               })}
               {(!subjects || subjects.length === 0) && (
-                <p className="text-sm text-gray-500">No subjects available. Add subjects to your profile first.</p>
+                <p className="text-sm text-gray-500">
+                  No subjects yet. Add subjects to your profile first.
+                </p>
               )}
             </div>
-
-            {activeDurationSubjectId === subjectId && subjectId && (
-              <div className="relative mt-3" ref={durationRef}>
-                <div className="absolute z-10 mt-1 w-44 rounded-md border border-gray-200 bg-white p-3 shadow-lg">
-                  <label className="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
-                    <input type="checkbox" checked={duration1} onChange={(e) => setDuration1(e.target.checked)} className="h-3.5 w-3.5" />
-                    30 Min
-                  </label>
-                  <label className="mt-2 flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
-                    <input type="checkbox" checked={duration2} onChange={(e) => setDuration2(e.target.checked)} className="h-3.5 w-3.5" />
-                    1 Hour
-                  </label>
-                  <label className="mt-2 flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
-                    <input type="checkbox" checked={duration3} onChange={(e) => setDuration3(e.target.checked)} className="h-3.5 w-3.5" />
-                    1.5 Hour
-                  </label>
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* Day Selector */}
+          {/* Step 2 — Days */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Available Days *
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-800 mb-2">
+              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-slate-100 text-[11px] font-bold text-slate-600">2</span>
+              Which days are you free?
             </label>
-            <p className="mb-3 text-xs text-gray-500">
-              Selected days repeat <span className="font-medium text-[#0077be]">every week</span>.
-            </p>
+            <div className="flex flex-wrap gap-2 mb-3">
+              <PresetChip label="Weekdays" onClick={() => setPresetDays(WEEKDAYS)} />
+              <PresetChip label="Weekend" onClick={() => setPresetDays(WEEKEND)} />
+              <PresetChip label="Every day" onClick={() => setPresetDays([1, 2, 3, 4, 5, 6, 0])} />
+            </div>
             <div className="flex gap-2 justify-between">
-              {DAYS.map((day) => (
-                <button
-                  key={day.idx}
-                  type="button"
-                  title={day.name}
-                  onClick={() => toggleDay(day.idx)}
-                  className={`w-10 h-10 rounded-full text-sm font-semibold transition-all duration-150 ${
-                    selectedDays.includes(day.idx)
-                      ? "bg-[#0077be] text-white shadow-md scale-110"
-                      : "bg-white text-gray-500 border border-gray-200 hover:border-[#0077be] hover:text-[#0077be]"
-                  }`}
-                >
-                  {day.label}
-                </button>
+              {DAYS.map((day) => {
+                const active = selectedDays.includes(day.idx);
+                return (
+                  <button
+                    key={day.idx}
+                    type="button"
+                    title={day.label}
+                    onClick={() => toggleDay(day.idx)}
+                    className={`flex-1 h-11 rounded-lg text-sm font-semibold transition-all duration-150 ${
+                      active
+                        ? "bg-[#0077be] text-white shadow-md"
+                        : "bg-white text-gray-500 border border-gray-200 hover:border-[#0077be] hover:text-[#0077be]"
+                    }`}
+                  >
+                    {day.short}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Step 3 — Hours */}
+          <div>
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-800 mb-2">
+              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-slate-100 text-[11px] font-bold text-slate-600">3</span>
+              <Clock className="w-4 h-4" />
+              What hours?
+            </label>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {TIME_PRESETS.map((p) => (
+                <PresetChip
+                  key={p.label}
+                  label={p.label}
+                  active={startTime === p.start && endTime === p.end}
+                  onClick={() => applyTimePreset(p.start, p.end)}
+                />
               ))}
             </div>
+            <div className="flex items-center gap-3">
+              <div className="flex-1">
+                <span className="block text-xs text-gray-500 mb-1">From</span>
+                <select
+                  value={startTime}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setStartTime(v);
+                    if (toMinutes(endTime) <= toMinutes(v)) {
+                      const next = TIME_OPTIONS.find((t) => toMinutes(t.value) > toMinutes(v));
+                      if (next) setEndTime(next.value);
+                    }
+                  }}
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-white text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
+                >
+                  {TIME_OPTIONS.slice(0, -1).map((t) => (
+                    <option key={t.value} value={t.value}>{t.label}</option>
+                  ))}
+                </select>
+              </div>
+              <span className="text-gray-400 mt-5">→</span>
+              <div className="flex-1">
+                <span className="block text-xs text-gray-500 mb-1">To</span>
+                <select
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-white text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
+                >
+                  {endOptions.map((t) => (
+                    <option key={t.value} value={t.value}>{t.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </div>
 
-          {/* Time Range Slider */}
+          {/* Step 4 — Session length */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
-              <Clock className="w-4 h-4" />
-              Availability Hours
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-800 mb-2">
+              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-slate-100 text-[11px] font-bold text-slate-600">4</span>
+              Session lengths you offer
             </label>
-            <div className="flex justify-between text-sm font-semibold text-[#0077be] mb-2 px-2.5">
-              <span>{slotToLabel(startSlot)}</span>
-              <span>{slotToLabel(endSlot)}{endSlot === 48 ? " +1" : ""}</span>
-            </div>
-            <TimeRangeSlider
-              startSlot={startSlot}
-              endSlot={endSlot}
-              onStartChange={setStartSlot}
-              onEndChange={setEndSlot}
-            />
-            <div className="flex justify-between text-[10px] text-gray-400 mt-2 px-2.5">
-              <span>12 AM</span>
-              <span>6 AM</span>
-              <span>12 PM</span>
-              <span>6 PM</span>
-              <span>12 AM</span>
+            <div className="flex gap-2">
+              {([
+                { key: 2 as const, label: "1 hour" },
+                { key: 1 as const, label: "30 min" },
+                { key: 3 as const, label: "1.5 hours" },
+              ]).map((d) => {
+                const active = durations[d.key];
+                return (
+                  <button
+                    key={d.key}
+                    type="button"
+                    onClick={() => toggleDuration(d.key)}
+                    className={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border px-3 py-2.5 text-sm font-medium transition-all ${
+                      active
+                        ? "bg-brand-50 border-[#0077be] text-[#0077be]"
+                        : "bg-white border-gray-200 text-gray-500 hover:border-brand-300"
+                    }`}
+                  >
+                    {active && <Check className="w-3.5 h-3.5" />}
+                    {d.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
+
+          {/* Live summary */}
+          {summary && (
+            <div className="flex items-start gap-2 rounded-lg bg-brand-50 border border-brand-100 px-4 py-3 text-sm text-slate-700">
+              <Repeat className="w-4 h-4 text-[#0077be] mt-0.5 shrink-0" />
+              <span>
+                You'll be available for{" "}
+                <span className="font-semibold">{subjectName || "this subject"}</span>{" "}
+                <span className="font-semibold">{summary}</span>, every week.
+              </span>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="flex justify-end gap-3 pt-2 border-t border-gray-200">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full px-5 py-2.5 text-sm text-slate-600 hover:bg-slate-200 transition-colors"
+              className="rounded-full px-5 py-2.5 text-sm text-slate-600 hover:bg-slate-100 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 bg-[#0077be] text-white rounded-full hover:bg-[#0077be]/80 transition-colors text-sm font-medium"
+              className="px-5 py-2.5 bg-[#0077be] text-white rounded-full hover:bg-[#0077be]/90 transition-colors text-sm font-medium"
             >
-              Save Availability
+              Save weekly availability
             </button>
           </div>
         </form>
@@ -340,3 +416,21 @@ export const EventModal: React.FC<EventModalProps> = ({
     </div>
   );
 };
+
+const PresetChip: React.FC<{ label: string; active?: boolean; onClick: () => void }> = ({
+  label,
+  active,
+  onClick,
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`rounded-full border px-3 py-1 text-xs font-medium transition-all ${
+      active
+        ? "bg-[#0077be] text-white border-[#0077be]"
+        : "bg-white border-gray-200 text-gray-600 hover:border-[#0077be] hover:text-[#0077be]"
+    }`}
+  >
+    {label}
+  </button>
+);

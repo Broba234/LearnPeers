@@ -3,16 +3,39 @@ import moment from "moment";
 import {
   X,
   Clock,
-  Calendar as CalendarIcon,
   DollarSign,
   BookOpen,
-  User,
-  FileText,
-  MapPin,
-  Tag,
+  Repeat,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase/client";
+
+// Mon-first weekday list, mirroring the create modal so editing keeps the same
+// recurring mental model (a weekday + time, never a one-off calendar date).
+const DAYS = [
+  { label: "Mon", short: "M", idx: 1 },
+  { label: "Tue", short: "T", idx: 2 },
+  { label: "Wed", short: "W", idx: 3 },
+  { label: "Thu", short: "T", idx: 4 },
+  { label: "Fri", short: "F", idx: 5 },
+  { label: "Sat", short: "S", idx: 6 },
+  { label: "Sun", short: "S", idx: 0 },
+];
+
+// Next calendar date that lands on the given weekday — used to anchor the
+// recurring slot when saving (the weekly expansion fans out from this date).
+function nextDateForDay(dayIdx: number): string {
+  const today = new Date();
+  const todayDay = today.getDay();
+  const daysUntil = ((dayIdx - todayDay + 7) % 7) || 7;
+  const next = new Date(today);
+  next.setDate(today.getDate() + daysUntil);
+  return next.toISOString().split("T")[0];
+}
+
+function weekdayName(idx: number): string {
+  return DAYS.find((d) => d.idx === idx)?.label ?? "";
+}
 
 interface EventDetailModalProps {
   isOpen: boolean;
@@ -50,6 +73,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   onUpdate,
 }) => {
   const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<number>(1);
   const [selectedSubject, setSelectedSubject] = useState<any | null>(null);
   const [selectedDurations, setSelectedDurations] = useState<
     Array<{ duration: number; price: number }>
@@ -189,6 +213,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
       const subjectName =
         event.title || event.originalData?.subject || event.subject || "";
 
+      setSelectedDay(moment(event.start).day());
       setUpdateForm((prev) => ({
         ...prev,
         subject_id: subjectId,
@@ -206,12 +231,11 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const startDateTime = moment(
-      `${updateForm.date} ${updateForm.startTime}`
-    ).toDate();
-    const endDateTime = moment(
-      `${updateForm.endDate} ${updateForm.endTime}`
-    ).toDate();
+    // Recurring slot: anchor both start and end to the next occurrence of the
+    // chosen weekday so the rule stays a clean weekly block (no stray dates).
+    const anchorDate = nextDateForDay(selectedDay);
+    const startDateTime = moment(`${anchorDate} ${updateForm.startTime}`).toDate();
+    const endDateTime = moment(`${anchorDate} ${updateForm.endTime}`).toDate();
 
     if (endDateTime <= startDateTime) {
       toast.error("End time must be after start time");
@@ -234,9 +258,9 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
       duration_3: updateForm.duration_3,
       start: startDateTime,
       end: endDateTime,
-      date: updateForm.date, // "YYYY-MM-DD"
+      date: anchorDate, // "YYYY-MM-DD"
       startTime: updateForm.startTime, // "HH:mm"
-      endDate: updateForm.endDate, // "YYYY-MM-DD"
+      endDate: anchorDate, // "YYYY-MM-DD"
       endTime: updateForm.endTime, // "HH:mm"
       start_time: updateForm.startTime,
       end_time: updateForm.endTime,
@@ -300,9 +324,6 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
 
   const startTime = moment(event.start).format("h:mm A");
   const endTime = moment(event.end).format("h:mm A");
-  const startDateStr = moment(event.start).format("MMMM Do, YYYY");
-  const endDateStr = moment(event.end).format("MMMM Do, YYYY");
-  const isMultiDay = moment(event.end).date() !== moment(event.start).date();
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 lg:p-4 overflow-y-auto">
       <div className="bg-slate-100 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
@@ -438,36 +459,35 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                     )}
                 </div>
 
-                {/* Date Range */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                      <CalendarIcon className="w-4 h-4" />
-                      Start Date *
-                    </label>
-                    <input
-                      type="date"
-                      name="date"
-                      value={updateForm.date}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
-                      required
-                    />
+                {/* Recurring weekday */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                    <Repeat className="w-4 h-4" />
+                    Repeats on
+                  </label>
+                  <div className="flex gap-2 justify-between">
+                    {DAYS.map((day) => {
+                      const active = selectedDay === day.idx;
+                      return (
+                        <button
+                          key={day.idx}
+                          type="button"
+                          title={day.label}
+                          onClick={() => setSelectedDay(day.idx)}
+                          className={`flex-1 h-11 rounded-lg text-sm font-semibold transition-all duration-150 ${
+                            active
+                              ? "bg-[#0077be] text-white shadow-md"
+                              : "bg-white text-gray-500 border border-gray-200 hover:border-[#0077be] hover:text-[#0077be]"
+                          }`}
+                        >
+                          {day.short}
+                        </button>
+                      );
+                    })}
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                      <CalendarIcon className="w-4 h-4" />
-                      End Date *
-                    </label>
-                    <input
-                      type="date"
-                      name="endDate"
-                      value={updateForm.endDate}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition"
-                      required
-                    />
-                  </div>
+                  <p className="mt-2 text-xs text-gray-500">
+                    This slot repeats every <span className="font-medium text-[#0077be]">{weekdayName(selectedDay)}</span>.
+                  </p>
                 </div>
 
                 {/* Time Range */}
@@ -510,27 +530,14 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-gray-50 p-4 rounded-xl">
                   <div className="flex items-center gap-3 mb-2">
-                    <CalendarIcon className="w-5 h-5 text-brand-600" />
-                    <h3 className="font-semibold text-gray-700">Date</h3>
+                    <Repeat className="w-5 h-5 text-brand-600" />
+                    <h3 className="font-semibold text-gray-700">Repeats</h3>
                   </div>
                   <div className="space-y-1">
                     <p className="text-gray-800 font-medium">
-                      {isMultiDay ? (
-                        <>
-                          {startDateStr}{" "}
-                          <span className="text-gray-500">to</span> {endDateStr}
-                        </>
-                      ) : (
-                        startDateStr
-                      )}
+                      Every {moment(event.start).format("dddd")}
                     </p>
-                    {isMultiDay && (
-                      <p className="text-sm text-gray-500">
-                        {moment(event.end).diff(moment(event.start), "days") +
-                          1}{" "}
-                        days
-                      </p>
-                    )}
+                    <p className="text-sm text-gray-500">Weekly</p>
                   </div>
                 </div>
 
@@ -545,13 +552,6 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                     <p className="text-gray-800 font-medium">
                       {startTime} - {endTime}
                     </p>
-                    <div className="flex justify-between items-center">
-                      {isMultiDay && (
-                        <span className="text-xs bg-brand-100 text-brand-800 px-2 py-1 rounded">
-                          Multi-day
-                        </span>
-                      )}
-                    </div>
                   </div>
                 </div>
               </div>

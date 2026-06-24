@@ -14,7 +14,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { EventDetailModal } from "./EventDetailModal";
 import { EventModal, EventFormData } from "./EventModal";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Repeat } from "lucide-react";
 
 // Define TypeScript interfaces
 interface CalendarEvent {
@@ -158,7 +158,9 @@ export default function Selectable({
     end: Date;
   } | null>(null);
 
-  const [currentView, setCurrentView] = useState<View>(Views.MONTH);
+  // Week view is the right default for a *recurring weekly* schedule — it reads
+  // like a student's class timetable instead of a noisy month of repeats.
+  const [currentView, setCurrentView] = useState<View>(Views.WEEK);
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null
@@ -280,11 +282,18 @@ export default function Selectable({
     };
   }, []);
 
-  const { scrollToTime } = useMemo(
-    () => ({
-      scrollToTime: new Date(),
-    }),
-    []
+  // Open the week/day view scrolled to the morning so after-school hours are in view.
+  const scrollToTime = useMemo(() => {
+    const d = new Date();
+    d.setHours(8, 0, 0, 0);
+    return d;
+  }, []);
+
+  // Count distinct weekly slots (not the weekly occurrences we expand them into),
+  // so the header reflects "how many recurring blocks have I set".
+  const weeklySlotCount = useMemo(
+    () => new Set(myEvents.map((e) => e.originalData?.id ?? e.id)).size,
+    [myEvents]
   );
   const handleAddLectureClick = useCallback(() => {
     const now = new Date();
@@ -299,23 +308,25 @@ export default function Selectable({
         <div className="max-w-7xl mx-auto">
           <div className="mb-6 bg-white flex items-start justify-between rounded-lg shadow p-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                Availability Calendar
+              <h1 className="text-2xl font-bold text-gray-800 mb-1">
+                Your weekly availability
               </h1>
-              <p className="text-gray-600 mb-4">
-                Schedule and manage your availability
+              <p className="flex items-center gap-1.5 text-gray-600 mb-4">
+                <Repeat className="w-4 h-4 text-[#0077be]" />
+                Set the hours you tutor — they repeat automatically every week.
               </p>
 
-              <div className="flex flex-wrap gap-4 mb-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-brand-600"></div>
-                  <span className="text-sm">Lecture</span>
+                  <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                  <span className="text-sm text-gray-600">Available hours</span>
                 </div>
+                <span className="text-gray-300">•</span>
+                <p className="text-sm text-gray-700">
+                  <span className="font-bold">{weeklySlotCount}</span>{" "}
+                  weekly {weeklySlotCount === 1 ? "slot" : "slots"} set
+                </p>
               </div>
-              <p className="text-gray-700">
-                Total Events:{" "}
-                <span className="font-bold">{myEvents.length}</span>
-              </p>
             </div>
 
             <button
@@ -323,9 +334,25 @@ export default function Selectable({
               className="px-5 py-2.5 bg-[#0077be] text-white rounded-full hover:bg-[#0077be]/80 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
             >
               <span><PlusIcon className="w-4 h-4" /></span>
-              Create availability
+              Add availability
             </button>
           </div>
+
+          {weeklySlotCount === 0 && (
+            <div className="mb-6 rounded-lg border border-dashed border-brand-200 bg-brand-50/50 p-6 text-center">
+              <p className="text-gray-700 font-medium">No availability set yet.</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Add the hours you're free each week — students can only book the times you set here.
+              </p>
+              <button
+                onClick={handleAddLectureClick}
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#0077be] text-white rounded-full text-sm hover:bg-[#0077be]/90 transition-colors"
+              >
+                <PlusIcon className="w-4 h-4" />
+                Add your first slot
+              </button>
+            </div>
+          )}
 
           <div className="bg-white rounded-lg shadow overflow-hidden">
             <div className="h-[700px]">
@@ -338,6 +365,7 @@ export default function Selectable({
                 localizer={propLocalizer || localizer}
                 onSelectEvent={handleEventSelect}
                 selectable={false}
+                views={[Views.WEEK, Views.DAY]}
                 scrollToTime={scrollToTime}
                 startAccessor="start"
                 endAccessor="end"
