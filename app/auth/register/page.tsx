@@ -213,6 +213,18 @@ function RegisterContent() {
             >
               {loading ? "Creating account..." : "Create Account"}
             </Button>
+
+            <p className="mt-4 text-center text-xs text-ink-400">
+              By creating an account you agree to our{" "}
+              <Link href="/legal/terms" className="font-medium text-brand-600 hover:text-brand-700">
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link href="/legal/privacy" className="font-medium text-brand-600 hover:text-brand-700">
+                Privacy Policy
+              </Link>
+              . You’ll be asked to confirm when you sign in.
+            </p>
           </form>
           <div className="mt-6 flex gap-1 items-center justify-center text-sm">
         <p className="text-ink-500">

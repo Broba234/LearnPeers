@@ -34,6 +34,7 @@ export const ADMIN_PAGES: AdminPage[] = [
   { key: "contacts", label: "Contacts", path: "/dashboard/contacts", group: "operations", blurb: "Inbound contact-form messages." },
   { key: "feedback", label: "Feedback", path: "/dashboard/feedback", group: "operations", blurb: "Beta feedback submissions." },
   // System
+  { key: "legal", label: "Legal", path: "/dashboard/legal", group: "system", ownerOnly: true, blurb: "Publish Terms of Service versions and review acceptances." },
   { key: "access", label: "Access", path: "/dashboard/access", group: "system", ownerOnly: true, blurb: "Manage admin seats and their permissions." },
 ];
 

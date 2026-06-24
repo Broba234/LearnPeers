@@ -13,6 +13,7 @@ import ConnectNowModal from "@/components/session/ConnectNowModal";
 import NotificationDropdown from "@/components/ui/components/header/NotificationDropdown";
 import BottomNav from "@/components/ui/BottomNav";
 import AccountEmailGate from "@/components/auth/AccountEmailGate";
+import TermsGate from "@/components/legal/TermsGate";
 
 
 import { TutorProfileModalContext } from "@/components/ui/components/common/TutorProfileModalContext";
@@ -188,6 +189,7 @@ export default function HomeLayout({
     <PresenceProvider role={userRole}>
     <TutorProfileModalContext.Provider value={{ openTutorProfileModal, openConnectNow }}>
       <>
+        <TermsGate />
         {/* Mobile top bar */}
         <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white/10 backdrop-blur-md border-b border-white/20 px-4 py-3 flex items-center justify-between" style={{
           boxShadow: '0 8px 32px 0 rgba(31,38,135,0.25)'

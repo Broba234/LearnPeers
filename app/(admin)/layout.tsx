@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getAdminContext } from "@/lib/admin-access";
 import AppHeader from "@/layout/AppHeader";
 import AppSidebar from "@/layout/AppSidebar";
+import TermsGate from "@/components/legal/TermsGate";
 import React from "react";
 
 export default async function AdminLayout({
@@ -19,6 +20,7 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 lg:flex">
+      <TermsGate />
       <AppSidebar allowedPages={allowedPages} />
       <div className="flex-1 min-w-0 lg:ml-64">
         <AppHeader
