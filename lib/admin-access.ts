@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -32,8 +33,11 @@ export interface AdminContext {
 /**
  * Resolve the current request's admin context, or `null` if the requester is
  * not a signed-in admin. Does not redirect — callers decide.
+ *
+ * Wrapped in React `cache` so the layout guard and a page/segment guard within
+ * the same request share a single auth + DB lookup.
  */
-export async function getAdminContext(): Promise<AdminContext | null> {
+export const getAdminContext = cache(async function getAdminContext(): Promise<AdminContext | null> {
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
@@ -78,7 +82,7 @@ export async function getAdminContext(): Promise<AdminContext | null> {
     allowedPages,
     can: (pageKey: string) => allowedPages.has(pageKey),
   };
-}
+});
 
 /**
  * Page-level guard for server components. Ensures the requester is an admin who

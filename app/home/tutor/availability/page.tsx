@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import EventCalender from "@/components/EventCalender";
 import Selectable from "@/components/EventCalender";
 import { momentLocalizer } from 'react-big-calendar'
@@ -85,11 +86,7 @@ export default function TutorAvailability() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-[60vh] h-screen bg-slate-900 flex items-center justify-center">
-        <div className="text-white/90">Loading availability…</div>
-      </div>
-    );
+    return <LearnPeersLoader fullScreen label="Loading availability…" />;
   }
 const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 moment.tz.setDefault(userTimezone);

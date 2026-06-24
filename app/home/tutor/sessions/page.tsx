@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
+import LearnPeersLoader from '@/components/ui/LearnPeersLoader';
 
 interface SessionRequest {
   id: string;
@@ -268,8 +269,8 @@ export default function InboxPage() {
 
         {/* Session list */}
         {loading && requests.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-sm text-slate-400">Loading sessions...</p>
+          <div className="flex justify-center py-16">
+            <LearnPeersLoader size={96} label="Loading sessions…" />
           </div>
         ) : filteredRequests.length === 0 ? (
           <div className="text-center py-20">

@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { supabase } from "@/lib/supabase/client";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import StandingHeader from "@/components/courses/StandingHeader";
 import CourseAssetCard from "@/components/courses/CourseAssetCard";
 import CourseTree from "@/components/courses/CourseTree";
@@ -137,11 +138,7 @@ export default function TutorCourses() {
   };
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-slate-50">
-        <div className="text-sm text-slate-400">Loading your portfolio…</div>
-      </div>
-    );
+    return <LearnPeersLoader fullScreen label="Loading your portfolio…" />;
   }
 
   const assets = portfolio?.assets || [];

@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import {
   ArrowLeft, Play, Pause, Volume2, Maximize2, Settings2,
   Search, ShieldCheck, Lock, Captions, Sparkles, Calendar, Clock,
@@ -87,11 +88,7 @@ export default function RecordingReviewPage() {
   const durLabel = session?.duration === 0.5 ? "30 min" : session?.duration === 1.5 ? "90 min" : "60 min";
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[#FAFAF9] flex items-center justify-center">
-        <div className="text-sm text-slate-400">Loading recording…</div>
-      </div>
-    );
+    return <LearnPeersLoader fullScreen label="Loading recording…" />;
   }
   if (error) {
     return (

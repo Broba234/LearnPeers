@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 export default function StudentProfile() {
   const [profile, setProfile] = useState<any>(null);
@@ -79,11 +80,7 @@ export default function StudentProfile() {
   };
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[#FAFAF9]">
-        <div className="text-sm text-slate-400">Loading profile...</div>
-      </div>
-    );
+    return <LearnPeersLoader fullScreen label="Loading profile…" />;
   }
   if (!profile) {
     return (

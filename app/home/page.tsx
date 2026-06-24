@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 
 export default function HomeRedirect() {
   const router = useRouter();
@@ -25,9 +26,5 @@ export default function HomeRedirect() {
     redirect();
   }, [router]);
 
-      return (
-        <div className="flex h-screen items-center justify-center bg-slate-50">
-          <div className="text-sm text-slate-400">Redirecting to home...</div>
-        </div>
-      );
+      return <LearnPeersLoader fullScreen label="Redirecting…" />;
 }

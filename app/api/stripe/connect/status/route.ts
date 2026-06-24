@@ -24,15 +24,28 @@ export async function GET(request: NextRequest) {
     const accountId = profile?.stripe_account_id ?? null;
     const connected = Boolean(accountId);
 
-    // Determine real onboarding completeness by inspecting the Stripe account.
+    // Inspect the Stripe account to derive three distinct states. We surface
+    // "submitted but still verifying" separately so the UI can stop showing
+    // the bare "Connect" screen to a tutor who just finished verification —
+    // otherwise it looks like nothing happened and they re-submit in a loop.
     let onboardingComplete = false;
+    let detailsSubmitted = false;
+    let needsAction = false;
     if (connected && stripe && accountId) {
       try {
         const account = await stripe.accounts.retrieve(accountId);
+        detailsSubmitted = Boolean(account.details_submitted);
         onboardingComplete =
           account.capabilities?.transfers === "active" &&
-          Boolean(account.details_submitted) &&
+          detailsSubmitted &&
           Boolean(account.payouts_enabled);
+
+        // Details are in but Stripe still wants something from the tutor (a
+        // bank account, an extra document) — distinct from passively verifying.
+        const req = account.requirements;
+        const due =
+          (req?.currently_due?.length ?? 0) + (req?.past_due?.length ?? 0);
+        needsAction = detailsSubmitted && !onboardingComplete && due > 0;
       } catch (e) {
         console.error("[Stripe Connect] status retrieve error:", e);
       }
@@ -42,6 +55,11 @@ export async function GET(request: NextRequest) {
       JSON.stringify({
         connected,
         onboardingComplete,
+        // True once the tutor has submitted everything, even if Stripe is still
+        // verifying (payouts not yet enabled). Drives the "verifying" state.
+        detailsSubmitted,
+        // True when Stripe needs more from the tutor to finish (resume needed).
+        needsAction,
         stripe_account_id: accountId,
       }),
       { status: 200, headers: { "Content-Type": "application/json" } }

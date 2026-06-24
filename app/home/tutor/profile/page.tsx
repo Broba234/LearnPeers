@@ -2,6 +2,7 @@
 import { useState, useEffect, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
+import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import dynamic from "next/dynamic";
 import Swal from "sweetalert2";
 // Tiptap pulls in a sizeable editor bundle; only load it client-side when the
@@ -262,11 +263,7 @@ export default function TutorProfile() {
   };
 
   if (loading) {
-    return (
-      <div className="flex h-screen bg-slate-50 items-center justify-center">
-        <div className="text-sm text-slate-400">Loading profile...</div>
-      </div>
-    );
+    return <LearnPeersLoader fullScreen label="Loading profile…" />;
   }
   if (!profile) {
     return (

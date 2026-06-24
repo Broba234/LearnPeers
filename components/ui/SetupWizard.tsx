@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle,
@@ -15,6 +15,8 @@ import {
   PrinterCheck,
   ArrowRight,
   Book,
+  Clock,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getCountryFromTimezone } from "@/lib/timezone-to-country";
@@ -57,6 +59,12 @@ const SetupWizard = () => {
     Subjects[]
   >([]);
   const [stripeConnected, setStripeConnected] = useState(false);
+  // Submitted everything, but Stripe may still be verifying (payouts pending).
+  const [stripeDetailsSubmitted, setStripeDetailsSubmitted] = useState(false);
+  // Stripe needs more from the tutor to finish (resume onboarding).
+  const [stripeNeedsAction, setStripeNeedsAction] = useState(false);
+  // A status re-check is in flight (drives the "Checking…" button state).
+  const [stripeChecking, setStripeChecking] = useState(false);
   const [stripeLoading, setStripeLoading] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
@@ -156,21 +164,41 @@ const SetupWizard = () => {
       });
   }, [router]);
 
-  const refreshStripeStatus = () => {
+  const refreshStripeStatus = useCallback(async () => {
     if (!profile?.email) return;
-    fetch(`/api/stripe/connect/status?email=${encodeURIComponent(profile.email)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setStripeConnected(Boolean(data.onboardingComplete));
-      })
-      .catch(() => {});
-  };
+    setStripeChecking(true);
+    try {
+      const res = await fetch(
+        `/api/stripe/connect/status?email=${encodeURIComponent(profile.email)}`
+      );
+      const data = await res.json();
+      setStripeConnected(Boolean(data.onboardingComplete));
+      setStripeDetailsSubmitted(Boolean(data.detailsSubmitted));
+      setStripeNeedsAction(Boolean(data.needsAction));
+    } catch {
+      /* leave prior state in place on a transient error */
+    } finally {
+      setStripeChecking(false);
+    }
+  }, [profile?.email]);
+
+  // Submitted to Stripe but not yet fully enabled — i.e. still verifying.
+  const stripePending = stripeDetailsSubmitted && !stripeConnected;
 
   useEffect(() => {
     if (activeStep === 5 && profile?.email) {
       refreshStripeStatus();
     }
-  }, [activeStep, profile?.email]);
+  }, [activeStep, profile?.email, refreshStripeStatus]);
+
+  // While Stripe verifies a freshly-submitted account, poll until it flips to
+  // fully enabled so the tutor doesn't have to refresh by hand. Stops on
+  // success/unmount or when they leave the step.
+  useEffect(() => {
+    if (activeStep !== 5 || !stripePending) return;
+    const id = setInterval(refreshStripeStatus, 5000);
+    return () => clearInterval(id);
+  }, [activeStep, stripePending, refreshStripeStatus]);
 
   const handleOnboardingExit = () => {
     setShowOnboarding(false);
@@ -700,6 +728,77 @@ const SetupWizard = () => {
                             >
                               {stripeLoading ? "Opening…" : "Manage Stripe account"}
                             </motion.button>
+                          </motion.div>
+                        ) : stripePending ? (
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className={cn(
+                              "flex flex-col items-center gap-4 p-6 rounded-2xl border-2 max-w-md text-center",
+                              stripeNeedsAction
+                                ? "bg-amber-50 border-amber-200"
+                                : "bg-blue-50 border-blue-200"
+                            )}
+                          >
+                            {stripeNeedsAction ? (
+                              <Clock className="w-14 h-14 text-amber-500" />
+                            ) : (
+                              <Loader2 className="w-14 h-14 text-blue-500 animate-spin" />
+                            )}
+                            <p
+                              className={cn(
+                                "text-lg font-semibold",
+                                stripeNeedsAction ? "text-amber-900" : "text-blue-900"
+                              )}
+                            >
+                              {stripeNeedsAction
+                                ? "Almost there"
+                                : "Verifying your details"}
+                            </p>
+                            <p
+                              className={cn(
+                                "text-sm",
+                                stripeNeedsAction ? "text-amber-800" : "text-blue-800"
+                              )}
+                            >
+                              {stripeNeedsAction
+                                ? "Stripe needs a little more to finish — usually a bank account or an extra document. Pick up right where you left off."
+                                : "Thanks! Stripe is reviewing the info you submitted. This usually takes a few minutes — keep this open and we'll unlock payouts automatically, or carry on and finish later."}
+                            </p>
+
+                            {stripeNeedsAction ? (
+                              <motion.button
+                                type="button"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => setShowOnboarding(true)}
+                                className="mt-1 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-amber-500 hover:bg-amber-600 transition-colors"
+                              >
+                                Finish on Stripe
+                              </motion.button>
+                            ) : (
+                              <motion.button
+                                type="button"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                disabled={stripeChecking}
+                                onClick={() => refreshStripeStatus()}
+                                className="mt-1 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-blue-800 bg-white border-2 border-blue-300 hover:bg-blue-50 hover:border-blue-400 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                              >
+                                {stripeChecking && (
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                )}
+                                {stripeChecking ? "Checking…" : "Check status"}
+                              </motion.button>
+                            )}
+
+                            <button
+                              type="button"
+                              onClick={() => HandleChangeSetUpStatus()}
+                              className="text-sm text-gray-400 hover:text-gray-600 underline underline-offset-4 transition-colors"
+                            >
+                              I&apos;ll finish this later
+                            </button>
                           </motion.div>
                         ) : (
                           <>
