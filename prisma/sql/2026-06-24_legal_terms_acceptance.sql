@@ -146,7 +146,7 @@ $doc$
 <p>These Terms, together with the Privacy Policy and any policies referenced in the Service, are the entire agreement between you and LearnPeers regarding the Service. If any provision is found unenforceable, the remaining provisions remain in effect. Our failure to enforce a provision is not a waiver. You may not assign these Terms without our consent; we may assign them in connection with a merger, acquisition, or sale of assets.</p>
 
 <h2>18. Contact</h2>
-<p>Questions about these Terms can be sent to <a href="mailto:legal@learnpeers.com">legal@learnpeers.com</a>.</p>
+<p>Questions about these Terms can be sent to <a href="mailto:hello@learnpeers.com">hello@learnpeers.com</a>.</p>
 $doc$
 WHERE NOT EXISTS (
   SELECT 1 FROM "public"."LegalDocuments" WHERE "type" = 'terms_of_service'
@@ -210,7 +210,7 @@ $doc$
 <p>We may update this Privacy Policy from time to time. We will post the updated version and update the effective date.</p>
 
 <h2>11. Contact</h2>
-<p>Questions about privacy can be sent to <a href="mailto:privacy@learnpeers.com">privacy@learnpeers.com</a>.</p>
+<p>Questions about privacy can be sent to <a href="mailto:hello@learnpeers.com">hello@learnpeers.com</a>.</p>
 $doc$
 WHERE NOT EXISTS (
   SELECT 1 FROM "public"."LegalDocuments" WHERE "type" = 'privacy_policy'
