@@ -1,7 +1,6 @@
 import Header from '@/components/landing/Header';
 import Hero from '@/components/landing/Hero';
 import { HowItWorks, Features, Faq, CtaBand } from '@/components/landing/Sections';
-import ContactSection from '@/components/landing/ContactSection';
 import Footer from '@/components/landing/Footer';
 
 export default function Home() {
@@ -14,7 +13,6 @@ export default function Home() {
         <Features />
         <Faq />
         <CtaBand />
-        <ContactSection />
       </main>
       <Footer />
     </>

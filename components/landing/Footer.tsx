@@ -48,12 +48,17 @@ export default function Footer() {
               students — and get paid to teach what they know.
             </p>
             <div className="flex gap-3 pt-1">
-              {[FaLinkedin, FaTwitter, FaInstagram, FaEnvelope].map((Icon, i) => (
+              {[
+                { Icon: FaLinkedin, href: "#", label: "LinkedIn" },
+                { Icon: FaTwitter, href: "#", label: "Twitter" },
+                { Icon: FaInstagram, href: "#", label: "Instagram" },
+                { Icon: FaEnvelope, href: "mailto:hello@learnpeers.com", label: "Email us" },
+              ].map(({ Icon, href, label }) => (
                 <a
-                  key={i}
-                  href="#"
+                  key={label}
+                  href={href}
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-white/70 transition hover:bg-brand-600 hover:text-white"
-                  aria-label="Social link"
+                  aria-label={label}
                 >
                   <Icon className="text-base" />
                 </a>
@@ -100,7 +105,7 @@ export default function Footer() {
           {/* Contact + CTA */}
           <div>
             <h3 className="mb-5 border-l-2 border-brand-500 pl-3 text-sm font-semibold uppercase tracking-wider text-white">
-              Get in touch
+              Contact
             </h3>
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-sm text-white/60">
@@ -137,7 +142,7 @@ export default function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             <Link href="#" className="text-sm text-white/40 transition hover:text-white">Terms</Link>
             <Link href="#" className="text-sm text-white/40 transition hover:text-white">Privacy</Link>
-            <Link href="/#contact" className="text-sm text-white/40 transition hover:text-white">Contact</Link>
+            <a href="mailto:hello@learnpeers.com" className="text-sm text-white/40 transition hover:text-white">Contact</a>
           </div>
         </div>
       </div>

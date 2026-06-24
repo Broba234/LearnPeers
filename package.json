@@ -46,6 +46,7 @@
     "react-date-range": "^2.0.1",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
+    "recharts": "^3.9.0",
     "sonner": "^2.0.7",
     "stripe": "^14.17.0",
     "sweetalert2": "^11.26.17",

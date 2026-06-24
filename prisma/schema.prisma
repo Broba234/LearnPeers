@@ -38,6 +38,8 @@ model Profiles {
   email_verified_at                      DateTime?                  @db.Timestamptz(6)
   stripe_account_id                      String?                    @db.VarChar(255)
   institution_id                         String?                    @db.Uuid
+  is_owner                               Boolean                    @default(false)
+  admin_pages                            String[]                   @default([])
   users                                  users                      @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   subjects                               ProfilesOnSubjects[]
   Sessions_Sessions_student_idToProfiles Sessions[]                 @relation("Sessions_student_idToProfiles")
