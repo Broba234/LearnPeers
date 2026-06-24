@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
+import StripeReminderBanner from "@/components/stripe/StripeReminderBanner";
 
 type EarningsSession = {
   id: string;
@@ -73,6 +73,9 @@ export default function EarningsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
+
+        {/* Nag tutors who skipped Stripe during onboarding */}
+        <StripeReminderBanner />
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
@@ -181,19 +184,6 @@ export default function EarningsPage() {
             </div>
           )}
         </div>
-
-        {/* No payout account */}
-        {!data?.loginUrl && sessions.length > 0 && (
-          <div className="mt-4 flex items-center gap-4 p-4 bg-amber-50 border border-amber-200 rounded-2xl">
-            <svg className="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-sm text-amber-800 font-medium flex-1">Complete Stripe onboarding to unlock payouts.</p>
-            <Link href="/home/tutor/profile" className="flex-shrink-0 px-3 py-1.5 bg-amber-500 text-white text-xs font-semibold rounded-lg hover:bg-amber-600 transition-colors">
-              Set up payouts
-            </Link>
-          </div>
-        )}
 
       </div>
     </div>

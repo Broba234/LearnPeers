@@ -13,6 +13,7 @@ import VerifyGradeModal from "@/components/courses/VerifyGradeModal";
 import PricingModal from "@/components/courses/PricingModal";
 import ReviewsModal from "@/components/courses/ReviewsModal";
 import { Portfolio, CatalogTree, CourseAsset, CatalogCourse } from "@/components/courses/types";
+import StripeReminderBanner from "@/components/stripe/StripeReminderBanner";
 
 const GROUPS: { key: string; title: string; statuses: string[]; blurb: string }[] = [
   { key: "live", title: "Live & earning", statuses: ["live"], blurb: "Published and bookable by students." },
@@ -149,6 +150,9 @@ export default function TutorCourses() {
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        {/* Nag tutors who skipped Stripe during onboarding */}
+        <StripeReminderBanner />
+
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-slate-900">Courses</h1>

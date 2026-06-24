@@ -758,6 +758,17 @@ const SetupWizard = () => {
                                 }}
                               />
                             </motion.button>
+                            <button
+                              type="button"
+                              onClick={() => HandleChangeSetUpStatus()}
+                              className="text-sm text-gray-400 hover:text-gray-600 underline underline-offset-4 transition-colors"
+                            >
+                              I&apos;ll do it later
+                            </button>
+                            <p className="text-xs text-gray-400 text-center max-w-xs">
+                              You can launch your workspace now and connect Stripe
+                              anytime — just note payouts stay locked until you do.
+                            </p>
                             {DEMO_MODE && (
                               <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-center max-w-md">
                                 Demo mode — you can press <strong>Continue</strong> to finish
