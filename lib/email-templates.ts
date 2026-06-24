@@ -123,7 +123,7 @@ export function accountVerificationEmailHtml(code: string): string {
       p("Welcome! Enter this code in LearnPeers to confirm this is really your email:") +
       `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px 0;"><tr><td align="center" style="background:${BRAND_TINT};border:1px solid ${BRAND_TINT_BORDER};border-radius:12px;padding:18px 30px;font-family:${FONT};font-size:34px;font-weight:800;letter-spacing:10px;color:${BRAND};">${code}</td></tr></table>`,
     footnote:
-      "This code expires in 15 minutes. If you didn't create a LearnPeers account, you can safely ignore this email.",
+      "This code expires in 1 hour. If you didn't create a LearnPeers account, you can safely ignore this email.",
   });
 }
 
@@ -138,6 +138,6 @@ export function verificationEmailHtml(code: string, institutionName: string): st
       ) +
       `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px 0;"><tr><td align="center" style="background:${BRAND_TINT};border:1px solid ${BRAND_TINT_BORDER};border-radius:12px;padding:18px 30px;font-family:${FONT};font-size:34px;font-weight:800;letter-spacing:10px;color:${BRAND};">${code}</td></tr></table>`,
     footnote:
-      "This code expires in 15 minutes. If you didn't request it, you can safely ignore this email.",
+      "This code expires in 1 hour. If you didn't request it, you can safely ignore this email.",
   });
 }

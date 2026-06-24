@@ -16,21 +16,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Enter the 6-digit code from your email" }, { status: 400 });
     }
 
+    const hash = crypto.createHash("sha256").update(String(code)).digest("hex");
+
+    // Match against ANY outstanding code, not just the newest. After resends a
+    // user often has several valid codes in their inbox; accepting only the
+    // latest wrongly rejects an earlier (still-valid) one they might type.
     const verification = await prisma.schoolEmailVerifications.findFirst({
-      where: { profile_id: user.id, consumed_at: null, expires_at: { gt: new Date() } },
+      where: { profile_id: user.id, consumed_at: null, expires_at: { gt: new Date() }, code_hash: hash },
       orderBy: { created_at: "desc" },
     });
-    if (!verification) {
-      return NextResponse.json({ error: "No active code. Request a new one." }, { status: 400 });
-    }
-    if (verification.attempts >= MAX_ATTEMPTS) {
-      return NextResponse.json({ error: "Too many wrong attempts. Request a new code." }, { status: 429 });
-    }
 
-    const hash = crypto.createHash("sha256").update(String(code)).digest("hex");
-    if (hash !== verification.code_hash) {
+    if (!verification) {
+      const latest = await prisma.schoolEmailVerifications.findFirst({
+        where: { profile_id: user.id, consumed_at: null, expires_at: { gt: new Date() } },
+        orderBy: { created_at: "desc" },
+      });
+      if (!latest) {
+        return NextResponse.json({ error: "No active code. Request a new one." }, { status: 400 });
+      }
+      if (latest.attempts >= MAX_ATTEMPTS) {
+        return NextResponse.json({ error: "Too many wrong attempts. Request a new code." }, { status: 429 });
+      }
       await prisma.schoolEmailVerifications.update({
-        where: { id: verification.id },
+        where: { id: latest.id },
         data: { attempts: { increment: 1 } },
       });
       return NextResponse.json({ error: "Incorrect code. Check your email and try again." }, { status: 400 });

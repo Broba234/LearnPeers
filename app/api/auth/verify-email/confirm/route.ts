@@ -30,26 +30,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true, alreadyVerified: true });
     }
 
+    const hash = hashCode(code.trim());
+
+    // Match against ANY outstanding code, not just the newest — after resends a
+    // user often has several valid codes; accepting only the latest wrongly
+    // rejects an earlier (still-valid) one.
     const record = await prisma.emailVerifications.findFirst({
-      where: { profile_id: user.id, consumed_at: null, expires_at: { gt: new Date() } },
+      where: { profile_id: user.id, consumed_at: null, expires_at: { gt: new Date() }, code_hash: hash },
       orderBy: { created_at: "desc" },
     });
-    if (!record) {
-      return NextResponse.json(
-        { error: "That code expired. Request a new one." },
-        { status: 400 }
-      );
-    }
-    if (record.attempts >= MAX_ATTEMPTS) {
-      return NextResponse.json(
-        { error: "Too many wrong attempts. Request a new code." },
-        { status: 429 }
-      );
-    }
 
-    if (record.code_hash !== hashCode(code.trim())) {
+    if (!record) {
+      const latest = await prisma.emailVerifications.findFirst({
+        where: { profile_id: user.id, consumed_at: null, expires_at: { gt: new Date() } },
+        orderBy: { created_at: "desc" },
+      });
+      if (!latest) {
+        return NextResponse.json({ error: "That code expired. Request a new one." }, { status: 400 });
+      }
+      if (latest.attempts >= MAX_ATTEMPTS) {
+        return NextResponse.json(
+          { error: "Too many wrong attempts. Request a new code." },
+          { status: 429 }
+        );
+      }
       await prisma.emailVerifications.update({
-        where: { id: record.id },
+        where: { id: latest.id },
         data: { attempts: { increment: 1 } },
       });
       return NextResponse.json({ error: "Incorrect code. Try again." }, { status: 400 });

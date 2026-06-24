@@ -68,9 +68,9 @@ export default function AccountEmailGate() {
   const openModal = () => {
     setOpen(true);
     setError("");
-    // Ensure a fresh code exists (signup may have missed it). Safe: rate-limited
-    // server-side and a no-op if already verified.
-    if (!requestedOnce) requestCode();
+    // Don't auto-send here — signup already emailed a code. Auto-sending a second
+    // one creates a newer code the user hasn't received yet, which (with the old
+    // newest-only matching) made their valid code look wrong. They can Resend.
   };
 
   const confirmCode = useCallback(

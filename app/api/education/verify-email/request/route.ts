@@ -4,7 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { getAuthedUser } from "@/lib/api-auth";
 import { sendSchoolVerificationEmail } from "@/lib/email";
 
-const CODE_TTL_MS = 15 * 60 * 1000;
+// 60 min, not 15 — university mail systems often quarantine the code for a
+// while before the student can release and enter it.
+const CODE_TTL_MS = 60 * 60 * 1000;
 const MAX_CODES_PER_HOUR = 5;
 
 function hashCode(code: string) {
