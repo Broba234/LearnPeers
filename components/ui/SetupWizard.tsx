@@ -116,23 +116,48 @@ const SetupWizard = () => {
             is_tutor: true,
             subjects: profileData.subjects || [],
           });
-          let normalizedSubjects: any[] = [];
-          if (profileData.subjects && Array.isArray(profileData.subjects)) {
-            normalizedSubjects = profileData.subjects
-              .map((s: any) => {
-                // Check if s.subject exists and is an object
-                if (s && s.Subjects && typeof s.Subjects === "object") {
-                  return s.Subjects;
-                }
-                return undefined;
-              })
-              .filter(
-                (Subjects: any): Subjects is any => Subjects !== undefined
-              );
-          }
+          // get-full returns each subject flattened (subject fields + price /
+          // duration columns). Older shapes nested them under `Subjects` — handle
+          // both so selections always come back on return.
+          const subjectsList: any[] = Array.isArray(profileData.subjects)
+            ? profileData.subjects
+            : [];
+          const normalizedSubjects = subjectsList
+            .map((s: any) => (s && s.Subjects && typeof s.Subjects === "object" ? { ...s.Subjects, ...s } : s))
+            .filter(Boolean);
           setSelectedSubjects(normalizedSubjects);
-          console.log("profileData", profileData);
+          // Rehydrate per-subject pricing so the Pricing step is pre-filled, not
+          // blank, when the tutor leaves and comes back.
+          setSelectedSubjectsWithPrice(normalizedSubjects);
           setStripeConnected(Boolean(profileData.stripe_account_id));
+
+          // Resume where they left off, derived from what's already saved — so
+          // logging out mid-onboarding never drops them back to step 1 or loses
+          // entered info. Advance-only; the Stripe-return effect handles the
+          // post-Stripe case on its own.
+          const hasEducation =
+            (Array.isArray(profileData.ProfileInstitutions) &&
+              profileData.ProfileInstitutions.length > 0) ||
+            Boolean(profileData.institution_id);
+          const hasBio = Boolean(profileData.bio && String(profileData.bio).trim());
+          const hasSubjects = normalizedSubjects.length > 0;
+          const hasPricing = normalizedSubjects.some((s: any) => Number(s.price_1) > 0);
+          const hasStripe = Boolean(profileData.stripe_account_id);
+          if (hasEducation) setEducationComplete(true);
+          let resume = 1;
+          if (hasStripe || hasPricing) resume = 5;
+          else if (hasSubjects) resume = 4;
+          else if (hasBio) resume = 3;
+          else if (hasEducation) resume = 2;
+          const setupParam = searchParams.get("setup");
+          const returningFromStripe =
+            setupParam === "4" ||
+            setupParam === "5" ||
+            (typeof window !== "undefined" &&
+              ["4", "5"].includes(sessionStorage.getItem("setupReturnStep") || ""));
+          if (!returningFromStripe && resume > 1) {
+            setActiveStep((prev) => (resume > prev ? resume : prev));
+          }
         }
       } catch (error) {}
     };

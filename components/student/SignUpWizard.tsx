@@ -77,21 +77,26 @@ const SignUpWizard = () => {
             is_tutor: profileData.is_tutor || false,
             subjects: profileData.subjects || [],
           });
-          let normalizedSubjects: any[] = [];
-          if (profileData.subjects && Array.isArray(profileData.subjects)) {
-            normalizedSubjects = profileData.subjects
-              .map((s: any) => {
-                // Check if s.subject exists and is an object
-                if (s && s.Subjects && typeof s.Subjects === "object") {
-                  return s.Subjects;
-                }
-                return undefined;
-              })
-              .filter(
-                (Subjects: any): Subjects is any => Subjects !== undefined
-              );
-          }
+          // get-full returns subjects flattened; handle the older nested shape
+          // too so previously-picked subjects always come back on return.
+          const subjectsList: any[] = Array.isArray(profileData.subjects)
+            ? profileData.subjects
+            : [];
+          const normalizedSubjects = subjectsList
+            .map((s: any) => (s && s.Subjects && typeof s.Subjects === "object" ? { ...s.Subjects, ...s } : s))
+            .filter(Boolean);
           setSelectedSubjects(normalizedSubjects);
+
+          // Resume where they left off so logging back in never restarts the
+          // flow. Steps: 1 School · 2 Subjects · 3 Finalize. Advance-only.
+          const hasEducation =
+            (Array.isArray(profileData.ProfileInstitutions) &&
+              profileData.ProfileInstitutions.length > 0) ||
+            Boolean(profileData.institution_id);
+          const hasSubjects = normalizedSubjects.length > 0;
+          if (hasEducation) setEducationComplete(true);
+          const resume = hasSubjects ? 3 : hasEducation ? 2 : 1;
+          if (resume > 1) setActiveStep((prev) => (resume > prev ? resume : prev));
         }
       } catch (error) { }
     };

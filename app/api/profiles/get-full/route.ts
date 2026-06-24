@@ -30,7 +30,9 @@ export async function GET(request: Request) {
         is_tutor: true,
         stripe_account_id: true,
         institution_id: true,
+        email_verified: true,
         Institutions: { select: { id: true, name: true, abbreviation: true } },
+        ProfileInstitutions: { select: { id: true, kind: true, status: true } },
         subjects: {
           select: {
             institution_course_id: true,

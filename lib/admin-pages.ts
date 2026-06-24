@@ -24,6 +24,7 @@ export const ADMIN_PAGES: AdminPage[] = [
   { key: "financials", label: "Financials", path: "/dashboard/financials", group: "analytics", blurb: "GMV, net revenue, take rate, payouts." },
   { key: "marketplace", label: "Marketplace", path: "/dashboard/marketplace", group: "analytics", blurb: "Liquidity: supply vs demand, fill rate, utilization." },
   { key: "growth", label: "Growth", path: "/dashboard/growth", group: "analytics", blurb: "Signups, activation, active users." },
+  { key: "onboarding", label: "Onboarding", path: "/dashboard/onboarding", group: "analytics", blurb: "Signup → activation funnel, drop-off and stalled users." },
   { key: "quality", label: "Quality", path: "/dashboard/quality", group: "analytics", blurb: "Ratings, repeat bookings, retention." },
   // Operational tools
   { key: "users", label: "Users", path: "/dashboard/users", group: "operations", blurb: "Browse and search all registered users." },
