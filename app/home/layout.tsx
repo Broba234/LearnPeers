@@ -12,6 +12,7 @@ import IncomingRequestOverlay from "@/components/session/IncomingRequestOverlay"
 import ConnectNowModal from "@/components/session/ConnectNowModal";
 import NotificationDropdown from "@/components/ui/components/header/NotificationDropdown";
 import BottomNav from "@/components/ui/BottomNav";
+import AccountEmailGate from "@/components/auth/AccountEmailGate";
 
 
 import { TutorProfileModalContext } from "@/components/ui/components/common/TutorProfileModalContext";
@@ -225,7 +226,10 @@ export default function HomeLayout({
             <HomeSidebar userRole={userRole} userName={userName} />
           </div>
           <main className="flex-1 overflow-y-auto relative">
-            <div className="pb-20 lg:pb-0">{children}</div>
+            <div className="pb-20 lg:pb-0">
+              <AccountEmailGate />
+              {children}
+            </div>
           </main>
         </div>
 

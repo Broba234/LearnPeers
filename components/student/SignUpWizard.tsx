@@ -377,6 +377,7 @@ const SignUpWizard = () => {
                       >
                         <EducationStep
                           requireVerification={false}
+                          highSchoolOnly={true}
                           allowSkip={true}
                           onComplete={setEducationComplete}
                         />

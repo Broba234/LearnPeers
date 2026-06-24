@@ -114,6 +114,19 @@ export function welcomeEmailHtml(firstName?: string): string {
   });
 }
 
+/** Account-email confirmation code — sent from noreply@ right after signup. */
+export function accountVerificationEmailHtml(code: string): string {
+  return layout({
+    preheader: `${code} is your LearnPeers confirmation code.`,
+    heading: "Confirm your email",
+    body:
+      p("Welcome! Enter this code in LearnPeers to confirm this is really your email:") +
+      `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px 0;"><tr><td align="center" style="background:${BRAND_TINT};border:1px solid ${BRAND_TINT_BORDER};border-radius:12px;padding:18px 30px;font-family:${FONT};font-size:34px;font-weight:800;letter-spacing:10px;color:${BRAND};">${code}</td></tr></table>`,
+    footnote:
+      "This code expires in 15 minutes. If you didn't create a LearnPeers account, you can safely ignore this email.",
+  });
+}
+
 /** School-email verification code — sent from noreply@. */
 export function verificationEmailHtml(code: string, institutionName: string): string {
   return layout({

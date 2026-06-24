@@ -22,6 +22,9 @@ type Props = {
   // Tutors are university students by definition, so skip the high-school vs
   // university chooser and go straight to the university picker.
   universityOnly?: boolean;
+  // Students are high-schoolers by definition — skip the chooser and go
+  // straight to the board → school picker. No university, no email verification.
+  highSchoolOnly?: boolean;
   onComplete: (complete: boolean) => void;
 };
 
@@ -198,9 +201,9 @@ function SchoolByBoardPicker({
   );
 }
 
-export default function EducationStep({ requireVerification, allowSkip, universityOnly, onComplete }: Props) {
+export default function EducationStep({ requireVerification, allowSkip, universityOnly, highSchoolOnly, onComplete }: Props) {
   const [level, setLevel] = useState<"high_school" | "university" | null>(
-    universityOnly ? "university" : null
+    universityOnly ? "university" : highSchoolOnly ? "high_school" : null
   );
   const [universities, setUniversities] = useState<Institution[]>([]);
   const [boards, setBoards] = useState<Institution[]>([]);
@@ -323,8 +326,8 @@ export default function EducationStep({ requireVerification, allowSkip, universi
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Step 1 — level selection (hidden for tutors: they're university students) */}
-      {!universityOnly && (
+      {/* Step 1 — level selection (hidden for tutors and students: each has a fixed level) */}
+      {!universityOnly && !highSchoolOnly && (
         <div>
           <p className="text-sm font-medium text-ink-700 mb-3">Where are you studying?</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

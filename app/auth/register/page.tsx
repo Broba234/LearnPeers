@@ -93,6 +93,15 @@ function RegisterContent() {
                 session = signInData.session;
             }
 
+            // 3b. Email the account-verification code now, so it's waiting when
+            //     they land. Best-effort — the verify banner can resend if this
+            //     misses (e.g. session cookie not yet propagated).
+            try {
+                await fetch("/api/auth/verify-email/request", { method: "POST" });
+            } catch {
+                /* non-fatal */
+            }
+
             // 4. Straight to onboarding — the role home renders the setup wizard
             //    until profile_setup flips true. Before leaving, wait until the
             //    auth session is actually persisted to storage, then do a HARD

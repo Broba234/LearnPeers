@@ -11,7 +11,11 @@
 // When RESEND_API_KEY is unset we log to the server console and, in
 // development, hand the code back to the caller so flows stay testable.
 
-import { welcomeEmailHtml, verificationEmailHtml } from "./email-templates";
+import {
+  welcomeEmailHtml,
+  verificationEmailHtml,
+  accountVerificationEmailHtml,
+} from "./email-templates";
 
 const NOREPLY_FROM =
   process.env.EMAIL_FROM_NOREPLY || "LearnPeers <noreply@learnpeers.com>";
@@ -60,6 +64,23 @@ async function sendEmail({ from, to, subject, html, replyTo }: EmailArgs): Promi
     throw new Error("Failed to send email");
   }
   return true;
+}
+
+// System mail — account-email confirmation code. Sent from noreply@ at signup.
+export async function sendAccountVerificationEmail(
+  to: string,
+  code: string
+): Promise<SendResult> {
+  const delivered = await sendEmail({
+    from: NOREPLY_FROM,
+    to,
+    subject: `${code} is your LearnPeers confirmation code`,
+    html: accountVerificationEmailHtml(code),
+  });
+
+  if (delivered) return { delivered: true };
+  if (process.env.NODE_ENV !== "production") return { delivered: false, devCode: code };
+  throw new Error("Email provider not configured");
 }
 
 // System mail — verification code. Sent from noreply@.
