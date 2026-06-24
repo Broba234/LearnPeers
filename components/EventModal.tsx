@@ -25,6 +25,7 @@ interface EventModalProps {
   onSubmit: (data: EventFormData) => void;
   defaultStart: Date;
   defaultEnd: Date;
+  defaultDays?: number[];
   subjects?: any[];
 }
 
@@ -103,6 +104,7 @@ export const EventModal: React.FC<EventModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  defaultDays,
   subjects,
 }) => {
   const [subjectId, setSubjectId] = useState("");
@@ -117,7 +119,10 @@ export const EventModal: React.FC<EventModalProps> = ({
   });
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      // Seed the day picker when opened from a specific day's "+".
+      setSelectedDays(defaultDays ?? []);
+    } else {
       setSubjectId("");
       setSubjectName("");
       setSelectedDays([]);
@@ -125,6 +130,7 @@ export const EventModal: React.FC<EventModalProps> = ({
       setEndTime("19:00");
       setDurations({ 1: false, 2: true, 3: false });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   if (!isOpen) return null;

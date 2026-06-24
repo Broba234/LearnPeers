@@ -1,22 +1,9 @@
 import React, { useState, useCallback, useMemo } from "react";
-import PropTypes from "prop-types";
-import {
-  Calendar,
-  Views,
-  DateLocalizer,
-  momentLocalizer,
-  View,
-  Components,
-} from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
 import { EventDetailModal } from "./EventDetailModal";
 import { EventModal, EventFormData } from "./EventModal";
-import { PlusIcon, Repeat } from "lucide-react";
+import { Plus, Repeat, Clock, CalendarDays, BookOpen } from "lucide-react";
 
-// Define TypeScript interfaces
 interface CalendarEvent {
   id: string;
   subject: string;
@@ -30,386 +17,344 @@ interface CalendarEvent {
 }
 
 interface SelectableProps {
-  localizer?: DateLocalizer;
+  // Kept for backwards compat with the page (no longer used internally).
+  localizer?: any;
   email: string;
   id: string;
-  data?: CalendarEvent[];
+  data?: any[];
   subjects?: any[];
 }
 
-interface SlotInfo {
-  start: Date;
-  end: Date;
-  slots: Date[];
-  action: "select" | "click" | "doubleClick";
+// Mon-first, the way a student reads a school timetable.
+const DAYS = [
+  { label: "Monday", short: "Mon", idx: 1 },
+  { label: "Tuesday", short: "Tue", idx: 2 },
+  { label: "Wednesday", short: "Wed", idx: 3 },
+  { label: "Thursday", short: "Thu", idx: 4 },
+  { label: "Friday", short: "Fri", idx: 5 },
+  { label: "Saturday", short: "Sat", idx: 6 },
+  { label: "Sunday", short: "Sun", idx: 0 },
+];
+
+// Compact wall-clock label: "4 PM", "4:30 PM".
+function fmtTime(m: moment.Moment): string {
+  return m.minutes() === 0 ? m.format("h A") : m.format("h:mm A");
 }
 
-// Set up moment localizer
-const localizer = momentLocalizer(moment);
-
-// Custom Event Components
-interface CustomEventProps {
-  event: any;
-  view?: View;
+function durationChips(slot: any): string[] {
+  const out: string[] = [];
+  if (slot?.duration_1) out.push("30m");
+  if (slot?.duration_2) out.push("1h");
+  if (slot?.duration_3) out.push("1.5h");
+  return out;
 }
 
-const CustomEvent: React.FC<CustomEventProps> = ({ event, view }) => {
-  const startTime = moment(event.start_time).format("h:mm A");
-  const endTime = moment(event.end_time).format("h:mm A");
-  const dateStr = moment(event.start_date).format("MMM D, YYYY");
-
-  if (view === Views.MONTH) {
-    return (
-      <div className={` text-white p-1 rounded text-xs overflow-hidden`}>
-        <div className="flex items-center gap-1 mb-0.5">
-          <div className="font-bold truncate">
-            {event?.originalData?.subject || event?.title}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (view === Views.AGENDA) {
-    return (
-      <div className="bg-gray-50 p-3 rounded-lg border-l-4 border-brand-500 mb-2">
-        <div className="flex items-center gap-3">
-          <div>
-            <div className="font-bold text-gray-800">
-              {event?.originalData?.subject || event?.title}
-            </div>
-          </div>
-        </div>
-        <div className="mt-2 text-sm text-gray-700">
-          <div className="flex items-center gap-1 mt-1">
-            <span>🕐</span> {dateStr} • {startTime} - {endTime}
-          </div>
-          {event.price && (
-            <div className="mt-2 text-xs text-gray-600">{event.price}</div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className={` text-white p-2 rounded-md h-full overflow-hidden`}>
-      <div className="font-bold text-sm mb-1 truncate">
-        {event?.originalData?.subject || event?.title}
-      </div>
-      <div className="text-xs opacity-90 mb-0.5 flex items-center gap-1">
-        <span className="text-[10px]">🕐</span> {startTime} - {endTime}
-      </div>
-    </div>
-  );
-};
-
-// Main component
-export default function Selectable({
-  localizer: propLocalizer,
-  email,
-  id,
-  data,
-  subjects,
-}: SelectableProps) {
-  // Availability is a *weekly recurring* rule (day_of_week + start/end time),
-  // so each stored slot is expanded into one calendar event per week across a
-  // window around today. This makes the schedule visibly repeat every week.
-  const RECURRENCE_WEEKS_BACK = 2;
-  const RECURRENCE_WEEKS_AHEAD = 26;
-
-  const transformEvents = (eventsData: any[]): any[] => {
-    return eventsData.flatMap((event) => {
-      if (!event?.start_date || !event?.end_date) return [];
-
-      const baseStart = moment.utc(event.start_date).local();
-      const baseEnd = moment.utc(event.end_date).local();
-      const durationMs = baseEnd.diff(baseStart);
-
-      // Walk weekly forward/back from the slot's own week so we cover the
-      // visible range regardless of when the slot was originally created.
-      const events: any[] = [];
-      for (let wk = -RECURRENCE_WEEKS_BACK; wk <= RECURRENCE_WEEKS_AHEAD; wk++) {
-        const start = baseStart.clone().add(wk, "weeks");
-        const end = start.clone().add(durationMs, "milliseconds");
-        events.push({
-          id: wk === 0 ? event.id : `${event.id}__wk${wk}`,
-          title: event.subject || "Available Slot",
-          price: event.price?.toString() || "0",
-          start: start.toDate(),
-          end: end.toDate(),
-          start_time: start,
-          end_time: end,
-          allDay: false,
-          recurring: true,
-          originalData: event,
-        });
-      }
-      return events;
-    });
+// Turn a stored recurring slot into the event shape the detail modal expects.
+function toEvent(slot: any) {
+  const start = moment.utc(slot.start_date).local();
+  const end = moment.utc(slot.end_date).local();
+  return {
+    id: slot.id,
+    title: slot.subject || "Available",
+    price: slot.price?.toString() || "0",
+    start: start.toDate(),
+    end: end.toDate(),
+    start_time: start,
+    end_time: end,
+    recurring: true,
+    originalData: slot,
   };
+}
 
-  const [myEvents, setEvents] = useState<any[]>(transformEvents(data || []));
-  const [subjectsData, setSubjectsData] = useState<any[]>(subjects || []);
+export default function Selectable({ email, id, data, subjects }: SelectableProps) {
+  const [slots, setSlots] = useState<any[]>(data || []);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState<{
-    start: Date;
-    end: Date;
-  } | null>(null);
+  const [createDays, setCreateDays] = useState<number[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
-  // Week view is the right default for a *recurring weekly* schedule — it reads
-  // like a student's class timetable instead of a noisy month of repeats.
-  const [currentView, setCurrentView] = useState<View>(Views.WEEK);
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
-    null
-  );
-
-  // const handleDeleteEvent = useCallback((eventId: string) => {
-  //   setEvents((prev) => prev.filter((ev) => ev.id !== eventId));
-  // }, []);
-
-  // Re-pull availability from the server and re-expand it into weekly
-  // occurrences. Used after create / edit / delete to keep the calendar in sync.
+  // Re-pull availability after create / edit / delete to stay in sync.
   const refreshEvents = useCallback(async () => {
     try {
       const res = await fetch(
         `/api/tutor-availability/get?email=${encodeURIComponent(email)}`
       );
-      if (res.ok) {
-        const data = await res.json();
-        setEvents(transformEvents(data));
-      }
-    } catch (e) {
-      // keep current events on failure
+      if (res.ok) setSlots(await res.json());
+    } catch {
+      /* keep current slots on failure */
     }
   }, [email]);
 
-  const handleCreateEvent = useCallback(async (formData: EventFormData) => {
-    const newEvent = {
-      id: formData.id,
-      title: formData.subject,
-      subject_id: formData.subject_id,
-      duration_1: formData.duration_1,
-      duration_2: formData.duration_2,
-      duration_3: formData.duration_3,
-      subject: formData.subject,
-      start_time: formData.startTime,
-      end_time: formData.endTime,
-      startDate: formData.startDate,
-      endDate: formData.endDate,
-      timezone: formData.timezone,
-      day_of_week: formData.day_of_week,
-      start: new Date(formData.startDate + "T" + formData.startTime),
-      end: new Date(formData.endDate + "T" + formData.endTime),
-    };
-   
-
-    try {
-      // setSaving(true);
-      // const slots = buildIntervals();
-      const res = await fetch("/api/tutor-availability/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, newEvent, id }),
-      });
-      if (!res.ok) {
-        console.error("Error saving availability", res);
+  const handleCreateEvent = useCallback(
+    async (formData: EventFormData) => {
+      const newEvent = {
+        id: formData.id,
+        title: formData.subject,
+        subject_id: formData.subject_id,
+        duration_1: formData.duration_1,
+        duration_2: formData.duration_2,
+        duration_3: formData.duration_3,
+        subject: formData.subject,
+        start_time: formData.startTime,
+        end_time: formData.endTime,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        timezone: formData.timezone,
+        day_of_week: formData.day_of_week,
+        start: new Date(formData.startDate + "T" + formData.startTime),
+        end: new Date(formData.endDate + "T" + formData.endTime),
+      };
+      try {
+        await fetch("/api/tutor-availability/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, newEvent, id }),
+        });
+      } catch {
+        /* surfaced by refresh */
       }
-      // setMessage('Availability saved');
-      // setTimeout(() => setMessage(''), 2500);
-    } catch (e: any) {
-      // setMessage('Error saving availability');
-      // setTimeout(() => setMessage(''), 3500);
-    } finally {
-      // setSaving(false);
-    }
-    await refreshEvents();
-  }, [email, id, refreshEvents]);
+      await refreshEvents();
+    },
+    [email, id, refreshEvents]
+  );
 
-  const handleViewChange = useCallback((view: View) => {
-    setCurrentView(view);
-  }, []);
-
-  const handleNavigate = useCallback((date: Date) => {
-    setCurrentDate(date);
-  }, []);
-
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const openCreate = (day?: number) => {
+    setCreateDays(day !== undefined ? [day] : []);
+    setModalOpen(true);
+  };
 
   const handleEventSelect = (event: any) => {
-    // Occurrences of a recurring slot carry a synthetic id (`<id>__wk<n>`);
-    // edit/delete must act on the real underlying record, so normalize the id
-    // to the stored record id while keeping the clicked occurrence's date/time.
+    // Normalize to the stored record id for edit / delete.
     const recordId = event?.originalData?.id ?? event?.id;
     setSelectedEvent({ ...event, id: recordId });
     setIsDetailModalOpen(true);
   };
 
-  const handleEventUpdate = async (_eventId: string, _updatedData: any) => {
-    // The edit hit the server; re-expand the rule into weekly occurrences.
-    await refreshEvents();
-  };
+  // Group slots by weekday for the board.
+  const byDay = useMemo(() => {
+    const map = new Map<number, any[]>();
+    for (const slot of slots) {
+      if (!slot?.start_date || !slot?.end_date) continue;
+      const day =
+        typeof slot.day_of_week === "number"
+          ? slot.day_of_week
+          : moment.utc(slot.start_date).local().day();
+      const arr = map.get(day) || [];
+      arr.push(slot);
+      map.set(day, arr);
+    }
+    // Sort each day's slots by start time.
+    for (const [, arr] of map) {
+      arr.sort(
+        (a, b) =>
+          moment.utc(a.start_date).valueOf() - moment.utc(b.start_date).valueOf()
+      );
+    }
+    return map;
+  }, [slots]);
 
-  const handleEventDelete = (_eventId: string) => {
-    // The delete hit the server; drop all weekly occurrences of the rule.
-    refreshEvents();
-  };
-
-  // Custom components for different views
-  const components: Components<any> = useMemo(
-    () => ({
-      event: (props) => <CustomEvent event={props.event} view={currentView} />,
-    }),
-    [currentView]
-  );
-
-  // Custom event style for background color
-  const eventStyleGetter = useCallback((event: any) => {
-    const backgroundColor = "green";
-
+  // Headline stats.
+  const stats = useMemo(() => {
+    let minutes = 0;
+    const subjectSet = new Set<string>();
+    const daySet = new Set<number>();
+    for (const slot of slots) {
+      if (!slot?.start_date || !slot?.end_date) continue;
+      minutes += moment
+        .utc(slot.end_date)
+        .diff(moment.utc(slot.start_date), "minutes");
+      if (slot.subject) subjectSet.add(slot.subject);
+      const day =
+        typeof slot.day_of_week === "number"
+          ? slot.day_of_week
+          : moment.utc(slot.start_date).local().day();
+      daySet.add(day);
+    }
+    const hours = minutes / 60;
     return {
-      style: {
-        backgroundColor,
-        opacity: 0.95,
-        color: "white",
-        border: "none",
-        display: "block",
-        padding: "2px",
-        overflow: "hidden",
-      },
+      hours: Number.isInteger(hours) ? `${hours}` : hours.toFixed(1),
+      days: daySet.size,
+      subjects: subjectSet.size,
     };
-  }, []);
+  }, [slots]);
 
-  // Open the week/day view scrolled to the morning so after-school hours are in view.
-  const scrollToTime = useMemo(() => {
-    const d = new Date();
-    d.setHours(8, 0, 0, 0);
-    return d;
-  }, []);
-
-  // Count distinct weekly slots (not the weekly occurrences we expand them into),
-  // so the header reflects "how many recurring blocks have I set".
-  const weeklySlotCount = useMemo(
-    () => new Set(myEvents.map((e) => e.originalData?.id ?? e.id)).size,
-    [myEvents]
-  );
-  const handleAddLectureClick = useCallback(() => {
-    const now = new Date();
-    const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
-    setSelectedSlot({ start: now, end: oneHourLater });
-    setModalOpen(true);
-  }, []);
+  const todayDay = new Date().getDay();
+  const hasAny = slots.length > 0;
 
   return (
-    <>
-      <div className="min-h-screen bg-gray-50 p-4 md:p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-6 bg-white flex items-start justify-between rounded-lg shadow p-6">
+    <div className="min-h-screen bg-canvas p-4 md:p-8">
+      <div className="mx-auto max-w-4xl space-y-6">
+        {/* Hero header */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 p-6 md:p-8 shadow-brand">
+          <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-white/10 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-12 -left-8 h-40 w-40 rounded-full bg-white/5 blur-2xl" />
+
+          <div className="relative flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800 mb-1">
+              <h1 className="text-2xl md:text-3xl font-bold text-white">
                 Your weekly availability
               </h1>
-              <p className="flex items-center gap-1.5 text-gray-600 mb-4">
-                <Repeat className="w-4 h-4 text-[#0077be]" />
-                Set the hours you tutor — they repeat automatically every week.
+              <p className="mt-1.5 flex items-center gap-1.5 text-sm text-brand-50/90">
+                <Repeat className="h-4 w-4" />
+                Set your hours once — they repeat automatically every week.
               </p>
-
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-green-600"></div>
-                  <span className="text-sm text-gray-600">Available hours</span>
-                </div>
-                <span className="text-gray-300">•</span>
-                <p className="text-sm text-gray-700">
-                  <span className="font-bold">{weeklySlotCount}</span>{" "}
-                  weekly {weeklySlotCount === 1 ? "slot" : "slots"} set
-                </p>
-              </div>
             </div>
-
             <button
-              onClick={handleAddLectureClick}
-              className="px-5 py-2.5 bg-[#0077be] text-white rounded-full hover:bg-[#0077be]/80 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-colors flex items-center gap-2"
+              onClick={() => openCreate()}
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 shadow-sm transition-colors hover:bg-brand-50"
             >
-              <span><PlusIcon className="w-4 h-4" /></span>
+              <Plus className="h-4 w-4" />
               Add availability
             </button>
           </div>
 
-          {weeklySlotCount === 0 && (
-            <div className="mb-6 rounded-lg border border-dashed border-brand-200 bg-brand-50/50 p-6 text-center">
-              <p className="text-gray-700 font-medium">No availability set yet.</p>
-              <p className="text-sm text-gray-500 mt-1">
-                Add the hours you're free each week — students can only book the times you set here.
-              </p>
-              <button
-                onClick={handleAddLectureClick}
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#0077be] text-white rounded-full text-sm hover:bg-[#0077be]/90 transition-colors"
-              >
-                <PlusIcon className="w-4 h-4" />
-                Add your first slot
-              </button>
+          {hasAny && (
+            <div className="relative mt-6 grid grid-cols-3 gap-3">
+              <Stat icon={<Clock className="h-4 w-4" />} value={stats.hours} label="hrs / week" />
+              <Stat icon={<CalendarDays className="h-4 w-4" />} value={`${stats.days}`} label={stats.days === 1 ? "day active" : "days active"} />
+              <Stat icon={<BookOpen className="h-4 w-4" />} value={`${stats.subjects}`} label={stats.subjects === 1 ? "subject" : "subjects"} />
             </div>
           )}
-
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="h-[700px]">
-              <Calendar
-                date={currentDate}
-                view={currentView}
-                onView={handleViewChange}
-                onNavigate={handleNavigate}
-                events={myEvents}
-                localizer={propLocalizer || localizer}
-                onSelectEvent={handleEventSelect}
-                selectable={false}
-                views={[Views.WEEK, Views.DAY]}
-                scrollToTime={scrollToTime}
-                startAccessor="start"
-                endAccessor="end"
-                titleAccessor="title"
-                components={components}
-                eventPropGetter={eventStyleGetter}
-                popup
-                formats={{
-                  timeGutterFormat: "h:mm A",
-                  eventTimeRangeFormat: ({ start, end }) =>
-                    `${moment(start).format("h:mm A")} - ${moment(end).format(
-                      "h:mm A"
-                    )}`,
-                }}
-              />
-            </div>
-          </div>
         </div>
+
+        {/* Week board */}
+        {hasAny ? (
+          <div className="overflow-hidden rounded-2xl border border-ink-100 bg-surface shadow-sm">
+            {DAYS.map((day, i) => {
+              const daySlots = byDay.get(day.idx) || [];
+              const isToday = day.idx === todayDay;
+              return (
+                <div
+                  key={day.idx}
+                  className={`group flex items-center gap-3 px-4 py-3.5 transition-colors md:px-6 ${
+                    i !== 0 ? "border-t border-ink-100" : ""
+                  } ${isToday ? "bg-brand-50/40" : "hover:bg-muted/50"}`}
+                >
+                  {/* Day label */}
+                  <div className="flex w-24 shrink-0 flex-col">
+                    <span className="text-sm font-semibold text-ink-800">{day.short}</span>
+                    {isToday && (
+                      <span className="mt-0.5 inline-flex w-fit items-center rounded-full bg-brand-600 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                        Today
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Slots */}
+                  <div className="flex flex-1 flex-wrap items-center gap-2">
+                    {daySlots.length > 0 ? (
+                      daySlots.map((slot) => {
+                        const ev = toEvent(slot);
+                        const chips = durationChips(slot);
+                        return (
+                          <button
+                            key={slot.id}
+                            onClick={() => handleEventSelect(ev)}
+                            className="group/pill inline-flex items-center gap-2.5 rounded-xl border border-brand-100 bg-brand-50 py-1.5 pl-2 pr-3 text-left transition-all hover:border-brand-300 hover:shadow-sm"
+                          >
+                            <span className="h-7 w-1 rounded-full bg-gradient-to-b from-brand-500 to-brand-700" />
+                            <span>
+                              <span className="block text-sm font-semibold text-ink-800">
+                                {fmtTime(ev.start_time)} – {fmtTime(ev.end_time)}
+                              </span>
+                              <span className="flex items-center gap-1.5 text-xs text-ink-500">
+                                <span className="truncate max-w-[10rem]">{slot.subject || "Available"}</span>
+                                {chips.length > 0 && (
+                                  <span className="text-ink-300">·</span>
+                                )}
+                                {chips.map((c) => (
+                                  <span key={c} className="rounded bg-white px-1 text-[10px] font-medium text-brand-700">
+                                    {c}
+                                  </span>
+                                ))}
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })
+                    ) : (
+                      <button
+                        onClick={() => openCreate(day.idx)}
+                        className="text-sm text-ink-300 transition-colors hover:text-brand-600"
+                      >
+                        Not available
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Add to this day */}
+                  <button
+                    onClick={() => openCreate(day.idx)}
+                    title={`Add availability on ${day.label}`}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-ink-400 opacity-0 transition-all hover:bg-brand-50 hover:text-brand-600 focus:opacity-100 group-hover:opacity-100"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          // Empty state
+          <div className="rounded-2xl border border-dashed border-brand-200 bg-surface p-10 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-brand-50">
+              <CalendarDays className="h-7 w-7 text-brand-600" />
+            </div>
+            <h2 className="text-lg font-semibold text-ink-800">No availability set yet</h2>
+            <p className="mx-auto mt-1 max-w-sm text-sm text-ink-500">
+              Add the hours you're free each week. Students can only book the times you
+              set here — and they repeat every week automatically.
+            </p>
+            <button
+              onClick={() => openCreate()}
+              className="mt-5 inline-flex items-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-brand transition-colors hover:bg-brand-700"
+            >
+              <Plus className="h-4 w-4" />
+              Add your first slot
+            </button>
+          </div>
+        )}
       </div>
 
       <EventModal
         isOpen={modalOpen}
         onClose={() => {
           setModalOpen(false);
-          setSelectedSlot(null);
+          setCreateDays([]);
         }}
         onSubmit={handleCreateEvent}
-        defaultStart={selectedSlot?.start || new Date()}
-        defaultEnd={selectedSlot?.end || new Date(Date.now() + 60 * 60 * 1000)}
+        defaultStart={new Date()}
+        defaultEnd={new Date(Date.now() + 60 * 60 * 1000)}
+        defaultDays={createDays}
         subjects={subjects}
       />
 
-      {/* Event Detail Modal */}
       <EventDetailModal
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}
         event={selectedEvent}
-        onDelete={handleEventDelete}
-        onUpdate={handleEventUpdate}
+        onDelete={() => {
+          setIsDetailModalOpen(false);
+          refreshEvents();
+        }}
+        onUpdate={() => {
+          setIsDetailModalOpen(false);
+          refreshEvents();
+        }}
       />
-    </>
+    </div>
   );
 }
 
-Selectable.propTypes = {
-  localizer: PropTypes.instanceOf(DateLocalizer),
-};
+const Stat: React.FC<{ icon: React.ReactNode; value: string; label: string }> = ({
+  icon,
+  value,
+  label,
+}) => (
+  <div className="rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">
+    <div className="flex items-center gap-1.5 text-brand-50/80">{icon}</div>
+    <div className="mt-1 text-xl font-bold leading-none text-white md:text-2xl">{value}</div>
+    <div className="mt-1 text-xs text-brand-50/70">{label}</div>
+  </div>
+);
