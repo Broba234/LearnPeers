@@ -61,7 +61,7 @@ export default async function MarketplacePage({
             <Empty text="No bookings in this period." />
           ) : (
             <div className="[&_.recharts-cartesian-axis-tick_text]:capitalize">
-              <SimpleBarChart data={funnelData} xKey="label" bars={[{ key: "count", label: "Sessions", color: PALETTE.brand }]} valueFormatter={(n) => formatNumber(n)} />
+              <SimpleBarChart data={funnelData} xKey="label" bars={[{ key: "count", label: "Sessions", color: PALETTE.brand }]} format="number" />
             </div>
           )}
         </ChartCard>
@@ -96,7 +96,7 @@ export default async function MarketplacePage({
                 { key: "Demand", label: "Demand", color: PALETTE.brand },
                 { key: "Live tutors", label: "Live tutors", color: PALETTE.emerald },
               ]}
-              valueFormatter={(n) => formatNumber(n)}
+              format="number"
             />
           )}
         </ChartCard>

@@ -43,7 +43,7 @@ export default async function FinancialsPage({
               { key: "payouts", label: "Tutor payouts", color: PALETTE.sky },
               { key: "revenue", label: "Net revenue", color: PALETTE.brand },
             ]}
-            valueFormatter={(n) => formatCurrency(n, { compact: true })}
+            format="currencyCompact"
           />
         </ChartCard>
 
@@ -153,7 +153,7 @@ export default async function FinancialsPage({
               horizontal
               height={Math.max(220, f.bySubject.length * 36)}
               bars={[{ key: "revenue", label: "Net revenue", color: PALETTE.brand }]}
-              valueFormatter={(n) => formatCurrency(n, { compact: true })}
+              format="currencyCompact"
             />
           )}
         </ChartCard>

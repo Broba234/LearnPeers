@@ -41,7 +41,7 @@ export default async function GrowthPage({
               { key: "students", label: "Students", color: PALETTE.emerald },
               { key: "tutors", label: "Tutors", color: PALETTE.violet },
             ]}
-            valueFormatter={(n) => formatNumber(n)}
+            format="number"
           />
         </ChartCard>
 

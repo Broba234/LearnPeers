@@ -13,6 +13,7 @@ import {
   Legend,
   Cell,
 } from "recharts";
+import { formatCurrency, formatNumber } from "./format";
 
 export const PALETTE = {
   brand: "#6366f1",
@@ -23,6 +24,27 @@ export const PALETTE = {
   violet: "#8b5cf6",
   slate: "#94a3b8",
 };
+
+/**
+ * Value formatting is passed as a serializable enum rather than a function,
+ * because these are Client Components rendered from Server Components — and
+ * functions can't cross the RSC → client boundary.
+ */
+export type ValueFormat = "number" | "numberCompact" | "currency" | "currencyCompact";
+
+function resolveFormat(format?: ValueFormat): (n: number) => string {
+  switch (format) {
+    case "currency":
+      return (n) => formatCurrency(n);
+    case "currencyCompact":
+      return (n) => formatCurrency(n, { compact: true });
+    case "numberCompact":
+      return (n) => formatNumber(n, { compact: true });
+    case "number":
+    default:
+      return (n) => formatNumber(n);
+  }
+}
 
 const axisStyle = { fontSize: 11, fill: "#94a3b8" } as const;
 
@@ -42,13 +64,14 @@ interface SeriesDef {
 interface TrendChartProps {
   data: Record<string, number | string>[];
   series: SeriesDef[];
-  /** Format the Y axis / tooltip values. */
-  valueFormatter?: (n: number) => string;
+  /** Serializable value format for the Y axis / tooltip. */
+  format?: ValueFormat;
   height?: number;
   stacked?: boolean;
 }
 
-export function TrendChart({ data, series, valueFormatter, height = 260, stacked }: TrendChartProps) {
+export function TrendChart({ data, series, format, height = 260, stacked }: TrendChartProps) {
+  const fmt = resolveFormat(format);
   return (
     <ResponsiveContainer width="100%" height={height}>
       <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
@@ -62,17 +85,11 @@ export function TrendChart({ data, series, valueFormatter, height = 260, stacked
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" strokeOpacity={0.4} vertical={false} />
         <XAxis dataKey="date" tickFormatter={fmtAxisDate} tick={axisStyle} tickLine={false} axisLine={false} minTickGap={24} />
-        <YAxis
-          tick={axisStyle}
-          tickLine={false}
-          axisLine={false}
-          width={56}
-          tickFormatter={(v) => (valueFormatter ? valueFormatter(v) : String(v))}
-        />
+        <YAxis tick={axisStyle} tickLine={false} axisLine={false} width={56} tickFormatter={(v) => fmt(v)} />
         <Tooltip
           contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 12 }}
           labelFormatter={(l) => fmtAxisDate(String(l))}
-          formatter={(value: number, name: string) => [valueFormatter ? valueFormatter(value) : value, name]}
+          formatter={(value: number, name: string) => [fmt(value), name]}
         />
         {series.length > 1 && <Legend wrapperStyle={{ fontSize: 12 }} />}
         {series.map((s) => (
@@ -96,12 +113,13 @@ interface BarChartProps {
   data: Record<string, number | string>[];
   xKey: string;
   bars: SeriesDef[];
-  valueFormatter?: (n: number) => string;
+  format?: ValueFormat;
   height?: number;
   horizontal?: boolean;
 }
 
-export function SimpleBarChart({ data, xKey, bars, valueFormatter, height = 260, horizontal }: BarChartProps) {
+export function SimpleBarChart({ data, xKey, bars, format, height = 260, horizontal }: BarChartProps) {
+  const fmt = resolveFormat(format);
   return (
     <ResponsiveContainer width="100%" height={height}>
       <BarChart
@@ -112,19 +130,19 @@ export function SimpleBarChart({ data, xKey, bars, valueFormatter, height = 260,
         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" strokeOpacity={0.4} vertical={!horizontal} horizontal={horizontal ? false : true} />
         {horizontal ? (
           <>
-            <XAxis type="number" tick={axisStyle} tickLine={false} axisLine={false} tickFormatter={(v) => (valueFormatter ? valueFormatter(v) : String(v))} />
+            <XAxis type="number" tick={axisStyle} tickLine={false} axisLine={false} tickFormatter={(v) => fmt(v)} />
             <YAxis type="category" dataKey={xKey} tick={axisStyle} tickLine={false} axisLine={false} width={120} />
           </>
         ) : (
           <>
             <XAxis dataKey={xKey} tick={axisStyle} tickLine={false} axisLine={false} />
-            <YAxis tick={axisStyle} tickLine={false} axisLine={false} width={48} tickFormatter={(v) => (valueFormatter ? valueFormatter(v) : String(v))} />
+            <YAxis tick={axisStyle} tickLine={false} axisLine={false} width={48} tickFormatter={(v) => fmt(v)} />
           </>
         )}
         <Tooltip
           cursor={{ fill: "#94a3b811" }}
           contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 12 }}
-          formatter={(value: number, name: string) => [valueFormatter ? valueFormatter(value) : value, name]}
+          formatter={(value: number, name: string) => [fmt(value), name]}
         />
         {bars.length > 1 && <Legend wrapperStyle={{ fontSize: 12 }} />}
         {bars.map((b) => (

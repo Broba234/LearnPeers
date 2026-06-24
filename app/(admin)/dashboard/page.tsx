@@ -47,7 +47,7 @@ export default async function OverviewPage({
               { key: "gmv", label: "GMV", color: PALETTE.slate },
               { key: "revenue", label: "Net revenue", color: PALETTE.brand },
             ]}
-            valueFormatter={(n) => formatCurrency(n, { compact: true })}
+            format="currencyCompact"
           />
         </ChartCard>
         <ChartCard title="New signups" subtitle="Tutors vs students">
@@ -58,7 +58,7 @@ export default async function OverviewPage({
               { key: "tutors", label: "Tutors", color: PALETTE.violet },
             ]}
             stacked
-            valueFormatter={(n) => formatNumber(n)}
+            format="number"
           />
         </ChartCard>
       </div>
