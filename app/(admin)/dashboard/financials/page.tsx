@@ -1,7 +1,7 @@
 import { requireAdminPage } from "@/lib/admin-access";
 import { getFinancials, isRange, rangeLabel, type Range } from "@/lib/analytics";
 import { getStripeFinancials } from "@/lib/stripe-financials";
-import { STUDENT_FEE_PERCENT, PLATFORM_FEE_PERCENT } from "@/lib/billing";
+import { STUDENT_FEE_PERCENT, PLATFORM_FEE_PERCENT, STRIPE_PERCENT_FEE, STRIPE_FIXED_FEE } from "@/lib/billing";
 import PageHeader from "@/components/admin/dashboard/PageHeader";
 import KpiCard from "@/components/admin/dashboard/KpiCard";
 import ChartCard from "@/components/admin/dashboard/ChartCard";
@@ -56,8 +56,10 @@ export default async function FinancialsPage({
               <Row label="Effective take of GMV" value={formatPct(f.takeRatePct)} strong />
             </div>
             <p className="text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
-              Booked figures are recognized when a session completes and are gross of Stripe fees,
-              refunds and disputes. See the reconciliation below for actual cash.
+              Stripe processing ({formatPct(STRIPE_PERCENT_FEE * 100, 1)} + {formatCurrency(STRIPE_FIXED_FEE)}) is
+              surcharged on top and split 50/50 between student and tutor, so the take above is
+              net of processing cost. Booked figures are recognized when a session completes and
+              are gross of refunds and disputes. See the reconciliation below for actual cash.
             </p>
           </div>
         </ChartCard>

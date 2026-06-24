@@ -222,7 +222,7 @@ export default function TutorHome() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <p className="text-sm text-amber-800 font-medium flex-1">Complete your payout setup to get paid for sessions.</p>
-            <Link href="/home/tutor/profile" className="flex-shrink-0 px-3 py-1.5 bg-amber-500 text-white text-xs font-semibold rounded-lg hover:bg-amber-600 transition-colors">
+            <Link href="/home/tutor/settings?tab=profile" className="flex-shrink-0 px-3 py-1.5 bg-amber-500 text-white text-xs font-semibold rounded-lg hover:bg-amber-600 transition-colors">
               Set up payouts
             </Link>
           </div>

@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
+import { tutorNet } from "@/lib/billing";
 
 export const runtime = "nodejs";
-
-const TUTOR_NET_PERCENT = 0.95;
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -47,11 +46,11 @@ export async function GET(request: NextRequest) {
   );
 
   const totalEarned = completedSessions.reduce(
-    (sum, s) => sum + Math.round((Number(s.amount) * TUTOR_NET_PERCENT) * 100) / 100,
+    (sum, s) => sum + tutorNet(Number(s.amount)),
     0
   );
   const totalPending = pendingSessions.reduce(
-    (sum, s) => sum + Math.round((Number(s.amount) * TUTOR_NET_PERCENT) * 100) / 100,
+    (sum, s) => sum + tutorNet(Number(s.amount)),
     0
   );
 
@@ -70,10 +69,10 @@ export async function GET(request: NextRequest) {
       const balance = await stripe.balance.retrieve({
         stripeAccount: profile.stripe_account_id,
       });
-      const usdAvailable = balance.available.find((b) => b.currency === "usd");
-      const usdPending = balance.pending.find((b) => b.currency === "usd");
-      stripeAvailable = (usdAvailable?.amount ?? 0) / 100;
-      stripePending = (usdPending?.amount ?? 0) / 100;
+      const cadAvailable = balance.available.find((b) => b.currency === "cad");
+      const cadPending = balance.pending.find((b) => b.currency === "cad");
+      stripeAvailable = (cadAvailable?.amount ?? 0) / 100;
+      stripePending = (cadPending?.amount ?? 0) / 100;
     } catch {
       // Stripe not fully onboarded — silently skip
     }

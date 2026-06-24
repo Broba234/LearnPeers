@@ -7,6 +7,7 @@ import SearchableSelect from "@/components/ui/SearchableSelect";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { PaymentForm } from "./PaymentForm";
+import type { ChargeBreakdown } from "@/lib/billing";
 import { getDateString, generateDateOptions } from "./tutorBooking.utils";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
@@ -73,6 +74,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
 
   const [step, setStep] = useState<1 | 2>(1);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [breakdown, setBreakdown] = useState<ChargeBreakdown | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState<
@@ -338,6 +340,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
       }
 
       setClientSecret(data.clientSecret);
+      setBreakdown(data.breakdown ?? null);
       setSessionId(data.sessionId);
       setStep(2);
     } catch (err) {
@@ -352,6 +355,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
     toast.success(`Session successfully booked with ${tutor.name}! Payment complete.`);
     setStep(1);
     setClientSecret(null);
+    setBreakdown(null);
     setSessionId(null);
     setSelectedTime(null);
     setBookingTopic("");
@@ -363,6 +367,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
   const handleBackToBooking = () => {
     setStep(1);
     setClientSecret(null);
+    setBreakdown(null);
     setSessionId(null);
   };
 
@@ -429,7 +434,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
 
         {/* Content */}
         <div className="p-6">
-          {step === 2 && clientSecret && stripePromise && sessionId ? (
+          {step === 2 && clientSecret && stripePromise && sessionId && breakdown ? (
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-1">
                 Complete Payment
@@ -449,10 +454,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
               >
                 <PaymentForm
                   sessionId={sessionId}
-                  amount={
-                    getSessionPrice(String(selectedDuration)) ??
-                    Number(selectedDuration)
-                  }
+                  breakdown={breakdown}
                   tutorName={tutor.name || "Tutor"}
                   onSuccess={handlePaymentSuccess}
                   onBack={handleBackToBooking}

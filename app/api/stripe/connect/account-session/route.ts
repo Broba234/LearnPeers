@@ -13,7 +13,9 @@ function detectCountry(request: NextRequest, countryOverride?: string): string {
   if (vercelCountry && /^[A-Z]{2}$/.test(vercelCountry)) return vercelCountry;
   const cfCountry = request.headers.get("cf-ipcountry");
   if (cfCountry && cfCountry !== "XX" && /^[A-Z]{2}$/.test(cfCountry)) return cfCountry;
-  return "US";
+  // Canada-native for now: connected accounts must support CAD payouts, so when
+  // geolocation is unknown, default to CA rather than US.
+  return "CA";
 }
 
 /**

@@ -48,7 +48,7 @@ export default function StripeReminderBanner() {
         </p>
       </div>
       <Link
-        href="/home/tutor/profile"
+        href="/home/tutor/settings?tab=profile"
         className="flex-shrink-0 px-4 py-2 bg-amber-500 text-white text-sm font-semibold rounded-xl hover:bg-amber-600 transition-colors"
       >
         Connect Stripe

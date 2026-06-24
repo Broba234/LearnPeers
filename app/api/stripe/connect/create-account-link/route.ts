@@ -41,7 +41,9 @@ async function detectCountry(
     // Ignore geolocation errors
   }
 
-  return "US";
+  // Canada-native for now: connected accounts must support CAD payouts, so when
+  // geolocation is unknown, default to CA rather than US.
+  return "CA";
 }
 
 export async function POST(request: NextRequest) {

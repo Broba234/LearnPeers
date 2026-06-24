@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
+import { tutorNet } from "@/lib/billing";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import StripeReminderBanner from "@/components/stripe/StripeReminderBanner";
 
@@ -26,9 +27,9 @@ type EarningsData = {
 };
 
 function fmt(amount: number) {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-CA", {
     style: "currency",
-    currency: "USD",
+    currency: "CAD",
     minimumFractionDigits: 2,
   }).format(amount);
 }
@@ -81,7 +82,7 @@ export default function EarningsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
           <div>
             <h1 className="text-2xl font-semibold text-slate-900">Earnings</h1>
-            <p className="text-sm text-slate-400 mt-0.5">Your revenue after the 5% platform fee</p>
+            <p className="text-sm text-slate-400 mt-0.5">Your revenue after the 5% platform fee and your half of payment processing</p>
           </div>
           {data?.loginUrl && (
             <a
@@ -147,7 +148,7 @@ export default function EarningsPage() {
               </div>
 
               {sessions.map((session) => {
-                const take = Math.round(Number(session.amount) * 0.95 * 100) / 100;
+                const take = tutorNet(Number(session.amount));
                 const displayDate = session.date
                   ? new Date(session.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
                   : new Date(session.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });

@@ -36,6 +36,8 @@ model Profiles {
   is_tutor                               Boolean?                   @default(false)
   email_verified                         Boolean                    @default(false)
   email_verified_at                      DateTime?                  @db.Timestamptz(6)
+  notify_email_enabled                   Boolean                    @default(true)
+  notify_email_target                    String                     @default("account")
   stripe_account_id                      String?                    @db.VarChar(255)
   institution_id                         String?                    @db.Uuid
   is_owner                               Boolean                    @default(false)

@@ -2,16 +2,17 @@
 
 import React, { useState } from "react";
 import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import type { ChargeBreakdown } from "@/lib/billing";
 
 export function PaymentForm({
   sessionId,
-  amount,
+  breakdown,
   tutorName,
   onSuccess,
   onBack,
 }: {
   sessionId: string;
-  amount: number;
+  breakdown: ChargeBreakdown;
   tutorName: string;
   onSuccess: () => void;
   onBack: () => void;
@@ -43,7 +44,7 @@ export function PaymentForm({
             receipt_email: undefined,
             payment_method_data: {
               billing_details: {
-                address: { country: "US" },
+                address: { country: "CA" },
               },
             },
           },
@@ -81,18 +82,26 @@ export function PaymentForm({
       <div className="p-4 bg-brand-50 rounded-xl space-y-1.5 text-sm">
         <div className="flex justify-between items-center">
           <span className="text-gray-600">Session price</span>
-          <span className="text-gray-800">${amount.toFixed(2)}</span>
+          <span className="text-gray-800">${breakdown.base.toFixed(2)}</span>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-gray-600">Platform fee (5%)</span>
-          <span className="text-gray-800">+${(amount * 0.05).toFixed(2)}</span>
+          <span className="text-gray-600">Service fee (5%)</span>
+          <span className="text-gray-800">+${breakdown.serviceFee.toFixed(2)}</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="text-gray-600">
+            Processing fee (your half)
+          </span>
+          <span className="text-gray-800">+${breakdown.studentStripeShare.toFixed(2)}</span>
         </div>
         <div className="flex justify-between items-center border-t border-brand-200 pt-1.5">
           <span className="font-semibold text-gray-800">Total charged</span>
-          <span className="font-bold text-brand-700">${(amount * 1.05).toFixed(2)}</span>
+          <span className="font-bold text-brand-700">${breakdown.studentTotal.toFixed(2)}</span>
         </div>
         <p className="text-xs text-gray-500 pt-0.5">
-          {tutorName} receives ${(amount * 0.95).toFixed(2)} (5% platform fee deducted from payout)
+          {tutorName} receives ${breakdown.tutorPayout.toFixed(2)} — the 5% service
+          fee and the other half of the payment processing fee
+          (${breakdown.tutorStripeShare.toFixed(2)}) are deducted from their payout.
         </p>
       </div>
 

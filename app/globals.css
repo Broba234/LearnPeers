@@ -96,3 +96,43 @@ html {
 input::placeholder {
   color: rgb(170, 170, 170);
 }
+
+/* Dual-handle range slider (EventModal availability window). Two range inputs
+   are overlaid; the track is non-interactive and only the thumbs catch pointer
+   events, so both handles stay independently draggable. */
+.dual-range input[type="range"] {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  background: transparent;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.dual-range input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  height: 20px;
+  width: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #0077be;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.dual-range input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  height: 20px;
+  width: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #0077be;
+  cursor: pointer;
+}
+.dual-range input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent;
+}
+.dual-range input[type="range"]::-moz-range-track {
+  background: transparent;
+}

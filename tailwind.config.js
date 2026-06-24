@@ -1,5 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // Dark mode is opt-in via a `dark` class on <html>, toggled from Settings →
+  // Appearance and persisted in localStorage (no DB). Pages adopt `dark:`
+  // variants incrementally; the Settings surface is fully themed today.
+  darkMode: 'class',
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}"

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Video, BookOpen, User, CalendarClock } from "lucide-react";
+import { Home, Search, Video, BookOpen, Settings, CalendarClock } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 type Item = { label: string; href: string; icon: LucideIcon };
@@ -18,13 +18,13 @@ export default function BottomNav({ role }: { role: string }) {
           { label: "Home", href: "/home/tutor", icon: Home },
           { label: "Requests", href: "/home/tutor/sessions", icon: CalendarClock },
           { label: "Courses", href: "/home/tutor/courses", icon: BookOpen },
-          { label: "Profile", href: "/home/tutor/profile", icon: User },
+          { label: "Settings", href: "/home/tutor/settings", icon: Settings },
         ]
       : [
           { label: "Home", href: "/home/student", icon: Home },
           { label: "Explore", href: "/home/student/explore", icon: Search },
           { label: "Sessions", href: "/home/student/sessions", icon: Video },
-          { label: "Profile", href: "/home/student/profile", icon: User },
+          { label: "Settings", href: "/home/student/settings", icon: Settings },
         ];
 
   const isActive = (href: string) => {

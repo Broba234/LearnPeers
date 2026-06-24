@@ -3,13 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { getAuthedUser } from "@/lib/api-auth";
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { notifySessionCreated } from "@/lib/notifications";
+import { computeCharge } from "@/lib/billing";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
-
-// 5% from student (charged on top) + 5% from tutor (deducted from payout) = 10% gross
-const STUDENT_FEE_PERCENT = 0.05;
-const PLATFORM_FEE_PERCENT = 0.10;
 
 /** Map a session duration (hours) to the tutor's matching price column. */
 function priceForDuration(
@@ -139,16 +136,17 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Student pays session price + 5% fee on top; tutor nets 95% of base price
-    const baseCents = Math.round(Number(amount) * 100);
-    const amountCents = Math.round(baseCents * (1 + STUDENT_FEE_PERCENT));
-    const applicationFeeCents = Math.round(baseCents * PLATFORM_FEE_PERCENT);
+    // Student pays base + 5% service fee + half the Stripe processing fee;
+    // the tutor's payout is reduced by 5% + the other half of the Stripe fee.
+    // The application fee is grossed up by the full Stripe fee so the platform
+    // still nets exactly 10% of base once Stripe takes its cut. See lib/billing.
+    const charge = computeCharge(Number(amount));
 
     const paymentIntent = await stripe!.paymentIntents.create({
-      amount: amountCents,
-      currency: "usd",
+      amount: charge.amountCents,
+      currency: "cad",
       automatic_payment_methods: { enabled: true },
-      application_fee_amount: applicationFeeCents,
+      application_fee_amount: charge.applicationFeeCents,
       transfer_data: {
         destination: tutorProfile!.stripe_account_id!,
       },
@@ -162,6 +160,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       clientSecret: paymentIntent.client_secret,
       sessionId: session.id,
+      breakdown: charge,
     });
   } catch (error) {
     console.error("[create-session-payment-intent] Error:", error);

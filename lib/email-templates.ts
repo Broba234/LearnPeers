@@ -127,6 +127,35 @@ export function accountVerificationEmailHtml(code: string): string {
   });
 }
 
+/** Notification: a student requested a session with this tutor. From noreply@. */
+export function tutorRequestEmailHtml({
+  tutorName,
+  studentName,
+  topic,
+}: {
+  tutorName?: string;
+  studentName: string;
+  topic?: string;
+}): string {
+  const hi = tutorName ? `Hi ${tutorName},` : "Hi,";
+  const what = topic
+    ? `a <strong style="color:${INK};">${topic}</strong> session`
+    : "a tutoring session";
+  return layout({
+    preheader: `${studentName} requested ${topic || "a tutoring"} session on LearnPeers.`,
+    heading: "You've got a new session request 📚",
+    body:
+      p(hi) +
+      p(
+        `<strong style="color:${INK};">${studentName}</strong> just requested ${what} with you on LearnPeers.`
+      ) +
+      p("Log in to accept or decline — students book fastest with the tutors who reply quickest."),
+    cta: { label: "View the request", href: `${APP_URL}/home/tutor` },
+    footnote:
+      "You're getting this because session-request emails are on. Change where these go in Settings → Notifications.",
+  });
+}
+
 /** School-email verification code — sent from noreply@. */
 export function verificationEmailHtml(code: string, institutionName: string): string {
   return layout({

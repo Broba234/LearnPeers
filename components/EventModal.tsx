@@ -71,12 +71,22 @@ function toMinutes(value: string): number {
   return h * 60 + m;
 }
 
-// Common after-school / evening windows a student would actually pick.
-const TIME_PRESETS = [
-  { label: "After school", start: "16:00", end: "19:00" },
-  { label: "Evenings", start: "18:00", end: "21:00" },
-  { label: "Mornings", start: "09:00", end: "12:00" },
-];
+// Availability window: 6:00 AM–11:00 PM in 30-min steps. The dual-handle slider
+// maps each handle to a step index so a tutor can drag both ends to set a slot.
+const SLOT_MIN = 360; // 6:00 AM, in minutes
+const SLOT_MAX = 1380; // 11:00 PM
+const SLOT_STEP = 30;
+const SLOT_STEPS = (SLOT_MAX - SLOT_MIN) / SLOT_STEP; // 34
+
+function minutesToValue(min: number): string {
+  return `${String(Math.floor(min / 60)).padStart(2, "0")}:${String(min % 60).padStart(2, "0")}`;
+}
+function idxToValue(idx: number): string {
+  return minutesToValue(SLOT_MIN + idx * SLOT_STEP);
+}
+function valueToIdx(value: string): number {
+  return Math.round((toMinutes(value) - SLOT_MIN) / SLOT_STEP);
+}
 
 function nextDateForDay(dayIdx: number): string {
   const today = new Date();
@@ -150,17 +160,10 @@ export const EventModal: React.FC<EventModalProps> = ({
     );
   };
 
-  const applyTimePreset = (start: string, end: string) => {
-    setStartTime(start);
-    setEndTime(end);
-  };
-
   const toggleDuration = (key: 1 | 2 | 3) =>
     setDurations((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const startMin = toMinutes(startTime);
-  // Keep the End dropdown valid: only times after the chosen start.
-  const endOptions = TIME_OPTIONS.filter((t) => toMinutes(t.value) > startMin);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -311,50 +314,14 @@ export const EventModal: React.FC<EventModalProps> = ({
               <Clock className="w-4 h-4" />
               What hours?
             </label>
-            <div className="flex flex-wrap gap-2 mb-3">
-              {TIME_PRESETS.map((p) => (
-                <PresetChip
-                  key={p.label}
-                  label={p.label}
-                  active={startTime === p.start && endTime === p.end}
-                  onClick={() => applyTimePreset(p.start, p.end)}
-                />
-              ))}
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex-1">
-                <span className="block text-xs text-gray-500 mb-1">From</span>
-                <select
-                  value={startTime}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    setStartTime(v);
-                    if (toMinutes(endTime) <= toMinutes(v)) {
-                      const next = TIME_OPTIONS.find((t) => toMinutes(t.value) > toMinutes(v));
-                      if (next) setEndTime(next.value);
-                    }
-                  }}
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-white text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
-                >
-                  {TIME_OPTIONS.slice(0, -1).map((t) => (
-                    <option key={t.value} value={t.value}>{t.label}</option>
-                  ))}
-                </select>
-              </div>
-              <span className="text-gray-400 mt-5">→</span>
-              <div className="flex-1">
-                <span className="block text-xs text-gray-500 mb-1">To</span>
-                <select
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-white text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
-                >
-                  {endOptions.map((t) => (
-                    <option key={t.value} value={t.value}>{t.label}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            <TimeRangeSlider
+              startTime={startTime}
+              endTime={endTime}
+              onChange={(s, e) => {
+                setStartTime(s);
+                setEndTime(e);
+              }}
+            />
           </div>
 
           {/* Step 4 — Session length */}
@@ -440,3 +407,60 @@ const PresetChip: React.FC<{ label: string; active?: boolean; onClick: () => voi
     {label}
   </button>
 );
+
+// Dual-handle range slider for the availability window. Two overlaid range
+// inputs (both ends draggable); a min one-step gap keeps start before end.
+const TimeRangeSlider: React.FC<{
+  startTime: string;
+  endTime: string;
+  onChange: (start: string, end: string) => void;
+}> = ({ startTime, endTime, onChange }) => {
+  const startIdx = valueToIdx(startTime);
+  const endIdx = valueToIdx(endTime);
+  const leftPct = (startIdx / SLOT_STEPS) * 100;
+  const rightPct = (endIdx / SLOT_STEPS) * 100;
+
+  const setStart = (idx: number) =>
+    onChange(idxToValue(Math.min(Math.max(0, idx), endIdx - 1)), endTime);
+  const setEnd = (idx: number) =>
+    onChange(startTime, idxToValue(Math.max(Math.min(SLOT_STEPS, idx), startIdx + 1)));
+
+  return (
+    <div>
+      <div className="mb-3 flex items-center justify-between text-sm">
+        <span className="font-semibold text-[#0077be]">{labelFor(startTime)}</span>
+        <span className="text-xs text-gray-400">to</span>
+        <span className="font-semibold text-[#0077be]">{labelFor(endTime)}</span>
+      </div>
+      <div className="dual-range relative flex h-6 items-center">
+        <div className="absolute h-1.5 w-full rounded-full bg-gray-200" />
+        <div
+          className="absolute h-1.5 rounded-full bg-[#0077be]"
+          style={{ left: `${leftPct}%`, width: `${rightPct - leftPct}%` }}
+        />
+        <input
+          type="range"
+          min={0}
+          max={SLOT_STEPS}
+          step={1}
+          value={startIdx}
+          onChange={(e) => setStart(Number(e.target.value))}
+          aria-label="Start time"
+        />
+        <input
+          type="range"
+          min={0}
+          max={SLOT_STEPS}
+          step={1}
+          value={endIdx}
+          onChange={(e) => setEnd(Number(e.target.value))}
+          aria-label="End time"
+        />
+      </div>
+      <div className="mt-2 flex justify-between text-[10px] text-gray-400">
+        <span>6 AM</span>
+        <span>11 PM</span>
+      </div>
+    </div>
+  );
+};

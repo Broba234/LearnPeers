@@ -1,4 +1,19 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { prisma } from '@/lib/prisma';
+import { sendTutorRequestEmail } from '@/lib/email';
+
+/** Resolve which address(es) a tutor's email notifications go to. */
+function resolveNotifyRecipients(
+  target: string,
+  accountEmail: string,
+  schoolEmail: string | null
+): string[] {
+  const account = accountEmail ? [accountEmail] : [];
+  if (target === 'school') return schoolEmail ? [schoolEmail] : account;
+  if (target === 'both')
+    return Array.from(new Set([accountEmail, schoolEmail].filter(Boolean) as string[]));
+  return account; // 'account' (default)
+}
 
 interface CreateNotificationParams {
   userId: string;
@@ -51,6 +66,36 @@ export async function notifySessionCreated(
     sessionId,
     actorId: studentId,
   });
+
+  // Also email the tutor, routed by their notification preferences. Non-fatal:
+  // an email hiccup must never break the request/notification flow.
+  try {
+    const tutor = await prisma.profiles.findUnique({
+      where: { id: tutorId },
+      select: {
+        email: true,
+        name: true,
+        notify_email_enabled: true,
+        notify_email_target: true,
+        ProfileInstitutions: {
+          where: { kind: 'current_university', status: 'verified' },
+          select: { verified_email: true },
+          take: 1,
+        },
+      },
+    });
+    if (tutor?.notify_email_enabled && tutor.email) {
+      const schoolEmail = tutor.ProfileInstitutions[0]?.verified_email ?? null;
+      const to = resolveNotifyRecipients(tutor.notify_email_target, tutor.email, schoolEmail);
+      await sendTutorRequestEmail(to, {
+        tutorName: tutor.name ? String(tutor.name).trim().split(/\s+/)[0] : undefined,
+        studentName,
+        topic,
+      });
+    }
+  } catch (e) {
+    console.error('Failed to email tutor about session request:', e);
+  }
 }
 
 export async function notifySessionStatusChanged(

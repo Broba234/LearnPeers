@@ -15,6 +15,7 @@ import {
   welcomeEmailHtml,
   verificationEmailHtml,
   accountVerificationEmailHtml,
+  tutorRequestEmailHtml,
 } from "./email-templates";
 
 const NOREPLY_FROM =
@@ -28,7 +29,7 @@ type SendResult = { delivered: boolean; devCode?: string };
 
 type EmailArgs = {
   from: string;
-  to: string;
+  to: string | string[];
   subject: string;
   html: string;
   replyTo?: string;
@@ -38,8 +39,9 @@ type EmailArgs = {
 // returns false when no provider is configured (dev fallback handled by callers).
 async function sendEmail({ from, to, subject, html, replyTo }: EmailArgs): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
+  const recipients = Array.isArray(to) ? to : [to];
   if (!apiKey) {
-    console.warn(`[EMAIL] No RESEND_API_KEY — would send "${subject}" to ${to}`);
+    console.warn(`[EMAIL] No RESEND_API_KEY — would send "${subject}" to ${recipients.join(", ")}`);
     return false;
   }
 
@@ -51,7 +53,7 @@ async function sendEmail({ from, to, subject, html, replyTo }: EmailArgs): Promi
     },
     body: JSON.stringify({
       from,
-      to: [to],
+      to: recipients,
       subject,
       html,
       ...(replyTo ? { reply_to: replyTo } : {}),
@@ -113,4 +115,20 @@ export async function sendWelcomeEmail(to: string, firstName?: string): Promise<
 
   if (delivered || process.env.NODE_ENV !== "production") return { delivered };
   throw new Error("Email provider not configured");
+}
+
+// Notification: tell a tutor a student requested a session. The caller resolves
+// the recipient list from the tutor's notify preferences (account / school /
+// both). Sent from noreply@. Throws on provider failure — call non-fatally.
+export async function sendTutorRequestEmail(
+  to: string[],
+  args: { tutorName?: string; studentName: string; topic?: string }
+): Promise<void> {
+  if (!to.length) return;
+  await sendEmail({
+    from: NOREPLY_FROM,
+    to,
+    subject: `${args.studentName} requested a session on LearnPeers`,
+    html: tutorRequestEmailHtml(args),
+  });
 }
