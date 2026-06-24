@@ -29,8 +29,8 @@ const CTA_NODES: ParallaxItem[] = [
 const STEPS = [
   {
     icon: Search,
-    title: 'Find your tutor',
-    body: 'Browse peer tutors by subject, rate, rating, and availability. See who knows the material inside out.',
+    title: 'Find your near-peer tutor',
+    body: 'Browse university students by the exact courses they aced. Find someone who sat in your seat just a year or two ago.',
   },
   {
     icon: CalendarCheck,
@@ -89,9 +89,9 @@ const STUDENT_FEATURES = [
 ];
 
 const TUTOR_FEATURES = [
-  { icon: Wallet, title: 'Get paid out', body: 'Connect payouts with Stripe and earn from the subjects you know best.' },
-  { icon: BadgeCheck, title: 'You set the terms', body: 'Choose your subjects, your rates, and your availability.' },
-  { icon: Users, title: 'Reach students', body: 'Get discovered by students searching for exactly what you teach.' },
+  { icon: Wallet, title: 'Earn between classes', body: 'Connect payouts with Stripe and earn from the courses you just aced.' },
+  { icon: BadgeCheck, title: 'You set the terms', body: 'Choose your subjects, your rates, and your availability around your timetable.' },
+  { icon: Users, title: 'Reach high schoolers', body: 'Get discovered by students chasing the same marks you already earned.' },
 ];
 
 export function Features() {
@@ -103,10 +103,10 @@ export function Features() {
           {/* Students */}
           <div className="rounded-3xl border border-ink-100 bg-white p-8 sm:p-10">
             <span className="inline-flex rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
-              For students
+              For high schoolers
             </span>
             <h2 className="mt-4 text-2xl font-bold tracking-tight text-ink-900 sm:text-3xl">
-              Real help from people who just learned it
+              Real help from someone who just sat where you sit
             </h2>
             <div className="mt-7 grid gap-5 sm:grid-cols-2">
               {STUDENT_FEATURES.map((f) => (
@@ -132,10 +132,10 @@ export function Features() {
           {/* Tutors */}
           <div className="rounded-3xl border border-ink-800 bg-gradient-to-br from-ink-900 to-ink-800 p-8 text-white sm:p-10">
             <span className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-brand-200">
-              For tutors
+              For university students
             </span>
             <h2 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
-              Turn what you know into income
+              Turn the courses you aced into income
             </h2>
             <div className="mt-7 grid gap-5">
               {TUTOR_FEATURES.map((f) => (
@@ -168,7 +168,7 @@ export function Features() {
 const FAQS = [
   {
     q: 'What is LearnPeers?',
-    a: 'LearnPeers is a peer-to-peer tutoring marketplace. Students book live one-on-one sessions with top student tutors over video, with a shared whiteboard, screen share, and secure in-platform payments.',
+    a: 'LearnPeers is a near-peer tutoring marketplace that connects high schoolers with university students who recently aced the same courses. Book live one-on-one sessions over video, with a shared whiteboard, screen share, and secure in-platform payments.',
   },
   {
     q: 'How much does it cost?',
@@ -176,7 +176,7 @@ const FAQS = [
   },
   {
     q: 'Who are the tutors?',
-    a: 'Tutors are students who excel in the subjects they teach. You can browse their profiles, subjects, rates, and ratings before booking a session.',
+    a: 'Tutors are university students who recently aced the same Grade 11 & 12 courses you\'re taking. They know exactly what the exams ask and how to get the marks — browse their profiles, subjects, rates, and ratings before booking a session.',
   },
   {
     q: 'How do sessions work?',
@@ -254,11 +254,11 @@ export function CtaBand() {
             <span className="h-1.5 w-1.5 rounded-full bg-white" /> Beta access open
           </span>
           <h2 className="mx-auto mt-4 max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Ready to learn from your peers?
+            Ready to learn from someone who just did it?
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-white/80">
-            Join the beta today — find a tutor in minutes or start earning by teaching what
-            you know.
+            Join the beta — high schoolers find a university tutor in minutes; university
+            students earn by teaching the courses they aced.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
@@ -271,7 +271,7 @@ export function CtaBand() {
               href="/auth/register?role=tutor"
               className="inline-flex w-full items-center justify-center rounded-2xl border border-white/40 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.98] sm:w-auto sm:text-base"
             >
-              Become a tutor
+              Tutor as a student
             </Link>
           </div>
         </div>

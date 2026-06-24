@@ -92,7 +92,7 @@ function ProductMock() {
         <div className="col-span-1 space-y-3">
           <div className="relative flex aspect-square items-end justify-start overflow-hidden rounded-xl bg-gradient-to-br from-brand-500/40 to-brand-700/40 p-2 ring-1 ring-white/10">
             <span className="rounded-md bg-black/40 px-1.5 py-0.5 text-[9px] font-medium text-white/80">
-              Maya · tutor
+              Maya · uni tutor
             </span>
           </div>
           <div className="relative flex aspect-square items-end justify-start overflow-hidden rounded-xl bg-gradient-to-br from-ink-500/40 to-ink-700/50 p-2 ring-1 ring-white/10">

@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og'
 
-export const alt = 'LearnPeers — Learn from peer tutors, live'
+export const alt = 'LearnPeers — High schoolers, taught by university students who aced it'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -61,10 +61,10 @@ export default function OpengraphImage() {
               maxWidth: 1000,
             }}
           >
-            Learn from peer tutors, live.
+            Learn from the uni student who aced it.
           </div>
           <div style={{ fontSize: 34, color: '#aebfca', fontWeight: 500, marginTop: 16 }}>
-            One-on-one video sessions · shared whiteboard · secure payments
+            High school × university · live near-peer tutoring
           </div>
         </div>
 

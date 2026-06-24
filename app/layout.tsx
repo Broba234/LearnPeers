@@ -12,26 +12,26 @@ const poppins = Poppins({
 const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://learnpeers.com'
 const SITE_NAME = 'LearnPeers'
 const SITE_DESCRIPTION =
-  'LearnPeers is a peer-to-peer tutoring marketplace where students book live one-on-one sessions with top student tutors — real-time video, a shared whiteboard, and secure payments. Now in beta.'
+  'LearnPeers connects high schoolers with university students who recently aced the same courses. Book live one-on-one tutoring over video — shared whiteboard, screen share, and secure payments. Now in beta.'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'LearnPeers — Learn from peer tutors, live',
+    default: 'LearnPeers — High schoolers, taught by university students who aced it',
     template: '%s · LearnPeers',
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
   keywords: [
-    'peer tutoring',
+    'near-peer tutoring',
+    'university student tutors',
+    'high school tutoring',
+    'Grade 11 tutoring',
+    'Grade 12 tutoring',
     'online tutoring',
-    'student tutors',
-    'peer-to-peer learning',
     'live tutoring',
-    'homework help',
     'exam prep',
     'find a tutor',
-    'study help',
     'LearnPeers',
   ],
   authors: [{ name: SITE_NAME }],
@@ -44,14 +44,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: SITE_NAME,
-    title: 'LearnPeers — Learn from peer tutors, live',
+    title: 'LearnPeers — High schoolers, taught by university students who aced it',
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'LearnPeers — Learn from peer tutors, live',
+    title: 'LearnPeers — High schoolers, taught by university students who aced it',
     description: SITE_DESCRIPTION,
   },
   robots: {
@@ -87,7 +87,7 @@ const jsonLd = {
       name: SITE_NAME,
       url: SITE_URL,
       description: SITE_DESCRIPTION,
-      slogan: 'Learn from peer tutors, live.',
+      slogan: 'Learn from the university student who aced your class.',
     },
     {
       '@type': 'WebSite',

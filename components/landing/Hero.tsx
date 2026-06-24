@@ -62,7 +62,7 @@ export default function Hero() {
           <motion.div {...fade(0)} className="mb-5 flex justify-center lg:justify-start">
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-1.5 text-xs font-semibold text-brand-700">
               <Sparkles className="h-3.5 w-3.5" />
-              Now in beta testing - give us feedback!
+              For high schoolers — taught by university students
             </span>
           </motion.div>
 
@@ -70,9 +70,9 @@ export default function Hero() {
             {...fade(0.08)}
             className="text-balance text-4xl font-extrabold tracking-tight text-ink-900 sm:text-5xl lg:text-6xl lg:leading-[1.05]"
           >
-            Learn from the student who{' '}
+            Learn from the university student who{' '}
             <span className="bg-gradient-to-r from-brand-500 to-brand-700 bg-clip-text text-transparent">
-              aced it
+              aced your class
             </span>
             .
           </motion.h1>
@@ -81,8 +81,8 @@ export default function Hero() {
             {...fade(0.16)}
             className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-ink-500 sm:text-lg lg:mx-0"
           >
-            Get matched with students a year or two ahead — the ones who scored 90+ in your
-            exact course.
+            Get matched with university students who recently aced the exact Grade 11 &amp; 12
+            courses you&apos;re taking now — and scored the 90s that got them in.
           </motion.p>
 
           <motion.div
@@ -101,7 +101,7 @@ export default function Hero() {
               className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-ink-200 bg-white px-6 py-3.5 text-sm font-semibold text-ink-800 shadow-sm transition hover:border-brand-300 hover:bg-brand-50/50 active:scale-[0.98] sm:w-auto sm:text-base"
             >
               <GraduationCap className="h-5 w-5 text-brand-600" />
-              Become a tutor
+              Tutor as a student
             </Link>
           </motion.div>
 
@@ -110,13 +110,13 @@ export default function Hero() {
             className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-400 lg:justify-start"
           >
             <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Grade-verified tutors
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Verified university tutors
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Recently aced your courses
             </span>
             <span className="flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Live 1-on-1 video
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Shared whiteboard
             </span>
           </motion.div>
         </motion.div>
