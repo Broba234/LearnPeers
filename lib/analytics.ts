@@ -463,11 +463,13 @@ export interface OverviewData {
 }
 
 export async function getOverview(range: Range): Promise<OverviewData> {
-  const [financials, marketplace, growth, quality] = await Promise.all([
-    getFinancials(range),
-    getMarketplace(range),
-    getGrowth(range),
-    getQuality(range),
-  ]);
+  // Run sequentially, not Promise.all: the production DB pool is capped at
+  // connection_limit=1, so fanning out four multi-query domains at once causes
+  // P2024 pool-timeout errors. Each call is cached (5-min TTL), so the
+  // sequential cost is paid at most once per window.
+  const financials = await getFinancials(range);
+  const marketplace = await getMarketplace(range);
+  const growth = await getGrowth(range);
+  const quality = await getQuality(range);
   return { range, financials, marketplace, growth, quality };
 }
