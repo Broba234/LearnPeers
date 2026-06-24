@@ -45,6 +45,17 @@ export async function POST(request: NextRequest) {
         type: "express",
         country,
         email,
+        // Tutors are individuals earning income through the platform. Pre-fill
+        // the business details every tutor shares so Stripe skips the
+        // industry / website / product-description / business-type screens —
+        // they're only ever asked for identity + bank.
+        business_type: "individual",
+        business_profile: {
+          mcc: "8299", // Educational services
+          product_description:
+            "One-on-one peer tutoring sessions booked through LearnPeers.",
+          url: "https://learnpeers.com",
+        },
         capabilities: {
           card_payments: { requested: true },
           transfers: { requested: true },

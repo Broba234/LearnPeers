@@ -53,7 +53,10 @@ export default function EmbeddedOnboarding({
         fetchClientSecret,
         appearance: {
           variables: {
-            colorPrimary: "#4F46E5",
+            colorPrimary: "#0077be", // LearnPeers brand azure
+            colorText: "#243036", // ink-900
+            fontFamily:
+              "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             borderRadius: "12px",
           },
         },
