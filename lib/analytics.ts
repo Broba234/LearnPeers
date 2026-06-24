@@ -3,11 +3,7 @@ import { unstable_cache } from "next/cache";
 import moment from "moment-timezone";
 import { Prisma } from "@/prisma/generated";
 import { prisma } from "@/lib/prisma";
-import {
-  STUDENT_FEE_PERCENT,
-  PLATFORM_FEE_PERCENT,
-  TAKE_RATE_OF_GMV,
-} from "@/lib/billing";
+import { gmv, platformRevenue, tutorPayout, TAKE_RATE_OF_GMV } from "@/lib/billing";
 
 /**
  * Server-side analytics for the BI dashboard.
@@ -154,9 +150,9 @@ async function _financials(range: Range): Promise<FinancialsData> {
   for (const r of seriesRows) {
     const amt = r.amount ?? 0;
     map.set(bucketKey(r.bucket), {
-      gmv: amt * (1 + STUDENT_FEE_PERCENT),
-      revenue: amt * (STUDENT_FEE_PERCENT + PLATFORM_FEE_PERCENT),
-      payouts: amt * (1 - PLATFORM_FEE_PERCENT),
+      gmv: gmv(amt),
+      revenue: platformRevenue(amt),
+      payouts: tutorPayout(amt),
     });
   }
   const series = fillSeries(win, map, ["gmv", "revenue", "payouts"]);
@@ -175,12 +171,12 @@ async function _financials(range: Range): Promise<FinancialsData> {
     LIMIT 8
   `);
 
-  const curGmv = t.cur_amount * (1 + STUDENT_FEE_PERCENT);
-  const prevGmv = t.prev_amount * (1 + STUDENT_FEE_PERCENT);
-  const curRev = t.cur_amount * (STUDENT_FEE_PERCENT + PLATFORM_FEE_PERCENT);
-  const prevRev = t.prev_amount * (STUDENT_FEE_PERCENT + PLATFORM_FEE_PERCENT);
-  const curPay = t.cur_amount * (1 - PLATFORM_FEE_PERCENT);
-  const prevPay = t.prev_amount * (1 - PLATFORM_FEE_PERCENT);
+  const curGmv = gmv(t.cur_amount);
+  const prevGmv = gmv(t.prev_amount);
+  const curRev = platformRevenue(t.cur_amount);
+  const prevRev = platformRevenue(t.prev_amount);
+  const curPay = tutorPayout(t.cur_amount);
+  const prevPay = tutorPayout(t.prev_amount);
 
   return {
     range,
@@ -198,7 +194,7 @@ async function _financials(range: Range): Promise<FinancialsData> {
     bySubject: bySubjectRows.map((r) => ({
       name: r.name ?? "Unmapped",
       category: r.category,
-      revenue: (r.amount ?? 0) * (STUDENT_FEE_PERCENT + PLATFORM_FEE_PERCENT),
+      revenue: platformRevenue(r.amount ?? 0),
       sessions: r.sessions,
     })),
   };
