@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Zap, X } from "lucide-react";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabase/client";
 
 interface ConnectTutor {
   id: string;
@@ -14,6 +15,10 @@ interface ConnectTutor {
 }
 
 type Phase = "confirm" | "ringing" | "declined";
+
+// Give up ringing after this long with no answer, so the student isn't left
+// spinning forever on a request the tutor never picks up.
+const RING_TIMEOUT_MS = 60_000;
 
 export default function ConnectNowModal({
   tutor,
@@ -53,6 +58,15 @@ export default function ConnectNowModal({
     pollRef.current = null;
   }, []);
 
+  // Retire the request server-side so the tutor's ring clears too.
+  const cancelRequest = useCallback((id: string) => {
+    fetch("/api/sessions/update-status", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId: id, status: "cancelled" }),
+    }).catch(() => {});
+  }, []);
+
   // Poll the request's status while ringing; auto-route into the room on accept.
   useEffect(() => {
     if (phase !== "ringing" || !sessionId) return;
@@ -74,8 +88,31 @@ export default function ConnectNowModal({
     };
     tick();
     pollRef.current = setInterval(tick, 2500);
-    return stopPolling;
-  }, [phase, sessionId, router, stopPolling]);
+
+    // Realtime: the instant the tutor accepts/declines this exact session row,
+    // re-check status and route into the room — no waiting for the next poll.
+    // The 2.5s interval remains as a fallback, so this is strictly additive.
+    const channel = supabase
+      .channel(`connect-now:${sessionId}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "Sessions", filter: `id=eq.${sessionId}` },
+        () => tick()
+      )
+      .subscribe();
+
+    // Stop ringing and fail gracefully if no one picks up in time.
+    const timeout = setTimeout(() => {
+      stopPolling();
+      cancelRequest(sessionId);
+      setPhase("declined");
+    }, RING_TIMEOUT_MS);
+    return () => {
+      stopPolling();
+      clearTimeout(timeout);
+      supabase.removeChannel(channel);
+    };
+  }, [phase, sessionId, router, stopPolling, cancelRequest]);
 
   if (!isOpen || !tutor) return null;
 
@@ -106,13 +143,7 @@ export default function ConnectNowModal({
 
   const handleCancel = async () => {
     stopPolling();
-    if (sessionId) {
-      fetch("/api/sessions/update-status", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId, status: "cancelled" }),
-      }).catch(() => {});
-    }
+    if (sessionId) cancelRequest(sessionId);
     onClose();
   };
 

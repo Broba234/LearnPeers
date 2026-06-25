@@ -136,3 +136,19 @@ input::placeholder {
 .dual-range input[type="range"]::-moz-range-track {
   background: transparent;
 }
+
+/* Brand the Excalidraw whiteboard so it reads as a first-party LearnPeers
+   surface rather than stock Excalidraw: tint the active tool / selection
+   highlights to the brand azure, and soften the chrome onto our warm canvas. */
+.excalidraw {
+  --color-primary: #0077be;
+  --color-primary-darker: #02628f;
+  --color-primary-darkest: #0a4f74;
+  --color-primary-light: #d8eefa;
+  --color-brand-hover: #1f8dcc;
+  --color-brand-active: #02628f;
+}
+.excalidraw .App-menu_top .buttonList,
+.excalidraw .Island {
+  border-radius: 12px;
+}

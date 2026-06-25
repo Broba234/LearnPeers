@@ -23,6 +23,19 @@ import { PointerOverlay } from '@/components/livekit/PointerOverlay';
 import { FloatingVideos } from '@/components/livekit/FloatingVideos';
 import { ScreenView } from '@/components/livekit/ScreenView';
 import { FileViewer } from '@/components/livekit/FileViewer';
+import {
+  Pencil,
+  Video,
+  VideoOff,
+  FileText,
+  Monitor,
+  Mic,
+  MicOff,
+  ScreenShare,
+  Upload,
+  PhoneOff,
+  Clock,
+} from 'lucide-react';
 
 interface LiveKitRoomProps {
   roomName: string;
@@ -31,6 +44,7 @@ interface LiveKitRoomProps {
   userRole: 'tutor' | 'student';
   onDisconnect?: () => void;
   isOpen: boolean;
+  topic?: string;
 }
 
 const LiveKitRoom: React.FC<LiveKitRoomProps> = ({
@@ -40,6 +54,7 @@ const LiveKitRoom: React.FC<LiveKitRoomProps> = ({
   userRole,
   onDisconnect,
   isOpen,
+  topic,
 }) => {
   const [token, setToken] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
@@ -82,7 +97,7 @@ const LiveKitRoom: React.FC<LiveKitRoomProps> = ({
   if (!token) return <div className="fixed inset-0 z-50 bg-black flex items-center justify-center"><div>Preparing session...</div></div>;
 
   return (
-    <div className="fixed inset-0 z-50 bg-gray-800 text-white">
+    <div className="fixed inset-0 z-50 bg-canvas text-ink-900">
       <LKRoom
         video={true}
         audio={true}
@@ -92,14 +107,112 @@ const LiveKitRoom: React.FC<LiveKitRoomProps> = ({
         style={{ height: '100vh' }}
         data-lk-theme="default"
       >
-        <MainContent onDisconnect={onDisconnect} userRole={userRole} userName={userName} />
+        <MainContent onDisconnect={onDisconnect} userRole={userRole} userName={userName} topic={topic} />
         <RoomAudioRenderer />
       </LKRoom>
     </div>
   );
 };
 
-function MainContent({ onDisconnect, userRole, userName }: { onDisconnect?: () => void; userRole: 'tutor' | 'student'; userName: string }) {
+// ── Session-shell chrome (presentational, module-scope so they don't remount) ──
+
+function RailButton({
+  icon,
+  label,
+  active,
+  onClick,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  active?: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className={`flex h-11 w-11 items-center justify-center rounded-xl transition-colors ${
+        active ? 'bg-brand-600 text-white' : 'text-ink-400 hover:bg-muted hover:text-ink-900'
+      }`}
+    >
+      {icon}
+    </button>
+  );
+}
+
+function CtrlButton({
+  icon,
+  label,
+  onClick,
+  disabled,
+  tone = 'default',
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  tone?: 'default' | 'danger' | 'active';
+}) {
+  const tones: Record<string, string> = {
+    default: 'bg-muted text-ink-700 hover:bg-ink-100',
+    active: 'bg-brand-50 text-brand-700 hover:bg-brand-100',
+    danger: 'bg-red-500 text-white hover:bg-red-600',
+  };
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      title={label}
+      className={`flex h-11 w-11 items-center justify-center rounded-full transition-colors disabled:opacity-50 ${tones[tone]}`}
+    >
+      {icon}
+    </button>
+  );
+}
+
+// Isolated so the per-second tick re-renders only the clock, never the
+// heavy room tree (Excalidraw, video tiles).
+function SessionTimer() {
+  const [elapsed, setElapsed] = useState(0);
+  useEffect(() => {
+    const start = Date.now();
+    const t = setInterval(() => setElapsed(Math.floor((Date.now() - start) / 1000)), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const ss = String(elapsed % 60).padStart(2, '0');
+  return (
+    <span className="tabular-nums">
+      {mm}:{ss}
+    </span>
+  );
+}
+
+// Dedicated "Camera view": participants front-and-centre instead of floating.
+function CameraStage() {
+  const tracks = useTracks([Track.Source.Camera]);
+  const cams = tracks.filter((t) => t.publication?.kind === 'video');
+  return (
+    <div className="flex h-full w-full flex-wrap items-center justify-center gap-4 p-6">
+      {cams.length === 0 && <p className="text-sm text-ink-400">Waiting for video…</p>}
+      {cams.map((t) => (
+        <div
+          key={t.publication.trackSid}
+          className="relative aspect-video w-[46%] max-w-2xl overflow-hidden rounded-2xl bg-ink-900 shadow-lg ring-1 ring-ink-900/10"
+        >
+          <VideoTrack trackRef={t} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <span className="absolute bottom-2 left-2 rounded-md bg-ink-900/60 px-2 py-1 text-xs text-white">
+            {t.participant.name || t.participant.identity}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect?: () => void; userRole: 'tutor' | 'student'; userName: string; topic?: string }) {
   const [activeView, setActiveView] = useState('whiteboard');
   const [sharedFile, setSharedFile] = useState<{ url: string; name: string; type: string } | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -108,6 +221,13 @@ function MainContent({ onDisconnect, userRole, userName }: { onDisconnect?: () =
   const requestedSceneRef = React.useRef(false);
   const [isExcalidrawReady, setIsExcalidrawReady] = useState(false);
   const lastRemoteApplyVersionRef = React.useRef(0);
+  // Per-element last-known version (id -> version), shared between the
+  // broadcaster and the remote-apply path. We send only elements whose
+  // version advanced past this map, which keeps each update tiny no matter
+  // how large the board grows. Recording remote-applied versions here also
+  // stops a receiver from echoing the sender's elements back — without it the
+  // delta would collapse back into a full-scene rebroadcast.
+  const sentElementVersionsRef = React.useRef<Map<string, number>>(new Map());
 
   // Screen sharing state
   const [isScreenSharing, setIsScreenSharing] = useState(false);
@@ -172,6 +292,16 @@ function MainContent({ onDisconnect, userRole, userName }: { onDisconnect?: () =
         // onChange will compare against this to suppress echoes — this
         // works regardless of whether onChange fires sync or async.
         lastRemoteApplyVersionRef.current = getSceneVersion(merged as any);
+
+        // Remember the versions we just applied so our own onChange does not
+        // re-broadcast these remote elements back to their sender.
+        for (const el of scene.elements) {
+          if (!el?.id) continue;
+          const prev = sentElementVersionsRef.current.get(el.id) ?? -1;
+          if ((el.version ?? 0) > prev) {
+            sentElementVersionsRef.current.set(el.id, el.version ?? 0);
+          }
+        }
 
         // Files must be added via addFiles — updateScene ignores them.
         if (scene.files && Object.keys(scene.files).length > 0) {
@@ -639,15 +769,81 @@ function MainContent({ onDisconnect, userRole, userName }: { onDisconnect?: () =
   };
 
   return (
-    <div className="relative h-full w-full">
-      {/* Whiteboard/file/screen content within a smaller bezel */}
-      <div
-        className="absolute rounded-3xl overflow-hidden bg-white shadow-2xl z-0"
-        style={{ top: '0.5in', right: '0.5in', bottom: '0.5in', left: '0.5in' }}
-      >
-        {activeView === 'whiteboard' && (
+    <div className="relative flex h-full w-full flex-col bg-canvas text-ink-900">
+      {/* Top bar */}
+      <header className="z-20 flex h-14 shrink-0 items-center justify-between border-b border-ink-900/10 bg-surface px-4">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-600 text-sm font-medium text-white">
+            L
+          </div>
+          <span className="text-sm font-medium text-ink-900">LearnPeers</span>
+          {topic && (
+            <>
+              <span className="text-ink-300">·</span>
+              <span className="truncate text-sm text-ink-500">{topic}</span>
+            </>
+          )}
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-600">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500" /> rec
+          </span>
+          <span className="flex items-center gap-1.5 text-sm text-ink-600">
+            <Clock className="h-4 w-4" />
+            <SessionTimer />
+          </span>
+          {onDisconnect && (
+            <button
+              onClick={handleEndOrLeaveSession}
+              aria-label={userRole === 'tutor' ? 'End session for everyone' : 'Leave session'}
+              title={userRole === 'tutor' ? 'End session for everyone' : 'Leave session'}
+              className="flex items-center gap-1.5 rounded-lg bg-red-500 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-red-600"
+            >
+              <PhoneOff className="h-4 w-4" />
+              {userRole === 'tutor' ? 'End session' : 'Leave'}
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* Body: view rail + stage */}
+      <div className="relative flex min-h-0 flex-1">
+        <nav className="z-20 flex w-16 shrink-0 flex-col items-center gap-1 border-r border-ink-900/10 bg-surface py-3">
+          <RailButton
+            icon={<Pencil className="h-5 w-5" />}
+            label="Whiteboard"
+            active={activeView === 'whiteboard'}
+            onClick={() => setActiveView('whiteboard')}
+          />
+          <RailButton
+            icon={<Video className="h-5 w-5" />}
+            label="Camera view"
+            active={activeView === 'camera'}
+            onClick={() => setActiveView('camera')}
+          />
+          {sharedFile && (
+            <RailButton
+              icon={<FileText className="h-5 w-5" />}
+              label="Shared file"
+              active={activeView === 'file'}
+              onClick={() => setActiveView('file')}
+            />
+          )}
+          {screenTrackRef && (
+            <RailButton
+              icon={<Monitor className="h-5 w-5" />}
+              label="Screen share"
+              active={activeView === 'screen'}
+              onClick={() => setActiveView('screen')}
+            />
+          )}
+        </nav>
+
+        <main className="relative min-w-0 flex-1 bg-canvas">
+          {/* Whiteboard stays mounted across view switches so the Excalidraw
+              scene and in-flight edits survive — we just hide it. */}
           <div
-            className="w-full h-full relative"
+            className={`absolute inset-0 ${activeView === 'whiteboard' ? '' : 'invisible pointer-events-none'}`}
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
           >
@@ -656,159 +852,80 @@ function MainContent({ onDisconnect, userRole, userName }: { onDisconnect?: () =
               excalidrawRef={excalidrawRef}
               onReady={() => setIsExcalidrawReady(true)}
               lastRemoteApplyVersionRef={lastRemoteApplyVersionRef}
+              sentElementVersionsRef={sentElementVersionsRef}
             />
-            <PointerOverlay
-              excalidrawRef={excalidrawRef}
-              pointers={remotePointers}
-            />
+            <PointerOverlay excalidrawRef={excalidrawRef} pointers={remotePointers} />
           </div>
-        )}
-        {activeView === 'file' && sharedFile && (
-          <FileViewer
-            file={sharedFile}
-            onClose={() => {
-              setActiveView('whiteboard');
-              setSharedFile(null);
-              sendDataSafe(new TextEncoder().encode(JSON.stringify({ type: 'file_close' })));
-            }}
-          />
-        )}
-        {activeView === 'screen' && screenTrackRef && <ScreenView trackRef={screenTrackRef} />}
+
+          {activeView === 'camera' && (
+            <div className="absolute inset-0">
+              <CameraStage />
+            </div>
+          )}
+          {activeView === 'file' && sharedFile && (
+            <div className="absolute inset-0">
+              <FileViewer
+                file={sharedFile}
+                onClose={() => {
+                  setActiveView('whiteboard');
+                  setSharedFile(null);
+                  sendDataSafe(new TextEncoder().encode(JSON.stringify({ type: 'file_close' })));
+                }}
+              />
+            </div>
+          )}
+          {activeView === 'screen' && screenTrackRef && (
+            <div className="absolute inset-0">
+              <ScreenView trackRef={screenTrackRef} />
+            </div>
+          )}
+
+          {/* Floating cameras — always visible except in dedicated camera view */}
+          {activeView !== 'camera' && (
+            <FloatingVideos
+              allScreenShares={allScreenShares}
+              screenTrackRef={screenTrackRef}
+              onSelectScreenShare={setScreenTrackRef}
+            />
+          )}
+        </main>
       </div>
 
-      {/* Data channel debug */}
-      {/* <div className="absolute top-4 left-4 rounded-xl bg-black/40 text-white text-xs px-3 py-2 backdrop-blur shadow-lg">
-        <div>Data sent: {dataStats.sent}</div>
-        <div>Data received: {dataStats.received}</div>
-        {dataStats.lastType && <div>Last type: {dataStats.lastType}</div>}
-        {dataStats.lastFrom && <div>Last from: {dataStats.lastFrom}</div>}
-        {dataStats.lastError && <div className="text-red-300">Send error: {dataStats.lastError}</div>}
-      </div> */}
-
-      {/* Top-right view toggles */}
-      <div className="absolute top-4 right-4 flex items-center gap-2">
-        {sharedFile && (
-          <button
-            onClick={() => setActiveView('file')}
-            aria-label="File"
-            title="File"
-            className={`p-2.5 rounded-2xl backdrop-blur shadow-lg border transition-colors ${activeView==='file' ? 'bg-brand-600/90 text-white border-brand-300' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <path d="M14 2v6h6" />
-            </svg>
-          </button>
-        )}
-        {screenTrackRef && (
-          <button
-            onClick={() => setActiveView('screen')}
-            aria-label="Screen"
-            title="Screen"
-            className={`p-2.5 rounded-2xl backdrop-blur shadow-lg border transition-colors ${activeView==='screen' ? 'bg-brand-600/90 text-white border-brand-300' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-              <path d="M8 21h8m-4-4v4" />
-            </svg>
-          </button>
-        )}
-      </div>
-
-      {/* Right-side floating cams */}
-      <FloatingVideos allScreenShares={allScreenShares} screenTrackRef={screenTrackRef} onSelectScreenShare={setScreenTrackRef} />
-
-      {/* Bottom center toolbar */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-4 flex items-center gap-3">
-        {/* Mic toggle */}
-        <button
+      {/* Control bar */}
+      <footer className="z-20 flex h-16 shrink-0 items-center justify-center gap-2.5 border-t border-ink-900/10 bg-surface">
+        <CtrlButton
+          icon={isMicEnabled ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
+          label={isMicEnabled ? 'Mute microphone' : 'Unmute microphone'}
+          tone={isMicEnabled ? 'default' : 'danger'}
           onClick={handleToggleMic}
-          aria-label={isMicEnabled ? 'Mute microphone' : 'Unmute microphone'}
-          title={isMicEnabled ? 'Mute microphone' : 'Unmute microphone'}
-          className={`p-2.5 rounded-2xl border backdrop-blur shadow-lg ${isMicEnabled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : 'bg-red-600/90 text-white border-red-300 hover:bg-red-600'}`}
-        >
-          {isMicEnabled ? (
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-              <line x1="12" y1="19" x2="12" y2="23" />
-              <line x1="8" y1="23" x2="16" y2="23" />
-            </svg>
-          ) : (
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="1" y1="1" x2="23" y2="23" />
-              <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" />
-              <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23" />
-              <line x1="12" y1="19" x2="12" y2="23" />
-              <line x1="8" y1="23" x2="16" y2="23" />
-            </svg>
-          )}
-        </button>
-        {/* Camera toggle */}
-        <button
+        />
+        <CtrlButton
+          icon={isCameraEnabled ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+          label={isCameraEnabled ? 'Turn off camera' : 'Turn on camera'}
+          tone={isCameraEnabled ? 'default' : 'danger'}
           onClick={handleToggleCamera}
-          aria-label={isCameraEnabled ? 'Turn off camera' : 'Turn on camera'}
-          title={isCameraEnabled ? 'Turn off camera' : 'Turn on camera'}
-          className={`p-2.5 rounded-2xl border backdrop-blur shadow-lg ${isCameraEnabled ? 'bg-white/10 text-white border-white/20 hover:bg-white/20' : 'bg-red-600/90 text-white border-red-300 hover:bg-red-600'}`}
-        >
-          {isCameraEnabled ? (
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="23 7 16 12 23 17 23 7" />
-              <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-            </svg>
-          ) : (
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="1" y1="1" x2="23" y2="23" />
-              <path d="M7 7H4a2 2 0 0 0-2 2v9.17M16 7h2a2 2 0 0 1 2 2v7.17" />
-              <line x1="16" y1="12" x2="23" y2="7" />
-              <line x1="23" y1="17" x2="16" y2="12" />
-            </svg>
-          )}
-        </button>
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          disabled={isSending}
-          aria-label="Share file"
-          title="Share file"
-          className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur shadow-lg disabled:opacity-50"
-        >
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M16 16v6m-4-2h8" />
-            <path d="M21.44 11.05A5 5 0 0 0 17 7h-1.26A8 8 0 1 0 12 21" />
-          </svg>
-        </button>
-        <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
-        <button 
-          onClick={isScreenSharing ? handleStopScreenShare : handleStartScreenShare} 
+        />
+        <CtrlButton
+          icon={<ScreenShare className="h-5 w-5" />}
+          label={
+            compatibilityStatus.isSupported
+              ? isScreenSharing
+                ? 'Stop sharing'
+                : 'Share screen'
+              : compatibilityStatus.reason || 'Screen sharing is not supported.'
+          }
+          tone={isScreenSharing ? 'active' : 'default'}
           disabled={isSending || !compatibilityStatus.isSupported}
-          aria-label={isScreenSharing ? 'Stop sharing' : 'Share screen'}
-          title={compatibilityStatus.isSupported ? (isScreenSharing ? 'Stop sharing' : 'Share screen') : (compatibilityStatus.reason || 'Screen sharing is not supported.')}
-          className={`p-2.5 rounded-2xl border backdrop-blur shadow-lg disabled:opacity-50 ${isScreenSharing ? 'bg-red-600/90 text-white border-red-300 hover:bg-red-600' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
-        >
-          {isScreenSharing ? (
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-              <path d="M8 21h8m-4-4v4" />
-            </svg>
-          )}
-        </button>
-        {onDisconnect && (
-          <button
-            onClick={handleEndOrLeaveSession}
-            aria-label={userRole === 'tutor' ? 'End session for everyone' : 'Leave session'}
-            title={userRole === 'tutor' ? 'End session for everyone' : 'Leave session'}
-            className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur shadow-lg"
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
-        )}
-      </div>
+          onClick={isScreenSharing ? handleStopScreenShare : handleStartScreenShare}
+        />
+        <CtrlButton
+          icon={<Upload className="h-5 w-5" />}
+          label="Share a file"
+          disabled={isSending}
+          onClick={() => fileInputRef.current?.click()}
+        />
+        <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
+      </footer>
     </div>
   );
 }
@@ -888,11 +1005,13 @@ function ExcalidrawWhiteboard({
   excalidrawRef,
   onReady,
   lastRemoteApplyVersionRef,
+  sentElementVersionsRef,
 }: {
   sendData: (data: Uint8Array) => Promise<void>;
   excalidrawRef: React.MutableRefObject<any | null>;
   onReady?: () => void;
   lastRemoteApplyVersionRef: React.MutableRefObject<number>;
+  sentElementVersionsRef: React.MutableRefObject<Map<string, number>>;
 }) {
   const lastSentVersion = React.useRef(0);
   const debounceRef = React.useRef<number | null>(null);
@@ -939,13 +1058,30 @@ function ExcalidrawWhiteboard({
 
           lastSentVersion.current = version;
 
-          // 1) Send elements WITHOUT files — this message stays small and
-          //    always succeeds even when the scene contains large images.
+          // Send only the elements whose version advanced since we last sent
+          // them. Deletions ride along automatically: Excalidraw keeps deleted
+          // elements in the scene with isDeleted=true and a bumped version, so
+          // they land here like any other change. The receiver merges deltas by
+          // version via mergeWithRemoteElements, so a small delta and a full
+          // scene produce the same result — but the delta stays tiny as the
+          // board grows, which is the whole point.
+          const sentVersions = sentElementVersionsRef.current;
+          const changed: any[] = [];
+          for (const el of allElements) {
+            if (!el?.id) continue;
+            const prev = sentVersions.get(el.id) ?? -1;
+            if ((el.version ?? 0) > prev) changed.push(el);
+          }
+          if (changed.length === 0) return;
+
+          // 1) Send changed elements WITHOUT files — this message stays small
+          //    and always succeeds even when the scene contains large images.
           const elementMessage = {
             type: 'excalidraw_update',
-            payload: { elements: allElements },
+            payload: { elements: changed },
           };
           await sendData(new TextEncoder().encode(JSON.stringify(elementMessage)));
+          for (const el of changed) sentVersions.set(el.id, el.version ?? 0);
 
           // 2) Send NEW files in a separate message so a large image
           //    doesn't block element delivery.  Already-sent files are
@@ -977,7 +1113,7 @@ function ExcalidrawWhiteboard({
         }
       }, 120);
     },
-    [sendData, sanitizeFilesForSending, lastRemoteApplyVersionRef],
+    [sendData, sanitizeFilesForSending, lastRemoteApplyVersionRef, sentElementVersionsRef],
   );
 
   const handlePointerUpdate = React.useCallback(

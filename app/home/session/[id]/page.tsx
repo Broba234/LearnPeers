@@ -106,6 +106,7 @@ export default function SessionRoomPage() {
       roomName={roomName}
       userIdentity={identity}
       userName={displayName}
+      topic={topic}
       userRole={(role === "tutor" ? "tutor" : "student") as any}
       onDisconnect={async () => {
         const { data: { user } } = await supabase.auth.getUser();

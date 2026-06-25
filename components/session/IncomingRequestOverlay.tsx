@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Zap, Phone, X } from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
 
 interface IncomingRequest {
   id: string;
@@ -45,8 +46,33 @@ export default function IncomingRequestOverlay({ enabled }: { enabled: boolean }
   useEffect(() => {
     if (!enabled) return;
     poll();
+
+    // Realtime makes the ring instant: when any Sessions row for this tutor is
+    // created or changes, refetch immediately through the authenticated API
+    // (we trust the API's filtering, not the payload). The interval stays as a
+    // safe fallback for the case where the table isn't in the realtime
+    // publication yet, so this is strictly additive — never a regression.
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+    supabase.auth.getUser().then(({ data }) => {
+      const uid = data.user?.id;
+      if (!uid || cancelled) return;
+      channel = supabase
+        .channel(`incoming-requests:${uid}`)
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "Sessions", filter: `tutor_id=eq.${uid}` },
+          () => poll()
+        )
+        .subscribe();
+    });
+
     const t = setInterval(poll, 4000);
-    return () => clearInterval(t);
+    return () => {
+      cancelled = true;
+      clearInterval(t);
+      if (channel) supabase.removeChannel(channel);
+    };
   }, [enabled, poll]);
 
   // Ring (sound + vibration) when a new request appears.

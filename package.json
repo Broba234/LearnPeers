@@ -12,6 +12,9 @@
     "postinstall": "prisma generate && node scripts/copy-excalidraw-css.mjs"
   },
   "dependencies": {
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/ios": "^8.4.1",
     "@excalidraw/excalidraw": "^0.18.0",
     "@livekit/components-react": "^2.9.13",
     "@livekit/components-styles": "^1.1.6",

@@ -68,7 +68,7 @@ export function FloatingVideos({ allScreenShares, screenTrackRef, onSelectScreen
         const isActive = screenTrackRef?.publication.trackSid === participantShare?.publication.trackSid;
         return (
           <div key={id} className="pointer-events-auto fixed z-50" style={{ left: pos.x, top: pos.y, width: 180, height: 132 }}>
-            <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/20 bg-white/5 backdrop-blur shadow-2xl">
+            <div className="relative w-full h-full rounded-2xl overflow-hidden border-2 border-white bg-ink-900 shadow-xl ring-1 ring-ink-900/10">
               <VideoTrack trackRef={trackRef} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               {/* Drag handle */}
               <div onMouseDown={(e) => onMouseDown(e, id)} className="absolute top-0 left-0 right-0 h-6 bg-black/20 cursor-move" />
@@ -99,7 +99,7 @@ export function FloatingVideos({ allScreenShares, screenTrackRef, onSelectScreen
           const participantShare = getParticipantScreenShare(participantIdentity);
           const isActive = screenTrackRef?.publication.trackSid === participantShare?.publication.trackSid;
           return (
-            <div key={id} className="relative pointer-events-auto w-[180px] h-[132px] rounded-2xl overflow-hidden border border-white/20 bg-white/5 backdrop-blur shadow-2xl">
+            <div key={id} className="relative pointer-events-auto w-[180px] h-[132px] rounded-2xl overflow-hidden border-2 border-white bg-ink-900 shadow-xl ring-1 ring-ink-900/10">
               <VideoTrack trackRef={trackRef} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               {/* Drag handle to undock */}
               <div onMouseDown={(e) => onMouseDown(e, id)} className="absolute top-0 left-0 right-0 h-6 bg-black/20 cursor-move" title="Drag to undock" />
@@ -124,7 +124,7 @@ export function FloatingVideos({ allScreenShares, screenTrackRef, onSelectScreen
       {Object.values(hidden).some(Boolean) && (
         <button
           onClick={() => setHidden({})}
-          className="pointer-events-auto fixed right-4 bottom-4 p-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur shadow-2xl z-50"
+          className="pointer-events-auto fixed right-4 bottom-20 p-3 rounded-2xl bg-surface hover:bg-muted text-ink-700 border border-ink-900/10 shadow-xl z-50"
           title="Show hidden cams"
           aria-label="Show hidden cams"
         >

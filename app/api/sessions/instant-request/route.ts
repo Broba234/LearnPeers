@@ -6,6 +6,11 @@ import { getAuthedUser } from "@/lib/api-auth";
 import { isTutorLive } from "@/lib/presence";
 import { createNotification } from "@/lib/notifications";
 
+// A pending request only rings on the tutor side while it's fresh (see
+// /api/sessions/incoming MAX_AGE_MS). Keep these in sync: a stale pending
+// request can no longer be accepted, so we must not reuse it.
+const PENDING_TTL_MS = 5 * 60 * 1000;
+
 /**
  * Student taps "Connect Now" on a live tutor. Creates an on-demand (is_instant)
  * session request with no upfront payment friction — the tutor accepts and both
@@ -46,10 +51,12 @@ export async function POST(request: NextRequest) {
     const supabase = createSupabaseAdminClient();
 
     // Reuse an existing live request between these two if one is already pending,
-    // so a double-tap doesn't spam the tutor with duplicates.
+    // so a double-tap doesn't spam the tutor with duplicates. A session already
+    // accepted/in_progress is always safe to rejoin; a *pending* one is only
+    // reusable while it's still fresh enough for the tutor to be ringing on it.
     const { data: existing } = await supabase
       .from("Sessions")
-      .select("id, status")
+      .select("id, status, created_at")
       .eq("tutor_id", tutorId)
       .eq("student_id", studentId)
       .eq("is_instant", true)
@@ -59,7 +66,15 @@ export async function POST(request: NextRequest) {
       .maybeSingle();
 
     if (existing) {
-      return NextResponse.json({ success: true, sessionId: existing.id, status: existing.status, reused: true });
+      const isStalePending =
+        existing.status === "pending" &&
+        Date.now() - new Date(existing.created_at).getTime() > PENDING_TTL_MS;
+      if (!isStalePending) {
+        return NextResponse.json({ success: true, sessionId: existing.id, status: existing.status, reused: true });
+      }
+      // The tutor's ring has long since dropped this request — retire it so a
+      // fresh one can be created instead of leaving the student waiting forever.
+      await supabase.from("Sessions").update({ status: "cancelled" }).eq("id", existing.id);
     }
 
     // Price the instant session at the tutor's 30-min rate for the record (best
