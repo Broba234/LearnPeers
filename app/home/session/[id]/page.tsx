@@ -44,6 +44,25 @@ export default function SessionRoomPage() {
         if (statusRes.ok) {
           const { session, viewerRole: vr } = await statusRes.json();
           viewerRole = vr;
+
+          // Don't let anyone into the room before it's actually open. A session
+          // is enterable only once accepted (booked, after payment) or live
+          // (instant, after the tutor accepts). This mirrors the server-side
+          // gate in /api/livekit/token — here it's just for a clean redirect.
+          const enterable = session.status === "accepted" || session.status === "in_progress";
+          if (!enterable) {
+            setDenied(true);
+            toast.error(
+              session.status === "pending"
+                ? "This session isn't open yet — waiting for it to be accepted."
+                : session.status === "completed"
+                ? "This session has ended."
+                : "This session is no longer available."
+            );
+            setTimeout(() => router.push("/home"), 1500);
+            return;
+          }
+
           setTopic(session.topic || "");
           setOtherParty(vr === "tutor" ? session.student : session.tutor);
         }

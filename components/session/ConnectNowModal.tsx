@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Zap, X } from "lucide-react";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 import { toast } from "sonner";
@@ -30,6 +30,7 @@ export default function ConnectNowModal({
   onClose: () => void;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [phase, setPhase] = useState<Phase>("confirm");
   const [topic, setTopic] = useState("");
   const [subjectId, setSubjectId] = useState<string>("");
@@ -77,6 +78,9 @@ export default function ConnectNowModal({
         const { session } = await res.json();
         if (session.status === "in_progress" || session.status === "accepted") {
           stopPolling();
+          // Close the (global, layout-level) modal as we route in, so its
+          // ringing overlay doesn't linger on top of the session room.
+          onClose();
           router.push(`/home/session/${sessionId}`);
         } else if (session.status === "declined" || session.status === "cancelled") {
           stopPolling();
@@ -112,9 +116,11 @@ export default function ConnectNowModal({
       clearTimeout(timeout);
       supabase.removeChannel(channel);
     };
-  }, [phase, sessionId, router, stopPolling, cancelRequest]);
+  }, [phase, sessionId, router, stopPolling, cancelRequest, onClose]);
 
-  if (!isOpen || !tutor) return null;
+  // Never render over a live session room (the modal is mounted globally in the
+  // home layout, so without this it can linger on top of the room after routing).
+  if (!isOpen || !tutor || pathname?.startsWith("/home/session/")) return null;
 
   const tutorName = tutor.name || "this tutor";
 
