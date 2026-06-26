@@ -6,6 +6,12 @@ import { getAuthedUser } from "@/lib/api-auth";
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// Safeguarding: the student and admins keep access to a session's recording +
+// transcript, but the tutor's access expires shortly after the session ends.
+// Tutors are (often older) university students and the learners are minors, so
+// they have no ongoing need to hold a child's session footage.
+const TUTOR_ACCESS_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
 /**
  * Participant-guarded session recording + transcript. Recordings are retained
  * for safeguarding and are reviewable only by the session's tutor, student, or
@@ -63,12 +69,31 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No recording for this session" }, { status: 404 });
     }
 
+    const viewerRole =
+      session.tutor_id === user.id ? "tutor" : session.student_id === user.id ? "student" : "admin";
+
+    // Tutor access expires ~1h after the session ended. We use the recording's
+    // created_at (egress finishes ~when the session ends) as the reference, so
+    // the cutoff tracks the real end rather than the scheduled time.
+    if (viewerRole === "tutor" && recording.created_at) {
+      const endedAt = new Date(recording.created_at).getTime();
+      if (Number.isFinite(endedAt) && Date.now() - endedAt > TUTOR_ACCESS_WINDOW_MS) {
+        return NextResponse.json(
+          {
+            error: "expired",
+            message:
+              "For student safety, tutor access to session recordings expires one hour after the session ends.",
+          },
+          { status: 403 }
+        );
+      }
+    }
+
     return NextResponse.json({
       success: true,
       session,
       recording,
-      viewerRole:
-        session.tutor_id === user.id ? "tutor" : session.student_id === user.id ? "student" : "admin",
+      viewerRole,
     });
   } catch (err) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
