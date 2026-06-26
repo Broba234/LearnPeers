@@ -35,6 +35,7 @@ import {
   Upload,
   PhoneOff,
   Clock,
+  Presentation,
 } from 'lucide-react';
 
 interface LiveKitRoomProps {
@@ -214,6 +215,13 @@ function CameraStage() {
 
 function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect?: () => void; userRole: 'tutor' | 'student'; userName: string; topic?: string }) {
   const [activeView, setActiveView] = useState('whiteboard');
+
+  // Present / follow mode: when someone is presenting, their viewport (pan +
+  // zoom) is mirrored to the other participant — a lightweight "slideshow".
+  // presenterIdentity === null means nobody is presenting.
+  const [presenterIdentity, setPresenterIdentity] = useState<string | null>(null);
+  const isPresentingRef = React.useRef(false);
+  const lastViewportSentRef = React.useRef(0);
   const [sharedFile, setSharedFile] = useState<{ url: string; name: string; type: string } | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const excalidrawRef = React.useRef<any | null>(null);
@@ -454,6 +462,21 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
               [fromIdentity]: { x, y, updatedAt: Date.now() },
             }));
           }
+        } else if (message.type === 'present_start') {
+          // The other participant started presenting — follow them, on the board.
+          setPresenterIdentity(msg?.from?.identity || 'remote');
+          setActiveView('whiteboard');
+        } else if (message.type === 'present_stop') {
+          setPresenterIdentity(null);
+        } else if (message.type === 'viewport_follow') {
+          // Only the presenter broadcasts these, so if we receive one we're a
+          // follower: mirror their pan/zoom. Element state is untouched, so this
+          // won't trigger an echo through the delta broadcaster.
+          const { scrollX, scrollY, zoom } = message.payload || {};
+          const api = excalidrawRef.current;
+          if (api?.updateScene && typeof scrollX === 'number' && typeof scrollY === 'number') {
+            api.updateScene({ appState: { scrollX, scrollY, zoom: { value: zoom || 1 } } });
+          }
         } else if (message.type === 'session_end') {
           console.log('Session end signal received, disconnecting from room.');
           try {
@@ -467,6 +490,60 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
       }
     };
   }, [applyExcalidrawScene, sendDataSafe, room]);
+
+  // Keep a ref of whether *we* are the presenter so the viewport broadcaster
+  // (called from Excalidraw's onChange) reads the current value without
+  // re-creating callbacks on every present toggle.
+  useEffect(() => {
+    isPresentingRef.current =
+      !!presenterIdentity && presenterIdentity === room?.localParticipant?.identity;
+  }, [presenterIdentity, room]);
+
+  // Broadcast our viewport (throttled) while presenting. Passed to the
+  // whiteboard, which calls it from onChange with the current pan/zoom.
+  const broadcastViewport = useCallback(
+    (vp: { scrollX: number; scrollY: number; zoom: number }) => {
+      if (!isPresentingRef.current) return;
+      const now = Date.now();
+      if (now - lastViewportSentRef.current < 80) return;
+      lastViewportSentRef.current = now;
+      sendDataSafe(
+        new TextEncoder().encode(JSON.stringify({ type: 'viewport_follow', payload: vp })),
+        { reliable: false },
+      );
+    },
+    [sendDataSafe],
+  );
+
+  const startPresenting = useCallback(() => {
+    const id = room?.localParticipant?.identity;
+    if (!id) return;
+    setPresenterIdentity(id);
+    isPresentingRef.current = true;
+    sendDataSafe(new TextEncoder().encode(JSON.stringify({ type: 'present_start' })));
+    // Push our current viewport so the follower snaps to it immediately.
+    const ap = excalidrawRef.current?.getAppState?.();
+    if (ap) {
+      sendDataSafe(
+        new TextEncoder().encode(
+          JSON.stringify({
+            type: 'viewport_follow',
+            payload: { scrollX: ap.scrollX, scrollY: ap.scrollY, zoom: ap.zoom?.value ?? 1 },
+          }),
+        ),
+      );
+    }
+  }, [room, sendDataSafe]);
+
+  const stopPresenting = useCallback(() => {
+    setPresenterIdentity(null);
+    isPresentingRef.current = false;
+    sendDataSafe(new TextEncoder().encode(JSON.stringify({ type: 'present_stop' })));
+  }, [sendDataSafe]);
+
+  const localIdentity = room?.localParticipant?.identity;
+  const isPresenting = !!presenterIdentity && presenterIdentity === localIdentity;
+  const isFollowing = !!presenterIdentity && !isPresenting;
 
   // Periodically prune stale remote pointers so we don't leak memory
   useEffect(() => {
@@ -821,6 +898,23 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
             active={activeView === 'camera'}
             onClick={() => setActiveView('camera')}
           />
+          <RailButton
+            icon={<Presentation className="h-5 w-5" />}
+            label={
+              isPresenting ? 'Stop presenting' : isFollowing ? 'Following presenter' : 'Present'
+            }
+            active={!!presenterIdentity}
+            onClick={() => {
+              if (isPresenting) {
+                stopPresenting();
+              } else if (!presenterIdentity) {
+                setActiveView('whiteboard');
+                startPresenting();
+              }
+              // If the other party is presenting, the button is just an
+              // indicator — you're already following them.
+            }}
+          />
           {sharedFile && (
             <RailButton
               icon={<FileText className="h-5 w-5" />}
@@ -853,8 +947,23 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
               onReady={() => setIsExcalidrawReady(true)}
               lastRemoteApplyVersionRef={lastRemoteApplyVersionRef}
               sentElementVersionsRef={sentElementVersionsRef}
+              onViewport={broadcastViewport}
             />
             <PointerOverlay excalidrawRef={excalidrawRef} pointers={remotePointers} />
+
+            {/* Present-mode banner */}
+            {presenterIdentity && (
+              <div className="pointer-events-none absolute left-1/2 top-3 z-10 -translate-x-1/2">
+                <span
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium shadow-sm ${
+                    isPresenting ? 'bg-brand-600 text-white' : 'bg-brand-50 text-brand-700'
+                  }`}
+                >
+                  <Presentation className="h-3.5 w-3.5" />
+                  {isPresenting ? "You're presenting" : 'Following the presenter'}
+                </span>
+              </div>
+            )}
           </div>
 
           {activeView === 'camera' && (
@@ -1006,12 +1115,14 @@ function ExcalidrawWhiteboard({
   onReady,
   lastRemoteApplyVersionRef,
   sentElementVersionsRef,
+  onViewport,
 }: {
   sendData: (data: Uint8Array) => Promise<void>;
   excalidrawRef: React.MutableRefObject<any | null>;
   onReady?: () => void;
   lastRemoteApplyVersionRef: React.MutableRefObject<number>;
   sentElementVersionsRef: React.MutableRefObject<Map<string, number>>;
+  onViewport?: (vp: { scrollX: number; scrollY: number; zoom: number }) => void;
 }) {
   const lastSentVersion = React.useRef(0);
   const debounceRef = React.useRef<number | null>(null);
@@ -1040,7 +1151,16 @@ function ExcalidrawWhiteboard({
   const sentFileIdsRef = React.useRef(new Set<string>());
 
   const onChange = React.useCallback(
-    (elements: any[], _appState: any, _filesFromCallback: any) => {
+    (elements: any[], appState: any, _filesFromCallback: any) => {
+      // Presenter viewport mirroring — cheap, the parent throttles + gates it.
+      if (appState && onViewport) {
+        onViewport({
+          scrollX: appState.scrollX,
+          scrollY: appState.scrollY,
+          zoom: appState.zoom?.value ?? 1,
+        });
+      }
+
       // Debounce + only send if changed
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
       debounceRef.current = window.setTimeout(async () => {
@@ -1113,7 +1233,7 @@ function ExcalidrawWhiteboard({
         }
       }, 120);
     },
-    [sendData, sanitizeFilesForSending, lastRemoteApplyVersionRef, sentElementVersionsRef],
+    [sendData, sanitizeFilesForSending, lastRemoteApplyVersionRef, sentElementVersionsRef, onViewport],
   );
 
   const handlePointerUpdate = React.useCallback(
