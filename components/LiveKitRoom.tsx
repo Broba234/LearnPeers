@@ -888,11 +888,104 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
     await uploadAndShareFile(file);
   };
 
+  const fileToDataURL = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(r.result as string);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+
+  // Embed an image directly on the whiteboard so it can be annotated. The new
+  // element (version 1) + its file ride the existing delta/file sync to the
+  // peer. Returns false if Excalidraw isn't ready → caller shares instead.
+  const embedImageOnCanvas = async (
+    dataURL: string,
+    mimeType: string,
+    yOffset = 0,
+  ): Promise<boolean> => {
+    const api = excalidrawRef.current;
+    if (!api?.updateScene || !api?.addFiles) return false;
+    try {
+      const img = new Image();
+      img.src = dataURL;
+      await img.decode().catch(() => {});
+      let w = img.naturalWidth || 400;
+      let h = img.naturalHeight || 300;
+      const max = 640;
+      if (w > max || h > max) {
+        const r = Math.min(max / w, max / h);
+        w = Math.round(w * r);
+        h = Math.round(h * r);
+      }
+      const fileId = crypto.randomUUID?.() || `f${Date.now()}${Math.random()}`;
+      api.addFiles([{ id: fileId, dataURL, mimeType, created: Date.now() }]);
+      const ap = api.getAppState?.() || {};
+      const x = -(ap.scrollX || 0) + 120;
+      const y = -(ap.scrollY || 0) + 120 + yOffset;
+      const el = {
+        id: crypto.randomUUID?.() || `img${Date.now()}${Math.random()}`,
+        type: 'image',
+        x, y, width: w, height: h, angle: 0,
+        strokeColor: 'transparent', backgroundColor: 'transparent',
+        fillStyle: 'solid', strokeWidth: 1, strokeStyle: 'solid', roughness: 1, opacity: 100,
+        groupIds: [], frameId: null, roundness: null,
+        seed: Math.floor(Math.random() * 1e9), version: 1, versionNonce: Math.floor(Math.random() * 1e9),
+        isDeleted: false, boundElements: null, updated: Date.now(), link: null, locked: false,
+        status: 'saved', fileId, scale: [1, 1],
+      };
+      api.updateScene({ elements: [...(api.getSceneElements?.() || []), el] });
+      return true;
+    } catch (e) {
+      console.error('embedImageOnCanvas failed:', e);
+      return false;
+    }
+  };
+
+  // Rasterize a PDF's pages and stack them on the board for annotation.
+  const embedPdfOnCanvas = async (file: File): Promise<boolean> => {
+    try {
+      const pdfjs: any = await import('pdfjs-dist');
+      pdfjs.GlobalWorkerOptions.workerSrc = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+      const data = await file.arrayBuffer();
+      const pdf = await pdfjs.getDocument({ data }).promise;
+      const pages = Math.min(pdf.numPages, 10);
+      let offsetY = 0;
+      let any = false;
+      for (let p = 1; p <= pages; p++) {
+        const page = await pdf.getPage(p);
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) continue;
+        await page.render({ canvasContext: ctx, viewport }).promise;
+        const ok = await embedImageOnCanvas(canvas.toDataURL('image/png'), 'image/png', offsetY);
+        any = any || ok;
+        offsetY += 640 * (viewport.height / viewport.width) + 24;
+      }
+      return any;
+    } catch (e) {
+      console.error('embedPdfOnCanvas failed:', e);
+      return false;
+    }
+  };
+
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
     const file = e.dataTransfer.files?.[0];
     if (!file) return;
+    const isImage = file.type.startsWith('image/');
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+    // Images & PDFs go ON the canvas to annotate; everything else is shared.
+    if (isImage) {
+      const dataURL = await fileToDataURL(file);
+      if (await embedImageOnCanvas(dataURL, file.type)) return;
+    } else if (isPdf) {
+      if (await embedPdfOnCanvas(file)) return;
+    }
     await uploadAndShareFile(file);
   };
 
