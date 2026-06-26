@@ -23,6 +23,7 @@ import { PointerOverlay } from '@/components/livekit/PointerOverlay';
 import { FloatingVideos } from '@/components/livekit/FloatingVideos';
 import { ScreenView } from '@/components/livekit/ScreenView';
 import { FileViewer } from '@/components/livekit/FileViewer';
+import { FileShelf } from '@/components/livekit/FileShelf';
 import {
   Pencil,
   Video,
@@ -36,6 +37,7 @@ import {
   PhoneOff,
   Clock,
   Presentation,
+  Folder,
 } from 'lucide-react';
 
 interface LiveKitRoomProps {
@@ -215,6 +217,9 @@ function CameraStage() {
 
 function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect?: () => void; userRole: 'tutor' | 'student'; userName: string; topic?: string }) {
   const [activeView, setActiveView] = useState('whiteboard');
+  // A file opened just for the local user (the file drive's "open privately"),
+  // rendered as an overlay and never broadcast to the peer.
+  const [privateFile, setPrivateFile] = useState<{ url: string; name: string; type: string } | null>(null);
 
   // Present / follow mode: when someone is presenting, their viewport (pan +
   // zoom) is mirrored to the other participant — a lightweight "slideshow".
@@ -541,6 +546,16 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
     sendDataSafe(new TextEncoder().encode(JSON.stringify({ type: 'present_stop' })));
   }, [sendDataSafe]);
 
+  // Share a (already-uploaded) drive file so both participants see it.
+  const shareFile = useCallback(
+    (file: { url: string; name: string; type: string }) => {
+      sendDataSafe(new TextEncoder().encode(JSON.stringify({ type: 'file_share', payload: file })));
+      setSharedFile(file);
+      setActiveView('file');
+    },
+    [sendDataSafe],
+  );
+
   const localIdentity = room?.localParticipant?.identity;
   const isPresenting = !!presenterIdentity && presenterIdentity === localIdentity;
   const isFollowing = !!presenterIdentity && !isPresenting;
@@ -825,6 +840,21 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
         .from('eclero-storage')
         .getPublicUrl(filePath);
 
+      // Record in the session file drive so it also appears in the shelf.
+      fetch('/api/sessions/files', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId,
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          url: publicUrl,
+          storagePath: filePath,
+          shared: true,
+        }),
+      }).catch(() => {});
+
       // Non-blocking validation — warn the sender if the URL isn't accessible
       // (e.g. Supabase bucket not set to public) but still share the file.
       try {
@@ -973,6 +1003,12 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
               // indicator — you're already following them.
             }}
           />
+          <RailButton
+            icon={<Folder className="h-5 w-5" />}
+            label="Files"
+            active={activeView === 'files'}
+            onClick={() => setActiveView('files')}
+          />
           {sharedFile && (
             <RailButton
               icon={<FileText className="h-5 w-5" />}
@@ -1029,6 +1065,11 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
               <CameraStage />
             </div>
           )}
+          {activeView === 'files' && (
+            <div className="absolute inset-0">
+              <FileShelf sessionId={sessionId} onOpenPrivate={setPrivateFile} onShare={shareFile} />
+            </div>
+          )}
           {activeView === 'file' && sharedFile && (
             <div className="absolute inset-0">
               <FileViewer
@@ -1039,6 +1080,13 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
                   sendDataSafe(new TextEncoder().encode(JSON.stringify({ type: 'file_close' })));
                 }}
               />
+            </div>
+          )}
+
+          {/* Private file viewer — only the local user sees this (no broadcast) */}
+          {privateFile && (
+            <div className="absolute inset-0 z-30">
+              <FileViewer file={privateFile} onClose={() => setPrivateFile(null)} />
             </div>
           )}
           {activeView === 'screen' && screenTrackRef && (
