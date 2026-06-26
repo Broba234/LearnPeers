@@ -545,6 +545,64 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
   const isPresenting = !!presenterIdentity && presenterIdentity === localIdentity;
   const isFollowing = !!presenterIdentity && !isPresenting;
 
+  // Whiteboard persistence — survives refresh/reconnect and remains as study
+  // notes afterwards. sessionId is encoded in the LiveKit room name.
+  const sessionId = room?.name?.replace(/^session-/, '') || '';
+  const lastSavedVersionRef = React.useRef(-1);
+
+  // Restore the saved board once Excalidraw is ready, but only if the local
+  // board is still empty (don't clobber a peer's live state).
+  useEffect(() => {
+    if (!isExcalidrawReady || !sessionId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`/api/sessions/whiteboard?sessionId=${encodeURIComponent(sessionId)}`);
+        if (!res.ok || cancelled) return;
+        const { scene } = await res.json();
+        const api = excalidrawRef.current;
+        const localEmpty = (api?.getSceneElements?.() || []).length === 0;
+        if (scene?.elements?.length && localEmpty) {
+          applyExcalidrawScene(scene);
+          lastSavedVersionRef.current = getSceneVersion(scene.elements);
+        }
+      } catch {
+        /* best-effort restore */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isExcalidrawReady, sessionId, applyExcalidrawScene]);
+
+  // Autosave the board (only when it actually changed) and once more on leave.
+  useEffect(() => {
+    if (!sessionId) return;
+    const save = async () => {
+      const api = excalidrawRef.current;
+      if (!api?.getSceneElements) return;
+      const elements = api.getSceneElements();
+      const version = getSceneVersion(elements);
+      if (version === lastSavedVersionRef.current) return;
+      lastSavedVersionRef.current = version;
+      try {
+        const files = api.getFiles?.() || {};
+        await fetch('/api/sessions/whiteboard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, scene: { elements, files } }),
+        });
+      } catch {
+        /* best-effort save */
+      }
+    };
+    const interval = window.setInterval(save, 8000);
+    return () => {
+      window.clearInterval(interval);
+      save();
+    };
+  }, [sessionId]);
+
   // Periodically prune stale remote pointers so we don't leak memory
   useEffect(() => {
     const interval = window.setInterval(() => {
