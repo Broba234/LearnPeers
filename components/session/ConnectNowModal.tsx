@@ -127,12 +127,18 @@ export default function ConnectNowModal({
   const handleConnect = async () => {
     setSubmitting(true);
     try {
-      const res = await fetch("/api/sessions/instant-request", {
+      const res = await fetch("/api/sessions/instant-authorize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tutorId: tutor.id, subjectId: subjectId || undefined, topic: topic.trim() || undefined }),
       });
       const data = await res.json();
+      if (res.status === 402 && data.needsCard) {
+        toast.error("Add a payment method to connect instantly.");
+        onClose();
+        router.push("/home/student/settings");
+        return;
+      }
       if (!res.ok) {
         toast.error(data.error || "Could not reach this tutor.");
         if (data.code === "TUTOR_OFFLINE") onClose();
@@ -211,7 +217,7 @@ export default function ConnectNowModal({
                   <Zap className="w-4 h-4" /> {submitting ? "Requesting…" : "Connect now"}
                 </button>
               </div>
-              <p className="text-center text-[11px] text-slate-400">No upfront charge — payment is settled after your session.</p>
+              <p className="text-center text-[11px] text-slate-400">We authorize your saved card to connect and only charge it after your session.</p>
             </div>
           </>
         )}

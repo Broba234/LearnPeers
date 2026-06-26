@@ -3,6 +3,7 @@ import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { notifySessionStatusChanged } from '@/lib/notifications';
 import { getAuthedUser } from '@/lib/api-auth';
 import { startSessionRecording, stopSessionRecording } from '@/lib/recording';
+import { settleHold, releaseHold } from '@/lib/payments';
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -81,6 +82,22 @@ export async function PATCH(request: NextRequest) {
           console.error('[recording] stop error:', e)
         );
       }
+    }
+
+    // Settle any card hold (gas-station model). Idempotent + role-agnostic:
+    // on completion, capture if the session ran ~the agreed time else release;
+    // on decline/cancel, release the hold. No-ops if there's no hold/Stripe.
+    if (status === 'completed') {
+      settleHold({
+        paymentIntentId: (updatedSession as any).payment_intent_id,
+        startedAt: (updatedSession as any).started_at,
+        endedAt: (updatedSession as any).ended_at,
+        agreedMinutes: Number((updatedSession as any).duration ?? 0.5) * 60,
+      }).catch((e) => console.error('[payments] settle error:', e));
+    } else if (status === 'declined' || status === 'cancelled') {
+      releaseHold((updatedSession as any).payment_intent_id).catch((e) =>
+        console.error('[payments] release error:', e)
+      );
     }
 
     // Send notification for the status change
