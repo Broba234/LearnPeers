@@ -38,7 +38,10 @@ type CategoryGroup = {
 };
 // DEMO MODE (temporary): lets tutors finish onboarding without a connected
 // Stripe account. Remove NEXT_PUBLIC_DEMO_MODE from .env.local to roll back.
-const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+// Force-disabled on the production deployment regardless of the flag (VERCEL_ENV guard).
+const DEMO_MODE =
+  process.env.NEXT_PUBLIC_DEMO_MODE === "true" &&
+  process.env.NEXT_PUBLIC_VERCEL_ENV !== "production";
 const SetupWizard = () => {
   const [formData, setFormData] = useState({
     bio: "",

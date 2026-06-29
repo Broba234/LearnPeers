@@ -27,8 +27,11 @@ export default function VerifyGradeModal({
   const [result, setResult] = useState<null | { qualifies: boolean; verified?: boolean; label?: string; reason?: string }>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   // DEMO MODE: verify instantly with no transcript upload. Remove
-  // NEXT_PUBLIC_DEMO_MODE to roll back.
-  const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+  // NEXT_PUBLIC_DEMO_MODE to roll back. Force-disabled on the production
+  // deployment regardless of the flag (VERCEL_ENV guard).
+  const DEMO_MODE =
+    process.env.NEXT_PUBLIC_DEMO_MODE === "true" &&
+    process.env.NEXT_PUBLIC_VERCEL_ENV !== "production";
 
   const scaleMeta = GRADE_SCALES.find((g) => g.value === scale)!;
   const code = asset.subject.code || asset.institution_course?.code || "";

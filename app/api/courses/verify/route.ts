@@ -22,8 +22,12 @@ export async function POST(req: Request) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     // DEMO MODE: skip the transcript upload + admin review and verify instantly.
-    // Remove NEXT_PUBLIC_DEMO_MODE to roll back.
-    const DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+    // Remove NEXT_PUBLIC_DEMO_MODE to roll back. Force-disabled on the production
+    // deployment regardless of the flag (VERCEL_ENV guard) so it can never weaken
+    // verification in prod; still works locally and on preview deployments.
+    const DEMO =
+      process.env.NEXT_PUBLIC_DEMO_MODE === "true" &&
+      process.env.VERCEL_ENV !== "production";
 
     const ct = req.headers.get("content-type") || "";
     if (!ct.includes("multipart/form-data")) {

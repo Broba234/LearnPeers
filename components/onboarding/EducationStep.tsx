@@ -32,8 +32,11 @@ const inputClass =
   "w-full bg-white border border-ink-200 px-4 py-3 rounded-xl text-ink-900 placeholder-ink-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all";
 
 // DEMO MODE (temporary): lets tutors skip the emailed school-email code.
-// Remove NEXT_PUBLIC_DEMO_MODE from .env.local to roll back.
-const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+// Remove NEXT_PUBLIC_DEMO_MODE from .env.local to roll back. Force-disabled on
+// the production deployment regardless of the flag (VERCEL_ENV guard).
+const DEMO_MODE =
+  process.env.NEXT_PUBLIC_DEMO_MODE === "true" &&
+  process.env.NEXT_PUBLIC_VERCEL_ENV !== "production";
 
 /**
  * Cascading school picker: pick a school board (required), then pick the

@@ -76,17 +76,19 @@ All current callers already send their own email/id, so switching to session-der
 
 ---
 
-## 3. 🟠 Verification & payment bypass flags shipping enabled
+## 3. 🟢 Verification & payment bypass flags — VERIFIED SAFE in production + hard-guarded
 
-`NEXT_PUBLIC_DEMO_MODE` is currently `true` in `.env.local`, and because it's `NEXT_PUBLIC` (client-readable) and **fail-open**, if it ever reaches a production build the trust model collapses.
+**Verified 2026-06-29 via `vercel env ls`:** `NEXT_PUBLIC_DEMO_MODE` is **not set in any Vercel environment** (Production, Preview, or Development). It is `=true` only in local `.env.local` (gitignored, never uploaded). Because it's a `NEXT_PUBLIC_*` var inlined at build time, production builds compile it to `undefined`, so all four bypasses are **inactive in production today**. The grade-verification, school-email, and Stripe-onboarding gates are enforced on `learnpeers.com`.
+
+**Hardened (applied):** each `DEMO_MODE` definition now also requires `VERCEL_ENV !== "production"` (server route) / `NEXT_PUBLIC_VERCEL_ENV !== "production"` (client), so the flag can **never** re-enable the bypass on the production deployment even if someone adds it to Vercel later. Local dev and preview demos are unchanged.
 
 | # | Sev | Location | Effect | Status |
 |---|---|---|---|---|
-| 3.1 | 🟠 | `app/api/courses/verify/route.ts:24-102` | Server-side: instantly sets a CourseAsset to `verified` with no transcript/admin review. | ⏳ Confirm off in prod |
-| 3.2 | 🟠 | `components/courses/VerifyGradeModal.tsx:29`, `onboarding/EducationStep.tsx` | Client: makes transcript upload optional; adds "skip verification" bypassing the school-email code. | ⏳ Confirm off in prod |
-| 3.3 | 🟡 | `components/ui/SetupWizard.tsx:40` | Lets tutors finish onboarding without connecting Stripe. | ⏳ Confirm off in prod |
+| 3.1 | 🟢 | `app/api/courses/verify/route.ts` | Server-side instant `verified`. | ✅ Verified off in prod + guarded |
+| 3.2 | 🟢 | `components/courses/VerifyGradeModal.tsx`, `onboarding/EducationStep.tsx` | Optional transcript / skip school-email code. | ✅ Verified off in prod + guarded |
+| 3.3 | 🟢 | `components/ui/SetupWizard.tsx` | Finish onboarding without Stripe. | ✅ Verified off in prod + guarded |
 
-**Recommendation:** make it a **server-only**, fail-closed flag (not `NEXT_PUBLIC`); confirm it's unset in every non-demo environment; track its removal before launch.
+> Note: the `VERCEL_ENV` server guard is authoritative (always set by Vercel server-side). The client `NEXT_PUBLIC_VERCEL_ENV` guard relies on Vercel's "Automatically expose System Environment Variables" (on by default); even if disabled it fails safe because the flag itself is unset in prod.
 
 ---
 
