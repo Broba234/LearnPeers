@@ -136,7 +136,6 @@ export const startScreenShare = async (room: Room | null): Promise<boolean> => {
     // This is the recommended way to start screen sharing
     await room.localParticipant.setScreenShareEnabled(true);
 
-    console.log('Screen share started successfully');
     showSuccess('Screen sharing started successfully!');
     return true;
 
@@ -204,13 +203,11 @@ export const stopScreenShare = async (room: Room | null): Promise<boolean> => {
     }
 
     if (!room.localParticipant.isScreenShareEnabled) {
-        console.log('No active screen share to stop.');
         return true; // No share was active, so it's a success
     }
 
     await room.localParticipant.setScreenShareEnabled(false);
 
-    console.log('Screen share stopped successfully');
     showSuccess('Screen sharing stopped successfully!');
     return true;
 

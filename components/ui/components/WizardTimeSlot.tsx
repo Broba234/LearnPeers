@@ -69,7 +69,6 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
     { value: "1", label: "1 hour", name: "duration_2", color: "bg-brand-100 text-brand-800" },
     { value: "1.5", label: "1.5 hour", name: "duration_3", color: "bg-brand-100 text-brand-800" },
   ];
-  console.log(selectedSubjects);
 
   const selectedSubject =
     selectedSubjects.find((s, index) => index === selectedSubjectId) ||

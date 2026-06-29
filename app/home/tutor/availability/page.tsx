@@ -63,7 +63,6 @@ export default function TutorAvailability() {
         
         if (res.ok) {
           const data = await res.json();
-          console.log('data updated', data);
           setData(data);
         }
         const profileRes = await fetch(

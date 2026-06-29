@@ -483,7 +483,6 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
             api.updateScene({ appState: { scrollX, scrollY, zoom: { value: zoom || 1 } } });
           }
         } else if (message.type === 'session_end') {
-          console.log('Session end signal received, disconnecting from room.');
           try {
             room?.disconnect();
           } catch (disconnectError) {
@@ -688,46 +687,34 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
           return currentTimestamp > latestTimestamp ? current : latest;
         });
         setScreenTrackRef(mostRecentShare);
-        
-        // Log screen share activity
-        console.log(`Screen share detected from ${mostRecentShare.participantIdentity}. Total active shares: ${screenShareTracks.length}`);
-        if (screenShareTracks.length > 1) {
-          const participantNames = screenShareTracks.map(t => t.participantIdentity).join(', ');
-          console.log(`Multiple screen shares active: ${participantNames}. Displaying most recent.`);
-        }
       } else {
         setIsScreenSharing(false);
         setScreenTrackRef(null);
         setAllScreenShares([]);
-        console.log('No active screen shares detected');
       }
     };
 
     // Listen to track events
     const handleLocalTrackPublished = (publication: any) => {
       if (publication.source === Track.Source.ScreenShare) {
-        console.log('Local screen share published');
         updateScreenShareState();
       }
     };
 
     const handleTrackUnpublished = (publication: any) => {
       if (publication.source === Track.Source.ScreenShare) {
-        console.log('Screen share unpublished');
         updateScreenShareState();
       }
     };
 
     const handleTrackSubscribed = (track: any, publication: any) => {
       if (publication.source === Track.Source.ScreenShare) {
-        console.log('Screen share subscribed');
         updateScreenShareState();
       }
     };
 
     const handleTrackUnsubscribed = (track: any, publication: any) => {
       if (publication.source === Track.Source.ScreenShare) {
-        console.log('Screen share unsubscribed');
         updateScreenShareState();
       }
     };
@@ -994,7 +981,6 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
     const success = await startScreenShare(room);
     if (success) {
       // Update local state if needed - the event listeners will handle this
-      console.log('Screen share initiated successfully');
     }
   };
 
@@ -1002,7 +988,6 @@ function MainContent({ onDisconnect, userRole, userName, topic }: { onDisconnect
     const success = await stopScreenShare(room);
     if (success) {
       // Update local state if needed - the event listeners will handle this
-      console.log('Screen share stopped successfully');
     }
   };
 

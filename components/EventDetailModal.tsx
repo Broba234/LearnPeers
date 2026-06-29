@@ -129,7 +129,6 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
 
           if (profileRes.ok) {
             const profileData = await profileRes.json();
-            console.log("profileData", profileData);
             setProfileSubjectDetails(profileData.profileSubject || null);
             setUpdateForm((prev) => ({
               ...prev,
@@ -155,7 +154,6 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
     if (duration === 1.5) return "1h 30m";
     return `${duration}h`;
   };
-  console.log("selectedDurations", selectedDurations);
 
   useEffect(() => {
     if (!profileSubjectDetails) return;
@@ -207,7 +205,6 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   }, [updateForm.duration_1, updateForm.duration_2, updateForm.duration_3]);
   useEffect(() => {
     if (event && isEditMode) {
-     console.log('even2222t', event);
       const subjectId =
         event.originalData?.id || event.id || "";
       const subjectName =

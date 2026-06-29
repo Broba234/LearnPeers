@@ -97,7 +97,6 @@ export default function AddSubject({ subjects, setSubjects, grades, categories, 
       if (!response.ok) {
         throw new Error(responseData.error || responseData.message || `Error: ${response.statusText}`);
       }
-      console.log(responseData);
 
       // Success
       setSuccess("Subject created successfully!");

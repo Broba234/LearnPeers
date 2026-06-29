@@ -25,7 +25,6 @@ import WizardTimeSlot from "./components/WizardTimeSlot";
 import EducationStep from "@/components/onboarding/EducationStep";
 import { GraduationCap } from "lucide-react";
 import EmbeddedOnboarding from "@/components/stripe/EmbeddedOnboarding";
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "./wizardIcons";
 export type Subjects = {
   id: string;
   name: string;
