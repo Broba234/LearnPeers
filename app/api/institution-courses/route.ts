@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { requireAdminApi } from '@/lib/admin-access';
 
 export async function GET(req: Request) {
   try {
@@ -25,6 +26,10 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    // Admin-only: mutates the global institution-course catalog (GET stays public).
+    const { res } = await requireAdminApi('institutions');
+    if (res) return res;
+
     const { institution_id, subject_id, code, name, description } = await req.json();
     if (!institution_id || !subject_id || !code?.trim()) {
       return Response.json({ error: 'institution_id, subject_id, and code are required' }, { status: 400 });

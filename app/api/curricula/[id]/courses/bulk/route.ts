@@ -1,9 +1,14 @@
 import { prisma } from "@/lib/prisma";
+import { requireAdminApi } from "@/lib/admin-access";
 
 // Bulk import courses into a curriculum. Accepts a JSON array (or { courses: [] })
 // of { code, name, grade?, category? }. Upserts by (curriculum, code).
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    // Admin-only: bulk-mutates the global course catalog.
+    const { res } = await requireAdminApi("curricula");
+    if (res) return res;
+
     const { id } = await params;
     const body = await req.json();
     const courses = Array.isArray(body) ? body : body.courses;

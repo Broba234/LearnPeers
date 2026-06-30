@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { requireAdminApi } from "@/lib/admin-access";
 
 const KINDS = ["provincial_secondary", "ib", "ap", "university"];
 
@@ -31,6 +32,10 @@ export async function GET() {
 // Creates a curriculum (provincial_secondary | ib | ap | university).
 export async function POST(req: Request) {
   try {
+    // Admin-only: mutates the global curriculum catalog (GET stays public).
+    const { res } = await requireAdminApi("curricula");
+    if (res) return res;
+
     const { name, kind, province_id, institution_id } = await req.json();
     if (!name?.trim() || !KINDS.includes(kind)) {
       return Response.json({ error: "name and a valid kind are required" }, { status: 400 });

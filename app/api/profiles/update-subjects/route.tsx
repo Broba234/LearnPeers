@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest } from 'next/server';
+import { requireUser } from '@/lib/api-auth';
 
 // Tutor onboarding — subject selection (step 3).
 // Selected courses become CourseAssets in the `claimed` state: owned but locked
@@ -7,19 +8,16 @@ import { NextRequest } from 'next/server';
 // enters ProfilesOnSubjects (the bookable listings) once it goes live.
 export async function PUT(request: NextRequest) {
   try {
+    // Edits the CALLER's own claimed courses — identity from the session.
+    const { user, res } = await requireUser();
+    if (res) return res;
+
     const body = await request.json();
-    const { email, subjects } = body;
+    const { subjects } = body;
 
-    if (!email) {
-      return new Response(JSON.stringify({ error: 'Email is required' }), { status: 400 });
-    }
+    const profile = { id: user.id };
 
-    const profile = await prisma.profiles.findUnique({
-      where: { email },
-      select: { id: true },
-    });
-
-    if (profile && subjects && Array.isArray(subjects)) {
+    if (subjects && Array.isArray(subjects)) {
       const selectedIds = subjects
         .map((s: any) => (typeof s === 'string' ? s : s?.id))
         .filter((id: any): id is string => typeof id === 'string' && id.trim().length > 0)

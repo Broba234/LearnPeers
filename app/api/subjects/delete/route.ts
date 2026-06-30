@@ -1,8 +1,13 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest } from 'next/server';
+import { requireAdminApi } from '@/lib/admin-access';
 
 export async function DELETE(req: NextRequest) {
   try {
+    // Admin-only: deletes from the global subject catalog.
+    const { res } = await requireAdminApi('subjects');
+    if (res) return res;
+
     const { subjectId } = await req.json();
 
     // Check if subject exists

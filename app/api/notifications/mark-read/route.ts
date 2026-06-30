@@ -1,14 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
+import { requireUser } from '@/lib/api-auth';
 
 export async function PATCH(request: NextRequest) {
   try {
+    // Only the caller's own notifications — user id from the session, never the
+    // request body. Any notificationId is still scoped to user_id below.
+    const { user, res } = await requireUser();
+    if (res) return res;
+    const userId = user.id;
+
     const supabase = createSupabaseAdminClient();
 
-    const { userId, notificationId } = await request.json();
-    if (!userId) {
-      return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
-    }
+    const { notificationId } = await request.json().catch(() => ({}));
 
     if (notificationId) {
       // Mark a single notification as read

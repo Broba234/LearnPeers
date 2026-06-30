@@ -1,14 +1,15 @@
 import { prisma } from "@/lib/prisma";
-import { NextRequest } from 'next/server';
+import { requireUser } from "@/lib/api-auth";
 
 
-export async function PUT(request: NextRequest) {
+export async function PUT() {
   try {
-    const body = await request.json();
-    const { email } = body;
+    // Marks the CALLER's own setup complete — identity from the session.
+    const { user, res } = await requireUser();
+    if (res) return res;
       // Update the main profile
       const updatedProfile = await prisma.profiles.update({
-        where: { email },
+        where: { id: user.id },
         data: {
           profile_setup: true,
         },

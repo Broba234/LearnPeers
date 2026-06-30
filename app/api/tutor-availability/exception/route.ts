@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/api-auth";
 
 function toTimeDate(time: string): Date {
   return new Date(`1970-01-01T${time}:00.000Z`);
@@ -7,17 +8,15 @@ function toTimeDate(time: string): Date {
 
 export async function POST(req: Request) {
   try {
-    const { userEmail, tutorId, date, start, end, isActive, timezone } = await req.json();
+    // Availability exceptions are created for the CALLER — tutor id from the session.
+    const { user, res } = await requireUser();
+    if (res) return res;
+
+    const { date, start, end, isActive, timezone } = await req.json();
     if (!date || !start || !end || typeof isActive !== 'boolean') {
       return NextResponse.json({ error: 'date, start, end, isActive required' }, { status: 400 });
     }
-    let resolvedTutorId: string | null = tutorId ?? null;
-    if (!resolvedTutorId && userEmail) {
-      const prof = await prisma.profiles.findUnique({ where: { email: userEmail }, select: { id: true } });
-      if (!prof) return NextResponse.json({ error: 'Tutor not found' }, { status: 404 });
-      resolvedTutorId = prof.id;
-    }
-    if (!resolvedTutorId) return NextResponse.json({ error: 'tutorId or userEmail required' }, { status: 400 });
+    const resolvedTutorId = user.id;
 
     const ex = await (prisma as any).tutorAvailabilityException.create({
       data: {

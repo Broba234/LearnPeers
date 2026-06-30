@@ -1,18 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
+import { requireUser } from '@/lib/api-auth';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // Create server-side Supabase client with service role key
+    // Only the caller's own sessions — tutor id is the authenticated user.
+    const { user, res } = await requireUser();
+    if (res) return res;
+
     const supabase = createSupabaseAdminClient();
-
-    const { searchParams } = new URL(request.url);
-    const tutorId = searchParams.get('tutorId');
-
-    if (!tutorId) {
-      return NextResponse.json({ error: 'TutorId parameter is required' }, { status: 400 });
-    }
-
 
     // Fetch sessions where user is the tutor
     const { data: sessions, error: fetchError } = await supabase
@@ -26,7 +22,7 @@ export async function GET(request: NextRequest) {
           bio
         )
       `)
-      .eq('tutor_id', tutorId)
+      .eq('tutor_id', user.id)
       .order('created_at', { ascending: false });
 
     if (fetchError) {

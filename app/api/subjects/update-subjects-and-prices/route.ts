@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireUser } from '@/lib/api-auth';
 
 // Tutor onboarding — pricing step (step 4).
 // Stores the desired pricing on each claimed CourseAsset. The course stays
@@ -8,20 +9,14 @@ import { NextRequest, NextResponse } from 'next/server';
 // ProfilesOnSubjects (the bookable listings) here.
 export async function PUT(request: NextRequest) {
   try {
+    // Edits the CALLER's own course pricing — identity from the session.
+    const { user, res } = await requireUser();
+    if (res) return res;
+
     const body = await request.json();
-    const { email, subjects } = body;
+    const { subjects } = body;
 
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
-    }
-
-    const profile = await prisma.profiles.findUnique({
-      where: { email },
-      select: { id: true },
-    });
-    if (!profile) {
-      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
-    }
+    const profile = { id: user.id };
 
     if (!subjects || !Array.isArray(subjects)) {
       return NextResponse.json({ error: 'Subjects must be provided as an array' }, { status: 400 });

@@ -1,7 +1,13 @@
 import { prisma } from "@/lib/prisma";
+import { requireAdminApi } from "@/lib/admin-access";
 
 export async function GET() {
   try {
+    // Admin-only: returns every contact submission (PII). The POST below stays
+    // public for the contact form (route is allowlisted in proxy.ts).
+    const { res } = await requireAdminApi("contacts");
+    if (res) return res;
+
     const contacts = await prisma.contacts.findMany({
       orderBy: { created_at: "desc" },
     });

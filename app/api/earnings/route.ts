@@ -1,18 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { tutorNet } from "@/lib/billing";
+import { requireUser } from "@/lib/api-auth";
 
 export const runtime = "nodejs";
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const tutorId = searchParams.get("tutorId");
-
-  if (!tutorId) {
-    return NextResponse.json({ error: "tutorId required" }, { status: 400 });
-  }
+export async function GET() {
+  // Earnings + a Stripe Express login link are returned for the CALLER only —
+  // the tutor id is the authenticated user, never a client-supplied value.
+  const { user, res } = await requireUser();
+  if (res) return res;
+  const tutorId = user.id;
 
   const supabase = createSupabaseAdminClient();
 

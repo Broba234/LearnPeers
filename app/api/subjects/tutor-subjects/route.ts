@@ -1,22 +1,15 @@
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { NextRequest, NextResponse } from 'next/server';
+import { requireUser } from '@/lib/api-auth';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const email = searchParams.get('email');
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
-    }
-    const profile = await prisma.profiles.findUnique({
-        where: { email },
-        select: { id: true }
-      });
-    if (!profile) {
-      return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
-    }
+    // Returns the CALLER's own subject listings — identity from the session.
+    const { user, res } = await requireUser();
+    if (res) return res;
+
     const subjects = await prisma.profilesOnSubjects.findMany({
-      where: { profile_id: profile.id },
+      where: { profile_id: user.id },
       select: {
         subject_id: true,
         profile_id: true,

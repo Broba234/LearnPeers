@@ -44,9 +44,12 @@ git push --force-with-lease   # coordinate with anyone who has the repo cloned
 
 ---
 
-## 2. 🟠 Broken access control (IDOR) — a systemic flaw, route-verified
+## 2. ✅ Broken access control (IDOR) — FIXED on branch `chore/audit-cleanup`
 
-**Root cause (one pattern, ~25 files):** handlers derive the acted-on identity from a **client-supplied** value (body `email`, or query `tutorId`/`studentId`/`userId`/`email`) and use it directly as a DB key against the **service-role client (RLS bypassed)**. The route authenticates (middleware requires a session) but never *authorizes*. `lib/api-auth.ts` already ships `getAuthedUser()` and even documents *"Never trust a user/profile id sent in the request body for authorization"* — it was simply never adopted in these routes. **12 of 13 groups confirmed vulnerable; 1 refuted.**
+**Root cause (one pattern, ~25 files):** handlers derived the acted-on identity from a **client-supplied** value (body `email`, or query `tutorId`/`studentId`/`userId`/`email`) and used it directly as a DB key against the **service-role client (RLS bypassed)**. The route authenticated (middleware requires a session) but never *authorized*. **12 of 13 groups confirmed vulnerable; 1 refuted.**
+
+**Fix applied (all 12 groups + the `tutor-availability/exception` sibling):** two helpers were added —
+`requireUser()` in `lib/api-auth.ts` (returns the session user or a 401) and `requireAdminApi(pageKey?)` in `lib/admin-access.ts` (401/403 for non-admins). Every per-user route now derives identity from `user.id`/`user.email` and ignores any client-supplied id/email; destructive availability routes enforce `tutor_id === user.id`; the catalog mutations and the `contacts`/`feedback` GETs are admin-gated (public GET listings and the contact-form/feedback POSTs left open). Verified: `tsc --noEmit` clean + `next build` exit 0. `profiles/create` (public sign-up) was intentionally left untouched pending a review of the signup sequence.
 
 | # | Sev | Route(s) | Impact | Status |
 |---|---|---|---|---|
@@ -72,7 +75,7 @@ git push --force-with-lease   # coordinate with anyone who has the repo cloned
 
 All current callers already send their own email/id, so switching to session-derived identity is **behavior-preserving** for legitimate use.
 
-> Not auto-applied: these change request/response behavior and touch payment-critical routes, so they're left for review. Recommended order = the table above (criticals first, then the unauthenticated dump 2.3, then destructive/role-tampering writes, then read-only disclosures).
+> ✅ All rows above are fixed on `chore/audit-cleanup` (every "Status" now reads as resolved). Because these touch payment-critical routes, **review the diff before deploying** and smoke-test: tutor earnings, Stripe Connect onboarding, profile/availability edits, notifications, and the admin catalog pages. Legitimate callers were already passing their own id/email, so the change is behavior-preserving for them; cross-user access now returns 401/403/404.
 
 ---
 

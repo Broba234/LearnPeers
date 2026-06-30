@@ -1,16 +1,15 @@
 import { prisma } from '@/lib/prisma';
+import { requireUser } from '@/lib/api-auth';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const email = searchParams.get('email');
-
-    if (!email) {
-      return new Response(JSON.stringify({ error: 'Email parameter is required' }), { status: 400 });
-    }
+    // Returns the CALLER's own full profile (incl. phone, stripe_account_id) —
+    // identity from the session, never a client-supplied email.
+    const { user, res } = await requireUser();
+    if (res) return res;
 
     const profile = await prisma.profiles.findUnique({
-      where: { email },
+      where: { id: user.id },
       select: {
         id: true,
         role: true,

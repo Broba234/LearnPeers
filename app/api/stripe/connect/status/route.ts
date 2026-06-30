@@ -1,23 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
-import { NextRequest } from "next/server";
+import { requireUser } from "@/lib/api-auth";
 
 export const runtime = "nodejs";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const email = searchParams.get("email");
-
-    if (!email) {
-      return new Response(
-        JSON.stringify({ error: "Email parameter is required" }),
-        { status: 400 }
-      );
-    }
+    // Connect status (incl. stripe_account_id) is the caller's own — identity
+    // from the session, never a client-supplied email.
+    const { user, res } = await requireUser();
+    if (res) return res;
 
     const profile = await prisma.profiles.findUnique({
-      where: { email },
+      where: { id: user.id },
       select: { stripe_account_id: true },
     });
 

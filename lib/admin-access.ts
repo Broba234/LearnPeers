@@ -1,6 +1,7 @@
 import "server-only";
 import { cache } from "react";
 import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { ADMIN_PAGES, pageByKey } from "@/lib/admin-pages";
@@ -105,4 +106,25 @@ export async function requireOwner(): Promise<AdminContext> {
   if (!ctx) redirect("/admin/login");
   if (!ctx.isOwner) redirect("/dashboard");
   return ctx;
+}
+
+/**
+ * API-route admin guard. Like `requireAdminPage` but returns a JSON response
+ * (401/403) instead of redirecting, for use inside route handlers.
+ *
+ *   const { ctx, res } = await requireAdminApi("contacts");
+ *   if (res) return res; // 401 if not signed in, 403 if not allowed
+ *   // ...ctx is an authorized admin
+ */
+export async function requireAdminApi(pageKey?: string): Promise<
+  { ctx: AdminContext; res: null } | { ctx: null; res: NextResponse }
+> {
+  const ctx = await getAdminContext();
+  if (!ctx) {
+    return { ctx: null, res: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+  }
+  if (pageKey && !ctx.can(pageKey)) {
+    return { ctx: null, res: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
+  }
+  return { ctx, res: null };
 }

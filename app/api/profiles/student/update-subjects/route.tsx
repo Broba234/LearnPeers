@@ -1,20 +1,19 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest } from 'next/server';
+import { requireUser } from '@/lib/api-auth';
 
 export async function PUT(request: NextRequest) {
   try {
+    // Edits the CALLER's own (student) subject listings — identity from the session.
+    const { user, res } = await requireUser();
+    if (res) return res;
+
     const body = await request.json();
-    const { email,subjects } = body;
+    const { subjects } = body;
 
-    if (!email) {
-      return new Response(JSON.stringify({ error: 'Email is required' }), { status: 400 });
-    }
-      const profile = await prisma.profiles.findUnique({
-        where: { email },
-        select: { id: true }
-      });
+      const profile = { id: user.id };
 
-      if (profile && subjects && Array.isArray(subjects)) {
+      if (subjects && Array.isArray(subjects)) {
         await prisma.profilesOnSubjects.deleteMany({ where: { profile_id: profile.id } });
 
         for (const s of subjects) {

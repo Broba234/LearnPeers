@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest } from 'next/server';
+import { requireUser } from '@/lib/api-auth';
 
 function convertTimeStringToDate(timeString: string) {
   // HH:mm or HH:mm:ss -> Date with only the time portion (UTC)
@@ -12,24 +13,14 @@ function convertTimeStringToDate(timeString: string) {
 
 export async function PUT(request: NextRequest) {
   try {
+    const { user, res } = await requireUser();
+    if (res) return res;
+
     const body = await request.json();
-    const { eventId, updatedData, email } = body;
+    const { eventId, updatedData } = body;
 
     if (!eventId || !updatedData) {
       return new Response(JSON.stringify({ error: 'eventId and updatedData are required' }), { status: 400 });
-    }
-
-    // Resolve tutor_id from email if provided
-    let tutorId: string | undefined;
-    if (email) {
-      const profile = await prisma.profiles.findUnique({
-        where: { email },
-        select: { id: true },
-      });
-      if (!profile) {
-        return new Response(JSON.stringify({ error: 'Tutor profile not found' }), { status: 404 });
-      }
-      tutorId = profile.id;
     }
 
     const existingEvent = await prisma.tutorAvailability.findUnique({
@@ -38,6 +29,10 @@ export async function PUT(request: NextRequest) {
     });
     if (!existingEvent) {
       return new Response(JSON.stringify({ error: 'Event not found' }), { status: 404 });
+    }
+    // Only the slot's owner may modify it.
+    if (existingEvent.tutor_id !== user.id) {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 });
     }
 
     // Use pre-computed UTC dates from client when available, fall back to date+time strings

@@ -1,14 +1,16 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest } from 'next/server';
+import { requireUser } from '@/lib/api-auth';
 
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { email, firstName, lastName, name, phone, bio, subjects, education, experience, is_tutor } = body;
+    // Edits the CALLER's own profile (incl. is_tutor / hourlyRate) — identity
+    // from the session, not body.email.
+    const { user, res } = await requireUser();
+    if (res) return res;
 
-    if (!email) {
-      return new Response(JSON.stringify({ error: 'Email is required' }), { status: 400 });
-    }
+    const body = await request.json();
+    const { firstName, lastName, name, phone, bio, subjects, education, experience, is_tutor } = body;
 
     // Use name if provided, otherwise combine first and last name
     const fullName = name || `${firstName || ''} ${lastName || ''}`.trim();
@@ -17,7 +19,7 @@ export async function PUT(request: NextRequest) {
     const result = await prisma.$transaction(async (tx:any) => {
       // Update the main profile
       const updatedProfile = await tx.profiles.update({
-        where: { email },
+        where: { id: user.id },
         data: {
           name: fullName,
           phone: phone || null,

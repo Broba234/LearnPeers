@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
+import { requireUser } from '@/lib/api-auth';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createSupabaseAdminClient();
+    // Only the caller's own notifications — user id from the session.
+    const { user, res } = await requireUser();
+    if (res) return res;
+    const userId = user.id;
 
-    const userId = request.nextUrl.searchParams.get('userId');
-    if (!userId) {
-      return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
-    }
+    const supabase = createSupabaseAdminClient();
 
     const limit = Math.min(parseInt(request.nextUrl.searchParams.get('limit') || '20', 10), 50);
 

@@ -1,9 +1,14 @@
 import { prisma } from '@/lib/prisma';
+import { requireAdminApi } from '@/lib/admin-access';
 
 // Bulk import endpoint for scraping university course catalogs
 // POST body: { institution_id, courses: [{ subject_id, code, name, description }] }
 export async function POST(req: Request) {
   try {
+    // Admin-only: bulk-mutates the global institution-course catalog.
+    const { res } = await requireAdminApi('institutions');
+    if (res) return res;
+
     const { institution_id, courses } = await req.json();
 
     if (!institution_id) return Response.json({ error: 'institution_id is required' }, { status: 400 });

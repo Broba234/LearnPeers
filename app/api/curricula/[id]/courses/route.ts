@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { requireAdminApi } from "@/lib/admin-access";
 
 // Lists the courses (Subjects) in a curriculum.
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -18,6 +19,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 // Adds a single course to a curriculum.
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    // Admin-only: mutates the global course catalog (GET stays public).
+    const { res } = await requireAdminApi("curricula");
+    if (res) return res;
+
     const { id } = await params;
     const { code, name, grade, category } = await req.json();
     if (!code?.trim() || !name?.trim()) {

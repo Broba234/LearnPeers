@@ -1,6 +1,7 @@
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
+import { requireUser } from "@/lib/api-auth";
 
 /** Detect country from request headers or IP geolocation. Returns ISO 3166-1 alpha-2 code. */
 async function detectCountry(
@@ -55,26 +56,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const { user, res } = await requireUser();
+    if (res) return res;
+
     const body = await request.json().catch(() => ({}));
-    const email = body?.email;
 
-    if (!email) {
-      return new Response(
-        JSON.stringify({ error: "Email is required" }),
-        { status: 400 }
-      );
-    }
-
+    // Identity comes from the session, never the request body.
     const profile = await prisma.profiles.findUnique({
-      where: { email },
+      where: { id: user.id },
     });
 
-    if (!profile) {
+    if (!profile?.email) {
       return new Response(
         JSON.stringify({ error: "Profile not found" }),
         { status: 404 }
       );
     }
+    const email = profile.email;
 
     let accountId = profile.stripe_account_id;
 
@@ -107,7 +105,7 @@ export async function POST(request: NextRequest) {
     });
 
     await prisma.profiles.update({
-      where: { email },
+      where: { id: user.id },
       data: { stripe_account_id: accountId },
     });
     return new Response(

@@ -1,18 +1,18 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest } from 'next/server';
+import { requireUser } from '@/lib/api-auth';
 
 export async function PUT(request: NextRequest) {
   try {
+    // Edits the CALLER's own profile — identity from the session, not body.email.
+    const { user, res } = await requireUser();
+    if (res) return res;
+
     const body = await request.json();
-    const { email, education } = body;
-
-    if (!email) {
-      return new Response(JSON.stringify({ error: 'Email is required' }), { status: 400 });
-    }
-
+    const { education } = body;
 
     const result = await prisma.profiles.update({
-      where: { email },
+      where: { id: user.id },
       data: {
         education: education || null,
       },

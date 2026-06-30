@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { requireAdminApi } from "@/lib/admin-access";
 
 // POST: store a feedback message. If the visitor is signed in, the message is
 // automatically linked to their profile (user_id / email / name). No email is
@@ -70,9 +71,12 @@ export async function POST(req: Request) {
   }
 }
 
-// GET: list feedback for the admin dashboard.
+// GET: list feedback for the admin dashboard. Admin-only (POST stays open).
 export async function GET() {
   try {
+    const { res } = await requireAdminApi("feedback");
+    if (res) return res;
+
     const feedback = await prisma.feedback.findMany({
       orderBy: { created_at: "desc" },
       include: {

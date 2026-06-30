@@ -1,7 +1,12 @@
 import { prisma } from '@/lib/prisma';
+import { requireAdminApi } from '@/lib/admin-access';
 
 export async function POST(req: Request) {
   try {
+    // Admin-only: mutates the global subject catalog.
+    const { res } = await requireAdminApi('subjects');
+    if (res) return res;
+
     const { category, grade, name,code } = await req.json();
 
     const subject = await prisma.subjects.create({

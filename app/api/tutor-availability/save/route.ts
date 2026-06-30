@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireUser } from "@/lib/api-auth";
 
 
 // Build a Date from date (YYYY-MM-DD) and time (HH:mm) in local time to preserve wall clock
@@ -12,25 +13,17 @@ function toTimeDate(time: string): Date {
 
 export async function POST(req: Request) {
   try {
-    const { email, newEvent } = await req.json();
+    // Availability slots are created for the CALLER — tutor id from the session.
+    const { user, res } = await requireUser();
+    if (res) return res;
 
-    if (!email && !newEvent) {
-      return NextResponse.json({ error: "userEmail or tutorId is required" }, { status: 400 });
+    const { newEvent } = await req.json();
+
+    if (!newEvent) {
+      return NextResponse.json({ error: "newEvent is required" }, { status: 400 });
     }
 
-    // Resolve tutor id
-    let resolvedTutorId: any;
-    if (email) {
-      const profile = await prisma.profiles.findUnique({
-        where: { email },
-        select: { id: true },
-      });
-      if (!profile) return NextResponse.json({ error: "Tutor not found" }, { status: 404 });
-      resolvedTutorId = profile.id;
-    }
-    if (!resolvedTutorId) {
-      return NextResponse.json({ error: "Could not resolve tutorId" }, { status: 400 });
-    }
+    const resolvedTutorId = user.id;
 // Use the pre-computed UTC ISO dates from the client (already timezone-correct)
 // newEvent.start / newEvent.end are ISO strings created in the user's browser timezone
 const tz = newEvent.timezone || "UTC";

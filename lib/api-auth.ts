@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+import type { User } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
@@ -14,4 +16,23 @@ export async function getAuthedUser() {
     data: { user },
   } = await supabase.auth.getUser();
   return user ?? null;
+}
+
+/**
+ * API-route guard. Returns the authenticated user, or a ready-to-return 401
+ * response. Derive identity from `user.id` (=== Profiles.id) / `user.email`
+ * (unique) — never from a client-supplied id/email in the query or body.
+ *
+ *   const { user, res } = await requireUser();
+ *   if (res) return res; // 401
+ *   // ...use user.id / user.email
+ */
+export async function requireUser(): Promise<
+  { user: User; res: null } | { user: null; res: NextResponse }
+> {
+  const user = await getAuthedUser();
+  if (!user) {
+    return { user: null, res: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+  }
+  return { user, res: null };
 }

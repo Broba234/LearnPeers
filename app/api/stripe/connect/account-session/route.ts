@@ -1,6 +1,7 @@
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { requireUser } from "@/lib/api-auth";
 
 export const runtime = "nodejs";
 
@@ -28,16 +29,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Stripe is not configured" }, { status: 500 });
     }
 
-    const body = await request.json().catch(() => ({}));
-    const email = body?.email;
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
-    }
+    const { user, res } = await requireUser();
+    if (res) return res;
 
-    const profile = await prisma.profiles.findUnique({ where: { email } });
-    if (!profile) {
+    const body = await request.json().catch(() => ({}));
+
+    // Identity comes from the session, never the request body — this binds a
+    // Stripe Express account to the CALLER only.
+    const profile = await prisma.profiles.findUnique({ where: { id: user.id } });
+    if (!profile?.email) {
       return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
+    const email = profile.email;
 
     let accountId = profile.stripe_account_id;
 
@@ -65,7 +68,7 @@ export async function POST(request: NextRequest) {
       });
       accountId = account.id;
       await prisma.profiles.update({
-        where: { email },
+        where: { id: user.id },
         data: { stripe_account_id: accountId },
       });
     }

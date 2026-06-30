@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { requireAdminApi } from '@/lib/admin-access';
 
 export async function GET(req: Request) {
   try {
@@ -25,6 +26,10 @@ const ALLOWED_TYPES = ['university', 'high_school', 'school_board'];
 
 export async function POST(req: Request) {
   try {
+    // Admin-only: creates global institution records (GET stays public).
+    const { res } = await requireAdminApi('institutions');
+    if (res) return res;
+
     const { name, abbreviation, country, province_id, type, city, email_domains } = await req.json();
     if (!name?.trim()) return Response.json({ error: 'Name is required' }, { status: 400 });
 
