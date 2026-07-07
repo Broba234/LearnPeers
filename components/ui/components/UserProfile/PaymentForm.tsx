@@ -10,12 +10,16 @@ export function PaymentForm({
   tutorName,
   onSuccess,
   onBack,
+  onProcessingChange,
 }: {
   sessionId: string;
   breakdown: ChargeBreakdown;
   tutorName: string;
   onSuccess: () => void;
   onBack: () => void;
+  /** Reports when a payment (incl. an in-progress 3-D Secure challenge) is in
+   *  flight, so the parent can lock the modal from closing and unmounting us. */
+  onProcessingChange?: (processing: boolean) => void;
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -23,11 +27,16 @@ export function PaymentForm({
   const [error, setError] = useState<string | null>(null);
   const [elementReady, setElementReady] = useState(false);
 
+  const setProcessing = (p: boolean) => {
+    setLoading(p);
+    onProcessingChange?.(p);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!stripe || !elements) return;
 
-    setLoading(true);
+    setProcessing(true);
     setError(null);
 
     try {
@@ -56,24 +65,51 @@ export function PaymentForm({
         return;
       }
 
-      if (paymentIntent && paymentIntent.status === "succeeded") {
-        const res = await fetch("/api/sessions/confirm-payment", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ sessionId, paymentIntentId: paymentIntent.id }),
-        });
-        if (res.ok) {
-          onSuccess();
-        } else {
-          const data = await res.json();
-          setError(data.error || "Failed to confirm session");
+      // Handle EVERY resolved outcome — not just "succeeded". A card that begins
+      // but doesn't finish 3-D Secure resolves here with no submitError and a
+      // non-succeeded status; swallowing that left the user staring at the form
+      // with no feedback (and the charge stuck "incomplete" in Stripe).
+      if (!paymentIntent) {
+        setError("We couldn't confirm the payment. Please try again.");
+        return;
+      }
+
+      switch (paymentIntent.status) {
+        case "succeeded": {
+          const res = await fetch("/api/sessions/confirm-payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sessionId, paymentIntentId: paymentIntent.id }),
+          });
+          if (res.ok) {
+            onSuccess();
+          } else {
+            const data = await res.json().catch(() => ({}));
+            setError(data.error || "Failed to confirm session");
+          }
+          break;
         }
+        case "processing":
+          // Async method still settling — treat as booked; the webhook finalizes.
+          onSuccess();
+          break;
+        case "requires_action":
+        case "requires_payment_method":
+          setError(
+            "Your bank didn't finish authenticating the card (3-D Secure). " +
+              "Please try again, or use a different card — some prepaid cards can't complete this step."
+          );
+          break;
+        default:
+          setError(
+            `Payment couldn't be completed (status: ${paymentIntent.status}). Please try again.`
+          );
       }
     } catch (err) {
       console.error("Payment error:", err);
       setError("An unexpected error occurred. Please try again.");
     } finally {
-      setLoading(false);
+      setProcessing(false);
     }
   };
 

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase/client';
+import { Modal, Button } from '@/components/ui/primitives';
 
 interface Session {
   id: string;
@@ -25,6 +26,8 @@ export default function StudentSessions() {
   const router = useRouter();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [sessionToCancel, setSessionToCancel] = useState<Session | null>(null);
+  const [cancelling, setCancelling] = useState(false);
 
   // LiveKit session state
   const [isSessionOpen, setIsSessionOpen] = useState(false);
@@ -136,6 +139,7 @@ export default function StudentSessions() {
 
   const handleCancelSession = async (sessionId: string) => {
     if (!userId) return;
+    setCancelling(true);
     try {
       const res = await fetch("/api/booking/cancel", {
         method: "POST",
@@ -144,9 +148,12 @@ export default function StudentSessions() {
       });
       if (res.ok) {
         fetchSessions();
+        setSessionToCancel(null);
       }
     } catch (err) {
       console.error("Cancel failed:", err);
+    } finally {
+      setCancelling(false);
     }
   };
 
@@ -298,7 +305,7 @@ export default function StudentSessions() {
                   <div className="px-5 pb-4 flex items-center justify-between">
                     <p className="text-xs text-slate-400">Awaiting confirmation</p>
                     <button
-                      onClick={() => handleCancelSession(session.id)}
+                      onClick={() => setSessionToCancel(session)}
                       className="text-xs text-red-500 hover:text-red-700 font-medium transition-colors"
                     >
                       Cancel
@@ -324,6 +331,45 @@ export default function StudentSessions() {
           )}
         </div>
       </div>
+
+      <Modal
+        isOpen={!!sessionToCancel}
+        onClose={() => setSessionToCancel(null)}
+        title="Cancel this session?"
+        size="sm"
+      >
+        {sessionToCancel && (
+          <div className="space-y-4">
+            <p className="text-sm leading-relaxed text-slate-600">
+              Your spot with{' '}
+              <span className="font-semibold text-slate-900">{sessionToCancel.tutorName}</span> on{' '}
+              {sessionToCancel.date}
+              {sessionToCancel.start_time ? ` at ${sessionToCancel.start_time}` : ''} will be
+              released and can be booked by someone else.
+              {sessionToCancel.price > 0 && (
+                <> You&apos;ll be refunded the full ${sessionToCancel.price}.</>
+              )}
+            </p>
+            <div className="flex gap-3">
+              <Button
+                variant="primary"
+                fullWidth
+                onClick={() => setSessionToCancel(null)}
+              >
+                Keep my session
+              </Button>
+              <Button
+                variant="danger"
+                fullWidth
+                loading={cancelling}
+                onClick={() => handleCancelSession(sessionToCancel.id)}
+              >
+                Cancel session
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
-} 
+}

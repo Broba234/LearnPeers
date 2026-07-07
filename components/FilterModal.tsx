@@ -27,6 +27,8 @@ interface FilterModalProps {
   onlyActiveNow: boolean;
   onActiveNowChange: (active: boolean) => void;
   subjectsLoading: boolean;
+  /** Tutors matching the current filters; null while the list is loading. */
+  resultCount?: number | null;
 }
 
 const gradeLabel = (n: number) => (n >= 1 && n <= 4 ? `Year ${n}` : `Grade ${n}`);
@@ -44,6 +46,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   onlyActiveNow,
   onActiveNowChange,
   subjectsLoading,
+  resultCount = null,
 }) => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -310,7 +313,9 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             onClick={onClose}
             className="flex-1 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 shadow-md transition-all"
           >
-            Show Results
+            {resultCount === null
+              ? "Show Results"
+              : `Show ${resultCount} tutor${resultCount === 1 ? "" : "s"}`}
           </button>
         </div>
       </div>

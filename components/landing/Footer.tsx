@@ -7,7 +7,7 @@ import { NodeConstellation } from "./NodeDecor";
 const QUICK_LINKS = [
   { label: "Home", href: "/" },
   { label: "How it works", href: "/#how-it-works" },
-  { label: "Find tutors", href: "/home/student/explore" },
+  { label: "Find tutors", href: "/tutors" },
   { label: "Teach & earn", href: "/auth/register?role=tutor" },
   { label: "FAQ", href: "/#faq" },
 ];

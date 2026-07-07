@@ -122,7 +122,7 @@ export function Features() {
               ))}
             </div>
             <Link
-              href="/home/student/explore"
+              href="/tutors"
               className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-800"
             >
               Explore tutors <ArrowRight className="h-4 w-4" />
@@ -172,7 +172,7 @@ const FAQS = [
   },
   {
     q: 'How much does it cost?',
-    a: 'Each tutor sets their own hourly rate, so pricing varies by subject and tutor. You see the exact price before you book, and payment is handled securely through the platform.',
+    a: 'Each tutor sets their own hourly rate, so pricing varies by subject and tutor — and because tutors are students, rates typically come in well under what tutoring centres charge. You see the exact price before you book, and payment is handled securely through the platform.',
   },
   {
     q: 'Who are the tutors?',

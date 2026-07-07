@@ -168,7 +168,9 @@ const SignUpWizard = () => {
     },
   ];
   const calculateProgress = () => {
-    return Math.round(((activeStep - 1) / (steps.length - 1)) * 100);
+    // Creating the account counts as the first completed step, so the bar
+    // never starts at 0% — don't "simplify" back to (activeStep - 1).
+    return Math.round((activeStep / (steps.length + 1)) * 100);
   };
 
   const HandleChangeSetUpStatus = async () => {
@@ -243,6 +245,21 @@ const SignUpWizard = () => {
                 </div>
 
                 <div className="space-y-2 mb-8 relative z-20">
+                  <div className="flex items-start gap-4 p-4 rounded-xl">
+                    <div className="relative flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-green-600">
+                      <CheckCircle className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-gray-700">
+                          Create account
+                          <span className="block text-[10px]">
+                            Done — your account is ready
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                   {steps.map((step) => (
                     <div
                       key={step.number}
@@ -290,7 +307,7 @@ const SignUpWizard = () => {
                         Your Progress
                       </span>
                       <p className="text-xs text-gray-500 mt-0.5">
-                        Complete all steps to launch workspace
+                        Account created — just a few steps to your first tutor
                       </p>
                     </div>
                     <div className="flex items-center">

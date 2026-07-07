@@ -10,6 +10,7 @@ import {
 } from "@/lib/courses";
 import Avatar from "@/components/ui/Avatar";
 import ShareButton from "@/components/tutor/ShareButton";
+import BookSessionCTA from "@/components/tutor/BookSessionCTA";
 
 export const dynamic = "force-dynamic";
 
@@ -122,8 +123,8 @@ export default async function TutorProfilePage({ params }: { params: Promise<{ i
       {/* Top bar */}
       <header className="sticky top-0 z-30 border-b border-slate-100 bg-white/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-          <Link href="/home/student/explore" className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900">
-            <ArrowLeft className="h-4 w-4" /> Explore
+          <Link href="/tutors" className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900">
+            <ArrowLeft className="h-4 w-4" /> All tutors
           </Link>
           <Link href="/" className="text-sm font-bold tracking-tight text-brand-700">LearnPeers</Link>
         </div>
@@ -286,12 +287,7 @@ export default async function TutorProfilePage({ params }: { params: Promise<{ i
               </div>
             )}
           </div>
-          <Link
-            href={`/home/student/explore?tutor=${p.id}`}
-            className="flex-1 rounded-xl bg-brand-600 py-3 text-center text-sm font-semibold text-white transition hover:bg-brand-700 active:scale-[0.99]"
-          >
-            Book a session
-          </Link>
+          <BookSessionCTA tutorId={p.id} tutorName={p.name || "this tutor"} />
           <ShareButton name={p.name || "this tutor"} />
         </div>
       </div>

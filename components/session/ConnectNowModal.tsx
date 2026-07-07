@@ -11,7 +11,12 @@ interface ConnectTutor {
   id: string;
   name?: string;
   avatar?: string;
-  subjects?: { id?: string; name?: string; code?: string }[];
+  subjects?: {
+    id?: string;
+    name?: string;
+    code?: string;
+    price_1?: number | string | null;
+  }[];
 }
 
 type Phase = "confirm" | "ringing" | "declined";
@@ -124,6 +129,15 @@ export default function ConnectNowModal({
 
   const tutorName = tutor.name || "this tutor";
 
+  // Mirror the server's hold amount (the selected subject's 30-min rate) so
+  // the student sees the exact number before their card is authorized.
+  const holdSubject =
+    (tutor.subjects || []).find((s) => s.id === subjectId) ||
+    (tutor.subjects || [])[0];
+  const holdAmountNum = Number(holdSubject?.price_1);
+  const holdAmount =
+    Number.isFinite(holdAmountNum) && holdAmountNum > 0 ? holdAmountNum : null;
+
   const handleConnect = async () => {
     setSubmitting(true);
     try {
@@ -217,7 +231,11 @@ export default function ConnectNowModal({
                   <Zap className="w-4 h-4" /> {submitting ? "Requesting…" : "Connect now"}
                 </button>
               </div>
-              <p className="text-center text-[11px] text-slate-400">We authorize your saved card to connect and only charge it after your session.</p>
+              <p className="text-center text-[11px] text-slate-400">
+                {holdAmount !== null
+                  ? `We place a temporary $${holdAmount.toFixed(2)} hold on your saved card — you're only charged after your session.`
+                  : "We authorize your saved card to connect and only charge it after your session."}
+              </p>
             </div>
           </>
         )}

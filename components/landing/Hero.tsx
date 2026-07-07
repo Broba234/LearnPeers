@@ -90,7 +90,7 @@ export default function Hero() {
             className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start"
           >
             <Link
-              href="/home/student/explore"
+              href="/tutors"
               className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand-600 to-brand-700 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-600/25 ring-1 ring-white/20 transition hover:shadow-xl hover:shadow-brand-600/30 hover:brightness-[1.04] active:scale-[0.98] sm:w-auto sm:text-base"
             >
               Find a tutor

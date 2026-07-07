@@ -53,7 +53,11 @@ export default function ExploreTutors() {
       fetch("/api/sessions/confirm-payment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId }),
+        // paymentIntentId is REQUIRED by the (hardened) confirm-payment route —
+        // it re-verifies the PI succeeded for this session. After a 3D-Secure
+        // redirect Stripe returns it as ?payment_intent=… ; forward it or the
+        // confirm 400s and a paid session never flips to "accepted".
+        body: JSON.stringify({ sessionId, paymentIntentId: paymentIntent }),
       })
         .then((res) => {
           if (res.ok) toast.success("Payment successful! Your session has been booked.");
@@ -117,11 +121,26 @@ export default function ExploreTutors() {
   };
 
   // Deep link from a shared tutor profile (/tutor/[id] → "Book a session"):
-  // auto-open that tutor's booking once the list has loaded.
+  // auto-open that tutor's booking once the list has loaded. A pick made while
+  // logged out survives the signup/login hop via localStorage, so check that
+  // too — the guest lands here with their tutor already open.
   useEffect(() => {
     if (loading || tutors.length === 0) return;
-    const tid = new URLSearchParams(window.location.search).get("tutor");
+    let tid = new URLSearchParams(window.location.search).get("tutor");
+    if (!tid) {
+      try {
+        const raw = localStorage.getItem("lp_pending_tutor");
+        if (raw) tid = JSON.parse(raw)?.id ?? null;
+      } catch {
+        /* ignore malformed storage */
+      }
+    }
     if (!tid) return;
+    try {
+      localStorage.removeItem("lp_pending_tutor");
+    } catch {
+      /* ignore */
+    }
     const t = tutors.find((x) => x.id === tid);
     if (t) {
       openTutorProfileModal(t);
@@ -253,6 +272,12 @@ export default function ExploreTutors() {
   const activeFilterCount = validStudentSubjectIds.length + (gradeFilter ? 1 : 0) + (onlyActiveNow ? 1 : 0);
   const activeNowTutors = tutors.filter((t) => t.derivedActiveNow);
   const displayedTutors = filterAndSortTutors(tutors, query, sortBy);
+  // Live count for the filter modal CTA — matches what the page will render
+  // (grade only narrows the subject list; Active Now already refetched `tutors`).
+  const matchingTutorCount =
+    validStudentSubjectIds.length > 0
+      ? filterAndSortTutors(allTutorsForSelectedSubjects, query, sortBy).length
+      : displayedTutors.length;
 
   return (
     <div className="min-h-screen bg-[#FAFAF9]">
@@ -497,6 +522,7 @@ export default function ExploreTutors() {
         onlyActiveNow={onlyActiveNow}
         onActiveNowChange={setOnlyActiveNow}
         subjectsLoading={subjectsLoading}
+        resultCount={loading ? null : matchingTutorCount}
       />
     </div>
   );

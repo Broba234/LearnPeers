@@ -1,7 +1,8 @@
 "use client";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useState, FormEvent, Suspense } from "react";
+import { useState, useEffect, FormEvent, Suspense } from "react";
 import Link from "next/link";
+import { BadgeCheck } from "lucide-react";
 import { supabase } from '@/lib/supabase/client' // correct
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import { Button, Input } from "@/components/ui/primitives";
@@ -17,6 +18,22 @@ function RegisterContent() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [pendingTutorName, setPendingTutorName] = useState<string | null>(null);
+
+    // A tutor picked while logged out (public /tutor/[id] → "Book a session")
+    // is waiting in localStorage; showing it here turns signup into the last
+    // step of a booking already in progress rather than a fresh form.
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem("lp_pending_tutor");
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (parsed?.name) setPendingTutorName(String(parsed.name));
+            }
+        } catch {
+            /* ignore malformed storage */
+        }
+    }, []);
 
     // Public sign-up may only create students or tutors. Admin is provisioned separately.
     const allowedRoles = ["student", "tutor"];
@@ -141,6 +158,12 @@ function RegisterContent() {
             <div className="text-ink-500 text-sm mb-2">
               Registering as {role.charAt(0).toUpperCase() + role.slice(1)}
             </div>
+            {normalizedRole === "student" && pendingTutorName && (
+              <div className="mt-2 inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700 ring-1 ring-emerald-100">
+                <BadgeCheck className="h-3.5 w-3.5 flex-shrink-0" />
+                Your tutor pick is saved — {pendingTutorName} will be waiting after setup.
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit} className="mt-6">

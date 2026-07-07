@@ -2,7 +2,7 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { toast } from "sonner";
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -77,6 +77,10 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
   const [breakdown, setBreakdown] = useState<ChargeBreakdown | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  // True while the card payment (incl. an in-progress 3-D Secure challenge) is
+  // settling. Locks the modal shut so a stray close doesn't unmount Stripe
+  // Elements mid-authentication and leave the charge stuck "incomplete".
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState<
     "0.5" | "1" | "1.5" | any
   >("0.5");
@@ -97,6 +101,24 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
   );
   const [calendarData, setCalendarData] = useState<CalendarDay[]>([]);
   const [calendarLoading, setCalendarLoading] = useState(false);
+
+  // Stripe Elements options MUST be referentially stable: a fresh object on a
+  // re-render makes react-stripe-js re-initialise Elements, which tears down an
+  // in-progress 3-D Secure challenge → "authentication began but not completed".
+  // Memoise on clientSecret so the provider is created once per payment intent.
+  const elementsOptions = useMemo(
+    () =>
+      clientSecret
+        ? {
+            clientSecret,
+            appearance: {
+              theme: "stripe" as const,
+              variables: { borderRadius: "12px" },
+            },
+          }
+        : undefined,
+    [clientSecret]
+  );
 
   const timeZoneLabel =
     Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
@@ -129,6 +151,22 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
   useEffect(() => {
     fetchCalendar();
   }, [fetchCalendar]);
+
+  // When the calendar first loads, jump to the earliest date that actually has
+  // availability instead of leaving the user on an empty "Today". Runs once so
+  // it never fights a date the user picks themselves.
+  const autoPickedDateRef = useRef(false);
+  useEffect(() => {
+    if (autoPickedDateRef.current || calendarLoading || calendarData.length === 0)
+      return;
+    autoPickedDateRef.current = true;
+    const hasSlots = (ds: string) =>
+      calendarData.some((d) => d.date === ds && d.slots.length > 0);
+    if (!hasSlots(selectedDateStr)) {
+      const firstWithSlots = dateOptions.find(({ dateStr }) => hasSlots(dateStr));
+      if (firstWithSlots) setSelectedDateStr(firstWithSlots.dateStr);
+    }
+  }, [calendarLoading, calendarData, selectedDateStr, dateOptions]);
 
   // Get slots for the selected date from calendar data
   const slotsForSelectedDate = useMemo(() => {
@@ -176,6 +214,19 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
     }
     return result;
   }, [selectedDuration, slotsForSelectedDate, selectedDateStr]);
+
+  // Default to the earliest slot so the form starts complete — the user scans
+  // and adjusts instead of building the booking from scratch.
+  useEffect(() => {
+    if (calendarLoading) return;
+    if (timeSlots.length === 0) {
+      setSelectedTime(null);
+      return;
+    }
+    setSelectedTime((prev) =>
+      prev !== null && timeSlots.includes(prev) ? prev : timeSlots[0]
+    );
+  }, [timeSlots, calendarLoading]);
 
   const selectedTutorSubject = useMemo(() => {
     if (!Array.isArray(tutor.subjects) || tutor.subjects.length === 0) {
@@ -266,6 +317,22 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
     if (durationValue === "1.5") return getNumber(selectedTutorSubject.price_3);
     return null;
   };
+
+  // Cheapest per-hour duration for this subject; null when the tutor's rates
+  // are flat (no honest "best value" to point at).
+  const bestValueDuration = (() => {
+    let best: { value: string; rate: number } | null = null;
+    let worstRate: number | null = null;
+    for (const option of durationOptions) {
+      const price = getSessionPrice(option.value);
+      if (price === null) continue;
+      const rate = price / Number(option.value);
+      if (best === null || rate < best.rate) best = { value: option.value, rate };
+      if (worstRate === null || rate > worstRate) worstRate = rate;
+    }
+    if (!best || worstRate === null || worstRate - best.rate < 0.005) return null;
+    return best.value;
+  })();
 
   const formatTimeLabel = (minutes: number) => {
     const hour24 = Math.floor(minutes / 60) % 24;
@@ -416,7 +483,9 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+            disabled={paymentProcessing}
+            title={paymentProcessing ? "Please wait — completing your payment…" : "Close"}
+            className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 w-8 h-8 rounded-full flex items-center justify-center transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <svg
               width="16"
@@ -442,22 +511,14 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
               <p className="text-sm text-gray-500 mb-5">
                 Pay securely with Stripe
               </p>
-              <Elements
-                stripe={stripePromise}
-                options={{
-                  clientSecret,
-                  appearance: {
-                    theme: "stripe",
-                    variables: { borderRadius: "12px" },
-                  },
-                }}
-              >
+              <Elements stripe={stripePromise} options={elementsOptions}>
                 <PaymentForm
                   sessionId={sessionId}
                   breakdown={breakdown}
                   tutorName={tutor.name || "Tutor"}
                   onSuccess={handlePaymentSuccess}
                   onBack={handleBackToBooking}
+                  onProcessingChange={setPaymentProcessing}
                 />
               </Elements>
             </div>
@@ -571,6 +632,17 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                             ${price.toFixed(2)}
                           </span>
                         )}
+                        {option.value === bestValueDuration && (
+                          <span
+                            className={`block text-[10px] font-semibold mt-0.5 ${
+                              selectedDuration === option.value
+                                ? "text-emerald-200"
+                                : "text-emerald-600"
+                            }`}
+                          >
+                            Best value
+                          </span>
+                        )}
                       </button>
                     );
                   })}
@@ -638,13 +710,14 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                   </div>
                 )}
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                  <label htmlFor="booking-topic" className="block text-xs font-medium text-gray-600 mb-1">
                     Topic{" "}
                     <span className="text-gray-400 font-normal">
                       (optional)
                     </span>
                   </label>
                   <input
+                    id="booking-topic"
                     type="text"
                     value={bookingTopic}
                     onChange={(e) => setBookingTopic(e.target.value)}
@@ -653,13 +726,14 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                  <label htmlFor="booking-notes" className="block text-xs font-medium text-gray-600 mb-1">
                     Notes{" "}
                     <span className="text-gray-400 font-normal">
                       (optional)
                     </span>
                   </label>
                   <textarea
+                    id="booking-notes"
                     value={bookingNotes}
                     onChange={(e) => setBookingNotes(e.target.value)}
                     placeholder="Any specific requirements?"
