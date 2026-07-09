@@ -24,6 +24,8 @@ export async function GET() {
         )
       `)
       .eq('student_id', user.id)
+      // awaiting_payment = abandoned/in-flight checkout draft, not a booking.
+      .neq('status', 'awaiting_payment')
       .order('created_at', { ascending: false });
 
     if (fetchError) { 

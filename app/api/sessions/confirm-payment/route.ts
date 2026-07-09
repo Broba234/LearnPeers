@@ -1,6 +1,8 @@
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { stripe } from "@/lib/stripe";
 import { getAuthedUser } from "@/lib/api-auth";
+import { finalizePaidSession } from "@/lib/session-payment";
+import { syncSavedPaymentMethodFromIntent } from "@/lib/payment-methods";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -9,9 +11,11 @@ const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
- * Marks a pending session accepted — but ONLY after verifying a real succeeded
- * payment exists for it. This is a UX accelerator; the Stripe webhook
- * (signature-verified) is the source of truth and does the same transition.
+ * Marks an awaiting_payment (draft) session accepted — but ONLY after verifying
+ * a real succeeded payment exists for it. This is a UX accelerator; the Stripe
+ * webhook (signature-verified) is the source of truth and does the same
+ * transition. Notifying the tutor happens inside finalizePaidSession, gated on
+ * winning the status flip, so webhook + client can't double-notify.
  *
  * Hardened: requires auth, the caller must be the session's student, and a
  * succeeded PaymentIntent for this session must exist. Without these checks
@@ -46,7 +50,7 @@ export async function POST(request: NextRequest) {
     if (session.student_id !== user.id) {
       return NextResponse.json({ error: "Not authorized" }, { status: 403 });
     }
-    if (session.status !== "pending") {
+    if (!["awaiting_payment", "pending"].includes(session.status)) {
       // Already handled (e.g. by the webhook) — treat as success, idempotent.
       return NextResponse.json({ success: true, status: session.status });
     }
@@ -70,22 +74,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { data, error } = await supabase
-      .from("Sessions")
-      .update({ status: "accepted" })
-      .eq("id", sessionId)
-      .eq("status", "pending")
-      .select()
-      .single();
+    await finalizePaidSession(supabase, pi);
+    // If the student asked to keep this card, mirror it for one-tap next time.
+    await syncSavedPaymentMethodFromIntent(stripe, pi);
 
-    if (error) {
-      return NextResponse.json(
-        { error: "Failed to confirm session", details: error.message },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ success: true, session: data });
+    return NextResponse.json({ success: true });
   } catch (err) {
     console.error("[confirm-payment] Error:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

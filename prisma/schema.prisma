@@ -39,6 +39,7 @@ model Profiles {
   notify_email_enabled                   Boolean                    @default(true)
   notify_email_target                    String                     @default("account")
   stripe_account_id                      String?                    @db.VarChar(255)
+  stripe_customer_id                     String?
   institution_id                         String?                    @db.Uuid
   is_owner                               Boolean                    @default(false)
   admin_pages                            String[]                   @default([])
@@ -56,6 +57,7 @@ model Profiles {
   CourseReviews_as_tutor                 CourseReviews[]            @relation("CourseReviews_tutor")
   CourseReviews_as_student               CourseReviews[]            @relation("CourseReviews_student")
   LegalAcceptances                       LegalAcceptances[]
+  StudentPaymentMethods                  StudentPaymentMethods[]
 
   @@schema("public")
 }
@@ -99,6 +101,7 @@ model Sessions {
   date                                   DateTime? @db.Date
   subject_id                             String?   @db.Uuid
   is_instant                             Boolean   @default(false)
+  payment_intent_id                      String?
   Profiles_Sessions_student_idToProfiles Profiles  @relation("Sessions_student_idToProfiles", fields: [student_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sessions_student_id_fkey")
   Profiles_Sessions_tutor_idToProfiles   Profiles  @relation("Sessions_tutor_idToProfiles", fields: [tutor_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sessions_tutor_id_fkey")
 
@@ -359,6 +362,25 @@ model CourseReviews {
 
   @@index([course_asset_id])
   @@index([tutor_id])
+  @@schema("public")
+}
+
+/// A student's saved card on file. The row id IS the Stripe PaymentMethod id
+/// (pm_…); Stripe stays the source of truth for the card itself — these columns
+/// are denormalized display info ("Visa •••• 4242") so listing saved cards
+/// never needs a Stripe round-trip. Exactly one row per student is the default.
+model StudentPaymentMethods {
+  id         String   @id
+  profile_id String   @db.Uuid
+  brand      String
+  last4      String
+  exp_month  Int
+  exp_year   Int
+  is_default Boolean  @default(false)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  Profiles   Profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([profile_id])
   @@schema("public")
 }
 

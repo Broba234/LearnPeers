@@ -14,11 +14,13 @@ import {
   PrinterCheck,
   ArrowRight,
   Book,
+  CreditCard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import WizardTimeSlot from "../ui/components/WizardTimeSlot";
 import SelectSubject from "../ui/components/SelectSubject";
 import EducationStep from "@/components/onboarding/EducationStep";
+import AddCardForm from "@/components/payments/AddCardForm";
 import { GraduationCap } from "lucide-react";
 export type Subjects = {
   id: string;
@@ -88,7 +90,9 @@ const SignUpWizard = () => {
           setSelectedSubjects(normalizedSubjects);
 
           // Resume where they left off so logging back in never restarts the
-          // flow. Steps: 1 School · 2 Subjects · 3 Finalize. Advance-only.
+          // flow. Steps: 1 School · 2 Subjects · 3 Payment (optional) ·
+          // 4 Finalize. Advance-only; payment is skippable so resuming at 3
+          // never blocks anyone.
           const hasEducation =
             (Array.isArray(profileData.ProfileInstitutions) &&
               profileData.ProfileInstitutions.length > 0) ||
@@ -140,6 +144,7 @@ const SignUpWizard = () => {
   };
   const [activeStep, setActiveStep] = useState(1);
   const [educationComplete, setEducationComplete] = useState(false);
+  const [cardSaved, setCardSaved] = useState(false);
 
   const steps = [
     {
@@ -160,6 +165,14 @@ const SignUpWizard = () => {
     },
     {
       number: 3,
+      title: "Add a payment method",
+      des: "Optional — save a card for one-tap booking. You can do this later.",
+      bigdes:
+        "Optional — save a card for one-tap booking. You can do this later.",
+      icon: <CreditCard className="w-4 h-4" />,
+    },
+    {
+      number: 4,
       title: "Finalize your setup",
       des: "You're all set — jump in and find your first tutor",
       bigdes:
@@ -219,6 +232,11 @@ const SignUpWizard = () => {
       }
     }
     if (activeStep === 3) {
+      // Payment method is optional — Continue doubles as "Skip for now" and
+      // never blocks: saving a card happens inside the step's own form.
+      setActiveStep(4);
+    }
+    if (activeStep === 4) {
       HandleChangeSetUpStatus();
     }
   };
@@ -422,7 +440,48 @@ const SignUpWizard = () => {
                     )}
                     {steps[activeStep - 1].number == 3 && (
                       <motion.div
-                        key="step-3"
+                        key="step-payment"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                      >
+                        <div className="max-w-md space-y-4">
+                          <div className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+                            <CreditCard className="w-3.5 h-3.5" />
+                            Optional — you can do this later
+                          </div>
+                          <p className="text-sm text-gray-600">
+                            Save a card once and book any tutor in one tap.
+                            You're only charged when you book a session, and you
+                            can manage your cards anytime in Settings → Payment.
+                          </p>
+                          {cardSaved ? (
+                            <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                              <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                              <p className="text-sm text-emerald-800">
+                                Card saved — you're all set for one-tap booking.
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="rounded-xl border border-gray-200 bg-white p-4">
+                              <AddCardForm
+                                onSaved={() => setCardSaved(true)}
+                                submitLabel="Save card"
+                              />
+                            </div>
+                          )}
+                          <p className="text-xs text-gray-400">
+                            Prefer to decide later? Just hit{" "}
+                            {cardSaved ? "Continue" : "Skip for now"} — nothing
+                            is required here.
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                    {steps[activeStep - 1].number == 4 && (
+                      <motion.div
+                        key="step-finish"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
@@ -490,7 +549,7 @@ const SignUpWizard = () => {
                   )}
                   
                   {
-                    activeStep < 3 && (
+                    activeStep < steps.length && (
                       <button
                         type="button"
                         disabled={loading || (activeStep == 1 && !educationComplete) || (activeStep == 2 && selectedSubjects.length === 0)}
@@ -505,7 +564,7 @@ const SignUpWizard = () => {
                           }
   `}
                       >
-                        Continue
+                        {activeStep === 3 && !cardSaved ? "Skip for now" : "Continue"}
                         {loading ? (
                           // Loading spinner
                           <div className="w-5 h-5 relative">
@@ -527,7 +586,11 @@ const SignUpWizard = () => {
                     onClick={() => HandleNextButton()}
                     className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-600 text-white rounded-xl hover:bg-brand-700 transition-colors font-medium"
                   >
-                    Continue
+                    {activeStep === 3 && !cardSaved
+                      ? "Skip for now"
+                      : activeStep === steps.length
+                        ? "Finish"
+                        : "Continue"}
                     <ChevronRight className="w-5 h-5" />
                   </button>
                 </div>

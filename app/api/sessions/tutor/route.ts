@@ -23,6 +23,8 @@ export async function GET() {
         )
       `)
       .eq('tutor_id', user.id)
+      // awaiting_payment = unpaid booking draft; it must never reach the tutor.
+      .neq('status', 'awaiting_payment')
       .order('created_at', { ascending: false });
 
     if (fetchError) {

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
-import { prisma } from "@/lib/prisma";
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
 import { createNotification } from "@/lib/notifications";
+import { finalizePaidSession } from "@/lib/session-payment";
+import { syncSavedPaymentMethodFromIntent } from "@/lib/payment-methods";
 
 export const runtime = "nodejs";
 
@@ -33,40 +34,26 @@ export async function POST(req: NextRequest) {
     switch (event.type) {
       case "payment_intent.succeeded": {
         const pi = event.data.object as import("stripe").Stripe.PaymentIntent;
-        const sessionId = pi.metadata?.session_id;
-        if (!sessionId) break;
+        // Instant-session holds succeed when captured at session END — that's
+        // settlement of an already-accepted session, not a new booking.
+        if (pi.metadata?.kind === "instant_hold") break;
 
-        const { data: session } = await supabase
-          .from("Sessions")
-          .select("status, tutor_id, student_id")
-          .eq("id", sessionId)
-          .single();
-
-        if (session && session.status === "pending") {
-          await supabase
-            .from("Sessions")
-            .update({ status: "accepted" })
-            .eq("id", sessionId);
-
-          const tutor = await prisma.profiles.findUnique({ where: { id: session.tutor_id }, select: { name: true } });
-
-          await createNotification(supabase, {
-            userId: session.student_id,
-            type: "session_accepted",
-            title: "Session Confirmed",
-            body: `Your payment was successful. ${tutor?.name ?? "Your tutor"} has been notified.`,
-            sessionId,
-            actorId: session.tutor_id,
-          });
-        }
+        // Source of truth: flip the awaiting_payment draft to accepted and
+        // notify tutor + student. Idempotent vs. the client confirm path.
+        await finalizePaidSession(supabase, pi);
+        await syncSavedPaymentMethodFromIntent(stripe, pi);
         break;
       }
 
       case "payment_intent.payment_failed": {
         const pi = event.data.object as import("stripe").Stripe.PaymentIntent;
         const sessionId = pi.metadata?.session_id;
-        if (!sessionId) break;
+        if (!sessionId || pi.metadata?.kind === "instant_hold") break;
 
+        // Only legacy pre-draft bookings need cancelling: they were created
+        // `pending` (tutor-visible) before payment. awaiting_payment drafts
+        // are invisible and the same PaymentIntent is retried in the modal
+        // after a decline, so cancelling them would break the retry.
         const { data: session } = await supabase
           .from("Sessions")
           .select("status, student_id, tutor_id")
@@ -77,7 +64,8 @@ export async function POST(req: NextRequest) {
           await supabase
             .from("Sessions")
             .update({ status: "cancelled" })
-            .eq("id", sessionId);
+            .eq("id", sessionId)
+            .eq("status", "pending");
 
           await createNotification(supabase, {
             userId: session.student_id,

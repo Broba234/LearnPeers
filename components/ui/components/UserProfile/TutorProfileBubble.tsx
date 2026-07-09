@@ -6,8 +6,10 @@ import React, { useEffect, useMemo, useState, useCallback, useRef } from "react"
 import SearchableSelect from "@/components/ui/SearchableSelect";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { PaymentForm } from "./PaymentForm";
-import type { ChargeBreakdown } from "@/lib/billing";
+import { PaymentForm, type CreatedBookingIntent } from "./PaymentForm";
+import { SavedCardCheckout } from "./SavedCardCheckout";
+import type { SavedCard } from "@/components/payments/cardDisplay";
+import { computeCharge, type ChargeBreakdown } from "@/lib/billing";
 import { getDateString, generateDateOptions } from "./tutorBooking.utils";
 
 const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
@@ -73,10 +75,15 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
   const isLiveNow = !!(tutor.derivedActiveNow || tutor.isAvailableNow);
 
   const [step, setStep] = useState<1 | 2>(1);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [breakdown, setBreakdown] = useState<ChargeBreakdown | null>(null);
-  const [sessionId, setSessionId] = useState<string | null>(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  // Set-and-forget payment state: the student's saved cards (null while
+  // loading) and whether this tutor can actually be charged right now
+  // (null = preflight pending/failed → assume payable, the server re-checks).
+  const [savedCards, setSavedCards] = useState<SavedCard[] | null>(null);
+  const [canCharge, setCanCharge] = useState<boolean | null>(null);
+  const [checkoutMode, setCheckoutMode] = useState<"saved" | "new">("new");
+  const [saveCard, setSaveCard] = useState(true);
   // True while the card payment (incl. an in-progress 3-D Secure challenge) is
   // settling. Locks the modal shut so a stray close doesn't unmount Stripe
   // Elements mid-authentication and leave the charge stuck "incomplete".
@@ -105,20 +112,55 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
   // Stripe Elements options MUST be referentially stable: a fresh object on a
   // re-render makes react-stripe-js re-initialise Elements, which tears down an
   // in-progress 3-D Secure challenge → "authentication began but not completed".
-  // Memoise on clientSecret so the provider is created once per payment intent.
+  // Deferred-intent mode: the PaymentElement renders from amount/currency alone;
+  // the real PaymentIntent (and the booking) is only created when the student
+  // hits Pay. setupFutureUsage must mirror what the server puts on the intent.
   const elementsOptions = useMemo(
     () =>
-      clientSecret
+      breakdown
         ? {
-            clientSecret,
+            mode: "payment" as const,
+            amount: breakdown.amountCents,
+            currency: "cad",
+            paymentMethodTypes: ["card"],
+            ...(saveCard ? { setupFutureUsage: "off_session" as const } : {}),
             appearance: {
               theme: "stripe" as const,
               variables: { borderRadius: "12px" },
             },
           }
         : undefined,
-    [clientSecret]
+    [breakdown, saveCard]
   );
+
+  // Load the student's saved cards + whether this tutor is payable as soon as
+  // the modal opens, so step 1's "Continue" can route straight to the right
+  // checkout (one-tap summary / card entry / no-payment request).
+  useEffect(() => {
+    if (!isOpen || !tutor.id) return;
+    let cancelled = false;
+    fetch("/api/stripe/payment-method")
+      .then((r) => r.json())
+      .then((d) => {
+        if (!cancelled) setSavedCards(Array.isArray(d.cards) ? d.cards : []);
+      })
+      .catch(() => {
+        if (!cancelled) setSavedCards([]);
+      });
+    fetch(
+      `/api/stripe/create-session-payment-intent?tutorId=${encodeURIComponent(tutor.id)}`
+    )
+      .then((r) => r.json())
+      .then((d) => {
+        if (!cancelled && typeof d.canCharge === "boolean") setCanCharge(d.canCharge);
+      })
+      .catch(() => {
+        /* leave null → assume payable; the server re-checks on POST */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, tutor.id]);
 
   const timeZoneLabel =
     Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
@@ -348,6 +390,39 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
     return `${hours.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:00`;
   };
 
+  /** The booking fields shared by every payment path, from current form state. */
+  const buildBookingPayload = () => {
+    const subjectIdForBooking =
+      selectedSubjectId && selectedSubjectId.length > 0
+        ? selectedSubjectId
+        : selectedTutorSubject && typeof selectedTutorSubject.id === "string"
+          ? selectedTutorSubject.id
+          : undefined;
+    return {
+      tutorId: tutor.id,
+      start_time: selectedTime !== null ? minutesToTimeString(selectedTime) : undefined,
+      duration: Number(selectedDuration),
+      topic: bookingTopic.trim() || undefined,
+      notes: bookingNotes.trim() || undefined,
+      date: selectedDateStr,
+      subjectId: subjectIdForBooking,
+    };
+  };
+
+  const handleSkipPayment = () => {
+    toast.success(
+      `Session requested with ${tutor.name}! They'll confirm shortly. Payment is settled later.`
+    );
+    onBookSession?.(tutor);
+    onClose();
+  };
+
+  /**
+   * Step 1 → checkout. Nothing is created server-side here (the booking and
+   * its charge happen together at pay time); this just routes to the right
+   * step-2 — one-tap saved card, new-card entry — or, for tutors who can't be
+   * charged yet, books immediately without payment like the old flow.
+   */
   const handleConfirm = async () => {
     if (!tutor || !userId || !selectedTime) {
       toast.error("Please select a time slot");
@@ -361,69 +436,74 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
       return;
     }
 
-    setPaymentLoading(true);
-    try {
-      const bookingTime = minutesToTimeString(selectedTime);
-      const subjectIdForBooking =
-        selectedSubjectId && selectedSubjectId.length > 0
-          ? selectedSubjectId
-          : selectedTutorSubject && typeof selectedTutorSubject.id === "string"
-            ? selectedTutorSubject.id
-            : undefined;
+    // Tutor isn't payable → request the session without payment (server
+    // re-verifies; if it disagrees it answers requiresPayment and we fall
+    // through to the normal checkout).
+    if (canCharge === false) {
+      setPaymentLoading(true);
+      try {
+        const res = await fetch("/api/stripe/create-session-payment-intent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...buildBookingPayload(), mode: "no_payment" }),
+        });
+        const data = await res.json();
+        if (data.skipPayment) {
+          handleSkipPayment();
+          return;
+        }
+        if (!res.ok && !data.requiresPayment) {
+          toast.error(data.error || "Failed to create booking");
+          return;
+        }
+        setCanCharge(true); // stale preflight — run the real payment flow
+      } catch (err) {
+        console.error("Booking error:", err);
+        toast.error("An error occurred. Please try again.");
+        return;
+      } finally {
+        setPaymentLoading(false);
+      }
+    }
 
+    // Display-only breakdown; the server recomputes all amounts from its own
+    // price lookup when the charge is created.
+    setBreakdown(computeCharge(amount));
+    setCheckoutMode(savedCards && savedCards.length > 0 ? "saved" : "new");
+    setSaveCard(true);
+    setStep(2);
+  };
+
+  /** Creates the awaiting_payment draft + PaymentIntent (new-card path). */
+  const createNewCardIntent = async (): Promise<CreatedBookingIntent> => {
+    try {
       const res = await fetch("/api/stripe/create-session-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tutorId: tutor.id,
-          studentId: userId,
-          amount,
-          start_time: bookingTime,
-          duration: Number(selectedDuration),
-          topic: bookingTopic.trim() || undefined,
-          notes: bookingNotes.trim() || undefined,
-          date: selectedDateStr,
-          subjectId: subjectIdForBooking,
-        }),
+        body: JSON.stringify({ ...buildBookingPayload(), saveCard }),
       });
-
       const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.error || "Failed to create booking");
-        setPaymentLoading(false);
-        return;
-      }
-
-      // Payments aren't collectable right now (Stripe not wired / tutor not
-      // onboarded) — the booking was still created. Confirm it and close.
-      if (data.skipPayment) {
-        toast.success(
-          `Session requested with ${tutor.name}! They'll confirm shortly. Payment is settled later.`
-        );
-        onBookSession?.(tutor);
-        onClose();
-        return;
-      }
-
-      setClientSecret(data.clientSecret);
-      setBreakdown(data.breakdown ?? null);
-      setSessionId(data.sessionId);
-      setStep(2);
-    } catch (err) {
-      console.error("Payment intent error:", err);
-      toast.error("An error occurred. Please try again.");
-    } finally {
-      setPaymentLoading(false);
+      if (!res.ok) return { error: data.error || "Failed to create booking" };
+      return data;
+    } catch {
+      return { error: "An error occurred. Please try again." };
     }
+  };
+
+  /** One-tap path: server creates AND confirms the charge on the saved card. */
+  const createAndConfirmWithSavedCard = async (paymentMethodId: string) => {
+    const res = await fetch("/api/stripe/create-session-payment-intent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...buildBookingPayload(), paymentMethodId }),
+    });
+    return res.json();
   };
 
   const handlePaymentSuccess = () => {
     toast.success(`Session successfully booked with ${tutor.name}! Payment complete.`);
     setStep(1);
-    setClientSecret(null);
     setBreakdown(null);
-    setSessionId(null);
     setSelectedTime(null);
     setBookingTopic("");
     setBookingNotes("");
@@ -433,9 +513,7 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
 
   const handleBackToBooking = () => {
     setStep(1);
-    setClientSecret(null);
     setBreakdown(null);
-    setSessionId(null);
   };
 
   const formatDateLabel = (date: Date, dateStr: string) => {
@@ -503,24 +581,42 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
 
         {/* Content */}
         <div className="p-6">
-          {step === 2 && clientSecret && stripePromise && sessionId && breakdown ? (
+          {step === 2 && stripePromise && breakdown ? (
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                Complete Payment
+                {checkoutMode === "saved" ? "Confirm & Pay" : "Complete Payment"}
               </h3>
               <p className="text-sm text-gray-500 mb-5">
                 Pay securely with Stripe
               </p>
-              <Elements stripe={stripePromise} options={elementsOptions}>
-                <PaymentForm
-                  sessionId={sessionId}
+              {checkoutMode === "saved" && savedCards && savedCards.length > 0 ? (
+                <SavedCardCheckout
+                  cards={savedCards}
                   breakdown={breakdown}
                   tutorName={tutor.name || "Tutor"}
+                  stripePromise={stripePromise}
+                  createAndConfirm={createAndConfirmWithSavedCard}
                   onSuccess={handlePaymentSuccess}
+                  onSkipPayment={handleSkipPayment}
+                  onUseNewCard={() => setCheckoutMode("new")}
                   onBack={handleBackToBooking}
                   onProcessingChange={setPaymentProcessing}
                 />
-              </Elements>
+              ) : (
+                <Elements stripe={stripePromise} options={elementsOptions}>
+                  <PaymentForm
+                    breakdown={breakdown}
+                    tutorName={tutor.name || "Tutor"}
+                    saveCard={saveCard}
+                    onSaveCardChange={setSaveCard}
+                    createIntent={createNewCardIntent}
+                    onSuccess={handlePaymentSuccess}
+                    onSkipPayment={handleSkipPayment}
+                    onBack={handleBackToBooking}
+                    onProcessingChange={setPaymentProcessing}
+                  />
+                </Elements>
+              )}
             </div>
           ) : (
             <div className="space-y-6">
@@ -793,7 +889,11 @@ const TutorProfileBubble: React.FC<TutorProfileBubbleProps> = ({
                     disabled={selectedTime === null || paymentLoading}
                     className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
-                    {paymentLoading ? "Preparing…" : "Confirm & Pay"}
+                    {paymentLoading
+                      ? "Preparing…"
+                      : canCharge === false
+                        ? "Request Session"
+                        : "Continue"}
                   </button>
                 </div>
               </div>

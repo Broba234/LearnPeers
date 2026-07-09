@@ -1,5 +1,7 @@
 import { stripe } from "@/lib/stripe";
 import { createSupabaseAdminClient } from '@/lib/supabase/admin';
+import { finalizePaidSession } from "@/lib/session-payment";
+import { syncSavedPaymentMethodFromIntent } from "@/lib/payment-methods";
 import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -43,18 +45,10 @@ export async function POST(request: NextRequest) {
 
     const supabase = createSupabaseAdminClient();
 
-    const { error } = await supabase
-      .from("Sessions")
-      .update({ status: "accepted" })
-      .eq("id", sessionId)
-      .eq("status", "pending");
-
-    if (error) {
-      return NextResponse.json(
-        { error: "Failed to confirm session", details: error.message },
-        { status: 500 }
-      );
-    }
+    // Same idempotent finalize as the webhook / confirm-payment paths: flip
+    // the draft to accepted and notify only if this call wins the transition.
+    await finalizePaidSession(supabase, paymentIntent);
+    await syncSavedPaymentMethodFromIntent(stripe, paymentIntent);
 
     return NextResponse.json({ success: true, sessionId });
   } catch (err) {

@@ -1,14 +1,16 @@
 import { stripe } from "@/lib/stripe";
 import { getAuthedUser } from "@/lib/api-auth";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { getOrCreateStripeCustomer } from "@/lib/payment-methods";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
 /**
- * Start saving a card on file for the student (the gas-station model holds
- * against this card later). Creates/loads a Stripe Customer, persists its id on
- * the profile, and returns a SetupIntent client secret for Stripe Elements.
+ * Start saving a card on file for the student (set-and-forget payments and
+ * the gas-station hold both charge against it later). Creates/loads their
+ * Stripe Customer and returns a SetupIntent client secret for Stripe Elements.
+ * After the client confirms the SetupIntent, it POSTs the resulting
+ * PaymentMethod id to /api/stripe/payment-method to persist the display info.
  */
 export async function POST() {
   try {
@@ -20,23 +22,7 @@ export async function POST() {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    const supabase = createSupabaseAdminClient();
-    const { data: profile } = await supabase
-      .from("Profiles")
-      .select("stripe_customer_id, name")
-      .eq("id", user.id)
-      .single();
-
-    let customerId = profile?.stripe_customer_id as string | undefined;
-    if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: user.email || undefined,
-        name: profile?.name || undefined,
-        metadata: { profile_id: user.id },
-      });
-      customerId = customer.id;
-      await supabase.from("Profiles").update({ stripe_customer_id: customerId }).eq("id", user.id);
-    }
+    const customerId = await getOrCreateStripeCustomer(stripe, user.id, user.email);
 
     const si = await stripe.setupIntents.create({
       customer: customerId,

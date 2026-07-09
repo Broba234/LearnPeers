@@ -113,8 +113,18 @@ export async function POST(request: NextRequest) {
       const cid = profile?.stripe_customer_id as string | undefined;
       let pmId: string | undefined;
       if (cid) {
-        const pms = await stripe!.paymentMethods.list({ customer: cid, type: "card" });
-        pmId = pms.data[0]?.id;
+        // Hold against the student's chosen default card; fall back to
+        // whatever Stripe has for customers saved before the mirror existed.
+        const saved = await prisma.studentPaymentMethods.findFirst({
+          where: { profile_id: studentId },
+          orderBy: [{ is_default: "desc" }, { created_at: "desc" }],
+          select: { id: true },
+        });
+        pmId = saved?.id;
+        if (!pmId) {
+          const pms = await stripe!.paymentMethods.list({ customer: cid, type: "card" });
+          pmId = pms.data[0]?.id;
+        }
       }
       if (!cid || !pmId) {
         return NextResponse.json({ needsCard: true }, { status: 402 });
