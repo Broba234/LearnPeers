@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import LearnPeersLoader from '@/components/ui/LearnPeersLoader';
+import { tutorNet } from '@/lib/billing';
 
 interface SessionRequest {
   id: string;
@@ -204,10 +205,10 @@ export default function InboxPage() {
   const upcomingCount = requests.filter(r => isUpcoming(r)).length;
   const completedCount = requests.filter(r => r.status === 'completed').length;
 
-  // ── Earnings sum from completed sessions ─────────────────
+  // ── Earnings sum from completed sessions (tutor payout, not the gross price) ─
   const totalEarnings = requests
     .filter(r => r.status === 'completed' && r.amount)
-    .reduce((sum, r) => sum + (r.amount ?? 0), 0);
+    .reduce((sum, r) => sum + tutorNet(r.amount ?? 0), 0);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -236,7 +237,7 @@ export default function InboxPage() {
             { label: 'Upcoming',  value: upcomingCount,                    color: 'text-brand-600' },
             { label: 'Pending',   value: pendingCount,                     color: 'text-amber-500' },
             { label: 'Completed', value: completedCount,                   color: 'text-green-600' },
-            { label: 'Earnings',  value: `$—`,                             color: 'text-slate-300' },
+            { label: 'Earnings',  value: `$${totalEarnings.toFixed(0)}`,   color: 'text-green-600' },
           ].map(stat => (
             <div key={stat.label} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{stat.label}</p>
