@@ -24,30 +24,18 @@ interface GradeOption {
   name: string;
 }
 
-interface CreateSubjectData {
-  name: string;
-  code: string;
-  grade: number;
-  category: string;
-}
-
 export default function SubjectsPage() {
   const router = useRouter();
   
   // State for form inputs
-  const [subjectName, setSubjectName] = useState("");
-  const [subjectCode, setSubjectCode] = useState("");
-  const [selectedGrade, setSelectedGrade] = useState<number | "">("");
-  const [selectedCategory, setSelectedCategory] = useState<string | "">("");
   const [showAddSubject, setShowAddSubject] = useState(false);
   // State for data
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [grades, setGrades] = useState<GradeOption[]>([]);
   const [categories, setCategories] = useState<CategoryOption[]>([]);
-  
+
   // State for loading and errors
   const [loading, setLoading] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   
@@ -158,62 +146,6 @@ export default function SubjectsPage() {
   const handlePageChange = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
-    }
-  };
-
-  // Handle create subject
-  const handleCreateSubject = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setError(null);
-    setSuccess(null);
-
-    if (!subjectName || !subjectCode || !selectedGrade || !selectedCategory) {
-      setError("Please fill in all fields");
-      setSubmitting(false);
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/subjects/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: subjectName.trim(),
-          code: subjectCode.trim().toUpperCase(),
-          grade: selectedGrade as number,
-          category: selectedCategory as string,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to create subject: ${response.statusText}`);
-      }
-
-      const newSubject = await response.json();
-      
-      // Add new subject to the list
-      setSubjects(prev => [newSubject, ...prev]);
-      
-      // Clear form
-      setSubjectName("");
-      setSubjectCode("");
-      setSelectedGrade("");
-      setSelectedCategory("");
-      
-      setSuccess("Subject created successfully!");
-      
-      // Reset success message after 3 seconds
-      setTimeout(() => {
-        setSuccess(null);
-      }, 3000);
-      
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create subject");
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -581,102 +513,9 @@ export default function SubjectsPage() {
           </div>
         )}
 
-        {/* Create Subject Form */}
-        {/* <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            Create New Subject
-          </h2>
-          <form onSubmit={handleCreateSubject}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="subject-name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Subject Name *
-                </label>
-                <input
-                  type="text"
-                  id="subject-name"
-                  value={subjectName}
-                  onChange={(e) => setSubjectName(e.target.value)}
-                  placeholder="Enter subject name"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="subject-code" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Subject Code *
-                </label>
-                <input
-                  type="text"
-                  id="subject-code"
-                  value={subjectCode}
-                  onChange={(e) => setSubjectCode(e.target.value)}
-                  placeholder="Enter subject code (e.g., MATH101)"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 dark:focus:ring-brand-600 outline-none"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="grade" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Grade *
-                </label>
-                <SearchableSelect
-                  id="grade"
-                  value={selectedGrade !== "" ? String(selectedGrade) : ""}
-                  onChange={(val) => setSelectedGrade(val ? parseInt(val) : "")}
-                  placeholder="Select Grade"
-                  options={grades.map((grade: any) => ({ value: String(grade.id), label: grade.name }))}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
-                  name="grade"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Category *
-                </label>
-                <SearchableSelect
-                  id="category"
-                  value={selectedCategory}
-                  onChange={setSelectedCategory}
-                  placeholder="Select Category"
-                  options={categories.map((category: any) => ({ value: String(category.id), label: category.name }))}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none"
-                  name="category"
-                  required
-                />
-              </div>
-            </div>
-            
-            <div className="mt-6">
-              <button
-                type="submit"
-                disabled={submitting}
-                className={`px-6 py-2 bg-brand-600 hover:bg-brand-700 dark:bg-brand-700 dark:hover:bg-brand-600 text-white font-medium rounded-lg transition-colors ${
-                  submitting ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-              >
-                {submitting ? (
-                  <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Creating...
-                  </span>
-                ) : (
-                  'Create Subject'
-                )}
-              </button>
-            </div>
-          </form>
-        </div> */}
       </div>
     </div>
-    {showAddSubject && <AddSubject subjects={subjects} setSubjects={setSubjects} grades={grades} categories={categories} setShowAddSubject={setShowAddSubject} />} 
+    {showAddSubject && <AddSubject subjects={subjects} setSubjects={setSubjects} grades={grades} categories={categories} setShowAddSubject={setShowAddSubject} />}
     </div>
   );
 }

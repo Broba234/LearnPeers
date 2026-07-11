@@ -1,5 +1,5 @@
 -- Education structure: institution types, affiliations, school-email verification
--- Applied 2026-06-12 via prisma db execute (see scripts/run-sql.cjs)
+-- Applied 2026-06-12 via `npx prisma db execute --file <this file> --schema prisma/schema.prisma`
 
 ALTER TABLE "Institutions"
   ADD COLUMN IF NOT EXISTS "type" text NOT NULL DEFAULT 'university',

@@ -40,16 +40,13 @@ export default function ResetPassword() {
     
             if (error) {
                 const msg = error.message.toLowerCase();
-                // Log raw error for debugging
+                // Log raw error server/console-side only; never surface Supabase/SMTP internals to end users.
                 console.error("[RESET] Supabase error:", error.message, error);
                 if (msg.includes('rate limit') || msg.includes('too many') || msg.includes('rate_limit')) {
-                    setMessage("Email limit reached. With default SMTP, Supabase allows only 2 auth emails/hour for the whole project. Fix: set up custom SMTP in Supabase Dashboard → Authentication → SMTP.");
-                    setIsError(true);
-                } else if (msg.includes('not authorized') || msg.includes('cannot be used') || msg.includes('authorized')) {
-                    setMessage("This email is not authorized. With default SMTP, Supabase only sends to org team members. Add your email in Organization → Team, or set up custom SMTP (Dashboard → Auth → SMTP).");
+                    setMessage("Too many reset requests. Please wait a bit and try again.");
                     setIsError(true);
                 } else {
-                    setMessage(error.message || "An error occurred. Please try again.");
+                    setMessage("We couldn't send a reset link right now. Please try again in a moment.");
                     setIsError(true);
                 }
             } else {
@@ -57,10 +54,8 @@ export default function ResetPassword() {
                 setEmail("");
             }
         } catch (error: unknown) {
-            
-            const err = error as { message?: string };
-            console.error("Reset password error:", err);
-            setMessage(err.message || "An error occurred. Please try again.");
+            console.error("Reset password error:", error);
+            setMessage("We couldn't send a reset link right now. Please try again in a moment.");
             setIsError(true);
         } finally {
             setIsLoading(false);
@@ -78,7 +73,7 @@ export default function ResetPassword() {
                         Enter your email address and we'll send you a link to reset your password.
                     </p>
                     <p className="mt-1 text-center text-xs text-gray-500">
-                        Not receiving emails? With Supabase default SMTP you need custom SMTP (Dashboard → Auth → SMTP) or your email in the org team. Local dev: check Mailpit.
+                        Not receiving emails? Check your spam folder, or contact support if the issue persists.
                     </p>
                 </div>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

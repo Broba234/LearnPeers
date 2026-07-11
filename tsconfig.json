@@ -16,7 +16,6 @@
     "noEmitOnError": false, // Allow build even when there are errors  // Skip type checking of declaration files
     "strictPropertyInitialization": false,
     "noImplicitThis": false,
-    "alwaysStrict": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
