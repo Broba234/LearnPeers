@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase/client';
 import { Modal, Button } from '@/components/ui/primitives';
 
@@ -41,6 +42,7 @@ export default function StudentSessions() {
     name: string;
   } | null>(null);
   const [userId, setUserId] = useState<string>("");
+  const hasLoadedOnceRef = useRef(false);
 
   // Get current user info for LiveKit
   useEffect(() => {
@@ -102,12 +104,19 @@ export default function StudentSessions() {
         } else {
           setSessions([]);
         }
-      } else {
-        const errorData = await res.json();
+      } else if (!hasLoadedOnceRef.current) {
+        // Only surface this on the first load — a transient error on a
+        // background poll shouldn't wipe an already-visible session list.
+        toast.error("Couldn't load your sessions — try refreshing");
         setSessions([]);
       }
     } catch (error) {
-      setSessions([]);
+      if (!hasLoadedOnceRef.current) {
+        toast.error("Couldn't load your sessions — try refreshing");
+        setSessions([]);
+      }
+    } finally {
+      hasLoadedOnceRef.current = true;
     }
   };
 
@@ -149,9 +158,13 @@ export default function StudentSessions() {
       if (res.ok) {
         fetchSessions();
         setSessionToCancel(null);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error || "Couldn't cancel this session — try again");
       }
     } catch (err) {
       console.error("Cancel failed:", err);
+      toast.error("Couldn't cancel this session — try again");
     } finally {
       setCancelling(false);
     }

@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -198,8 +199,11 @@ const SignUpWizard = () => {
       if (response.ok) {
         router.push("/home/student/explore");
       } else {
+        toast.error("Couldn't finish setup — try again");
       }
-    } catch (e) { }
+    } catch (e) {
+      toast.error("Couldn't finish setup — try again");
+    }
   };
   // Returns true if ALL subjects have valid price and duration
   const is_all_selected = selectedSubjectsWithPrice.every(
@@ -225,10 +229,14 @@ const SignUpWizard = () => {
           }),
         });
         setLoading(false);
-        if (!res.ok) return;
+        if (!res.ok) {
+          toast.error("Couldn't save your subjects — try again");
+          return;
+        }
         setActiveStep(activeStep + 1);
       } catch (e) {
         setLoading(false);
+        toast.error("Couldn't save your subjects — try again");
       }
     }
     if (activeStep === 3) {
