@@ -40,3 +40,14 @@
 - Secrets in `.env.local` (never commit). Client-safe vars use `NEXT_PUBLIC_*`.
 - Database/config: Prisma uses `DATABASE_URL`. Keep schemas and migrations consistent.
 - Review `next.config.js` and `proxy.ts` (the Supabase SSR middleware) when changing routing or headers.
+
+## Daily Mentor / Automated Routine Conventions
+- Any product, UX, or messaging proposal (not just a code change) must ship with a
+  ready-made HTML mockup rendered as an Artifact — a live page the owner can look at,
+  not just a text description of the idea.
+- Any actual UI code change made during a routine should be verified by running
+  `npm run dev` and driving the affected page (e.g. with a headless browser), and a
+  screenshot of the result should be sent to the owner alongside the summary — don't
+  just claim it works from reading the diff.
+- Land verified, low-risk fixes straight to `main` (owner has given standing approval
+  for this repo) rather than parking them on an unmerged branch.
