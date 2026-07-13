@@ -419,7 +419,6 @@ export default function ExploreTutors() {
             icon={<Users className="w-4 h-4 text-brand-500" />}
             tutors={displayedTutors}
             loading={loading}
-            onBook={openTutorProfileModal}
             onConnectNow={openConnectNow}
             savedIds={savedIds}
             onToggleSave={toggleSave}
@@ -478,7 +477,6 @@ export default function ExploreTutors() {
                   icon={<BookOpen className="w-4 h-4 text-brand-500" />}
                   tutors={tutorsForSubject}
                   loading={loading}
-                  onBook={openTutorProfileModal}
                   onConnectNow={openConnectNow}
                 />
               );
@@ -490,7 +488,6 @@ export default function ExploreTutors() {
             icon={<Users className="w-4 h-4 text-brand-500" />}
             tutors={filterAndSortTutors(allTutorsForSelectedSubjects, query, sortBy)}
             loading={loading}
-            onBook={openTutorProfileModal}
             onConnectNow={openConnectNow}
             savedIds={savedIds}
             onToggleSave={toggleSave}

@@ -25,19 +25,6 @@ export function countTimeSlots(availableSlots: AvailableSlot[]): number {
   return unique.size;
 }
 
-export function currentTimeInTz(tz: string): string {
-  try {
-    return new Date().toLocaleTimeString("en-US", {
-      timeZone: tz,
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  } catch {
-    return "";
-  }
-}
-
 export function getStartingPrice(subjects: Subjects[]): number | null {
   let min: number | null = null;
   for (const s of subjects) {

@@ -30,13 +30,6 @@ export default function StudentSessions() {
   const [sessionToCancel, setSessionToCancel] = useState<Session | null>(null);
   const [cancelling, setCancelling] = useState(false);
 
-  // LiveKit session state
-  const [isSessionOpen, setIsSessionOpen] = useState(false);
-  const [currentSessionData, setCurrentSessionData] = useState<{
-    roomName: string;
-    tutorName: string;
-    subject: string;
-  } | null>(null);
   const [userInfo, setUserInfo] = useState<{
     identity: string;
     name: string;
@@ -170,11 +163,6 @@ export default function StudentSessions() {
     } finally {
       setCancelling(false);
     }
-  };
-
-  const handleEndSession = () => {
-    setIsSessionOpen(false);
-    setCurrentSessionData(null);
   };
 
   const filterOptions = ['all', 'active', 'completed', 'pending'] as const;

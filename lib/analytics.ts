@@ -46,14 +46,14 @@ export function rangeLabel(range: Range): string {
   return RANGES[range].label;
 }
 
-interface Window {
+interface TimeWindow {
   start: Date;
   prevStart: Date;
   end: Date;
   spec: RangeSpec;
 }
 
-function windowFor(range: Range): Window {
+function windowFor(range: Range): TimeWindow {
   const spec = RANGES[range];
   const end = new Date();
   const start = new Date(end.getTime() - spec.days * 24 * 60 * 60 * 1000);
@@ -77,7 +77,7 @@ export interface SeriesPoint {
  * `rows` is keyed by ISO bucket-start date.
  */
 function fillSeries(
-  win: Window,
+  win: TimeWindow,
   rows: Map<string, Record<string, number>>,
   metrics: string[]
 ): SeriesPoint[] {
