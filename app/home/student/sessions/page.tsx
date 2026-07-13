@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase/client';
 import { Modal, Button } from '@/components/ui/primitives';
 
@@ -41,6 +42,7 @@ export default function StudentSessions() {
     name: string;
   } | null>(null);
   const [userId, setUserId] = useState<string>("");
+  const hasLoadedOnceRef = useRef(false);
 
   // Get current user info for LiveKit
   useEffect(() => {
@@ -59,16 +61,17 @@ export default function StudentSessions() {
             });
             setUserId(user.id);
           } else {
+            toast.error("Couldn't load your account — try refreshing the page");
           }
-        } else {
         }
       } catch (error) {
+        toast.error("Couldn't load your account — try refreshing the page");
       }
     };
     getCurrentUser();
   }, []);
 
-  const fetchSessions = async () => {
+  const fetchSessions = async (isManual = false) => {
     if (!userId || userId.length === 0) {
       return;
     }
@@ -102,12 +105,20 @@ export default function StudentSessions() {
         } else {
           setSessions([]);
         }
-      } else {
-        const errorData = await res.json();
-        setSessions([]);
+      } else if (isManual || !hasLoadedOnceRef.current) {
+        // Always tell the user when they explicitly asked for a refresh;
+        // for the silent background poll (every 5s) only surface the first
+        // failure, and don't wipe an already-visible list on a later blip.
+        toast.error("Couldn't load your sessions — try refreshing");
+        if (!hasLoadedOnceRef.current) setSessions([]);
       }
     } catch (error) {
-      setSessions([]);
+      if (isManual || !hasLoadedOnceRef.current) {
+        toast.error("Couldn't load your sessions — try refreshing");
+        if (!hasLoadedOnceRef.current) setSessions([]);
+      }
+    } finally {
+      hasLoadedOnceRef.current = true;
     }
   };
 
@@ -149,9 +160,13 @@ export default function StudentSessions() {
       if (res.ok) {
         fetchSessions();
         setSessionToCancel(null);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error || "Couldn't cancel this session — try again");
       }
     } catch (err) {
       console.error("Cancel failed:", err);
+      toast.error("Couldn't cancel this session — try again");
     } finally {
       setCancelling(false);
     }
@@ -187,7 +202,7 @@ export default function StudentSessions() {
             <p className="text-sm text-slate-400 mt-0.5">Your tutoring history</p>
           </div>
           <button
-            onClick={fetchSessions}
+            onClick={() => fetchSessions(true)}
             className="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-lg hover:bg-slate-100"
             title="Refresh"
           >
