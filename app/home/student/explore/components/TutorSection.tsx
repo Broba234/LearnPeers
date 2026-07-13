@@ -7,7 +7,6 @@ export const TutorSection = ({
   icon,
   tutors,
   loading,
-  onBook,
   onConnectNow,
   savedIds,
   onToggleSave,
@@ -16,7 +15,6 @@ export const TutorSection = ({
   icon?: React.ReactNode;
   tutors: Tutor[];
   loading: boolean;
-  onBook: (tutor: Tutor) => void;
   onConnectNow?: (tutor: Tutor) => void;
   savedIds?: Set<string>;
   onToggleSave?: (id: string) => void;
@@ -42,7 +40,6 @@ export const TutorSection = ({
               <TutorCard
                 key={tutor.id}
                 tutor={tutor}
-                onBook={onBook}
                 onConnectNow={onConnectNow}
                 saved={savedIds?.has(tutor.id)}
                 onToggleSave={onToggleSave}

@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
-import EventCalender from "@/components/EventCalender";
 import Selectable from "@/components/EventCalender";
 import { momentLocalizer } from 'react-big-calendar'
 import moment from 'moment-timezone'

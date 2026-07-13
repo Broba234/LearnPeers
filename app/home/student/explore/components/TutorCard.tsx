@@ -3,18 +3,16 @@ import Link from "next/link";
 import { Star, Clock, BadgeCheck, ShieldCheck, Zap, Heart } from "lucide-react";
 import Avatar from "@/components/ui/Avatar";
 import type { Tutor } from "../types";
-import { countTimeSlots, currentTimeInTz, getStartingPrice } from "../utils";
+import { countTimeSlots, getStartingPrice } from "../utils";
 import { SchoolBadge } from "./SchoolBadge";
 
 export const TutorCard = ({
   tutor,
-  onBook,
   onConnectNow,
   saved,
   onToggleSave,
 }: {
   tutor: Tutor;
-  onBook: (tutor: Tutor) => void;
   onConnectNow?: (tutor: Tutor) => void;
   saved?: boolean;
   onToggleSave?: (id: string) => void;
@@ -25,7 +23,6 @@ export const TutorCard = ({
   );
 
   const startingPrice = useMemo(() => getStartingPrice(tutor.subjects ?? []), [tutor.subjects]);
-  const tzTime = tutor.timezone ? currentTimeInTz(tutor.timezone) : null;
 
   // Verified courses, headlined by mastery — the peer-proof that beats Wyzant.
   const verifiedSubjects = useMemo(
