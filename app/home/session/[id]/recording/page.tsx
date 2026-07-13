@@ -39,9 +39,10 @@ export default function RecordingReviewPage() {
   const [query, setQuery] = useState("");
   const [playing, setPlaying] = useState(false);
 
-  // Static playhead for review (the recording is server-retained; this screen
-  // is the reviewer surface). Sits mid-session so the transcript shows sync.
-  const currentTime = 88;
+  // The placeholder frame (shown when there's no playable recording_url yet)
+  // has no real playback, so the playhead stays at 0 rather than faking a
+  // mid-session position.
+  const currentTime = 0;
 
   useEffect(() => {
     if (!sessionId) return;
