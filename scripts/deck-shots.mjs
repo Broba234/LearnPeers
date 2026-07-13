@@ -9,6 +9,9 @@ import os from 'node:os';
 import path from 'node:path';
 import fs from 'node:fs';
 import { Client } from 'pg';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: path.resolve('.env.local') });
 
 const EXEC = path.join(
   os.homedir(),
@@ -18,8 +21,17 @@ const OUT = path.resolve('../slide-screenshots');
 fs.mkdirSync(OUT, { recursive: true });
 
 const BASE = 'http://localhost:3000';
-const STUDENT = { email: 'edouard.taha@gmail.com', password: 'Baba$123' };
-const TUTOR = { email: 'edouard.taha@icloud.com', password: 'Baba$123' };
+
+function requireEnv(name) {
+  const v = process.env[name];
+  if (!v) {
+    console.error(`Missing ${name}. Set DECK_SHOTS_STUDENT_EMAIL/PASSWORD and DECK_SHOTS_TUTOR_EMAIL/PASSWORD in .env.local (see .env.example).`);
+    process.exit(1);
+  }
+  return v;
+}
+const STUDENT = { email: requireEnv('DECK_SHOTS_STUDENT_EMAIL'), password: requireEnv('DECK_SHOTS_STUDENT_PASSWORD') };
+const TUTOR = { email: requireEnv('DECK_SHOTS_TUTOR_EMAIL'), password: requireEnv('DECK_SHOTS_TUTOR_PASSWORD') };
 
 const SHOWCASE_TUTOR = '9ecbab70-09e5-48ec-b9a9-ac34f928b02a'; // Edouard T.
 const KAIS_STUDENT = '04b67ebc-9245-4026-a0d6-c33901238bca';   // Kais Jr
