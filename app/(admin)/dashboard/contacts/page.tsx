@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 
 interface Contact {
@@ -206,9 +206,8 @@ export default function ContactsPage() {
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {currentContacts.length > 0 ? (
                   currentContacts.map((contact) => (
-                    <>
+                    <Fragment key={contact.id}>
                       <tr
-                        key={contact.id}
                         className={`hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer ${
                           !contact.is_read ? "bg-brand-50/50 dark:bg-brand-900/10" : ""
                         }`}
@@ -271,7 +270,7 @@ export default function ContactsPage() {
                         </td>
                       </tr>
                       {expandedId === contact.id && (
-                        <tr key={`${contact.id}-detail`}>
+                        <tr>
                           <td colSpan={5} className="px-6 py-4 bg-gray-50 dark:bg-gray-900/50">
                             <div className="max-w-3xl">
                               <div className="mb-3">
@@ -298,7 +297,7 @@ export default function ContactsPage() {
                           </td>
                         </tr>
                       )}
-                    </>
+                    </Fragment>
                   ))
                 ) : (
                   <tr>
