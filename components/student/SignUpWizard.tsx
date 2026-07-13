@@ -102,8 +102,12 @@ const SignUpWizard = () => {
           if (hasEducation) setEducationComplete(true);
           const resume = hasSubjects ? 3 : hasEducation ? 2 : 1;
           if (resume > 1) setActiveStep((prev) => (resume > prev ? resume : prev));
+        } else {
+          toast.error("Couldn't load your profile — try refreshing the page");
         }
-      } catch (error) { }
+      } catch (error) {
+        toast.error("Couldn't load your profile — try refreshing the page");
+      }
     };
 
     fetchProfile();
@@ -125,11 +129,13 @@ const SignUpWizard = () => {
         } else {
           setSelectedSubjects([]);
           setCategories([]);
+          toast.error("Couldn't load subjects — try refreshing the page");
         }
       })
       .catch((err) => {
         setSelectedSubjects([]);
         setCategories([]);
+        toast.error("Couldn't load subjects — try refreshing the page");
       });
   }, [router]);
   const handleInputChange = (e: any) => {

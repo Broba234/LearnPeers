@@ -61,16 +61,17 @@ export default function StudentSessions() {
             });
             setUserId(user.id);
           } else {
+            toast.error("Couldn't load your account — try refreshing the page");
           }
-        } else {
         }
       } catch (error) {
+        toast.error("Couldn't load your account — try refreshing the page");
       }
     };
     getCurrentUser();
   }, []);
 
-  const fetchSessions = async () => {
+  const fetchSessions = async (isManual = false) => {
     if (!userId || userId.length === 0) {
       return;
     }
@@ -104,16 +105,17 @@ export default function StudentSessions() {
         } else {
           setSessions([]);
         }
-      } else if (!hasLoadedOnceRef.current) {
-        // Only surface this on the first load — a transient error on a
-        // background poll shouldn't wipe an already-visible session list.
+      } else if (isManual || !hasLoadedOnceRef.current) {
+        // Always tell the user when they explicitly asked for a refresh;
+        // for the silent background poll (every 5s) only surface the first
+        // failure, and don't wipe an already-visible list on a later blip.
         toast.error("Couldn't load your sessions — try refreshing");
-        setSessions([]);
+        if (!hasLoadedOnceRef.current) setSessions([]);
       }
     } catch (error) {
-      if (!hasLoadedOnceRef.current) {
+      if (isManual || !hasLoadedOnceRef.current) {
         toast.error("Couldn't load your sessions — try refreshing");
-        setSessions([]);
+        if (!hasLoadedOnceRef.current) setSessions([]);
       }
     } finally {
       hasLoadedOnceRef.current = true;
@@ -200,7 +202,7 @@ export default function StudentSessions() {
             <p className="text-sm text-slate-400 mt-0.5">Your tutoring history</p>
           </div>
           <button
-            onClick={fetchSessions}
+            onClick={() => fetchSessions(true)}
             className="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-lg hover:bg-slate-100"
             title="Refresh"
           >
