@@ -89,7 +89,7 @@ export async function POST(req: Request) {
 
     console.error("[API] Profile creation failed:", error);
     return NextResponse.json(
-      { error: "Internal Server Error", details: error instanceof Error ? error.message : error },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }

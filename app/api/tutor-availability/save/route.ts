@@ -55,7 +55,7 @@ const endDate = newEvent.end ? new Date(newEvent.end) : new Date(`${newEvent.end
   } catch (error: any) {
     console.error("[TA_SAVE] Error:", error);
     return NextResponse.json(
-      { error: "Internal Server Error", details: error?.message || error },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }

@@ -23,7 +23,6 @@ export async function GET(request: Request) {
     console.error('[PROFILE_GET] Error:', error);
     return new Response(JSON.stringify({
       error: 'Internal Server Error',
-      details: error?.message || error
     }), { status: 500 });
   }
 } 

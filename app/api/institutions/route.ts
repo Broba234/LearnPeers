@@ -18,7 +18,8 @@ export async function GET(req: Request) {
     });
     return Response.json(institutions);
   } catch (error: any) {
-    return Response.json({ error: 'Internal Server Error', details: error?.message }, { status: 500 });
+    console.error('[INSTITUTIONS_GET]', error);
+    return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -66,6 +67,7 @@ export async function POST(req: Request) {
 
     return Response.json(institution);
   } catch (error: any) {
-    return Response.json({ error: 'Internal Server Error', details: error?.message }, { status: 500 });
+    console.error('[INSTITUTIONS_POST]', error);
+    return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

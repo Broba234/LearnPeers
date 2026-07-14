@@ -42,8 +42,7 @@ export async function DELETE(req: NextRequest) {
     return new Response(
       JSON.stringify({
         error: 'Internal Server Error',
-        details: error?.message || error
-      }), 
+      }),
       { status: 500 }
     );
   }

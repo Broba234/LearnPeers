@@ -53,7 +53,7 @@ export async function GET(req: Request) {
      return new Response(JSON.stringify(slots), { status: 200 });
   } catch (error: any) {
     console.error('[TA_GET] Error:', error);
-    return NextResponse.json({ error: 'Internal Server Error', details: error?.message || error }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 

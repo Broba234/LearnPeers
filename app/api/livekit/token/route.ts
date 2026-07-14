@@ -91,7 +91,6 @@ export async function POST(req: NextRequest) {
     return json(
       {
         error: "Failed to generate token",
-        details: error instanceof Error ? error.message : "Unknown error",
       },
       500,
     );

@@ -64,8 +64,9 @@ export async function POST(req: Request) {
 
     return Response.json({ ok: true, id: feedback.id }, { status: 201 });
   } catch (error: any) {
+    console.error("[FEEDBACK_POST]", error);
     return Response.json(
-      { error: "Internal Server Error", details: error?.message ?? String(error) },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }
@@ -85,8 +86,9 @@ export async function GET() {
     });
     return Response.json(feedback, { status: 200 });
   } catch (error: any) {
+    console.error("[FEEDBACK_GET]", error);
     return Response.json(
-      { error: "Internal Server Error", details: error?.message ?? String(error) },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }

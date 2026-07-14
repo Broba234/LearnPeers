@@ -49,6 +49,7 @@ export async function POST(req: Request) {
 
     return Response.json(results);
   } catch (error: any) {
-    return Response.json({ error: 'Internal Server Error', details: error?.message }, { status: 500 });
+    console.error('[INSTITUTION_COURSES_BULK_POST]', error);
+    return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

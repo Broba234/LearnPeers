@@ -71,7 +71,8 @@ export async function POST(request: NextRequest) {
         { onConflict: "session_id" }
       );
     if (error) {
-      return NextResponse.json({ error: "Failed to save", details: error.message }, { status: 500 });
+      console.error("[WHITEBOARD_SAVE]", error);
+      return NextResponse.json({ error: "Failed to save" }, { status: 500 });
     }
     return NextResponse.json({ success: true });
   } catch {

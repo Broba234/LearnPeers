@@ -25,7 +25,8 @@ export async function GET() {
       }))
     );
   } catch (error: any) {
-    return Response.json({ error: "Internal Server Error", details: error?.message }, { status: 500 });
+    console.error('[CURRICULA_GET]', error);
+    return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
@@ -60,6 +61,7 @@ export async function POST(req: Request) {
     if (error?.code === "P2002") {
       return Response.json({ error: "A curriculum of this kind already exists for that province/institution" }, { status: 409 });
     }
-    return Response.json({ error: "Internal Server Error", details: error?.message }, { status: 500 });
+    console.error('[CURRICULA_POST]', error);
+    return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

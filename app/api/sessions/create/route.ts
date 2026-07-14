@@ -50,7 +50,8 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: 'Failed to create session', details: error.message }, { status: 500 });
+      console.error('[SESSION_CREATE]', error);
+      return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
     }
 
     // Look up student name for the notification

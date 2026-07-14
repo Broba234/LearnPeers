@@ -107,8 +107,9 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
+      console.error("[INSTANT_REQUEST_CREATE]", error);
       return NextResponse.json(
-        { error: "Failed to create request", details: error.message },
+        { error: "Failed to create request" },
         { status: 500 }
       );
     }

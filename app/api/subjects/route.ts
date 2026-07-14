@@ -16,7 +16,6 @@ export async function GET() {
     console.error('[SUBJECTS_GET] Error:', error);
     return new Response(JSON.stringify({
       error: 'Internal Server Error',
-      details: error?.message || error
     }), { status: 500 });
   }
 } 
