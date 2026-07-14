@@ -56,7 +56,6 @@ const availability = await prisma.tutorAvailability.findMany({
     console.error('[PROFILE_GET_FULL] Error:', error);
     return new Response(JSON.stringify({
       error: 'Internal Server Error',
-      details: error?.message || error
     }), { status: 500 });
   }
 } 

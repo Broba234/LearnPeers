@@ -9,6 +9,7 @@ export async function GET() {
     });
     return Response.json(provinces);
   } catch (error: any) {
-    return Response.json({ error: "Internal Server Error", details: error?.message }, { status: 500 });
+    console.error("[PROVINCES_GET]", error);
+    return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

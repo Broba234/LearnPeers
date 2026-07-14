@@ -17,9 +17,9 @@ export async function GET() {
 
     return new Response(JSON.stringify(users), { status: 200 });
   } catch (error: any) {
+    console.error('[USERS_GET]', error);
     return new Response(JSON.stringify({
       error: 'Internal Server Error',
-      details: error?.message || error,
     }), { status: 500 });
   }
 }

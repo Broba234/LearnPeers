@@ -20,7 +20,6 @@ export async function PUT() {
     console.error('[PROFILE_UPDATE] Error:', error);
     return new Response(JSON.stringify({
       error: 'Internal Server Error',
-      details: error?.message || error
     }), { status: 500 });
   }
 }

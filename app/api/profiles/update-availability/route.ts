@@ -41,7 +41,7 @@ export async function PATCH(req: Request) {
   } catch (error: any) {
     console.error("[AVAILABILITY_UPDATE] Error:", error);
     return NextResponse.json(
-      { error: "Internal Server Error", details: error?.message || String(error) },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }

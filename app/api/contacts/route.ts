@@ -14,10 +14,10 @@ export async function GET() {
 
     return new Response(JSON.stringify(contacts), { status: 200 });
   } catch (error: any) {
+    console.error("[CONTACTS_GET]", error);
     return new Response(
       JSON.stringify({
         error: "Internal Server Error",
-        details: error?.message || error,
       }),
       { status: 500 }
     );
@@ -46,10 +46,10 @@ export async function POST(req: Request) {
 
     return new Response(JSON.stringify(contact), { status: 201 });
   } catch (error: any) {
+    console.error("[CONTACTS_POST]", error);
     return new Response(
       JSON.stringify({
         error: "Internal Server Error",
-        details: error?.message || error,
       }),
       { status: 500 }
     );

@@ -20,7 +20,8 @@ export async function GET(req: Request) {
     });
     return Response.json(courses);
   } catch (error: any) {
-    return Response.json({ error: 'Internal Server Error', details: error?.message }, { status: 500 });
+    console.error('[INSTITUTION_COURSES_GET]', error);
+    return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
     if (error?.code === 'P2002') {
       return Response.json({ error: 'This course code already exists for this institution' }, { status: 409 });
     }
-    return Response.json({ error: 'Internal Server Error', details: error?.message }, { status: 500 });
+    console.error('[INSTITUTION_COURSES_POST]', error);
+    return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

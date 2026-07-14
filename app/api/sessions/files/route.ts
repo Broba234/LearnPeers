@@ -71,7 +71,8 @@ export async function POST(request: NextRequest) {
       .select("id, name, type, size, url, storage_path, shared, uploader_id, created_at")
       .single();
     if (error) {
-      return NextResponse.json({ error: "Failed to record file", details: error.message }, { status: 500 });
+      console.error("[SESSION_FILES_RECORD]", error);
+      return NextResponse.json({ error: "Failed to record file" }, { status: 500 });
     }
     return NextResponse.json({ file: data });
   } catch {

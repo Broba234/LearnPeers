@@ -12,7 +12,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     });
     return Response.json(courses);
   } catch (error: any) {
-    return Response.json({ error: "Internal Server Error", details: error?.message }, { status: 500 });
+    console.error('[CURRICULA_COURSES_GET]', error);
+    return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
@@ -49,6 +50,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     });
     return Response.json(course);
   } catch (error: any) {
-    return Response.json({ error: "Internal Server Error", details: error?.message }, { status: 500 });
+    console.error('[CURRICULA_COURSES_POST]', error);
+    return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

@@ -34,8 +34,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true, online });
   } catch (error: any) {
+    console.error("[HEARTBEAT]", error);
     return NextResponse.json(
-      { error: "Internal Server Error", details: error?.message || String(error) },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }

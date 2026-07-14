@@ -52,6 +52,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     }
     return Response.json(results);
   } catch (error: any) {
-    return Response.json({ error: "Internal Server Error", details: error?.message }, { status: 500 });
+    console.error('[CURRICULA_COURSES_BULK_POST]', error);
+    return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
