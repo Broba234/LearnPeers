@@ -34,13 +34,11 @@ function LoginContent() {
 
             if (!data.user) {
                 throw new Error('No user returned from sign in');
-                // new comments here
             }
 
             // Fetch user role from the database using email via API
             const profileRes = await fetch(`/api/profiles/get?email=${encodeURIComponent(email)}`);
-            
-            
+
             if (!profileRes.ok) {
                 const errorData = await profileRes.json().catch(() => ({ error: 'Failed to parse error response' }));
                 console.error('[LOGIN] Profile lookup failed:', errorData);

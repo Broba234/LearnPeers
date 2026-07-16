@@ -85,9 +85,6 @@ html {
   pointer-events: auto;
 }
 
-
-
-/* Add to your global.css or styles/globals.css */
 .focus-border-inline:focus {
   border-inline: 2px solid #12B1D1 !important;
 }
