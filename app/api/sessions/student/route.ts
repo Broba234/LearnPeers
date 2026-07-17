@@ -28,12 +28,9 @@ export async function GET() {
       .neq('status', 'awaiting_payment')
       .order('created_at', { ascending: false });
 
-    if (fetchError) { 
-      return NextResponse.json({ 
-        error: 'Failed to fetch sessions', 
-        details: fetchError.message,
-        code: fetchError.code 
-      }, { status: 500 });
+    if (fetchError) {
+      console.error('[SESSIONS_STUDENT_GET]', fetchError);
+      return NextResponse.json({ error: 'Failed to fetch sessions' }, { status: 500 });
     }
 
     return NextResponse.json({

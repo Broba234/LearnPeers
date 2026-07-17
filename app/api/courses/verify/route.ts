@@ -159,6 +159,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ asset: { id: asset.id, status: "pending", grade_label: g.label }, qualifies: true, pending: true });
   } catch (e: any) {
     console.error("[COURSES_VERIFY]", e);
-    return NextResponse.json({ error: "Internal Server Error", details: e?.message }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

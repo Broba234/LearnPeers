@@ -35,6 +35,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ asset });
   } catch (e: any) {
     console.error("[COURSES_CLAIM]", e);
-    return NextResponse.json({ error: "Internal Server Error", details: e?.message }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

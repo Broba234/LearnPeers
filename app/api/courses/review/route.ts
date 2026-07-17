@@ -114,6 +114,6 @@ export async function POST(req: Request) {
     });
   } catch (e: any) {
     console.error("[COURSES_REVIEW]", e);
-    return NextResponse.json({ error: "Internal Server Error", details: e?.message }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
