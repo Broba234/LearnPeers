@@ -43,6 +43,6 @@ export async function GET() {
     return NextResponse.json({ tree });
   } catch (e: any) {
     console.error("[COURSES_CATALOG]", e);
-    return NextResponse.json({ error: "Internal Server Error", details: e?.message }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

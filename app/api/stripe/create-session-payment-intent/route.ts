@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
       if (sessionError) {
         console.error("[create-session-payment-intent] Session error:", sessionError);
         return NextResponse.json(
-          { error: "Failed to create session", details: sessionError.message },
+          { error: "Failed to create session" },
           { status: 500 }
         );
       }
@@ -224,7 +224,7 @@ export async function POST(request: NextRequest) {
     if (sessionError) {
       console.error("[create-session-payment-intent] Session error:", sessionError);
       return NextResponse.json(
-        { error: "Failed to create session", details: sessionError.message },
+        { error: "Failed to create session" },
         { status: 500 }
       );
     }

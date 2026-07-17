@@ -31,6 +31,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, exception: ex });
   } catch (e: any) {
     console.error('[TA_EXC] Error', e);
-    return NextResponse.json({ error: 'Internal Server Error', details: e?.message || e }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

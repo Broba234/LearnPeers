@@ -94,6 +94,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ timezone: tz, days: result });
   } catch (e: any) {
     console.error('[TA_CAL] Error', e);
-    return NextResponse.json({ error: 'Internal Server Error', details: e?.message || e }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

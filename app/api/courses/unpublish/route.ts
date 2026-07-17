@@ -26,6 +26,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   } catch (e: any) {
     console.error("[COURSES_UNPUBLISH]", e);
-    return NextResponse.json({ error: "Internal Server Error", details: e?.message }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

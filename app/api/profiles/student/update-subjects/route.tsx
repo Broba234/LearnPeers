@@ -30,9 +30,9 @@ export async function PUT(request: NextRequest) {
 
     return new Response(JSON.stringify(profile), { status: 200 });
   } catch (error: any) {
+    console.error('[STUDENT_UPDATE_SUBJECTS]', error);
     return new Response(JSON.stringify({
       error: 'Internal Server Error',
-      details: error?.message || error
     }), { status: 500 });
   }
 }

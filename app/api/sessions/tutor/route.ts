@@ -28,13 +28,8 @@ export async function GET() {
       .order('created_at', { ascending: false });
 
     if (fetchError) {
-      console.error('Tutor sessions fetch error:', fetchError);
-      console.error('Full error details:', JSON.stringify(fetchError, null, 2));
-      return NextResponse.json({ 
-        error: 'Failed to fetch sessions', 
-        details: fetchError.message,
-        code: fetchError.code 
-      }, { status: 500 });
+      console.error('[SESSIONS_TUTOR_GET]', fetchError);
+      return NextResponse.json({ error: 'Failed to fetch sessions' }, { status: 500 });
     }
 
     return NextResponse.json({ 
