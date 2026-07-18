@@ -105,7 +105,11 @@ export async function POST(req: Request) {
         body: `Your ${subj?.code || subj?.name || "course"} standing was updated — now ${newRating}★ over ${newCount} review${newCount === 1 ? "" : "s"}.`,
         actorId: user.id,
       });
-    } catch {}
+    } catch (e) {
+      // Best-effort notification — the review itself already succeeded above,
+      // so log and move on rather than failing the request.
+      console.error("[COURSES_REVIEW] notification failed", e);
+    }
 
     return NextResponse.json({
       ok: true,
