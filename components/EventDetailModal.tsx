@@ -137,9 +137,10 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               duration_3: profileData.duration_3 || 0,
             }));
             setSelectedSubject(profileData.subjects || null);
-           
+
           }
         } catch (error) {
+          console.error("[EventDetailModal] fetchSubjects failed", error);
         } finally {
           setLoadingSubjects(false);
         }

@@ -53,7 +53,9 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
             }));
           setSelectedSubjects(normalizedSubjects);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error("[WizardTimeSlot] fetchProfile failed", error);
+      }
     };
 
     fetchProfile();

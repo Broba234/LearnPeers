@@ -161,7 +161,9 @@ const SetupWizard = () => {
             setActiveStep((prev) => (resume > prev ? resume : prev));
           }
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error("[SetupWizard] fetchProfile failed", error);
+      }
     };
 
     fetchProfile();
