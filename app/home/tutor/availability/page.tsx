@@ -46,7 +46,6 @@ export default function TutorAvailability() {
   const [data, setData] = useState([]);
   const [email, setEmail] = useState<string>('');
   const [id, setId] = useState<string>('');
-  // (UI was simplified; week offset removed
   const [subjects, setSubjects] = useState<[]>([]);
   useEffect(() => {
     const init = async () => {

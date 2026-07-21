@@ -34,7 +34,6 @@ function LoginContent() {
 
             if (!data.user) {
                 throw new Error('No user returned from sign in');
-                // new comments here
             }
 
             // Fetch user role from the database using email via API
