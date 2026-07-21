@@ -16,7 +16,7 @@
 | 🟡 Medium | 17 | Type checking disabled; raw Prisma errors to clients; swallowed errors; debug logging; abandoned migrations |
 | ⚪ Low | 35 | Dead code, unused deps, commented-out blocks, legacy naming, UI polish |
 
-Status legend: **✅ Fixed** (applied on branch `chore/audit-cleanup`) · **⏳ Manual** (needs your action) · **🔍 Confirm** (verified, fix is a code change for review).
+Status legend: **✅ Fixed** (merged to `main`) · **⏳ Manual** (needs your action) · **🔍 Confirm** (verified, fix is a code change for review) · **🔍 Recommend** (lower-priority cleanup, not independently re-verified since 2026-06-29).
 
 ---
 
@@ -53,19 +53,21 @@ git push --force-with-lease   # coordinate with anyone who has the repo cloned
 
 | # | Sev | Route(s) | Impact | Status |
 |---|---|---|---|---|
-| 2.1 | 🔴 | `GET /api/earnings` | `?tutorId=<victim>` returns earnings, student PII, **and a `stripe.accounts.createLoginLink` URL** → log straight into the victim's Stripe Express dashboard (payout/bank takeover). | 🔍 Confirm |
-| 2.2 | 🔴 | `POST /api/stripe/connect/account-session` + `create-account-link` | Trusts `body.email`; creates/binds a Stripe account to a victim and returns onboarding `client_secret`/URL → KYC/bank-redirect payout takeover. | 🔍 Confirm |
-| 2.3 | 🟠 | `GET /api/contacts` | **Fully unauthenticated** (method-agnostic `PUBLIC_API` allowlist meant for the public POST) — dumps the entire contacts table (name/email/subject/message) to anyone. | 🔍 Confirm |
-| 2.4 | 🟠 | `PUT /api/profiles/update-bio` (+ `update`, `update-education`, `complete-setup`, `student/update-subjects`) | Mass-assignment writes keyed on `body.email`; `update-bio` also flips `is_tutor` (**role tampering**) and can null `hourlyRate` on any account. | 🔍 Confirm |
-| 2.5 | 🟠 | `DELETE /api/subjects/delete` (+ `subjects/create`, `institutions`, `curricula`, `institution-courses`) | No admin gate on **global** reference data — any user can destroy marketplace-wide catalog rows or inject spam. | 🔍 Confirm |
-| 2.6 | 🟠 | `DELETE/PUT/POST /api/tutor-availability/{delete,update,save}` | Delete any tutor's slot by guessable `eventId` (no check at all); overwrite slots; create availability under any victim's email. `update` even computes `tutorId` then never uses it (a dropped check). | 🔍 Confirm |
-| 2.7 | 🟠 | `PUT /api/profiles/update-subjects` (+ `subjects/update-subjects-and-prices`, `subjects/tutor-subjects`) | Cross-tenant CourseAsset write/delete + price overwrite keyed on client email. | 🔍 Confirm |
-| 2.8 | 🟠 | `GET /api/profiles/get-full?email=` | Any authed user harvests any profile by email — leaks phone, `stripe_account_id`, `email_verified` across the whole user base via email enumeration. | 🔍 Confirm |
-| 2.9 | 🟠 | `GET /api/stripe/connect/status?email=` | Enumeration oracle: any email → `acct_…` + onboarding/verification state. | 🔍 Confirm |
-| 2.10 | 🟠 | `GET /api/sessions/student` + `tutor` | Any user reads any user's sessions + counterparty PII (name/avatar/bio/hourlyRate). | 🔍 Confirm |
-| 2.11 | 🟠 | `GET /api/notifications/list` + `PATCH /mark-read` | Read/tamper any user's notifications via `userId` param. | 🔍 Confirm |
-| 2.12 | 🟠 | `GET /api/feedback` | Commented "for the admin dashboard" but no admin gate — any authed user exfiltrates all feedback + submitter PII. | 🔍 Confirm |
+| 2.1 | 🔴 | `GET /api/earnings` | `?tutorId=<victim>` returns earnings, student PII, **and a `stripe.accounts.createLoginLink` URL** → log straight into the victim's Stripe Express dashboard (payout/bank takeover). | ✅ Fixed — `requireUser()`, verified in `route.ts` |
+| 2.2 | 🔴 | `POST /api/stripe/connect/account-session` + `create-account-link` | Trusts `body.email`; creates/binds a Stripe account to a victim and returns onboarding `client_secret`/URL → KYC/bank-redirect payout takeover. | ✅ Fixed — `requireUser()` |
+| 2.3 | 🟠 | `GET /api/contacts` | **Fully unauthenticated** (method-agnostic `PUBLIC_API` allowlist meant for the public POST) — dumps the entire contacts table (name/email/subject/message) to anyone. | ✅ Fixed — `requireAdminApi("contacts")`, verified in `route.ts` |
+| 2.4 | 🟠 | `PUT /api/profiles/update-bio` (+ `update`, `update-education`, `complete-setup`, `student/update-subjects`) | Mass-assignment writes keyed on `body.email`; `update-bio` also flips `is_tutor` (**role tampering**) and can null `hourlyRate` on any account. | ✅ Fixed — `requireUser()` |
+| 2.5 | 🟠 | `DELETE /api/subjects/delete` (+ `subjects/create`, `institutions`, `curricula`, `institution-courses`) | No admin gate on **global** reference data — any user can destroy marketplace-wide catalog rows or inject spam. | ✅ Fixed — `requireAdminApi("subjects")`, verified in `route.ts` |
+| 2.6 | 🟠 | `DELETE/PUT/POST /api/tutor-availability/{delete,update,save}` | Delete any tutor's slot by guessable `eventId` (no check at all); overwrite slots; create availability under any victim's email. `update` even computes `tutorId` then never uses it (a dropped check). | ✅ Fixed — `requireUser()`, `tutor_id === user.id` |
+| 2.7 | 🟠 | `PUT /api/profiles/update-subjects` (+ `subjects/update-subjects-and-prices`, `subjects/tutor-subjects`) | Cross-tenant CourseAsset write/delete + price overwrite keyed on client email. | ✅ Fixed — `requireUser()` |
+| 2.8 | 🟠 | `GET /api/profiles/get-full?email=` | Any authed user harvests any profile by email — leaks phone, `stripe_account_id`, `email_verified` across the whole user base via email enumeration. | ✅ Fixed — `requireUser()` |
+| 2.9 | 🟠 | `GET /api/stripe/connect/status?email=` | Enumeration oracle: any email → `acct_…` + onboarding/verification state. | ✅ Fixed — `requireUser()` |
+| 2.10 | 🟠 | `GET /api/sessions/student` + `tutor` | Any user reads any user's sessions + counterparty PII (name/avatar/bio/hourlyRate). | ✅ Fixed — `requireUser()` |
+| 2.11 | 🟠 | `GET /api/notifications/list` + `PATCH /mark-read` | Read/tamper any user's notifications via `userId` param. | ✅ Fixed — `requireUser()` |
+| 2.12 | 🟠 | `GET /api/feedback` | Commented "for the admin dashboard" but no admin gate — any authed user exfiltrates all feedback + submitter PII. | ✅ Fixed — `requireAdminApi("feedback")`, verified in `route.ts` |
 | — | ✅ refuted | `POST /api/stripe/complete-payment-return` | **Not a vuln**: the session id comes from unforgeable server-set `PaymentIntent.metadata` with a succeeded/pending-only write. Optional ownership assertion for defense-in-depth only. | — |
+
+> **Re-verified 2026-07-19** (daily routine): the `chore/audit-cleanup` fixes above are live on `main`, not parked on an unmerged branch — confirmed by re-reading each route's source. Table updated to match reality.
 
 **Shared fix (closes the whole family at once)** — add two helpers to `lib/api-auth.ts` and adopt mechanically:
 
@@ -100,9 +102,9 @@ All current callers already send their own email/id, so switching to session-der
 | # | Sev | Location | Issue | Status |
 |---|---|---|---|---|
 | 4.1 | 🟠 | `app/home/page.tsx:14,18` | `console.log` printed the **full Supabase session (access/refresh JWT)** + profile to the browser console on every load. | ✅ Fixed |
-| 4.2 | 🟠 | `app/auth/reset/page.tsx:46-49,81` | Shows real users Supabase/SMTP/Mailpit operational internals ("set up custom SMTP… check Mailpit"). | 🔍 Confirm |
-| 4.3 | 🟡 | ~43 API handlers | Return `details: error?.message` in 500 bodies, leaking Prisma/table/column internals. | 🔍 Confirm |
-| 4.4 | ⚪ | `app/home/session/[id]/recording/page.tsx:44,172-213` | Non-functional demo player (hardcoded `currentTime = 88`) ships whenever `recording_url` isn't an http(s) URL. | 🔍 Confirm |
+| 4.2 | 🟠 | `app/auth/reset/page.tsx:46-49,81` | Shows real users Supabase/SMTP/Mailpit operational internals ("set up custom SMTP… check Mailpit"). | ✅ Fixed — raw error now logged server-side only, user sees a generic message |
+| 4.3 | 🟡 | ~43 API handlers | Return `details: error?.message` in 500 bodies, leaking Prisma/table/column internals. | ✅ Fixed — repo-wide `grep "details: error"` now returns 0 hits |
+| 4.4 | ⚪ | `app/home/session/[id]/recording/page.tsx:44,172-213` | Non-functional demo player (hardcoded `currentTime = 88`) ships whenever `recording_url` isn't an http(s) URL. | ✅ Fixed — placeholder now stays at `currentTime = 0` instead of faking playback position |
 
 ---
 
@@ -186,10 +188,10 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 | 11.2 | `scripts/seed-education.cjs`, `prisma/seed.ts` | Broken/orphaned seeders superseded by `seed-provinces-curricula.cjs`. | 🔍 Recommend (delete) |
 | 11.3 | `.DS_Store`, `data/ontario_school_codes.xlsx`, `.gitignore` `eclero2.0.zip` | Committed OS/data artifacts; stale ignore rule. | ✅ Untracked + gitignore cleaned |
 | 11.4 | `components/EventCalender.tsx` | Misspelled module; default export named `Selectable` (unrelated to a calendar). | 🔍 Recommend (rename) |
-| 11.5 | `sessions-rls-policies.sql:17-34` | RLS compares `auth.uid()::text = <uuid column>` → type-mismatch error at eval. | 🔍 Confirm + fix |
+| 11.5 | `sessions-rls-policies.sql:17-34` | RLS compares `auth.uid()::text = <uuid column>` → type-mismatch error at eval. | ✅ Fixed — policies now compare `auth.uid()` directly against the uuid columns |
 | 11.6 | `app/api/subjects/create/route.ts:18` | Copy-paste log tag `[SUBJECTS_GET]` in the POST/create handler. | ✅ Fixed (`[SUBJECTS_CREATE]`) |
 | 11.7 | `prisma/sql/2026-06-12_…sql:2` | Header references `scripts/run-sql.cjs` that doesn't exist. | 🔍 Recommend |
-| 11.8 | `contacts/page.tsx:208-301` | React list `key` on inner `<tr>` instead of the mapped Fragment. | 🔍 Recommend |
+| 11.8 | `contacts/page.tsx:208-301` | React list `key` on inner `<tr>` instead of the mapped Fragment. | ✅ Fixed |
 | 11.9 | 6 admin ops pages | Double-wrapped layout (nested max-width/padding) + off-brand loading gradient. | 🔍 Recommend |
 | 11.10 | `TutorProfileBubble.tsx:392` (+ ~15 files) | Avatars fall back to non-existent `/default-avatar.png` → broken image, despite a purpose-built `Avatar` primitive. | 🔍 Recommend |
 | 11.11 | `SignUpWizard.tsx:134`, `student/page.tsx:180`, `admin/login/page.tsx:62` | Convoluted boolean; redirect-during-render; silent non-admin login loop. | 🔍 Recommend |
@@ -209,7 +211,7 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 
 ## Appendix B — Required manual follow-up (cannot be auto-applied)
 
-1. **Rotate** the leaked Supabase service-role + anon keys, Postgres password, and LiveKit key/secret (§1.1), plus the reused `Baba$123` (§1.2). **Purge git history** of the backup files.
-2. **Confirm `NEXT_PUBLIC_DEMO_MODE` is unset in production** (§3) and make it server-only/fail-closed.
-3. **Fix the IDOR family** (§2) via `requireUser()` / `requireAdminApi()` — criticals first.
-4. Then work the 🔍 items in §4–§11 (error handling, dead code, dep consolidation, migrations, polish).
+1. **⏳ Still outstanding as of 2026-07-19: rotate** the leaked Supabase service-role + anon keys, Postgres password, and LiveKit key/secret (§1.1), plus the reused `Baba$123` (§1.2 — the code was fixed on 2026-07-13, but the password itself was real and reused, so it must still be rotated). **Purge git history** of the backup files — they remain in every prior commit until this is done. This is the only item on this page that requires the owner directly; nothing else does.
+2. ~~Confirm `NEXT_PUBLIC_DEMO_MODE` is unset in production~~ — done, see §3.
+3. ~~Fix the IDOR family~~ — done, see §2 (re-verified live on `main` 2026-07-19).
+4. Remaining: the 🔍 Recommend items in §6–§11 (error handling polish, dead code, dep consolidation, migrations) — lower priority, not re-verified since 2026-06-29.
