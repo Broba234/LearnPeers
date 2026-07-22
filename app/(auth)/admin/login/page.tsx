@@ -54,15 +54,11 @@ function LoginContent() {
                 throw new Error('Could not determine user role. Please ensure you have registered an account.');
             }
 
-            let homePath = "/home";
-            switch (userData.role.toLowerCase()) {
-                case "admin":
-                    homePath = "/dashboard";
-                    break;
-                default:
-                    homePath = "/admin/login";
+            if (userData.role.toLowerCase() !== "admin") {
+                await supabase.auth.signOut();
+                throw new Error("This login is for admin accounts only. Use the regular login page instead.");
             }
-            router.push(homePath);
+            router.push("/dashboard");
         } catch (err: any) {
             console.error('[LOGIN] Error:', err?.message || err, err);
             setError(err.message || "An error occurred during login");
@@ -102,7 +98,16 @@ function LoginContent() {
                             className="w-full mt-2 px-3 py-2 text-white bg-transparent outline-none border border-white/30 focus:border-brand-400 focus:ring-2 focus:ring-brand-400/40 shadow-sm rounded-lg placeholder-gray-300"
                         />
                     </div>
-                    {error && <div className="text-red-400 text-sm">{error}</div>}
+                    {error && (
+                        <div className="text-red-400 text-sm">
+                            {error}{" "}
+                            {error.includes("admin accounts only") && (
+                                <Link href="/auth/login" className="underline text-red-300 hover:text-red-200">
+                                    Go to regular login
+                                </Link>
+                            )}
+                        </div>
+                    )}
                     <button
                         type="submit"
                         disabled={loading}
