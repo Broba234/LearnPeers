@@ -271,7 +271,7 @@ export function CtaBand() {
               href="/auth/register?role=tutor"
               className="inline-flex w-full items-center justify-center rounded-2xl border border-white/40 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.98] sm:w-auto sm:text-base"
             >
-              Tutor as a student
+              Earn as a tutor
             </Link>
           </div>
         </div>

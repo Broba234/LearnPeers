@@ -101,7 +101,7 @@ export default function Hero() {
               className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-ink-200 bg-white px-6 py-3.5 text-sm font-semibold text-ink-800 shadow-sm transition hover:border-brand-300 hover:bg-brand-50/50 active:scale-[0.98] sm:w-auto sm:text-base"
             >
               <GraduationCap className="h-5 w-5 text-brand-600" />
-              Tutor as a student
+              Earn as a tutor
             </Link>
           </motion.div>
 
