@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   // Ensure ESM packages like Excalidraw are transpiled for production builds
   transpilePackages: ['@excalidraw/excalidraw'],
   // Add empty turbopack config to silence the error
