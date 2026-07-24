@@ -209,7 +209,28 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 
 ## Appendix B — Required manual follow-up (cannot be auto-applied)
 
-1. **Rotate** the leaked Supabase service-role + anon keys, Postgres password, and LiveKit key/secret (§1.1), plus the reused `Baba$123` (§1.2). **Purge git history** of the backup files.
+1. **Rotate** the leaked Supabase service-role + anon keys, Postgres password, and LiveKit key/secret (§1.1). **Purge git history** of the backup files. (§1.2's reused `Baba$123` is moot — `deck-shots.mjs` now reads `DECK_SHOTS_*` env vars instead of hardcoded creds.)
 2. **Confirm `NEXT_PUBLIC_DEMO_MODE` is unset in production** (§3) and make it server-only/fail-closed.
-3. **Fix the IDOR family** (§2) via `requireUser()` / `requireAdminApi()` — criticals first.
+3. ~~**Fix the IDOR family** (§2) via `requireUser()` / `requireAdminApi()` — criticals first.~~ Done — see 2026-07-24 update below.
 4. Then work the 🔍 items in §4–§11 (error handling, dead code, dep consolidation, migrations, polish).
+
+---
+
+## Update — 2026-07-24 (daily mentor routine spot-check)
+
+Re-checked this audit against the current codebase (13 commits landed since 06-29, several tagged `fix(security)`). Confirmed fixed and no longer open, despite table rows below still reading 🔍/⏳ (not rewritten row-by-row to keep this diff small):
+
+- **§2 IDOR family (all 12 groups)** — `requireUser()`/`requireAdminApi()` verified live in `earnings`, `contacts`, `feedback`, `notifications/list`, `sessions/student`, `sessions/tutor`, and the rest of the routes named in §2. Client-supplied identity is no longer trusted anywhere in this list.
+- **§1.2 deck-shots.mjs hardcoded creds** — now reads `DECK_SHOTS_STUDENT_EMAIL/PASSWORD` + `DECK_SHOTS_TUTOR_EMAIL/PASSWORD` from `.env.local`; no real credentials in the file.
+- **§4.1 JWT-to-console leak, §5 all 22 `console.log`s, §6.1 `ignoreBuildErrors`, §9.1/9.2 unused deps** — all confirmed fixed (0 remaining `console.log`, `ignoreBuildErrors` removed 2026-07-23, deps pruned).
+- **§11.3 committed OS/data artifacts, §11.6 `[SUBJECTS_GET]` copy-paste tag** — confirmed fixed.
+- **§11.10 broken `/default-avatar.png`** — no longer an issue: the file exists as a valid 256×256 PNG, and `components/ui/Avatar.tsx` already has an initials-fallback that doesn't depend on it anyway.
+
+**Fixed today** (§4.3, the remaining slice — 8 files the original sweep's repo-wide grep missed because they use `error.message`/`error?.message` inline rather than a `details:` key): `earnings`, `auth/verify-email/{request,confirm}`, `education/verify-email/request`, and `stripe/connect/{login-link,account-session,create-account-link}` + `stripe/create-session-payment-intent` no longer echo raw Prisma/Stripe error text to API clients; each now logs the real error server-side via `console.error` and returns a generic message. Verified: `tsc --noEmit` clean, `eslint .` clean (0 errors, pre-existing warnings only), `next build`'s own TypeScript pass clean (the build itself can't fully prerender in this sandbox — no live Supabase/Stripe env vars — which is an environment limitation, not a regression).
+
+**Still genuinely open, none of them a safe drive-by fix:**
+- `tsconfig.json` `strict: false` (§6.1) — real lift, ~219 `any` in payment/auth code; needs a dedicated pass.
+- CSP `'unsafe-inline' 'unsafe-eval'` (§6.2) — likely needed for Stripe.js/inline styles today; tightening needs a real audit of what breaks, not a blind change.
+- ~65 empty/near-empty `catch` blocks repo-wide (§7) — each needs a human judgment call on whether swallowing was intentional; not mechanical.
+- Prisma migration history vs. hand-written `prisma/sql/*.sql` (§11.1) — re-baselining is a real DB-team decision.
+- Hardcoded `wss://eclero-livekit…` LiveKit fallback (§6.4) — intentionally left (see README note on live `eclero-*` infra names); changing it risks breaking local dev silently if `NEXT_PUBLIC_LIVEKIT_URL` is unset.

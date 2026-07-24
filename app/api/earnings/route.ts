@@ -37,7 +37,8 @@ export async function GET() {
     .order("created_at", { ascending: false });
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("[EARNINGS_GET]", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 
   const completedSessions = (sessions ?? []).filter((s) => s.status === "completed");
