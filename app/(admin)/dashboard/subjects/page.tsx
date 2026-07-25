@@ -193,7 +193,6 @@ export default function SubjectsPage() {
 
   return (
     <div>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -514,7 +513,6 @@ export default function SubjectsPage() {
         )}
 
       </div>
-    </div>
     {showAddSubject && <AddSubject subjects={subjects} setSubjects={setSubjects} grades={grades} categories={categories} setShowAddSubject={setShowAddSubject} />}
     </div>
   );

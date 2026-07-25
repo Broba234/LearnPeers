@@ -173,8 +173,7 @@ export default function InstitutionsPage() {
   const selectedInst = institutions.find(i => i.id === activeInstitution);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Institutions</h1>
@@ -358,6 +357,5 @@ export default function InstitutionsPage() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
