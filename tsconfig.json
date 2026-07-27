@@ -12,8 +12,8 @@
     "noImplicitAny": false,
     "strictNullChecks": false,
     "strictFunctionTypes": false,
-    "strictBindCallApply": false, // Disable strict mode
-    "noEmitOnError": false, // Allow build even when there are errors  // Skip type checking of declaration files
+    "strictBindCallApply": false,
+    "noEmitOnError": false,
     "strictPropertyInitialization": false,
     "noImplicitThis": false,
     "noEmit": true,

@@ -53,7 +53,9 @@ function WizardTimeSlot({ setSelectedSubjectsWithPrice }: any) {
             }));
           setSelectedSubjects(normalizedSubjects);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error("Failed to load pricing subjects from portfolio:", error);
+      }
     };
 
     fetchProfile();
