@@ -76,6 +76,7 @@ export default function TutorAvailability() {
           setSubjects(profileData);
         }
       } catch (e) {
+        console.error("Failed to load availability data:", e);
       } finally {
         setLoading(false);
       }

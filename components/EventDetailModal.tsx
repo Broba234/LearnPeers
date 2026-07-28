@@ -140,6 +140,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
            
           }
         } catch (error) {
+          console.error("Failed to load event subjects:", error);
         } finally {
           setLoadingSubjects(false);
         }
