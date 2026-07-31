@@ -87,12 +87,6 @@ html {
 
 
 
-/* Add to your global.css or styles/globals.css */
-.focus-border-inline:focus {
-  border-inline: 2px solid #12B1D1 !important;
-}
-
-/* Optional: For placeholder color consistency */
 input::placeholder {
   color: rgb(170, 170, 170);
 }
