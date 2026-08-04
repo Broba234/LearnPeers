@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, type ReactNode } from 'react';
 import Link from 'next/link';
 import {
   motion,
@@ -28,7 +28,7 @@ const fade = (delay: number) => ({
   transition: { duration: 0.6, delay, ease: [0.21, 0.5, 0.36, 1] as const },
 });
 
-export default function Hero() {
+export default function Hero({ liveTutorsSlot }: { liveTutorsSlot?: ReactNode }) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
@@ -118,6 +118,7 @@ export default function Hero() {
             <span className="flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-500" /> Live 1-on-1 video
             </span>
+            {liveTutorsSlot}
           </motion.div>
         </motion.div>
 
