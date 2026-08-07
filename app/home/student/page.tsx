@@ -179,6 +179,7 @@ export default function StudentHome() {
       }
       if (profile.role !== "student") {
         router.push("/auth/login");
+        return <LearnPeersLoader fullScreen />;
       }
       if (!profile.profile_setup) {
         return (
