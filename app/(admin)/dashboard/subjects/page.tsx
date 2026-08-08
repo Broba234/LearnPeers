@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import AddSubject from "@/components/admin/AddSubject";
 import SearchableSelect from "@/components/ui/SearchableSelect";
 
@@ -25,8 +24,6 @@ interface GradeOption {
 }
 
 export default function SubjectsPage() {
-  const router = useRouter();
-  
   // State for form inputs
   const [showAddSubject, setShowAddSubject] = useState(false);
   // State for data
