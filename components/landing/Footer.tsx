@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { FaLinkedin, FaTwitter, FaInstagram, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-import { ArrowRight } from "lucide-react";
+import { Linkedin, Twitter, Instagram, Mail, MapPin, ArrowRight } from "lucide-react";
 import { NodeConstellation } from "./NodeDecor";
 
 const QUICK_LINKS = [
@@ -49,10 +48,10 @@ export default function Footer() {
             </p>
             <div className="flex gap-3 pt-1">
               {[
-                { Icon: FaLinkedin, href: "#", label: "LinkedIn" },
-                { Icon: FaTwitter, href: "#", label: "Twitter" },
-                { Icon: FaInstagram, href: "#", label: "Instagram" },
-                { Icon: FaEnvelope, href: "mailto:hello@learnpeers.com", label: "Email us" },
+                { Icon: Linkedin, href: "#", label: "LinkedIn" },
+                { Icon: Twitter, href: "#", label: "Twitter" },
+                { Icon: Instagram, href: "#", label: "Instagram" },
+                { Icon: Mail, href: "mailto:hello@learnpeers.com", label: "Email us" },
               ].map(({ Icon, href, label }) => (
                 <a
                   key={label}
@@ -60,7 +59,7 @@ export default function Footer() {
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-white/70 transition hover:bg-brand-600 hover:text-white"
                   aria-label={label}
                 >
-                  <Icon className="text-base" />
+                  <Icon className="h-4 w-4" />
                 </a>
               ))}
             </div>
@@ -109,13 +108,13 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-sm text-white/60">
-                <FaEnvelope className="shrink-0 text-brand-400" />
+                <Mail className="h-4 w-4 shrink-0 text-brand-400" />
                 <a href="mailto:hello@learnpeers.com" className="break-all hover:text-brand-300">
                   hello@learnpeers.com
                 </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-white/60">
-                <FaMapMarkerAlt className="shrink-0 text-brand-400" />
+                <MapPin className="h-4 w-4 shrink-0 text-brand-400" />
                 Ontario, Canada
               </li>
             </ul>
