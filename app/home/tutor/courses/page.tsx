@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import Swal from "sweetalert2";
 import { supabase } from "@/lib/supabase/client";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import StandingHeader from "@/components/courses/StandingHeader";
@@ -108,16 +107,10 @@ export default function TutorCourses() {
   };
 
   const handleUnclaim = async (asset: CourseAsset) => {
-    const r = await Swal.fire({
-      title: "Remove this course?",
-      text: `${asset.subject.code || asset.subject.name} will be removed from your portfolio.`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#e11d48",
-      cancelButtonColor: "#64748b",
-      confirmButtonText: "Remove",
-    });
-    if (!r.isConfirmed) return;
+    const confirmed = window.confirm(
+      `Remove this course? ${asset.subject.code || asset.subject.name} will be removed from your portfolio.`
+    );
+    if (!confirmed) return;
     const res = await fetch("/api/courses/unclaim", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
