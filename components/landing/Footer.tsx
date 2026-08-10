@@ -12,9 +12,8 @@ const QUICK_LINKS = [
 ];
 
 const LEGAL_LINKS = [
-  { label: "Terms of Service", href: "#" },
-  { label: "Privacy Policy", href: "#" },
-  { label: "Cookie Policy", href: "#" },
+  { label: "Terms of Service", href: "/legal/terms" },
+  { label: "Privacy Policy", href: "/legal/privacy" },
 ];
 
 export default function Footer() {
@@ -139,8 +138,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} <span className="font-semibold text-white/70">LearnPeers</span>. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-            <Link href="#" className="text-sm text-white/40 transition hover:text-white">Terms</Link>
-            <Link href="#" className="text-sm text-white/40 transition hover:text-white">Privacy</Link>
+            <Link href="/legal/terms" className="text-sm text-white/40 transition hover:text-white">Terms</Link>
+            <Link href="/legal/privacy" className="text-sm text-white/40 transition hover:text-white">Privacy</Link>
             <a href="mailto:hello@learnpeers.com" className="text-sm text-white/40 transition hover:text-white">Contact</a>
           </div>
         </div>
