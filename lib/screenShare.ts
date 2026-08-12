@@ -1,4 +1,4 @@
-import { Room, Track } from 'livekit-client';
+import { Room } from 'livekit-client';
 import { toast } from '@/lib/toast';
 
 /**
