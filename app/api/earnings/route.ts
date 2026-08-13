@@ -73,15 +73,18 @@ export async function GET() {
       const cadPending = balance.pending.find((b) => b.currency === "cad");
       stripeAvailable = (cadAvailable?.amount ?? 0) / 100;
       stripePending = (cadPending?.amount ?? 0) / 100;
-    } catch {
-      // Stripe not fully onboarded — silently skip
+    } catch (err) {
+      // Stripe not fully onboarded — leave balances at 0, but log so a real
+      // Stripe outage doesn't look identical to "not onboarded yet".
+      console.error("[EARNINGS] stripe.balance.retrieve failed:", err);
     }
 
     try {
       const link = await stripe.accounts.createLoginLink(profile.stripe_account_id);
       loginUrl = link.url;
-    } catch {
+    } catch (err) {
       // Express dashboard not available in test mode with sandbox accounts
+      console.error("[EARNINGS] stripe.accounts.createLoginLink failed:", err);
     }
   }
 
