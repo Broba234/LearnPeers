@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { supabase } from "@/lib/supabase/client";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import Selectable from "@/components/EventCalendar";
@@ -76,6 +77,7 @@ export default function TutorAvailability() {
           setSubjects(profileData);
         }
       } catch (e) {
+        toast.error("Couldn't load your availability — try refreshing the page");
       } finally {
         setLoading(false);
       }

@@ -140,6 +140,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
            
           }
         } catch (error) {
+          toast.error("Couldn't load your subjects — try refreshing the page");
         } finally {
           setLoadingSubjects(false);
         }
