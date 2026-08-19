@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import { TutorProfileModalContext } from "@/components/ui/components/common/TutorProfileModalContext";
 import { FilterModal } from "@/components/FilterModal";
@@ -451,12 +450,12 @@ export default function ExploreTutors() {
               We&rsquo;re onboarding verified student tutors from across Ontario universities. Tell us
               the course you need and we&rsquo;ll notify you the moment a tutor goes live.
             </p>
-            <Link
-              href="/#contact"
+            <a
+              href={`mailto:hello@learnpeers.com?subject=${encodeURIComponent("Tutor request")}&body=${encodeURIComponent("Hi! I'm looking for a tutor for: ")}`}
               className="mt-5 inline-flex items-center gap-1.5 px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors"
             >
               Request a tutor
-            </Link>
+            </a>
           </div>
         )}
 
@@ -503,6 +502,18 @@ export default function ExploreTutors() {
             <p className="text-slate-400 text-sm max-w-sm mx-auto">
               No tutors have availability for your selected subjects right now. Try adjusting your filters.
             </p>
+            <a
+              href={`mailto:hello@learnpeers.com?subject=${encodeURIComponent("Tutor request")}&body=${encodeURIComponent(
+                `Hi! I couldn't find a tutor for: ${validStudentSubjectIds
+                  .map((id) => subjects.find((s) => s.id === id))
+                  .filter((s): s is Subjects => !!s)
+                  .map((s) => `${s.name} (${s.code})`)
+                  .join(", ")}. Please let me know when one's available.`
+              )}`}
+              className="mt-5 inline-flex items-center gap-1.5 px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors"
+            >
+              Request this course
+            </a>
           </div>
         )}
       </div>
