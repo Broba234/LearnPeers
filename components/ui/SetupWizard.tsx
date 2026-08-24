@@ -451,8 +451,7 @@ const SetupWizard = () => {
                   {steps.map((step) => (
                     <div
                       key={step.number}
-                      // onClick={() => setActiveStep(step.number)}
-                      className={`flex items-start gap-4 p-4 cursor-pointer rounded-xl transition-all`}
+                      className={`flex items-start gap-4 p-4 rounded-xl transition-all`}
                     >
                       <div
                         className={`relative flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
@@ -463,7 +462,6 @@ const SetupWizard = () => {
                             : "bg-gray-200 text-gray-600"
                         }`}
                       >
-                        {/* <div className="absolute w-1 h-5 top-100 left-0 bg-gray-200"></div> */}
                         {step.number < activeStep ? (
                           <CheckCircle className="w-5 h-5" />
                         ) : step.number == activeStep ? (
@@ -547,9 +545,6 @@ const SetupWizard = () => {
                           />
                         </svg>
                       </div>
-                      {/* <div className="text-xs font-semibold bg-gradient-to-r from-brand-600 to-brand-600 bg-clip-text text-transparent mt-1">
-        Step {activeStep}
-      </div> */}
                     </div>
                   </div>
                 </div>
