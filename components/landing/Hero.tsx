@@ -25,7 +25,7 @@ const HERO_NODES: ParallaxItem[] = [
 const fade = (delay: number) => ({
   initial: { opacity: 0, y: 18 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.21, 0.5, 0.36, 1] as const },
+  transition: { duration: 0.45, delay, ease: [0.21, 0.5, 0.36, 1] as const },
 });
 
 export default function Hero() {
@@ -67,7 +67,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.h1
-            {...fade(0.08)}
+            {...fade(0.05)}
             className="text-balance text-4xl font-extrabold tracking-tight text-ink-900 sm:text-5xl lg:text-6xl lg:leading-[1.05]"
           >
             Learn from the university student who{' '}
@@ -78,7 +78,7 @@ export default function Hero() {
           </motion.h1>
 
           <motion.p
-            {...fade(0.16)}
+            {...fade(0.1)}
             className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-ink-500 sm:text-lg lg:mx-0"
           >
             Get matched with university students who recently aced the exact Grade 11 &amp; 12
@@ -86,7 +86,7 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
-            {...fade(0.24)}
+            {...fade(0.15)}
             className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start"
           >
             <Link
@@ -106,7 +106,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.div
-            {...fade(0.32)}
+            {...fade(0.2)}
             className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-400 lg:justify-start"
           >
             <span className="flex items-center gap-1.5">
