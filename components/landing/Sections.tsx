@@ -190,6 +190,10 @@ const FAQS = [
     q: 'Is LearnPeers free to join?',
     a: 'Creating an account is free. You only pay when you book a session with a tutor. LearnPeers is currently in beta.',
   },
+  {
+    q: 'Can I cancel or reschedule a session?',
+    a: 'Yes. Either you or your tutor can cancel a booked session before it starts, and any payment is automatically refunded in full. If a tutor declines your request, you\'re never charged.',
+  },
 ];
 
 export function Faq() {
