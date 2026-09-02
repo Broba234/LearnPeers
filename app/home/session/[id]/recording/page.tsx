@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import LearnPeersLoader from "@/components/ui/LearnPeersLoader";
 import {
-  ArrowLeft, Play, Pause, Volume2, Maximize2, Settings2,
+  ArrowLeft, Play, Volume2, Maximize2, Settings2,
   Search, ShieldCheck, Lock, Captions, Sparkles, Calendar, Clock,
 } from "lucide-react";
 
@@ -37,8 +37,6 @@ export default function RecordingReviewPage() {
   const [session, setSession] = useState<any>(null);
   const [recording, setRecording] = useState<any>(null);
   const [query, setQuery] = useState("");
-  const [playing, setPlaying] = useState(false);
-
   // The placeholder frame (shown when there's no playable recording_url yet)
   // has no real playback, so the playhead stays at 0 rather than faking a
   // mid-session position.
@@ -109,6 +107,7 @@ export default function RecordingReviewPage() {
   const hasVideo = typeof recording.recording_url === "string" && /^https?:\/\//.test(recording.recording_url);
   const status: string = recording.status || "ready";
   const processing = ["recording", "processing", "transcribing"].includes(status);
+  const failed = status === "failed";
   const hasTranscript = segments.length > 0;
 
   return (
@@ -181,15 +180,21 @@ export default function RecordingReviewPage() {
                     </p>
                   </div>
                 ) : (
-                  <button
-                    onClick={() => setPlaying((p) => !p)}
-                    className="absolute inset-0 flex items-center justify-center group"
-                    aria-label={playing ? "Pause" : "Play"}
-                  >
-                    <span className="w-16 h-16 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-xl transition-transform group-hover:scale-105">
-                      {playing ? <Pause className="w-7 h-7 text-slate-900" /> : <Play className="w-7 h-7 text-slate-900 translate-x-0.5" />}
-                    </span>
-                  </button>
+                  // No playable recording_url and nothing is processing — there is
+                  // no video to control, so don't render a play button that would
+                  // silently do nothing when clicked.
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-slate-900/70 text-white text-center px-6">
+                    <p className="text-sm font-medium">
+                      {failed
+                        ? "This recording couldn't be processed."
+                        : "Recording unavailable for this session."}
+                    </p>
+                    {failed && (
+                      <p className="text-xs text-white/70 max-w-xs">
+                        The transcript below (if any) is still available. Contact support if you need this recording.
+                      </p>
+                    )}
+                  </div>
                 )}
                 <div className="absolute bottom-0 left-0 right-0 px-4 pb-3 pt-10 bg-gradient-to-t from-black/70 to-transparent">
                   <div className="h-1.5 w-full rounded-full bg-white/25 overflow-hidden">
