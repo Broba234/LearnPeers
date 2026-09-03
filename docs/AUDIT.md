@@ -7,6 +7,8 @@
 
 > The brief was "find dead code or anything unprofessional." Both are covered below. The sweep also surfaced **critical security holes** (committed live secrets, a systemic authorization flaw) that "unprofessional" undersells — they lead the report.
 
+> **2026-09-03 status check (daily routine):** most 🔍 items below have since been closed by follow-up commits and this table was never updated to match. Re-verified today: §4.3 error-detail leaks — **0 remaining** (`grep -rl "details: error" app/api` empty). §7.1/7.2 swallowed errors/empty catches — **0 remaining** (only exception is the theme-detector IIFE in `app/layout.tsx`, which is deliberately silent). §9.4 `dotenv` — already moved to devDependencies. §11.4 `EventCalender.tsx` — already renamed. §11.8 contacts row key — already fixed. §11.9 admin ops double-wrap — already fixed. §11.10 `/default-avatar.png` — the asset now exists at `public/default-avatar.png`, so the ~15 fallback references are no longer broken-image links. Still genuinely open: **§6.1** (`strict: false` — flagged then as too large for a drive-by, still true), **§6.2** (CSP still ships `unsafe-eval` + `unsafe-inline`), and **§6.4** (`components/LiveKitRoom.tsx:66` still silently falls back to a hardcoded `wss://eclero-livekit…` URL if the env var is unset). §1.1's credential-rotation step can't be verified from the repo — confirm directly with Supabase/LiveKit dashboards if that hasn't been done.
+
 ## Severity summary
 
 | Severity | Count | Headline items |
