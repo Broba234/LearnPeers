@@ -129,7 +129,7 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 | 6.1 | 🟡 | `next.config.js:4-6`, `tsconfig.json:11` | `ignoreBuildErrors: true` + `strict: false` — builds pass with real type errors; root cause behind ~219 `any` in a payments/auth codebase. | ✅ `ignoreBuildErrors` removed (2026-07-23, `tsc --noEmit` + build's own TS pass both clean) · 🔍 `strict: false` still open — bigger lift, needs a dedicated pass, not a daily-routine drive-by |
 | 6.2 | 🟡 | `next.config.js:21` | CSP `script-src` allows both `'unsafe-eval'` **and** `'unsafe-inline'`, defeating most XSS protection. | 🔍 Review |
 | 6.3 | 🟡 | `components/admin/AddSubject.tsx:33`, `WizardTimeSlot`, `UsersTable` | Whole props bags / datasets typed `any`, hiding field-name typos. | 🔍 Recommend |
-| 6.4 | ⚪ | `components/LiveKitRoom.tsx:66` | Hardcoded `wss://eclero-livekit…` fallback if `NEXT_PUBLIC_LIVEKIT_URL` unset — connects to a stale project instead of failing loudly. | 🔍 Recommend |
+| 6.4 | ⚪ | `components/LiveKitRoom.tsx:66` | Hardcoded `wss://eclero-livekit…` fallback if `NEXT_PUBLIC_LIVEKIT_URL` unset — connects to a stale project instead of failing loudly. | ✅ Fixed (2026-09-04, daily routine) |
 | 6.5 | ⚪ | `lib/analytics.ts:49` | Local `interface Window` shadows the global DOM type. | ✅ Fixed |
 
 ---

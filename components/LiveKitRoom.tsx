@@ -63,10 +63,16 @@ const LiveKitRoom: React.FC<LiveKitRoomProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
 
-  const serverUrl = process.env.NEXT_PUBLIC_LIVEKIT_URL || 'wss://eclero-livekit.livekit.cloud';
+  const serverUrl = process.env.NEXT_PUBLIC_LIVEKIT_URL;
 
   useEffect(() => {
     if (!isOpen || !roomName || !userIdentity) return;
+
+    if (!serverUrl) {
+      setError('Connection Error: NEXT_PUBLIC_LIVEKIT_URL is not configured.');
+      setIsLoading(false);
+      return;
+    }
 
     const getToken = async () => {
       setIsLoading(true);
