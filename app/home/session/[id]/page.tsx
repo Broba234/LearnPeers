@@ -105,7 +105,7 @@ export default function SessionRoomPage() {
             <span className="absolute w-20 h-20 rounded-full bg-emerald-400/20 animate-ping" />
             <img
               src={otherParty?.avatar || "/default-avatar.png"}
-              alt=""
+              alt={otherParty?.name || "Session participant"}
               className="relative w-16 h-16 rounded-full object-cover ring-2 ring-emerald-400/50 bg-slate-800"
             />
           </div>
