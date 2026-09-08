@@ -8,6 +8,10 @@
 > The brief was "find dead code or anything unprofessional." Both are covered below. The sweep also surfaced **critical security holes** (committed live secrets, a systemic authorization flaw) that "unprofessional" undersells — they lead the report.
 
 > **2026-09-03 status check (daily routine):** most 🔍 items below have since been closed by follow-up commits and this table was never updated to match. Re-verified today: §4.3 error-detail leaks — **0 remaining** (`grep -rl "details: error" app/api` empty). §7.1/7.2 swallowed errors/empty catches — **0 remaining** (only exception is the theme-detector IIFE in `app/layout.tsx`, which is deliberately silent). §9.4 `dotenv` — already moved to devDependencies. §11.4 `EventCalender.tsx` — already renamed. §11.8 contacts row key — already fixed. §11.9 admin ops double-wrap — already fixed. §11.10 `/default-avatar.png` — the asset now exists at `public/default-avatar.png`, so the ~15 fallback references are no longer broken-image links. Still genuinely open: **§6.1** (`strict: false` — flagged then as too large for a drive-by, still true), **§6.2** (CSP still ships `unsafe-eval` + `unsafe-inline`), and **§6.4** (`components/LiveKitRoom.tsx:66` still silently falls back to a hardcoded `wss://eclero-livekit…` URL if the env var is unset). §1.1's credential-rotation step can't be verified from the repo — confirm directly with Supabase/LiveKit dashboards if that hasn't been done.
+>
+> **2026-09-08 status check (daily routine):** §6.4 is now ✅ **fixed** (2026-09-04 commit — `LiveKitRoom` throws instead of falling back to the stale `eclero-livekit` host). Re-verified several more 🔍 items and found them already resolved by commits since 09-03: §4.2 (`app/auth/reset/page.tsx` no longer surfaces Mailpit/SMTP internals — generic user-facing copy only, raw error stays in `console.error`), §8.3 (`app/api/booking/create/route.ts` no-op route deleted), §8.4 (tutor sessions page's `totalEarnings` is now wired into the stat card instead of being discarded), §11.2 (`seed-education.cjs` / `prisma/seed.ts` orphaned seeders deleted), §1.2 (`scripts/deck-shots.mjs` no longer hardcodes real Gmail/iCloud creds — reads `DECK_SHOTS_*` env vars). **Did not delete** the unused `Card`/`Badge`/`Spinner` primitives (§8.8) on a closer look — `docs/DESIGN_SYSTEM.md` documents them as the intended design-system surface for future pages, so "unused today" isn't "dead," and removing them would fight the stated convention.
+>
+> **Still genuinely open, unchanged:** §1.1 (**leaked Supabase service-role JWT / Postgres password / LiveKit secret are still recoverable from git history** — commit `aeeb9b3` — even though the working tree is clean; rotation + `git filter-repo` history purge has not been done and can't be verified from the repo), §1.3 (`Deck$Seed123` shared seed password, still present in `scripts/seed-deck.mjs:158` — low severity, dev/seed-only), §6.1 (`strict: false`), §6.2 (CSP `unsafe-eval`/`unsafe-inline`), §9.3 (dep consolidation — `moment`+`moment-timezone` still present alongside newer date handling), §11.1 (migration history vs. hand-written SQL), §11.5 (RLS `auth.uid()::text` type mismatch).
 
 ## Severity summary
 
@@ -27,7 +31,7 @@ Status legend: **✅ Fixed** (applied on branch `chore/audit-cleanup`) · **⏳ 
 | # | Sev | Location | Issue | Status |
 |---|---|---|---|---|
 | 1.1 | 🔴 | `.env.local.backup`, `.env.backup` | **Tracked in git with live secrets**: Supabase **service-role JWT** (bypasses all RLS), Postgres password, anon key, LiveKit API key + secret. `.gitignore` covered `.env*` but not `*.backup`. | ✅ untracked + gitignore fixed · ⏳ **rotate all credentials + purge history** |
-| 1.2 | 🟠 | `scripts/deck-shots.mjs:21-22` | Developer's real Gmail + iCloud logins hardcoded with a **reused password** (`Baba$123`). | ⏳ Manual + rotate |
+| 1.2 | 🟠 | `scripts/deck-shots.mjs:21-22` | Developer's real Gmail + iCloud logins hardcoded with a **reused password** (`Baba$123`). | ✅ Fixed (now reads `DECK_SHOTS_*` env vars) |
 | 1.3 | 🟡 | `scripts/seed-deck.mjs:158`, `seed-showcase.mjs` | Hardcoded shared password (`Deck$Seed123`) creates sign-in-able seeded auth users. | 🔍 Confirm |
 | 1.4 | ⚪ | `.env.example:37` | Real-looking `pk_test_…` Stripe key instead of a placeholder. | ✅ Fixed (placeholder) |
 | 1.5 | ⚪ | `prisma/sql/2026-06-24_admin_seats_permissions.sql:12-15` | Product-owner email hardcoded to bootstrap admin in a committed migration. | 🔍 Confirm |
@@ -102,7 +106,7 @@ All current callers already send their own email/id, so switching to session-der
 | # | Sev | Location | Issue | Status |
 |---|---|---|---|---|
 | 4.1 | 🟠 | `app/home/page.tsx:14,18` | `console.log` printed the **full Supabase session (access/refresh JWT)** + profile to the browser console on every load. | ✅ Fixed |
-| 4.2 | 🟠 | `app/auth/reset/page.tsx:46-49,81` | Shows real users Supabase/SMTP/Mailpit operational internals ("set up custom SMTP… check Mailpit"). | 🔍 Confirm |
+| 4.2 | 🟠 | `app/auth/reset/page.tsx:46-49,81` | Shows real users Supabase/SMTP/Mailpit operational internals ("set up custom SMTP… check Mailpit"). | ✅ Fixed (generic copy only; raw error goes to `console.error`) |
 | 4.3 | 🟡 | ~43 API handlers | Return `details: error?.message` in 500 bodies, leaking Prisma/table/column internals. | 🔍 Confirm |
 | 4.4 | ⚪ | `app/home/session/[id]/recording/page.tsx:44,172-213` | Non-functional demo player (hardcoded `currentTime = 88`) ships whenever `recording_url` isn't an http(s) URL. | 🔍 Confirm |
 
@@ -150,8 +154,8 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 |---|---|---|---|
 | 8.1 | `components/ui/components/SubjectSelectProfile.tsx` (539 L), `UpdateProfileTimeSlot.tsx` (298 L) | Imported nowhere; ~90% copy-paste forks of live components. `SubjectSelectProfile` would crash if rendered. | ✅ Deleted |
 | 8.2 | `components/ui/wizardIcons.tsx` (+ import in `SetupWizard.tsx:28`) | Whole file dead — icons imported but never rendered. | ✅ Deleted |
-| 8.3 | `app/api/booking/create/route.ts` | `export {};` no-op route; `instant-request` superseded by `instant-authorize`; empty branches in `connect/return`, `sessions/update-status:52`. | 🔍 Recommend |
-| 8.4 | `app/home/tutor/sessions/page.tsx:208-239` | Computes `totalEarnings` then discards it; ships a permanent `'$—'` placeholder card. | 🔍 Recommend |
+| 8.3 | `app/api/booking/create/route.ts` | `export {};` no-op route; `instant-request` superseded by `instant-authorize`; empty branches in `connect/return`, `sessions/update-status:52`. | ✅ Fixed (no-op route deleted) |
+| 8.4 | `app/home/tutor/sessions/page.tsx:208-239` | Computes `totalEarnings` then discards it; ships a permanent `'$—'` placeholder card. | ✅ Fixed (stat card now shows the real total) |
 | 8.5 | `app/(admin)/dashboard/subjects/page.tsx:35-50,165-218` | `handleCreateSubject` + state reachable only from a commented-out form (see 10.1). | 🔍 Recommend |
 | 8.6 | `app/home/student/sessions/page.tsx:30-35`, `tutor/availability/page.tsx:6-7`, `explore/components/TutorCard.tsx:11,28` | Dead modal scaffolding, duplicate import, dead `onBook` prop + `tzTime` (orphans `currentTimeInTz`). | 🔍 Recommend |
 | 8.7 | `AddSubject`, `SetupWizard`, `EventModal`, `FilterModal`, `WizardTimeSlot`, `EventDetailModal`, `tutor/[id]`, `admin/login`, `approvals` | Long tail of unused imports/interfaces/props/state (incl. `AddSubject`'s unused `loading` → unreachable spinner). | 🔍 Recommend |
@@ -185,7 +189,7 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 | # | Location | Issue | Status |
 |---|---|---|---|
 | 11.1 | `prisma/migrations/` | **Migration history abandoned & contradicts `schema.prisma`** (2026 changes applied via hand-written `prisma/sql/*.sql`) — `migrate deploy` on a fresh DB yields a wrong schema. | 🔍 Recommend (re-baseline or document) |
-| 11.2 | `scripts/seed-education.cjs`, `prisma/seed.ts` | Broken/orphaned seeders superseded by `seed-provinces-curricula.cjs`. | 🔍 Recommend (delete) |
+| 11.2 | `scripts/seed-education.cjs`, `prisma/seed.ts` | Broken/orphaned seeders superseded by `seed-provinces-curricula.cjs`. | ✅ Fixed (both deleted) |
 | 11.3 | `.DS_Store`, `data/ontario_school_codes.xlsx`, `.gitignore` `eclero2.0.zip` | Committed OS/data artifacts; stale ignore rule. | ✅ Untracked + gitignore cleaned |
 | 11.4 | `components/EventCalender.tsx` | Misspelled module; default export named `Selectable` (unrelated to a calendar). | 🔍 Recommend (rename) |
 | 11.5 | `sessions-rls-policies.sql:17-34` | RLS compares `auth.uid()::text = <uuid column>` → type-mismatch error at eval. | 🔍 Confirm + fix |
