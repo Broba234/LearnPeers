@@ -18,6 +18,9 @@ const getEnv = (k) => {
 const DATABASE_URL = getEnv('DATABASE_URL');
 const SUPABASE_URL = getEnv('NEXT_PUBLIC_SUPABASE_URL');
 const SERVICE_ROLE = getEnv('SUPABASE_SERVICE_ROLE_KEY');
+// Override via SEED_PASSWORD in .env.local; falls back to the same shared
+// dev-seed password so existing local setups keep working unchanged.
+const SEED_PASSWORD = getEnv('SEED_PASSWORD') || 'Deck$Seed123';
 
 const client = new Client({ connectionString: DATABASE_URL });
 const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { autoRefreshToken: false, persistSession: false } });
@@ -155,7 +158,7 @@ async function ensureAuthUser(email) {
   if (existing.rows[0]) return existing.rows[0].id;
   // Otherwise look for an existing auth user, else create one.
   const { data: created, error } = await admin.auth.admin.createUser({
-    email, password: 'Deck$Seed123', email_confirm: true,
+    email, password: SEED_PASSWORD, email_confirm: true,
   });
   if (error) {
     if (/already been registered|already exists/i.test(error.message)) {
