@@ -1,11 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import {
-  ArrowRight, BadgeCheck, GraduationCap, ShieldCheck, Sparkles, Star,
-} from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { normalizeGrade, type GradeScale } from "@/lib/courses";
-import Avatar from "@/components/ui/Avatar";
+import TutorSearchGrid from "@/components/tutor/TutorSearchGrid";
 
 export const dynamic = "force-dynamic";
 
@@ -154,85 +152,7 @@ export default async function BrowseTutorsPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {tutors.map((t) => (
-              <Link
-                key={t.id}
-                href={`/tutor/${t.id}`}
-                className="group flex flex-col rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-md"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <Avatar
-                      src={t.avatar}
-                      name={t.name}
-                      rounded="rounded-xl"
-                      className="h-12 w-12 flex-shrink-0 text-lg"
-                    />
-                    <div className="min-w-0">
-                      <p className="truncate font-semibold text-slate-900">{t.name}</p>
-                      {t.school && (
-                        <p className="mt-0.5 flex items-center gap-1 truncate text-xs text-slate-500">
-                          {t.verified ? (
-                            <BadgeCheck className="h-3.5 w-3.5 flex-shrink-0 text-emerald-500" />
-                          ) : (
-                            <GraduationCap className="h-3.5 w-3.5 flex-shrink-0 text-slate-400" />
-                          )}
-                          {t.school.abbreviation || t.school.name}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  {t.fromPrice != null && (
-                    <div className="flex-shrink-0 text-right">
-                      <span className="text-[11px] text-slate-400">from</span>
-                      <div className="text-sm font-semibold text-slate-900">
-                        ${t.fromPrice}
-                        <span className="text-xs font-normal text-slate-400">/hr</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {t.topCode && t.topGradeLabel && (
-                  <div className="mt-3 flex items-center gap-1.5 rounded-lg bg-emerald-50 px-2.5 py-1.5 text-xs text-emerald-800 ring-1 ring-emerald-100">
-                    <ShieldCheck className="h-3.5 w-3.5 flex-shrink-0 text-emerald-600" />
-                    <span>
-                      Aced <span className="font-mono font-semibold">{t.topCode}</span> —{" "}
-                      <span className="font-bold">{t.topGradeLabel}</span>
-                    </span>
-                  </div>
-                )}
-
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {t.codes.map((code) => (
-                    <span
-                      key={code}
-                      className="rounded-md bg-slate-100 px-2 py-0.5 font-mono text-[11px] font-medium text-slate-600"
-                    >
-                      {code}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-auto flex items-center justify-between pt-4">
-                  <div className="flex items-center gap-2 text-xs text-slate-400">
-                    {t.rating != null && (
-                      <span className="inline-flex items-center gap-1 font-medium text-slate-600">
-                        <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                        {t.rating.toFixed(2)}
-                        {t.totalReviews > 0 && <span className="text-slate-400">({t.totalReviews})</span>}
-                      </span>
-                    )}
-                    {t.totalSessions > 0 && <span>{t.totalSessions} sessions</span>}
-                  </div>
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-600 transition group-hover:gap-1.5">
-                    View profile <ArrowRight className="h-3.5 w-3.5" />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <TutorSearchGrid tutors={tutors} />
         )}
 
         {tutors.length > 0 && (
