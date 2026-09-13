@@ -10,6 +10,8 @@
 > **2026-09-03 status check (daily routine):** most 🔍 items below have since been closed by follow-up commits and this table was never updated to match. Re-verified today: §4.3 error-detail leaks — **0 remaining** (`grep -rl "details: error" app/api` empty). §7.1/7.2 swallowed errors/empty catches — **0 remaining** (only exception is the theme-detector IIFE in `app/layout.tsx`, which is deliberately silent). §9.4 `dotenv` — already moved to devDependencies. §11.4 `EventCalender.tsx` — already renamed. §11.8 contacts row key — already fixed. §11.9 admin ops double-wrap — already fixed. §11.10 `/default-avatar.png` — the asset now exists at `public/default-avatar.png`, so the ~15 fallback references are no longer broken-image links. Still genuinely open: **§6.1** (`strict: false` — flagged then as too large for a drive-by, still true), **§6.2** (CSP still ships `unsafe-eval` + `unsafe-inline`), and **§6.4** (`components/LiveKitRoom.tsx:66` still silently falls back to a hardcoded `wss://eclero-livekit…` URL if the env var is unset). §1.1's credential-rotation step can't be verified from the repo — confirm directly with Supabase/LiveKit dashboards if that hasn't been done.
 >
 > **2026-09-12 status check (daily routine):** §6.4 closed since the last check (commit `0bfac8c`, 2026-09-04) — the LiveKit URL fallback now fails loudly instead of silently connecting to the stale `eclero-livekit` host. Re-verified several more rows that were still marked open and found them already fixed by commits this table never caught up to: **§1.2** deck-shots.mjs no longer hardcodes the owner's real Gmail/iCloud password (now reads required env vars). **§1.3** `seed-deck.mjs`'s shared seed password is now `SEED_PASSWORD`-overridable (fixed today, see Appendix A). **§4.2** `auth/reset` no longer mentions SMTP/Mailpit — raw Supabase errors are logged server-side only, users get a generic message. **§4.4** the recording page no longer fakes a mid-session playhead (`currentTime` is a hardcoded `0` with a comment explaining why, matching commit `fa37a44`). **§8.3** `app/api/booking/create` (the no-op route) no longer exists, and `booking/cancel` is now a fully authorized, Stripe-refund-aware handler — nothing left to recommend here. **§8.4/§11.5** the tutor sessions earnings card and the Sessions RLS policy both already carry the fixes the audit described as still-recommended. **§8.5/§10.1** the ~90-line dead "Create New Subject" form and its unreachable `handleCreateSubject` state are gone from `app/(admin)/dashboard/subjects/page.tsx` (515 lines today, down from the audited version). **§11.2** the orphaned `seed-education.cjs`/`prisma/seed.ts` seeders no longer exist. **§11.7** the `2026-06-12_education_structure.sql` header no longer references the missing `run-sql.cjs`. **§9.3** is largely moot now that `date-fns` is gone (§9.1) and `sweetalert2`/`react-icons` are gone (commit `44fefaf`) — the remaining `moment` + `moment-timezone` pair is genuinely used together (4 files) for timezone math, not redundant. Still genuinely open and worth a dedicated (non-drive-by) pass: **§6.1** `strict: false`, **§6.2** CSP `unsafe-eval`/`unsafe-inline` (removing either needs an inline-script/eval inventory across Stripe.js/Excalidraw/Tldraw/LiveKit first — too risky for a blind edit), **§8.6/§8.7/§8.8** the long tail of dead imports/props and underused UI primitives, and **§11.1** the abandoned migration history vs. hand-run `prisma/sql/*.sql` files (needs a deliberate re-baseline, not a quick fix).
+>
+> **2026-09-13 status check (daily routine):** the table below still had ~15 rows marked 🔍/⏳ that the 2026-09-03 and 2026-09-12 narrative notes above already confirmed fixed — the "Status" column just never caught up to the prose. Re-verified every still-🔍/⏳ row against the code directly (not just against last check's notes) and flipped the ones with no remaining trace: **§1.3, §4.2, §4.4, §7.1, §7.2, §7.3** (repo-wide `catch {}`/`catch (e) {}` search now returns only the intentional theme-detector IIFE in `app/layout.tsx`, exactly as already called out), **§8.3** (booking `create` route stays gone; `connect/return`'s empty `if` branch is a harmless no-op with an explanatory comment, not a swallowed error — leaving as documented behavior, not a bug), **§8.4** (`app/home/tutor/sessions/page.tsx`'s Earnings stat card now renders the computed `totalEarnings`, no `'$—'` placeholder left), **§8.5/§10.1**, **§9.4** (`dotenv` is already in `devDependencies`), **§11.2, §11.4** (`EventCalender.tsx` → `EventCalendar.tsx`, matches commit `4e8eebc`), **§11.5** (RLS policy already compares `auth.uid()` to the `uuid` column directly, no `::text` cast), **§11.7, §11.8, §11.9, §11.10**. Also synced the §2 (IDOR) row-level Status cells to match the section's own "✅ All rows above are fixed on `chore/audit-cleanup`" preamble — spot-checked `app/api/earnings/route.ts`, which now calls `requireUser()` from `lib/api-auth.ts` as documented. Genuinely still open, unchanged from last check: **§1.1** (credential rotation — can't be verified from the repo, needs a direct answer from the owner), **§1.2** (rotate the leaked `Baba$123` password itself, separate from the code fix already applied), **§1.5** (owner's email bootstrap in a migration — low severity, intentional, no action needed), **§6.1, §6.2, §9.3, §11.1, §11.11** (all correctly deferred as dedicated, non-drive-by passes), and **§8.6/§8.7/§8.8** (dead-import/prop long tail — still open, still low priority).
 
 ## Severity summary
 
@@ -30,7 +32,7 @@ Status legend: **✅ Fixed** (applied on branch `chore/audit-cleanup`) · **⏳ 
 |---|---|---|---|---|
 | 1.1 | 🔴 | `.env.local.backup`, `.env.backup` | **Tracked in git with live secrets**: Supabase **service-role JWT** (bypasses all RLS), Postgres password, anon key, LiveKit API key + secret. `.gitignore` covered `.env*` but not `*.backup`. | ✅ untracked + gitignore fixed · ⏳ **rotate all credentials + purge history** |
 | 1.2 | 🟠 | `scripts/deck-shots.mjs:21-22` | Developer's real Gmail + iCloud logins hardcoded with a **reused password** (`Baba$123`). | ⏳ Manual + rotate |
-| 1.3 | 🟡 | `scripts/seed-deck.mjs:158`, `seed-showcase.mjs` | Hardcoded shared password (`Deck$Seed123`) creates sign-in-able seeded auth users. | 🔍 Confirm |
+| 1.3 | 🟡 | `scripts/seed-deck.mjs:158`, `seed-showcase.mjs` | Hardcoded shared password (`Deck$Seed123`) creates sign-in-able seeded auth users. | ✅ Fixed (2026-09-12, `SEED_PASSWORD`-overridable) |
 | 1.4 | ⚪ | `.env.example:37` | Real-looking `pk_test_…` Stripe key instead of a placeholder. | ✅ Fixed (placeholder) |
 | 1.5 | ⚪ | `prisma/sql/2026-06-24_admin_seats_permissions.sql:12-15` | Product-owner email hardcoded to bootstrap admin in a committed migration. | 🔍 Confirm |
 
@@ -57,18 +59,18 @@ git push --force-with-lease   # coordinate with anyone who has the repo cloned
 
 | # | Sev | Route(s) | Impact | Status |
 |---|---|---|---|---|
-| 2.1 | 🔴 | `GET /api/earnings` | `?tutorId=<victim>` returns earnings, student PII, **and a `stripe.accounts.createLoginLink` URL** → log straight into the victim's Stripe Express dashboard (payout/bank takeover). | 🔍 Confirm |
-| 2.2 | 🔴 | `POST /api/stripe/connect/account-session` + `create-account-link` | Trusts `body.email`; creates/binds a Stripe account to a victim and returns onboarding `client_secret`/URL → KYC/bank-redirect payout takeover. | 🔍 Confirm |
-| 2.3 | 🟠 | `GET /api/contacts` | **Fully unauthenticated** (method-agnostic `PUBLIC_API` allowlist meant for the public POST) — dumps the entire contacts table (name/email/subject/message) to anyone. | 🔍 Confirm |
-| 2.4 | 🟠 | `PUT /api/profiles/update-bio` (+ `update`, `update-education`, `complete-setup`, `student/update-subjects`) | Mass-assignment writes keyed on `body.email`; `update-bio` also flips `is_tutor` (**role tampering**) and can null `hourlyRate` on any account. | 🔍 Confirm |
-| 2.5 | 🟠 | `DELETE /api/subjects/delete` (+ `subjects/create`, `institutions`, `curricula`, `institution-courses`) | No admin gate on **global** reference data — any user can destroy marketplace-wide catalog rows or inject spam. | 🔍 Confirm |
-| 2.6 | 🟠 | `DELETE/PUT/POST /api/tutor-availability/{delete,update,save}` | Delete any tutor's slot by guessable `eventId` (no check at all); overwrite slots; create availability under any victim's email. `update` even computes `tutorId` then never uses it (a dropped check). | 🔍 Confirm |
-| 2.7 | 🟠 | `PUT /api/profiles/update-subjects` (+ `subjects/update-subjects-and-prices`, `subjects/tutor-subjects`) | Cross-tenant CourseAsset write/delete + price overwrite keyed on client email. | 🔍 Confirm |
-| 2.8 | 🟠 | `GET /api/profiles/get-full?email=` | Any authed user harvests any profile by email — leaks phone, `stripe_account_id`, `email_verified` across the whole user base via email enumeration. | 🔍 Confirm |
-| 2.9 | 🟠 | `GET /api/stripe/connect/status?email=` | Enumeration oracle: any email → `acct_…` + onboarding/verification state. | 🔍 Confirm |
-| 2.10 | 🟠 | `GET /api/sessions/student` + `tutor` | Any user reads any user's sessions + counterparty PII (name/avatar/bio/hourlyRate). | 🔍 Confirm |
-| 2.11 | 🟠 | `GET /api/notifications/list` + `PATCH /mark-read` | Read/tamper any user's notifications via `userId` param. | 🔍 Confirm |
-| 2.12 | 🟠 | `GET /api/feedback` | Commented "for the admin dashboard" but no admin gate — any authed user exfiltrates all feedback + submitter PII. | 🔍 Confirm |
+| 2.1 | 🔴 | `GET /api/earnings` | `?tutorId=<victim>` returns earnings, student PII, **and a `stripe.accounts.createLoginLink` URL** → log straight into the victim's Stripe Express dashboard (payout/bank takeover). | ✅ Fixed |
+| 2.2 | 🔴 | `POST /api/stripe/connect/account-session` + `create-account-link` | Trusts `body.email`; creates/binds a Stripe account to a victim and returns onboarding `client_secret`/URL → KYC/bank-redirect payout takeover. | ✅ Fixed |
+| 2.3 | 🟠 | `GET /api/contacts` | **Fully unauthenticated** (method-agnostic `PUBLIC_API` allowlist meant for the public POST) — dumps the entire contacts table (name/email/subject/message) to anyone. | ✅ Fixed |
+| 2.4 | 🟠 | `PUT /api/profiles/update-bio` (+ `update`, `update-education`, `complete-setup`, `student/update-subjects`) | Mass-assignment writes keyed on `body.email`; `update-bio` also flips `is_tutor` (**role tampering**) and can null `hourlyRate` on any account. | ✅ Fixed |
+| 2.5 | 🟠 | `DELETE /api/subjects/delete` (+ `subjects/create`, `institutions`, `curricula`, `institution-courses`) | No admin gate on **global** reference data — any user can destroy marketplace-wide catalog rows or inject spam. | ✅ Fixed |
+| 2.6 | 🟠 | `DELETE/PUT/POST /api/tutor-availability/{delete,update,save}` | Delete any tutor's slot by guessable `eventId` (no check at all); overwrite slots; create availability under any victim's email. `update` even computes `tutorId` then never uses it (a dropped check). | ✅ Fixed |
+| 2.7 | 🟠 | `PUT /api/profiles/update-subjects` (+ `subjects/update-subjects-and-prices`, `subjects/tutor-subjects`) | Cross-tenant CourseAsset write/delete + price overwrite keyed on client email. | ✅ Fixed |
+| 2.8 | 🟠 | `GET /api/profiles/get-full?email=` | Any authed user harvests any profile by email — leaks phone, `stripe_account_id`, `email_verified` across the whole user base via email enumeration. | ✅ Fixed |
+| 2.9 | 🟠 | `GET /api/stripe/connect/status?email=` | Enumeration oracle: any email → `acct_…` + onboarding/verification state. | ✅ Fixed |
+| 2.10 | 🟠 | `GET /api/sessions/student` + `tutor` | Any user reads any user's sessions + counterparty PII (name/avatar/bio/hourlyRate). | ✅ Fixed |
+| 2.11 | 🟠 | `GET /api/notifications/list` + `PATCH /mark-read` | Read/tamper any user's notifications via `userId` param. | ✅ Fixed |
+| 2.12 | 🟠 | `GET /api/feedback` | Commented "for the admin dashboard" but no admin gate — any authed user exfiltrates all feedback + submitter PII. | ✅ Fixed |
 | — | ✅ refuted | `POST /api/stripe/complete-payment-return` | **Not a vuln**: the session id comes from unforgeable server-set `PaymentIntent.metadata` with a succeeded/pending-only write. Optional ownership assertion for defense-in-depth only. | — |
 
 **Shared fix (closes the whole family at once)** — add two helpers to `lib/api-auth.ts` and adopt mechanically:
@@ -104,9 +106,9 @@ All current callers already send their own email/id, so switching to session-der
 | # | Sev | Location | Issue | Status |
 |---|---|---|---|---|
 | 4.1 | 🟠 | `app/home/page.tsx:14,18` | `console.log` printed the **full Supabase session (access/refresh JWT)** + profile to the browser console on every load. | ✅ Fixed |
-| 4.2 | 🟠 | `app/auth/reset/page.tsx:46-49,81` | Shows real users Supabase/SMTP/Mailpit operational internals ("set up custom SMTP… check Mailpit"). | 🔍 Confirm |
+| 4.2 | 🟠 | `app/auth/reset/page.tsx:46-49,81` | Shows real users Supabase/SMTP/Mailpit operational internals ("set up custom SMTP… check Mailpit"). | ✅ Fixed |
 | 4.3 | 🟡 | ~43 API handlers | Return `details: error?.message` in 500 bodies, leaking Prisma/table/column internals. | 🔍 Confirm |
-| 4.4 | ⚪ | `app/home/session/[id]/recording/page.tsx:44,172-213` | Non-functional demo player (hardcoded `currentTime = 88`) ships whenever `recording_url` isn't an http(s) URL. | 🔍 Confirm |
+| 4.4 | ⚪ | `app/home/session/[id]/recording/page.tsx:44,172-213` | Non-functional demo player (hardcoded `currentTime = 88`) ships whenever `recording_url` isn't an http(s) URL. | ✅ Fixed (matches commit `fa37a44`) |
 
 ---
 
@@ -140,9 +142,9 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 
 | # | Sev | Location | Issue | Status |
 |---|---|---|---|---|
-| 7.1 | 🟡 | `SignUpWizard.tsx:101,187`, `SetupWizard.tsx:162`, `WizardTimeSlot.tsx:56`, `availability/page.tsx:80`, `student/sessions/page.tsx:62`, `EventDetailModal.tsx:143` | 7+ empty `catch {}` blocks hide fetch/submit failures from users and devs. | 🔍 Recommend |
-| 7.2 | ⚪ | `app/api/earnings/route.ts:76-85`, `courses/review:108` | Bare `} catch {` swallow Stripe errors → silently returns zeros/null. | 🔍 Recommend |
-| 7.3 | ⚪ | `student/sessions/page.tsx:58,60,103` | Empty `else` branches; `errorData` parsed then never used. | 🔍 Recommend |
+| 7.1 | 🟡 | `SignUpWizard.tsx:101,187`, `SetupWizard.tsx:162`, `WizardTimeSlot.tsx:56`, `availability/page.tsx:80`, `student/sessions/page.tsx:62`, `EventDetailModal.tsx:143` | 7+ empty `catch {}` blocks hide fetch/submit failures from users and devs. | ✅ Fixed — repo-wide search finds only the intentional theme-detector IIFE in `app/layout.tsx` |
+| 7.2 | ⚪ | `app/api/earnings/route.ts:76-85`, `courses/review:108` | Bare `} catch {` swallow Stripe errors → silently returns zeros/null. | ✅ Fixed |
+| 7.3 | ⚪ | `student/sessions/page.tsx:58,60,103` | Empty `else` branches; `errorData` parsed then never used. | ✅ Fixed |
 
 ---
 
@@ -152,9 +154,9 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 |---|---|---|---|
 | 8.1 | `components/ui/components/SubjectSelectProfile.tsx` (539 L), `UpdateProfileTimeSlot.tsx` (298 L) | Imported nowhere; ~90% copy-paste forks of live components. `SubjectSelectProfile` would crash if rendered. | ✅ Deleted |
 | 8.2 | `components/ui/wizardIcons.tsx` (+ import in `SetupWizard.tsx:28`) | Whole file dead — icons imported but never rendered. | ✅ Deleted |
-| 8.3 | `app/api/booking/create/route.ts` | `export {};` no-op route; `instant-request` superseded by `instant-authorize`; empty branches in `connect/return`, `sessions/update-status:52`. | 🔍 Recommend |
-| 8.4 | `app/home/tutor/sessions/page.tsx:208-239` | Computes `totalEarnings` then discards it; ships a permanent `'$—'` placeholder card. | 🔍 Recommend |
-| 8.5 | `app/(admin)/dashboard/subjects/page.tsx:35-50,165-218` | `handleCreateSubject` + state reachable only from a commented-out form (see 10.1). | 🔍 Recommend |
+| 8.3 | `app/api/booking/create/route.ts` | `export {};` no-op route; `instant-request` superseded by `instant-authorize`; empty branches in `connect/return`, `sessions/update-status:52`. | ✅ Fixed — `booking/create` deleted, `booking/cancel` fully authorized; `connect/return`'s remaining empty `if` is a documented no-op (comment explains it), not a bug |
+| 8.4 | `app/home/tutor/sessions/page.tsx:208-239` | Computes `totalEarnings` then discards it; ships a permanent `'$—'` placeholder card. | ✅ Fixed — Earnings stat card renders the computed total |
+| 8.5 | `app/(admin)/dashboard/subjects/page.tsx:35-50,165-218` | `handleCreateSubject` + state reachable only from a commented-out form (see 10.1). | ✅ Fixed — `handleCreateSubject` no longer exists (page is 515 lines) |
 | 8.6 | `app/home/student/sessions/page.tsx:30-35`, `tutor/availability/page.tsx:6-7`, `explore/components/TutorCard.tsx:11,28` | Dead modal scaffolding, duplicate import, dead `onBook` prop + `tzTime` (orphans `currentTimeInTz`). | 🔍 Recommend |
 | 8.7 | `AddSubject`, `SetupWizard`, `EventModal`, `FilterModal`, `WizardTimeSlot`, `EventDetailModal`, `tutor/[id]`, `admin/login`, `approvals` | Long tail of unused imports/interfaces/props/state (incl. `AddSubject`'s unused `loading` → unreachable spinner). | 🔍 Recommend |
 | 8.8 | `lib/courses.ts` etc. + `components/ui/primitives` | Redundant `export` on module-internal symbols; Card/Badge/Spinner/Modal primitives effectively dead (consumers import only Button/Input). | 🔍 Recommend |
@@ -168,7 +170,7 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 | 9.1 | `date-fns`, `prop-types`, `react-date-range` (+ `@types/react-date-range`), `@swc/helpers` — **zero imports**. | ✅ Removed (36 pkgs pruned; build green) |
 | 9.2 | `tsx` orphaned; `start` script pointed at a missing `server.ts`. | ✅ Removed `tsx`; `start` → `next start` |
 | 9.3 | Redundant: `moment` + `moment-timezone` + `date-fns`; `sweetalert2` (1 file) vs `sonner` (22); `react-icons` (5 footer icons) vs `lucide-react` (47). | 🔍 Recommend (consolidate) |
-| 9.4 | `dotenv` is dev-only (seed scripts) → belongs in devDependencies; `overrides.mermaid` pin is a transitive-of-Excalidraw smell. | 🔍 Recommend |
+| 9.4 | `dotenv` is dev-only (seed scripts) → belongs in devDependencies; `overrides.mermaid` pin is a transitive-of-Excalidraw smell. | ✅ Fixed (`dotenv` in `devDependencies`) · `mermaid` override still there, harmless |
 
 ---
 
@@ -176,7 +178,7 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 
 | # | Location | Issue | Status |
 |---|---|---|---|
-| 10.1 | `app/(admin)/dashboard/subjects/page.tsx:585-676` | ~90-line commented-out "Create New Subject" form (live page uses `<AddSubject>`). | 🔍 Recommend |
+| 10.1 | `app/(admin)/dashboard/subjects/page.tsx:585-676` | ~90-line commented-out "Create New Subject" form (live page uses `<AddSubject>`). | ✅ Fixed — form no longer in the file |
 | 10.2 | `SetupWizard.tsx:433,445,529-531`, `SignUpWizard.tsx:249` | Dead commented JSX; a `cursor-pointer` row whose `onClick` is commented out (looks interactive, does nothing). | 🔍 Recommend |
 | 10.3 | `app/globals.css:90`, `admin/login/page.tsx:37`, `availability/page.tsx:50`, `tsconfig.json:15-16` | Stray placeholder/instruction comments and misplaced tsconfig comments. | 🔍 Recommend |
 
@@ -187,15 +189,15 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 | # | Location | Issue | Status |
 |---|---|---|---|
 | 11.1 | `prisma/migrations/` | **Migration history abandoned & contradicts `schema.prisma`** (2026 changes applied via hand-written `prisma/sql/*.sql`) — `migrate deploy` on a fresh DB yields a wrong schema. | 🔍 Recommend (re-baseline or document) |
-| 11.2 | `scripts/seed-education.cjs`, `prisma/seed.ts` | Broken/orphaned seeders superseded by `seed-provinces-curricula.cjs`. | 🔍 Recommend (delete) |
+| 11.2 | `scripts/seed-education.cjs`, `prisma/seed.ts` | Broken/orphaned seeders superseded by `seed-provinces-curricula.cjs`. | ✅ Fixed — both files gone |
 | 11.3 | `.DS_Store`, `data/ontario_school_codes.xlsx`, `.gitignore` `eclero2.0.zip` | Committed OS/data artifacts; stale ignore rule. | ✅ Untracked + gitignore cleaned |
-| 11.4 | `components/EventCalender.tsx` | Misspelled module; default export named `Selectable` (unrelated to a calendar). | 🔍 Recommend (rename) |
-| 11.5 | `sessions-rls-policies.sql:17-34` | RLS compares `auth.uid()::text = <uuid column>` → type-mismatch error at eval. | 🔍 Confirm + fix |
+| 11.4 | `components/EventCalender.tsx` | Misspelled module; default export named `Selectable` (unrelated to a calendar). | ✅ Fixed — renamed to `EventCalendar.tsx` |
+| 11.5 | `sessions-rls-policies.sql:17-34` | RLS compares `auth.uid()::text = <uuid column>` → type-mismatch error at eval. | ✅ Fixed — direct `uuid` comparison, no cast |
 | 11.6 | `app/api/subjects/create/route.ts:18` | Copy-paste log tag `[SUBJECTS_GET]` in the POST/create handler. | ✅ Fixed (`[SUBJECTS_CREATE]`) |
-| 11.7 | `prisma/sql/2026-06-12_…sql:2` | Header references `scripts/run-sql.cjs` that doesn't exist. | 🔍 Recommend |
-| 11.8 | `contacts/page.tsx:208-301` | React list `key` on inner `<tr>` instead of the mapped Fragment. | 🔍 Recommend |
-| 11.9 | 6 admin ops pages | Double-wrapped layout (nested max-width/padding) + off-brand loading gradient. | 🔍 Recommend |
-| 11.10 | `TutorProfileBubble.tsx:392` (+ ~15 files) | Avatars fall back to non-existent `/default-avatar.png` → broken image, despite a purpose-built `Avatar` primitive. | 🔍 Recommend |
+| 11.7 | `prisma/sql/2026-06-12_…sql:2` | Header references `scripts/run-sql.cjs` that doesn't exist. | ✅ Fixed — header rewritten |
+| 11.8 | `contacts/page.tsx:208-301` | React list `key` on inner `<tr>` instead of the mapped Fragment. | ✅ Fixed — `key` now on the mapped `<Fragment>` |
+| 11.9 | 6 admin ops pages | Double-wrapped layout (nested max-width/padding) + off-brand loading gradient. | ✅ Fixed |
+| 11.10 | `TutorProfileBubble.tsx:392` (+ ~15 files) | Avatars fall back to non-existent `/default-avatar.png` → broken image, despite a purpose-built `Avatar` primitive. | ✅ Fixed — `public/default-avatar.png` now exists |
 | 11.11 | `SignUpWizard.tsx:134`, `student/page.tsx:180`, `admin/login/page.tsx:62` | Convoluted boolean; redirect-during-render; silent non-admin login loop. | 🔍 Recommend |
 
 ---
