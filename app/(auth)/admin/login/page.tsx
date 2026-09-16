@@ -53,15 +53,10 @@ function LoginContent() {
                 throw new Error('Could not determine user role. Please ensure you have registered an account.');
             }
 
-            let homePath = "/home";
-            switch (userData.role.toLowerCase()) {
-                case "admin":
-                    homePath = "/dashboard";
-                    break;
-                default:
-                    homePath = "/admin/login";
+            if (userData.role.toLowerCase() !== "admin") {
+                throw new Error("This login is for admin accounts only. Please use the regular sign-in page.");
             }
-            router.push(homePath);
+            router.push("/dashboard");
         } catch (err: any) {
             console.error('[LOGIN] Error:', err?.message || err, err);
             setError(err.message || "An error occurred during login");
