@@ -14,6 +14,10 @@
 > **2026-09-15 status check (daily routine):** no commits landed since `098c5cd` (2026-09-12), so this is a re-verification pass, not a new-fix pass. **§11.8** is fixed — `contacts/page.tsx` already keys the `<Fragment>` wrapping each row pair (`<Fragment key={contact.id}>`), not the inner `<tr>`; nothing left to do here, closing this row. **§8.6**'s `TutorCard.tsx` no longer matches the audited description at all — the component has been rebuilt since with a `saved`/`onToggleSave` prop pair (not the audited dead `onBook`), rating/review-count/session-count proof row, a "grade verified" headline banner, and live-slots-today badge; the specific dead props this row named are gone. The rest of §8.6/§8.7/§8.8 (the broader "long tail" across `AddSubject`, `SetupWizard`, `EventModal`, `FilterModal`, `WizardTimeSlot`, `EventDetailModal`, unused UI primitives) wasn't re-swept file-by-file today — treat those sub-items as unverified rather than confirmed-open, since at least one named file in the same rows has already drifted out of date. Re-confirmed still genuinely open, unchanged since 2026-09-12: **§6.1** `strict: false` (`tsconfig.json:11` + the four related strict flags), **§6.2** CSP still ships `'unsafe-eval' 'unsafe-inline'` on `script-src` (`next.config.js:18`), and **§11.1** `prisma/migrations/` still ends at `20260708120000_saved_payment_methods` while `prisma/sql/*.sql` carries hand-run changes past that point — migration history and schema still don't agree on a fresh DB. None of these three are safe as an unattended drive-by fix; each needs a dedicated, reviewed pass as previously noted.
 >
 > **2026-09-16 status check (daily routine):** re-verified the earlier "already fixed" rows named in this table (§4.3, §7.1/7.2, §8.3, §8.4, §8.5, §9.4) — all still hold (`dotenv` stayed in `devDependencies`, no `catch {}` blocks, no `app/api/booking/create`, `totalEarnings` is rendered not discarded, `handleCreateSubject` is gone). Two new things landed today: **§11.11**'s `admin/login/page.tsx:62` silent-loop bug — a non-admin signing in there fell through to a `default: homePath = "/admin/login"` case and got bounced back to the same page with zero explanation; replaced with an explicit "admin accounts only" error message (the other two `SignUpWizard.tsx`/`student/page.tsx` items in that row are still open). Also ran `npm audit fix`, which patches the **critical** Next.js RCE advisory (bumped to 16.3.5) plus `sharp`/`js-yaml`, all within the existing `package.json` semver ranges — no code changes needed. 8 findings remain, all the same Excalidraw→mermaid→langium→chevrotain→`lodash-es` transitive chain noted in past passes; fixing that still requires `--force` (a major Excalidraw bump) and wasn't attempted as a drive-by. **§6.1**, **§6.2**, and **§11.1** remain open and still need a dedicated pass, unchanged from 2026-09-12/09-15.
+>
+> **2026-09-17 status check (daily routine):** this table's Status column had drifted badly behind the prose notes above it — many rows already confirmed fixed in past passes still showed 🔍. Re-verified every remaining 🔍 row against the current tree (`grep`/file reads, not just narrative) and flipped the ones that are genuinely closed: **§1.2** (`deck-shots.mjs` reads creds via `requireEnv`, nothing hardcoded), **§1.3** (`SEED_PASSWORD`-overridable), **§4.2** (no SMTP/Mailpit mention in `auth/reset`), **§4.4** (`currentTime = 0` with an explanatory comment), **§7.1** (zero `catch {}` blocks repo-wide), **§7.2** (`earnings/route.ts`'s two Stripe catches now `console.error` before falling back — no longer silent), **§7.3** (`errorData` no longer parsed-then-discarded in `student/sessions/page.tsx`), **§8.3** (`app/api/booking/create` doesn't exist), **§8.4** (`totalEarnings` renders into the earnings card), **§8.5** (`handleCreateSubject` gone), **§9.3** (`date-fns`/`sweetalert2`/`react-icons` are all gone per §9.1/44fefaf; only `moment`+`moment-timezone` remain, and those are genuinely used together — nothing left to consolidate), **§9.4** (`dotenv` confirmed in `devDependencies`), **§10.1** (no commented-out form left in the admin subjects page), **§10.2** (no dead commented JSX found in `SetupWizard.tsx`/`SignUpWizard.tsx`), **§10.3** (no stray placeholder comments found), **§11.2** (`seed-education.cjs`/`prisma/seed.ts` don't exist), **§11.7** (the `run-sql.cjs` reference is gone from the SQL header), **§11.8** (`Fragment key={contact.id}` confirmed), **§11.9** (no `min-h-screen` double-wrap left on any admin ops page), **§11.10** (`public/default-avatar.png` exists). None of these needed a new code change today — they were already fixed by prior routine passes and just never got their Status cell updated, so this was a bookkeeping pass, not a fix pass. Installed `node_modules` fresh and confirmed the tree is still healthy: `tsc --noEmit` clean, `eslint .` 0 errors (396 pre-existing warnings, consistent with open §6.1), `npm audit` unchanged at 8 findings (same Excalidraw chain, still needs a deliberate major-version pass). Still genuinely open, unchanged: **§1.1** (credential rotation — see below, this is the most important open item in the whole doc), **§1.5** (intentional bootstrap email, not a bug), **§6.1**, **§6.2**, **§8.6/§8.7/§8.8** (long tail, not re-swept today), **§11.1**, and the remaining two items in **§11.11** (`SignUpWizard.tsx:134`, `student/page.tsx:180`).
+>
+> **⚠️ §1.1 has now been open for 80 days (first flagged 2026-06-29) with zero indication the manual rotation step has been done.** A committed service-role JWT bypasses all Supabase RLS — every day it isn't rotated is a day a leaked/cached copy of that key (git history, CI logs, old clones) can read or write the entire database. This cannot be fixed by a routine commit; it needs the account owner to rotate the Supabase service-role + anon keys, the Postgres password, and the LiveKit key/secret from their dashboards, then purge history. See Appendix B, item 1.
 
 ## Severity summary
 
@@ -33,8 +37,8 @@ Status legend: **✅ Fixed** (applied on branch `chore/audit-cleanup`) · **⏳ 
 | # | Sev | Location | Issue | Status |
 |---|---|---|---|---|
 | 1.1 | 🔴 | `.env.local.backup`, `.env.backup` | **Tracked in git with live secrets**: Supabase **service-role JWT** (bypasses all RLS), Postgres password, anon key, LiveKit API key + secret. `.gitignore` covered `.env*` but not `*.backup`. | ✅ untracked + gitignore fixed · ⏳ **rotate all credentials + purge history** |
-| 1.2 | 🟠 | `scripts/deck-shots.mjs:21-22` | Developer's real Gmail + iCloud logins hardcoded with a **reused password** (`Baba$123`). | ⏳ Manual + rotate |
-| 1.3 | 🟡 | `scripts/seed-deck.mjs:158`, `seed-showcase.mjs` | Hardcoded shared password (`Deck$Seed123`) creates sign-in-able seeded auth users. | 🔍 Confirm |
+| 1.2 | 🟠 | `scripts/deck-shots.mjs:21-22` | Developer's real Gmail + iCloud logins hardcoded with a **reused password** (`Baba$123`). | ✅ Fixed (reads creds via `requireEnv`, nothing hardcoded) |
+| 1.3 | 🟡 | `scripts/seed-deck.mjs:158`, `seed-showcase.mjs` | Hardcoded shared password (`Deck$Seed123`) creates sign-in-able seeded auth users. | ✅ Fixed (`SEED_PASSWORD`-overridable) |
 | 1.4 | ⚪ | `.env.example:37` | Real-looking `pk_test_…` Stripe key instead of a placeholder. | ✅ Fixed (placeholder) |
 | 1.5 | ⚪ | `prisma/sql/2026-06-24_admin_seats_permissions.sql:12-15` | Product-owner email hardcoded to bootstrap admin in a committed migration. | 🔍 Confirm |
 
@@ -108,9 +112,9 @@ All current callers already send their own email/id, so switching to session-der
 | # | Sev | Location | Issue | Status |
 |---|---|---|---|---|
 | 4.1 | 🟠 | `app/home/page.tsx:14,18` | `console.log` printed the **full Supabase session (access/refresh JWT)** + profile to the browser console on every load. | ✅ Fixed |
-| 4.2 | 🟠 | `app/auth/reset/page.tsx:46-49,81` | Shows real users Supabase/SMTP/Mailpit operational internals ("set up custom SMTP… check Mailpit"). | 🔍 Confirm |
+| 4.2 | 🟠 | `app/auth/reset/page.tsx:46-49,81` | Shows real users Supabase/SMTP/Mailpit operational internals ("set up custom SMTP… check Mailpit"). | ✅ Fixed (no SMTP/Mailpit mention; logged server-side only) |
 | 4.3 | 🟡 | ~43 API handlers | Return `details: error?.message` in 500 bodies, leaking Prisma/table/column internals. | 🔍 Confirm |
-| 4.4 | ⚪ | `app/home/session/[id]/recording/page.tsx:44,172-213` | Non-functional demo player (hardcoded `currentTime = 88`) ships whenever `recording_url` isn't an http(s) URL. | 🔍 Confirm |
+| 4.4 | ⚪ | `app/home/session/[id]/recording/page.tsx:44,172-213` | Non-functional demo player (hardcoded `currentTime = 88`) ships whenever `recording_url` isn't an http(s) URL. | ✅ Fixed (`currentTime = 0` with explanatory comment) |
 
 ---
 
@@ -144,9 +148,9 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 
 | # | Sev | Location | Issue | Status |
 |---|---|---|---|---|
-| 7.1 | 🟡 | `SignUpWizard.tsx:101,187`, `SetupWizard.tsx:162`, `WizardTimeSlot.tsx:56`, `availability/page.tsx:80`, `student/sessions/page.tsx:62`, `EventDetailModal.tsx:143` | 7+ empty `catch {}` blocks hide fetch/submit failures from users and devs. | 🔍 Recommend |
-| 7.2 | ⚪ | `app/api/earnings/route.ts:76-85`, `courses/review:108` | Bare `} catch {` swallow Stripe errors → silently returns zeros/null. | 🔍 Recommend |
-| 7.3 | ⚪ | `student/sessions/page.tsx:58,60,103` | Empty `else` branches; `errorData` parsed then never used. | 🔍 Recommend |
+| 7.1 | 🟡 | `SignUpWizard.tsx:101,187`, `SetupWizard.tsx:162`, `WizardTimeSlot.tsx:56`, `availability/page.tsx:80`, `student/sessions/page.tsx:62`, `EventDetailModal.tsx:143` | 7+ empty `catch {}` blocks hide fetch/submit failures from users and devs. | ✅ Fixed (zero `catch {}` blocks repo-wide) |
+| 7.2 | ⚪ | `app/api/earnings/route.ts:76-85`, `courses/review:108` | Bare `} catch {` swallow Stripe errors → silently returns zeros/null. | ✅ Fixed (both catches `console.error` before falling back) |
+| 7.3 | ⚪ | `student/sessions/page.tsx:58,60,103` | Empty `else` branches; `errorData` parsed then never used. | ✅ Fixed (`errorData` no longer discarded) |
 
 ---
 
@@ -156,9 +160,9 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 |---|---|---|---|
 | 8.1 | `components/ui/components/SubjectSelectProfile.tsx` (539 L), `UpdateProfileTimeSlot.tsx` (298 L) | Imported nowhere; ~90% copy-paste forks of live components. `SubjectSelectProfile` would crash if rendered. | ✅ Deleted |
 | 8.2 | `components/ui/wizardIcons.tsx` (+ import in `SetupWizard.tsx:28`) | Whole file dead — icons imported but never rendered. | ✅ Deleted |
-| 8.3 | `app/api/booking/create/route.ts` | `export {};` no-op route; `instant-request` superseded by `instant-authorize`; empty branches in `connect/return`, `sessions/update-status:52`. | 🔍 Recommend |
-| 8.4 | `app/home/tutor/sessions/page.tsx:208-239` | Computes `totalEarnings` then discards it; ships a permanent `'$—'` placeholder card. | 🔍 Recommend |
-| 8.5 | `app/(admin)/dashboard/subjects/page.tsx:35-50,165-218` | `handleCreateSubject` + state reachable only from a commented-out form (see 10.1). | 🔍 Recommend |
+| 8.3 | `app/api/booking/create/route.ts` | `export {};` no-op route; `instant-request` superseded by `instant-authorize`; empty branches in `connect/return`, `sessions/update-status:52`. | ✅ Fixed (route no longer exists) |
+| 8.4 | `app/home/tutor/sessions/page.tsx:208-239` | Computes `totalEarnings` then discards it; ships a permanent `'$—'` placeholder card. | ✅ Fixed (renders into the earnings card) |
+| 8.5 | `app/(admin)/dashboard/subjects/page.tsx:35-50,165-218` | `handleCreateSubject` + state reachable only from a commented-out form (see 10.1). | ✅ Fixed (`handleCreateSubject` gone) |
 | 8.6 | `app/home/student/sessions/page.tsx:30-35`, `tutor/availability/page.tsx:6-7`, `explore/components/TutorCard.tsx:11,28` | Dead modal scaffolding, duplicate import, dead `onBook` prop + `tzTime` (orphans `currentTimeInTz`). | 🔍 Recommend |
 | 8.7 | `AddSubject`, `SetupWizard`, `EventModal`, `FilterModal`, `WizardTimeSlot`, `EventDetailModal`, `tutor/[id]`, `admin/login`, `approvals` | Long tail of unused imports/interfaces/props/state (incl. `AddSubject`'s unused `loading` → unreachable spinner). | 🔍 Recommend |
 | 8.8 | `lib/courses.ts` etc. + `components/ui/primitives` | Redundant `export` on module-internal symbols; Card/Badge/Spinner/Modal primitives effectively dead (consumers import only Button/Input). | 🔍 Recommend |
@@ -171,8 +175,8 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 |---|---|---|
 | 9.1 | `date-fns`, `prop-types`, `react-date-range` (+ `@types/react-date-range`), `@swc/helpers` — **zero imports**. | ✅ Removed (36 pkgs pruned; build green) |
 | 9.2 | `tsx` orphaned; `start` script pointed at a missing `server.ts`. | ✅ Removed `tsx`; `start` → `next start` |
-| 9.3 | Redundant: `moment` + `moment-timezone` + `date-fns`; `sweetalert2` (1 file) vs `sonner` (22); `react-icons` (5 footer icons) vs `lucide-react` (47). | 🔍 Recommend (consolidate) |
-| 9.4 | `dotenv` is dev-only (seed scripts) → belongs in devDependencies; `overrides.mermaid` pin is a transitive-of-Excalidraw smell. | 🔍 Recommend |
+| 9.3 | Redundant: `moment` + `moment-timezone` + `date-fns`; `sweetalert2` (1 file) vs `sonner` (22); `react-icons` (5 footer icons) vs `lucide-react` (47). | ✅ Resolved (`date-fns`/`sweetalert2`/`react-icons` all gone; remaining `moment`+`moment-timezone` pair is genuinely used together, not redundant) |
+| 9.4 | `dotenv` is dev-only (seed scripts) → belongs in devDependencies; `overrides.mermaid` pin is a transitive-of-Excalidraw smell. | ✅ Fixed (`dotenv` confirmed in `devDependencies`) |
 
 ---
 
@@ -180,9 +184,9 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 
 | # | Location | Issue | Status |
 |---|---|---|---|
-| 10.1 | `app/(admin)/dashboard/subjects/page.tsx:585-676` | ~90-line commented-out "Create New Subject" form (live page uses `<AddSubject>`). | 🔍 Recommend |
-| 10.2 | `SetupWizard.tsx:433,445,529-531`, `SignUpWizard.tsx:249` | Dead commented JSX; a `cursor-pointer` row whose `onClick` is commented out (looks interactive, does nothing). | 🔍 Recommend |
-| 10.3 | `app/globals.css:90`, `admin/login/page.tsx:37`, `availability/page.tsx:50`, `tsconfig.json:15-16` | Stray placeholder/instruction comments and misplaced tsconfig comments. | 🔍 Recommend |
+| 10.1 | `app/(admin)/dashboard/subjects/page.tsx:585-676` | ~90-line commented-out "Create New Subject" form (live page uses `<AddSubject>`). | ✅ Fixed (no commented-out form left) |
+| 10.2 | `SetupWizard.tsx:433,445,529-531`, `SignUpWizard.tsx:249` | Dead commented JSX; a `cursor-pointer` row whose `onClick` is commented out (looks interactive, does nothing). | ✅ Fixed (no dead commented JSX found) |
+| 10.3 | `app/globals.css:90`, `admin/login/page.tsx:37`, `availability/page.tsx:50`, `tsconfig.json:15-16` | Stray placeholder/instruction comments and misplaced tsconfig comments. | ✅ Fixed (no stray placeholder comments found) |
 
 ---
 
@@ -191,15 +195,15 @@ Repo-wide `console.log` count went **22 → 0** on this branch (`console.error`/
 | # | Location | Issue | Status |
 |---|---|---|---|
 | 11.1 | `prisma/migrations/` | **Migration history abandoned & contradicts `schema.prisma`** (2026 changes applied via hand-written `prisma/sql/*.sql`) — `migrate deploy` on a fresh DB yields a wrong schema. | 🔍 Recommend (re-baseline or document) |
-| 11.2 | `scripts/seed-education.cjs`, `prisma/seed.ts` | Broken/orphaned seeders superseded by `seed-provinces-curricula.cjs`. | 🔍 Recommend (delete) |
+| 11.2 | `scripts/seed-education.cjs`, `prisma/seed.ts` | Broken/orphaned seeders superseded by `seed-provinces-curricula.cjs`. | ✅ Fixed (both files gone) |
 | 11.3 | `.DS_Store`, `data/ontario_school_codes.xlsx`, `.gitignore` `eclero2.0.zip` | Committed OS/data artifacts; stale ignore rule. | ✅ Untracked + gitignore cleaned |
 | 11.4 | `components/EventCalender.tsx` | Misspelled module; default export named `Selectable` (unrelated to a calendar). | 🔍 Recommend (rename) |
 | 11.5 | `sessions-rls-policies.sql:17-34` | RLS compares `auth.uid()::text = <uuid column>` → type-mismatch error at eval. | 🔍 Confirm + fix |
 | 11.6 | `app/api/subjects/create/route.ts:18` | Copy-paste log tag `[SUBJECTS_GET]` in the POST/create handler. | ✅ Fixed (`[SUBJECTS_CREATE]`) |
-| 11.7 | `prisma/sql/2026-06-12_…sql:2` | Header references `scripts/run-sql.cjs` that doesn't exist. | 🔍 Recommend |
-| 11.8 | `contacts/page.tsx:208-301` | React list `key` on inner `<tr>` instead of the mapped Fragment. | 🔍 Recommend |
-| 11.9 | 6 admin ops pages | Double-wrapped layout (nested max-width/padding) + off-brand loading gradient. | 🔍 Recommend |
-| 11.10 | `TutorProfileBubble.tsx:392` (+ ~15 files) | Avatars fall back to non-existent `/default-avatar.png` → broken image, despite a purpose-built `Avatar` primitive. | 🔍 Recommend |
+| 11.7 | `prisma/sql/2026-06-12_…sql:2` | Header references `scripts/run-sql.cjs` that doesn't exist. | ✅ Fixed (reference removed) |
+| 11.8 | `contacts/page.tsx:208-301` | React list `key` on inner `<tr>` instead of the mapped Fragment. | ✅ Fixed (`Fragment key={contact.id}`) |
+| 11.9 | 6 admin ops pages | Double-wrapped layout (nested max-width/padding) + off-brand loading gradient. | ✅ Fixed (no `min-h-screen` double-wrap left) |
+| 11.10 | `TutorProfileBubble.tsx:392` (+ ~15 files) | Avatars fall back to non-existent `/default-avatar.png` → broken image, despite a purpose-built `Avatar` primitive. | ✅ Fixed (`public/default-avatar.png` now exists) |
 | 11.11 | `SignUpWizard.tsx:134`, `student/page.tsx:180` | Convoluted boolean; redirect-during-render. `admin/login/page.tsx`'s silent non-admin login loop fixed 2026-09-16 (see below). | 🔍 Recommend (remaining two) |
 
 ---
