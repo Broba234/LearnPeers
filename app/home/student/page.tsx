@@ -167,6 +167,12 @@ export default function StudentHome() {
         fetchProfile();
       }, [router]);
 
+      useEffect(() => {
+        if (profile && profile.role !== "student") {
+          router.push("/auth/login");
+        }
+      }, [profile, router]);
+
       if (loading) {
         return <LearnPeersLoader fullScreen />;
       }
@@ -178,7 +184,7 @@ export default function StudentHome() {
         );
       }
       if (profile.role !== "student") {
-        router.push("/auth/login");
+        return <LearnPeersLoader fullScreen />;
       }
       if (!profile.profile_setup) {
         return (
