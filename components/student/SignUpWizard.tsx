@@ -142,7 +142,7 @@ const SignUpWizard = () => {
     const { name, value } = e.target;
     let processedValue = value;
     if (name === "is_tutor") {
-      processedValue = (value == 1) === true || value === 1;
+      processedValue = value == 1;
     }
     setFormData((prev) => ({
       ...prev,
