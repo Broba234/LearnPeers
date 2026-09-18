@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState, useContext } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import { TutorProfileModalContext } from "@/components/ui/components/common/TutorProfileModalContext";
 import { FilterModal } from "@/components/FilterModal";
@@ -19,6 +18,7 @@ import type { CategoryGroup, SortKey, StudentSubject, Subjects, Tutor } from "./
 import { SORT_LABELS, filterAndSortTutors } from "./utils";
 import { AvailableNowRail } from "./components/AvailableNowRail";
 import { TutorSection } from "./components/TutorSection";
+import { RequestCourseModal } from "./components/RequestCourseModal";
 
 export default function ExploreTutors() {
   const [studentSubjectIds, setStudentSubjectIds] = useState<string[]>([]);
@@ -37,6 +37,8 @@ export default function ExploreTutors() {
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortKey>("recommended");
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  const [requestModalOpen, setRequestModalOpen] = useState(false);
+  const [requestModalCourse, setRequestModalCourse] = useState("");
 
   const { openTutorProfileModal, openConnectNow } = useContext(TutorProfileModalContext)!;
 
@@ -432,12 +434,23 @@ export default function ExploreTutors() {
             </div>
             <h3 className="text-base font-semibold text-slate-900 mb-1">No tutors match &ldquo;{query}&rdquo;</h3>
             <p className="text-slate-400 text-sm">Try a course code like MCV4U, a subject, or a school name.</p>
-            <button
-              onClick={() => setQuery("")}
-              className="mt-4 inline-block px-4 py-2 bg-brand-600 text-white text-xs font-medium rounded-xl hover:bg-brand-700 transition-colors"
-            >
-              Clear search
-            </button>
+            <div className="mt-4 flex items-center justify-center gap-2">
+              <button
+                onClick={() => setQuery("")}
+                className="inline-block px-4 py-2 bg-brand-600 text-white text-xs font-medium rounded-xl hover:bg-brand-700 transition-colors"
+              >
+                Clear search
+              </button>
+              <button
+                onClick={() => {
+                  setRequestModalCourse(query);
+                  setRequestModalOpen(true);
+                }}
+                className="inline-block px-4 py-2 border border-ink-200 text-ink-700 text-xs font-medium rounded-xl hover:bg-ink-50 transition-colors"
+              >
+                Request this course
+              </button>
+            </div>
           </div>
         )}
         {/* Cold start — no tutors at all */}
@@ -451,12 +464,15 @@ export default function ExploreTutors() {
               We&rsquo;re onboarding verified student tutors from across Ontario universities. Tell us
               the course you need and we&rsquo;ll notify you the moment a tutor goes live.
             </p>
-            <Link
-              href="/#contact"
+            <button
+              onClick={() => {
+                setRequestModalCourse("");
+                setRequestModalOpen(true);
+              }}
               className="mt-5 inline-flex items-center gap-1.5 px-4 py-2.5 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 transition-colors"
             >
               Request a tutor
-            </Link>
+            </button>
           </div>
         )}
 
@@ -520,6 +536,12 @@ export default function ExploreTutors() {
         onActiveNowChange={setOnlyActiveNow}
         subjectsLoading={subjectsLoading}
         resultCount={loading ? null : matchingTutorCount}
+      />
+
+      <RequestCourseModal
+        isOpen={requestModalOpen}
+        onClose={() => setRequestModalOpen(false)}
+        prefillCourse={requestModalCourse}
       />
     </div>
   );
