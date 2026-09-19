@@ -76,7 +76,7 @@ export default function CourseApprovalsPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div>
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">Course Verifications</h1>

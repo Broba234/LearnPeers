@@ -79,7 +79,7 @@ export default function ContactsPage() {
   const unreadCount = contacts.filter((c) => !c.is_read).length;
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div>
         {/* Header */}
         <div className="mb-8">
           <div className="flex justify-between items-center">
